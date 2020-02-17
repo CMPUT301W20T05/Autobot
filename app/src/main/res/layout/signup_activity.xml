@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="276dp"
-        android:text="@string/phonenumber"
+        android:text="@string/phone_number"
         android:textColor="@color/blue"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"

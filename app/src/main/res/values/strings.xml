@@ -2,8 +2,7 @@
     <string name="app_name">Autobot</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
-    <string name="phonenumber">Phone Number*</string>
-    <string name="user_name">User Name*</string>
+    <string name="user_name">User Name</string>
     <string name="driver">Driver</string>
     <string name="rider">Rider</string>
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
