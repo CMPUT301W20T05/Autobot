@@ -8,4 +8,9 @@
     <string name="rider">Rider</string>
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
     <string name="phone_number">Phone Number</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="home_address">Home Address</string>
 </resources>
