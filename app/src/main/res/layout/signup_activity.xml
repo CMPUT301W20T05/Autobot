@@ -99,7 +99,7 @@
         tools:layout_editor_absoluteY="458dp">
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/radioButtonDriver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="108dp"
@@ -108,7 +108,7 @@
             tools:layout_editor_absoluteY="509dp" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/radioButtonRider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rider"
@@ -118,7 +118,7 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBoxPolicy"
         android:layout_width="325dp"
         android:layout_height="61dp"
         android:text="@string/agree_policy_terms"
