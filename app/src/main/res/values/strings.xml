@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Autobot</string>
+    <string name="please_input_phone_number">Please input phone number</string>
+    <string name="log_in">Log in</string>
+    <string name="no_account">No account?</string>
+    <string name="logo">logo</string>
+    <string-array name="country">
+        <item>CA</item>
+        <item>US</item>
+    </string-array>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="user_name">User Name</string>
