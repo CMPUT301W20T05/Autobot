@@ -7,4 +7,5 @@
     <string name="driver">Driver</string>
     <string name="rider">Rider</string>
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
+    <string name="phone_number">Phone Number</string>
 </resources>
