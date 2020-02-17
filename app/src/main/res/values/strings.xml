@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Autobot</string>
-<<<<<<< HEAD
     <string name="please_input_phone_number">Please input phone number</string>
     <string name="log_in">Log in</string>
     <string name="no_account">No account?</string>
@@ -9,14 +8,16 @@
         <item>CA</item>
         <item>US</item>
     </string-array>
-
-=======
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
-    <string name="phonenumber">Phone Number*</string>
-    <string name="user_name">User Name*</string>
+    <string name="user_name">User Name</string>
     <string name="driver">Driver</string>
     <string name="rider">Rider</string>
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
->>>>>>> 51d7d9bc43746a08a4249866b60d2ffe5150756a
+    <string name="phone_number">Phone Number</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="home_address">Home Address</string>
 </resources>
