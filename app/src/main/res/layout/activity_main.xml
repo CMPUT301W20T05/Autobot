@@ -8,23 +8,24 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="238dp"
-        android:layout_height="156dp"
+        android:layout_width="175dp"
+        android:layout_height="176dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.43"
-        tools:srcCompat="@drawable/logo" />
+        app:layout_constraintVertical_bias="0.421" />
 
     <TextView
         android:id="@+id/textView"
+        android:layout_width="227dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="36dp"
         android:gravity="center"
-        android:layout_width="129dp"
-        android:layout_height="60dp"
         android:text="@string/slogan"
+        android:textSize="25dp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
