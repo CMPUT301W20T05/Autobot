@@ -12,7 +12,7 @@
         android:id="@+id/textView"
         android:layout_width="293dp"
         android:layout_height="47dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/text_style"
         android:text="  Where are you?"
         android:textSize="30dp"
@@ -25,12 +25,15 @@
         android:layout_width="293dp"
         android:layout_height="47dp"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/text_style"
         android:text="  Where to go?"
         android:textSize="30dp"
-        android:background="@drawable/text_style"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.106" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
