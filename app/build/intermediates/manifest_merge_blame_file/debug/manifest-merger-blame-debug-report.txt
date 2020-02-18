@@ -39,6 +39,52 @@
 25        android:roundIcon="@mipmap/ic_launcher_round"
 25-->/Users/jclkh/Desktop/Autobot/app/src/main/AndroidManifest.xml:9:9-54
 26        android:supportsRtl="true"
+<<<<<<< HEAD
+26-->D:\git\Autobot\app\src\main\AndroidManifest.xml:10:9-35
+27        android:testOnly="true"
+28        android:theme="@style/AppTheme" >
+28-->D:\git\Autobot\app\src\main\AndroidManifest.xml:11:9-40
+29        <activity android:name="com.example.autobot.MainActivity" >
+29-->D:\git\Autobot\app\src\main\AndroidManifest.xml:12:9-18:20
+29-->D:\git\Autobot\app\src\main\AndroidManifest.xml:12:19-47
+30            <intent-filter>
+30-->D:\git\Autobot\app\src\main\AndroidManifest.xml:13:13-17:29
+31                <action android:name="android.intent.action.MAIN" />
+31-->D:\git\Autobot\app\src\main\AndroidManifest.xml:14:17-69
+31-->D:\git\Autobot\app\src\main\AndroidManifest.xml:14:25-66
+32
+33                <category android:name="android.intent.category.LAUNCHER" />
+33-->D:\git\Autobot\app\src\main\AndroidManifest.xml:16:17-77
+33-->D:\git\Autobot\app\src\main\AndroidManifest.xml:16:27-74
+34            </intent-filter>
+35        </activity>
+36        <!-- Needs to be explicitly declared on P+ -->
+37        <uses-library
+37-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
+38            android:name="org.apache.http.legacy"
+38-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
+39            android:required="false" />
+39-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
+40
+41        <activity
+41-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+42            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+42-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+43            android:exported="false"
+43-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+44            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+44-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+45
+46        <meta-data
+46-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\9c91a5adf82a504c850be78babaa7bfc\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+47            android:name="com.google.android.gms.version"
+47-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\9c91a5adf82a504c850be78babaa7bfc\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+48            android:value="@integer/google_play_services_version" />
+48-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\9c91a5adf82a504c850be78babaa7bfc\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+49    </application>
+50
+51</manifest>
+=======
 26-->/Users/jclkh/Desktop/Autobot/app/src/main/AndroidManifest.xml:10:9-35
 27        android:testOnly="true"
 28        android:theme="@style/AppTheme" >
@@ -98,3 +144,4 @@
 58    </application>
 59
 60</manifest>
+>>>>>>> a2dad5ad7710f1ad14e435b01b4eac821acc3b92
