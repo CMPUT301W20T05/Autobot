@@ -10,10 +10,18 @@
     </string-array>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
-    <string name="user_name">User Name</string>
+    <string name="phonenumber">Phone Number*</string>
+    <string name="user_name">User Name*</string>
     <string name="driver">Driver</string>
     <string name="rider">Rider</string>
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
+    <string name="Destination">Destination</string>
+    <string name="address">Address</string>
+    <string name="Estimated_fare">Estimate fare:</string>
+    <string name="fare">$35.2</string>
+    <string name="add_tips">Add tips</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="phone_number">Phone Number</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -21,3 +29,4 @@
     <string name="emergency_contact">Emergency Contact</string>
     <string name="home_address">Home Address</string>
 </resources>
+
