@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Autobot</string>
-
     <string name="please_input_phone_number">Please input phone number</string>
     <string name="log_in">Log in</string>
     <string name="no_account">No account?</string>
@@ -9,8 +8,6 @@
         <item>CA</item>
         <item>US</item>
     </string-array>
-
-=======
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="phonenumber">Phone Number*</string>
@@ -25,5 +22,11 @@
     <string name="add_tips">Add tips</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    >>>>>>> 51d7d9bc43746a08a4249866b60d2ffe5150756a
+    <string name="phone_number">Phone Number</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="home_address">Home Address</string>
 </resources>
+
