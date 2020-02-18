@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,7 +19,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
-
+        Intent intent = getIntent();
         EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
         EditText editTextUserName = findViewById(R.id.accountUserName);
         Button signUpButton = findViewById(R.id.signUpButton);
