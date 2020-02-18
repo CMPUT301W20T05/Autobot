@@ -1,14 +1,14 @@
 package com.example.autobot;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     Button get_start;
@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //opening animation
         set_animation();
     }
@@ -26,14 +27,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @SuppressLint("HandlerLeak")
     public void set_animation(){
-        //handle the tansformation
+        //handle the transformation
         handler = new Handler(){
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 log_out_page();
             }};
         //delay the transformation between home page and login page
-        handler.sendEmptyMessageDelayed(0,4000);
+        handler.sendEmptyMessageDelayed(0,2500);
     }
 }
