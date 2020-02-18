@@ -36,6 +36,6 @@ public class MainActivity extends AppCompatActivity {
                 log_out_page();
             }};
         //delay the transformation between home page and login page
-        handler.sendEmptyMessageDelayed(0,4000);
+        handler.sendEmptyMessageDelayed(0,2500);
     }
 }

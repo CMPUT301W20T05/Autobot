@@ -19,7 +19,7 @@
     <string name="Destination">Destination</string>
     <string name="address">Address</string>
     <string name="Estimated_fare">Estimate fare:</string>
-    <string name="fare">$35.2</string>
+    <string name="fare">$0.0</string>
     <string name="add_tips">Add tips</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
