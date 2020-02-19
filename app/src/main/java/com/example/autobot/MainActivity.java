@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
+        setContentView(R.layout.current_request_of_user);
+=======
         setContentView(R.layout.activity_main);
 
         log_in_page();
@@ -37,5 +40,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.schedule(task,DELAY);
+>>>>>>> 9df9d515f518a1cfcc8f84011688cf631f19a421
     }
 }
