@@ -26,7 +26,7 @@
 17-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:28:9-32
 18
 19    <application
-19-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:5-26:19
+19-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:5-34:19
 20        android:allowBackup="true"
 20-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:6:9-35
 21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -40,61 +40,88 @@
 25-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:9:9-54
 26        android:supportsRtl="true"
 26-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:10:9-35
-27        android:testOnly="true"
-28        android:theme="@style/AppTheme" >
-28-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:11:9-40
-29        <activity
-29-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:9-18:20
-30            android:name="com.example.autobot.SignUpActivity"
-30-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:19-49
-31            android:parentActivityName="com.example.autobot.MainActivity" >
-31-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:13:13-55
-32
-33            <!-- The meta-data tag is required if you support API level 15 and lower -->
-34            <meta-data
-34-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:15:13-17:49
-35                android:name="android.support.PARENT_ACTIVITY"
-35-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:16:17-63
-36                android:value=".MainActivity" />
-36-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:17-46
-37        </activity>
-38        <activity android:name="com.example.autobot.MainActivity" >
-38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:9-25:20
-38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:19-47
-39            <intent-filter>
-39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:20:13-24:29
-40                <action android:name="android.intent.action.MAIN" />
-40-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:17-69
-40-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:25-66
-41
-42                <category android:name="android.intent.category.LAUNCHER" />
-42-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:17-77
-42-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:27-74
-43            </intent-filter>
-44        </activity>
-45        <!-- Needs to be explicitly declared on P+ -->
-46        <uses-library
-46-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
-47            android:name="org.apache.http.legacy"
-47-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
-48            android:required="false" />
-48-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
-49
-50        <activity
-50-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-51            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-51-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-52            android:exported="false"
-52-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-53            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-53-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-54
-55        <meta-data
-55-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-56            android:name="com.google.android.gms.version"
-56-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-57            android:value="@integer/google_play_services_version" />
-57-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-58    </application>
-59
-60</manifest>
+27        android:theme="@style/AppTheme" >
+27-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:11:9-40
+28        <activity
+28-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:9-18:20
+29            android:name="com.example.autobot.SignUpActivity"
+29-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:19-49
+30            android:parentActivityName="com.example.autobot.MainActivity" >
+30-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:13:13-55
+31
+32            <!-- The meta-data tag is required if you support API level 15 and lower -->
+33            <meta-data
+33-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:15:13-17:49
+34                android:name="android.support.PARENT_ACTIVITY"
+34-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:16:17-63
+35                android:value=".MainActivity" />
+35-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:17-46
+36        </activity>
+37        <activity android:name="com.example.autobot.MainActivity" >
+37-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:9-25:20
+37-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:19-47
+38            <intent-filter>
+38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:20:13-24:29
+39                <action android:name="android.intent.action.MAIN" />
+39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:17-69
+39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:25-66
+40
+41                <category android:name="android.intent.category.LAUNCHER" />
+41-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:17-77
+41-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:27-74
+42            </intent-filter>
+43        </activity>
+44        <activity
+44-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:26:9-28:20
+45            android:name="com.example.autobot.SetPasswordActivity"
+45-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:26:19-54
+46            android:parentActivityName="com.example.autobot.SignUpActivity" >
+46-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:27:13-57
+47        </activity>
+48        <activity
+48-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:29:9-32:20
+49            android:name="com.example.autobot.LoginActivity"
+49-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:29:19-48
+50            android:parentActivityName="com.example.autobot.MainActivity" >
+50-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:30:13-55
+51        </activity>
+52        <activity android:name="com.example.autobot.HomePageActivity" />
+52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:33:9-54
+52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:33:19-51
+53        <!-- Needs to be explicitly declared on P+ -->
+54        <uses-library
+54-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
+55            android:name="org.apache.http.legacy"
+55-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
+56            android:required="false" />
+56-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
+57
+58        <activity
+58-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+59            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+59-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+60            android:exported="false"
+60-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+61            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+61-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+62
+63        <meta-data
+63-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+64            android:name="com.google.android.gms.version"
+64-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+65            android:value="@integer/google_play_services_version" />
+65-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+66
+67        <provider
+67-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:23:9-27:43
+68            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+68-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:24:13-79
+69            android:authorities="com.example.autobot.lifecycle-process"
+69-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:25:13-69
+70            android:exported="false"
+70-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:26:13-37
+71            android:multiprocess="true" />
+71-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:27:13-40
+72    </application>
+73
+74</manifest>
