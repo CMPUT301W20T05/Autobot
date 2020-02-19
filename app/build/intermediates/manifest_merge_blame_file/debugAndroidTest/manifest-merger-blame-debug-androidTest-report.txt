@@ -3,7 +3,8 @@
 3    package="com.example.autobot.test" >
 4
 5    <uses-sdk
-5-->E:\GitRepo\Autobot\app\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger2204366021462965486.xml:5:5-74
+5-->E:\GitRepo\Autobot\app\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger689930508709269791.xml:5:5-74
+>>>>>>> 0af618acf679da3a2c57660b07fb3d9942eff297
 6        android:minSdkVersion="15"
 6-->E:\GitRepo\Autobot\app\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger2204366021462965486.xml:5:15-41
 7        android:targetSdkVersion="29" />
