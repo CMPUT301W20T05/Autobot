@@ -10,32 +10,32 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity {
     Button get_start;
     Handler handler;
+    int DELAY = 3*1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //opening animation
-        set_animation();
+        log_in_page();
+
     }
     /*change activity*/
-    public void log_out_page() {
-        Intent intent = new Intent(this,SignUpActivity.class);
-        startActivity(intent);
-    }
-
-    @SuppressLint("HandlerLeak")
-    public void set_animation(){
-        //handle the transformation
-        handler = new Handler(){
+    public void log_in_page() {
+        final Intent intentLogin = new Intent(this,SignUpActivity.class);
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask()
+        {
             @Override
-            public void handleMessage(@NonNull Message msg) {
-                log_out_page();
-            }};
-        //delay the transformation between home page and login page
-        handler.sendEmptyMessageDelayed(0,2500);
+            public void run(){
+                startActivity(intentLogin);
+            }
+        };
+        timer.schedule(task,DELAY);
     }
 }
