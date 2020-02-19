@@ -18,6 +18,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
+
         final Intent intent = getIntent();
         TextView textViewBackToLogin = findViewById(R.id.textViewGoToSignUp);
         EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);

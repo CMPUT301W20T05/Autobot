@@ -30,6 +30,10 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc" />
+
         <activity
             android:name="com.example.autobot.SignUpActivity"
             android:parentActivityName="com.example.autobot.MainActivity" >
