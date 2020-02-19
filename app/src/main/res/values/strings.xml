@@ -46,4 +46,6 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="where_to_go">Where to go?</string>
+    <string name="where_are_you">Where are you?</string>
 </resources>

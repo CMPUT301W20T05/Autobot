@@ -8,44 +8,38 @@
     android:shape="oval"
     android:orientation="vertical">
 
-    <fragment
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <TextView
-        android:id="@+id/textView"
+    <EditText
+        android:id="@+id/editTextOriginLocation"
         android:layout_width="290dp"
         android:layout_height="47dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="540dp"
         android:background="@drawable/text_style"
-        android:text="  Where are you?"
-        android:textSize="30dp"
+        android:text="@string/where_are_you"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
+    <EditText
+        android:id="@+id/editTextDestinationLocation"
         android:layout_width="290dp"
         android:layout_height="47dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/text_style"
-        android:text="  Where to go?"
-        android:textSize="30dp"
+        android:text="@string/where_to_go"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextOriginLocation" />
 
-    <!--    <com.google.android.gms.maps.MapView-->
-<!--        android:id="@+id/mapView2"-->
-<!--        android:layout_width="413dp"-->
-<!--        android:layout_height="489dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapViewHomePage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

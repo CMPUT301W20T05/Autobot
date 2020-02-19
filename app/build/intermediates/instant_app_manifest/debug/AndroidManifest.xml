@@ -25,7 +25,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:testOnly="true"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc" />
+
         <activity
             android:name="com.example.autobot.SignUpActivity"
             android:parentActivityName="com.example.autobot.MainActivity" >
@@ -50,7 +55,8 @@
             android:name="com.example.autobot.LoginActivity"
             android:parentActivityName="com.example.autobot.MainActivity" >
         </activity>
-        <activity android:name="com.example.autobot.HomePageActivity" />
+        <activity android:name="com.example.autobot.HomePageActivity" >
+        </activity>
         <!-- Needs to be explicitly declared on P+ -->
         <uses-library
             android:name="org.apache.http.legacy"
