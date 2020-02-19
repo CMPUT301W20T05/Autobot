@@ -5,183 +5,229 @@
 5    android:versionName="1.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="15"
-8-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml
+8        android:minSdkVersion="16"
+8-->D:\git2\Autobot\app\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="29" />
-9-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml
+9-->D:\git2\Autobot\app\src\main\AndroidManifest.xml
 10
 11    <!-- Include required permissions for Google Maps API to run. -->
 12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-12-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:23:5-79
-12-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:23:22-76
+12-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:23:5-79
+12-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:23:22-76
 13    <uses-permission android:name="android.permission.INTERNET" />
-13-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:24:5-67
-13-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:24:22-64
+13-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:24:5-67
+13-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:24:22-64
 14
 15    <uses-feature
-15-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:26:5-28:35
+15-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:26:5-28:35
 16        android:glEsVersion="0x00020000"
-16-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:27:9-41
+16-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:27:9-41
 17        android:required="true" />
-17-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:28:9-32
+17-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:28:9-32
 18
-19    <application
-19-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:5-34:19
-20        android:allowBackup="true"
-20-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:6:9-35
-21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-21-->[androidx.core:core:1.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\e9dab9c67c1ee3668e0bbf86c6d8cbd8\core-1.1.0\AndroidManifest.xml:24:18-86
-22        android:debuggable="true"
-23        android:icon="@mipmap/ic_launcher"
-23-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:7:9-43
-24        android:label="@string/app_name"
-24-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:8:9-41
-25        android:roundIcon="@mipmap/ic_launcher_round"
-25-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:9:9-54
-26        android:supportsRtl="true"
-26-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:10:9-35
-<<<<<<< HEAD
-27        android:theme="@style/AppTheme" >
-27-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:11:9-40
-28        <activity
-28-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:9-18:20
-29            android:name="com.example.autobot.SignUpActivity"
-29-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:19-49
-30            android:parentActivityName="com.example.autobot.MainActivity" >
-30-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:13:13-55
-31
-32            <!-- The meta-data tag is required if you support API level 15 and lower -->
-33            <meta-data
-33-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:15:13-17:49
-34                android:name="android.support.PARENT_ACTIVITY"
-34-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:16:17-63
-35                android:value=".MainActivity" />
-35-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:17-46
-36        </activity>
-37        <activity android:name="com.example.autobot.MainActivity" >
-37-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:9-25:20
-37-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:19-47
-38            <intent-filter>
-38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:20:13-24:29
-39                <action android:name="android.intent.action.MAIN" />
-39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:17-69
-39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:25-66
-40
-41                <category android:name="android.intent.category.LAUNCHER" />
-41-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:17-77
-41-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:27-74
-42            </intent-filter>
-43        </activity>
-44        <activity
-44-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:26:9-28:20
-45            android:name="com.example.autobot.SetPasswordActivity"
-45-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:26:19-54
-46            android:parentActivityName="com.example.autobot.SignUpActivity" >
-46-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:27:13-57
-47        </activity>
-48        <activity
-48-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:29:9-32:20
-49            android:name="com.example.autobot.LoginActivity"
-49-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:29:19-48
-50            android:parentActivityName="com.example.autobot.MainActivity" >
-50-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:30:13-55
-51        </activity>
-52        <activity android:name="com.example.autobot.HomePageActivity" />
-52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:33:9-54
-52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:33:19-51
-53        <!-- Needs to be explicitly declared on P+ -->
-54        <uses-library
-54-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
-55            android:name="org.apache.http.legacy"
-55-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
-56            android:required="false" />
-56-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
-57
-58        <activity
-58-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-59            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-59-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-60            android:exported="false"
-60-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-61            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-61-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+19    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+19-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:24:5-68
+19-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:24:22-65
+20    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+20-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:26:5-82
+20-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:26:22-79
+21    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+21-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:26:5-110
+21-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:26:22-107
+22
+23    <application
+23-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:5:5-34:19
+24        android:allowBackup="true"
+24-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:6:9-35
+25        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+25-->[androidx.core:core:1.1.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\331630a23dfa1f0594bcf54d5352aa36\core-1.1.0\AndroidManifest.xml:24:18-86
+26        android:debuggable="true"
+27        android:icon="@mipmap/ic_launcher"
+27-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:7:9-43
+28        android:label="@string/app_name"
+28-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:8:9-41
+29        android:roundIcon="@mipmap/ic_launcher_round"
+29-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:9:9-54
+30        android:supportsRtl="true"
+30-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:10:9-35
+31        android:testOnly="true"
+32        android:theme="@style/AppTheme" >
+32-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:11:9-40
+33        <activity
+33-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:12:9-18:20
+34            android:name="com.example.autobot.SignUpActivity"
+34-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:12:19-49
+35            android:parentActivityName="com.example.autobot.MainActivity" >
+35-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:13:13-55
+36
+37            <!-- The meta-data tag is required if you support API level 15 and lower -->
+38            <meta-data
+38-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:15:13-17:49
+39                android:name="android.support.PARENT_ACTIVITY"
+39-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:16:17-63
+40                android:value=".MainActivity" />
+40-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:17:17-46
+41        </activity>
+42        <activity android:name="com.example.autobot.MainActivity" >
+42-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:19:9-25:20
+42-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:19:19-47
+43            <intent-filter>
+43-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:20:13-24:29
+44                <action android:name="android.intent.action.MAIN" />
+44-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:21:17-69
+44-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:21:25-66
+45
+46                <category android:name="android.intent.category.LAUNCHER" />
+46-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:23:17-77
+46-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:23:27-74
+47            </intent-filter>
+48        </activity>
+49        <activity
+49-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:26:9-28:20
+50            android:name="com.example.autobot.SetPasswordActivity"
+50-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:26:19-54
+51            android:parentActivityName="com.example.autobot.SignUpActivity" >
+51-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:27:13-57
+52        </activity>
+53        <activity
+53-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:29:9-32:20
+54            android:name="com.example.autobot.LoginActivity"
+54-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:29:19-48
+55            android:parentActivityName="com.example.autobot.MainActivity" >
+55-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:30:13-55
+56        </activity>
+57        <activity android:name="com.example.autobot.HomePageActivity" />
+57-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:33:9-54
+57-->D:\git2\Autobot\app\src\main\AndroidManifest.xml:33:19-51
+58        <!-- Needs to be explicitly declared on P+ -->
+59        <uses-library
+59-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
+60            android:name="org.apache.http.legacy"
+60-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
+61            android:required="false" />
+61-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
 62
-63        <meta-data
-63-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-64            android:name="com.google.android.gms.version"
-64-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-65            android:value="@integer/google_play_services_version" />
-65-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-66
-67        <provider
-67-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:23:9-27:43
-68            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
-68-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:24:13-79
-69            android:authorities="com.example.autobot.lifecycle-process"
-69-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:25:13-69
-70            android:exported="false"
-70-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:26:13-37
-71            android:multiprocess="true" />
-71-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\6fbf654d3db04d7d9e48eb73ccf59f45\lifecycle-process-2.0.0\AndroidManifest.xml:27:13-40
-72    </application>
-73
-74</manifest>
-=======
-27        android:testOnly="true"
-28        android:theme="@style/AppTheme" >
-28-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:11:9-40
-29        <activity
-29-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:9-18:20
-30            android:name="com.example.autobot.SignUpActivity"
-30-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:19-49
-31            android:parentActivityName="com.example.autobot.MainActivity" >
-31-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:13:13-55
-32
-33            <!-- The meta-data tag is required if you support API level 15 and lower -->
-34            <meta-data
-34-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:15:13-17:49
-35                android:name="android.support.PARENT_ACTIVITY"
-35-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:16:17-63
-36                android:value=".MainActivity" />
-36-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:17-46
-37        </activity>
-38        <activity android:name="com.example.autobot.MainActivity" >
-38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:9-25:20
-38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:19-47
-39            <intent-filter>
-39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:20:13-24:29
-40                <action android:name="android.intent.action.MAIN" />
-40-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:17-69
-40-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:25-66
-41
-42                <category android:name="android.intent.category.LAUNCHER" />
-42-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:17-77
-42-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:27-74
-43            </intent-filter>
-44        </activity>
-45        <!-- Needs to be explicitly declared on P+ -->
-46        <uses-library
-46-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
-47            android:name="org.apache.http.legacy"
-47-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
-48            android:required="false" />
-48-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\a3d702a77cbfacefb23de82416a0cb1f\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
-49
-50        <activity
-50-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-51            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-51-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-52            android:exported="false"
-52-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-53            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-53-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\77c2fc448e2bd0738fd67dce062b1efd\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-54
-55        <meta-data
-55-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-56            android:name="com.google.android.gms.version"
-56-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-57            android:value="@integer/google_play_services_version" />
-57-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8aa72c5e1deec381281e4769869b23d9\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-58    </application>
-59
-60</manifest>
+63        <service
+63-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:27:9-33:19
+64            android:name="com.google.firebase.components.ComponentDiscoveryService"
+64-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:28:13-84
+65            android:directBootAware="true"
+65-->[com.google.firebase:firebase-common:19.3.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\55bc8ae423cc8619ba9ad4676cccbe18\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+66            android:exported="false" >
+66-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:29:13-37
+67            <meta-data
+67-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:30:13-32:85
+68                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+68-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:31:17-139
+69                android:value="com.google.firebase.components.ComponentRegistrar" />
+69-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\3d8bed9a53529358f2c71b6407804b7b\play-services-measurement-api-17.2.2\AndroidManifest.xml:32:17-82
+70            <meta-data
+70-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:32:13-34:85
+71                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+71-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:33:17-96
+72                android:value="com.google.firebase.components.ComponentRegistrar" />
+72-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:34:17-82
+73        </service>
+74
+75        <receiver
+75-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:37:9-44:20
+76            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+76-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:38:13-78
+77            android:exported="true"
+77-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:39:13-36
+78            android:permission="com.google.android.c2dm.permission.SEND" >
+78-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:40:13-73
+79            <intent-filter>
+79-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:41:13-43:29
+80                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+80-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:42:17-81
+80-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:42:25-78
+81            </intent-filter>
+82        </receiver>
+83
+84        <activity
+84-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+85            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+85-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+86            android:exported="false"
+86-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+87            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+87-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+88
+89        <receiver
+89-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:29:9-33:20
+90            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+90-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:30:13-85
+91            android:enabled="true"
+91-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:31:13-35
+92            android:exported="false" >
+92-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:32:13-37
+93        </receiver>
+94        <receiver
+94-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:34:9-42:20
+95            android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver"
+95-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:35:13-100
+96            android:enabled="true"
+96-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:36:13-35
+97            android:exported="true"
+97-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:37:13-36
+98            android:permission="android.permission.INSTALL_PACKAGES" >
+98-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:38:13-69
+99            <intent-filter>
+99-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:39:13-41:29
+100                <action android:name="com.android.vending.INSTALL_REFERRER" />
+100-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:40:17-79
+100-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:40:25-76
+101            </intent-filter>
+102        </receiver>
+103
+104        <service
+104-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:44:9-47:40
+105            android:name="com.google.android.gms.measurement.AppMeasurementService"
+105-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:45:13-84
+106            android:enabled="true"
+106-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:46:13-35
+107            android:exported="false" />
+107-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:47:13-37
+108        <service
+108-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:48:9-52:72
+109            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+109-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:49:13-87
+110            android:enabled="true"
+110-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:50:13-35
+111            android:exported="false"
+111-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:51:13-37
+112            android:permission="android.permission.BIND_JOB_SERVICE" />
+112-->[com.google.android.gms:play-services-measurement:17.2.2] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\ac2605da77983b497481f9e2091aefdd\play-services-measurement-17.2.2\AndroidManifest.xml:52:13-69
+113
+114        <provider
+114-->[com.google.firebase:firebase-common:19.3.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\55bc8ae423cc8619ba9ad4676cccbe18\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+115            android:name="com.google.firebase.provider.FirebaseInitProvider"
+115-->[com.google.firebase:firebase-common:19.3.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\55bc8ae423cc8619ba9ad4676cccbe18\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+116            android:authorities="com.example.autobot.firebaseinitprovider"
+116-->[com.google.firebase:firebase-common:19.3.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\55bc8ae423cc8619ba9ad4676cccbe18\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+117            android:exported="false"
+117-->[com.google.firebase:firebase-common:19.3.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\55bc8ae423cc8619ba9ad4676cccbe18\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+118            android:initOrder="100" />
+118-->[com.google.firebase:firebase-common:19.3.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\55bc8ae423cc8619ba9ad4676cccbe18\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+119
+120        <meta-data
+120-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b94b143c2cde9ff39fec837107ae9b80\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+121            android:name="com.google.android.gms.version"
+121-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b94b143c2cde9ff39fec837107ae9b80\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+122            android:value="@integer/google_play_services_version" />
+122-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\b94b143c2cde9ff39fec837107ae9b80\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+123
+124        <provider
+124-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:25:9-29:43
+125            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+125-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:26:13-79
+126            android:authorities="com.example.autobot.lifecycle-process"
+126-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:27:13-69
+127            android:exported="false"
+127-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:28:13-37
+128            android:multiprocess="true" />
+128-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\weida.DESKTOP-7KV2BM3\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:29:13-40
+129    </application>
+130
+131</manifest>

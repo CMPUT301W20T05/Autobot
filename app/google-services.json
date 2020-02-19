@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "727596552877",
+    "firebase_url": "https://cmput301w20t05.firebaseio.com",
+    "project_id": "cmput301w20t05",
+    "storage_bucket": "cmput301w20t05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727596552877:android:c8b37cde77cd5c795cec24",
+        "android_client_info": {
+          "package_name": "com.example.autobot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727596552877-064rpe6d88kcgv7brn5c933861a9326c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT2rrsP09RmQH7xfl4tBQRN6QCTe4nL7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727596552877-064rpe6d88kcgv7brn5c933861a9326c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
