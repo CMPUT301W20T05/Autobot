@@ -4,9 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="116dp"
+        android:layout_height="123dp"
+        android:layout_marginTop="140dp"
+        android:background="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="295dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="120dp"
+        android:background="#00050303"
+        android:gravity="center"
+        android:text="@string/solgan"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+<<<<<<< HEAD
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+=======
+>>>>>>> 9df9d515f518a1cfcc8f84011688cf631f19a421
