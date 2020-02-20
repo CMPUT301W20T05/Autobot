@@ -1,7 +1,10 @@
 package com.example.autobot;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +35,21 @@ public class HomePageActivity extends AppCompatActivity implements OnMapReadyCal
         mapView = findViewById(R.id.mapViewHomePage);
         EditText editTextOriginLocation = findViewById(R.id.editTextOriginLocation);
         EditText editTextDestinationLocation = findViewById(R.id.editTextDestinationLocation);
+        Button HPConfimrButton = findViewById(R.id.HPconfirm);
         editTextOriginLocation.bringToFront();
         editTextDestinationLocation.bringToFront();
+        HPConfimrButton.bringToFront();
 
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
 
+        HPConfimrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                startActivity(intentCurRequest);
+            }
+        });
     }
 
     @Override

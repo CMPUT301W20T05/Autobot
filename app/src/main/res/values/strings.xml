@@ -9,6 +9,11 @@
         <item>CA</item>
         <item>US</item>
     </string-array>
+    <string name="Models">
+        <item>Normal</item>
+        <item>Pleasure</item>
+        <item>Luxury</item>
+    </string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="phonenumber">Phone Number*</string>
@@ -46,4 +51,6 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="Models_to_choose">Models to choose</string>
+    <string name="Estimated_Money">Estimated Money</string>
 </resources>

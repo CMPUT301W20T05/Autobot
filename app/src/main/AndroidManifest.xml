@@ -33,6 +33,8 @@
 
         </activity>
         <activity android:name=".HomePageActivity" />
+        <activity android:name=".UCurRequest"
+            android:parentActivityName=".HomePageActivity"/>
     </application>
 
 </manifest>
