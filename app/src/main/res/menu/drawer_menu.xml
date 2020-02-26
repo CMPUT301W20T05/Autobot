@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/edit_profile"
+            android:icon="@drawable/ic_edit_profile"
+            android:title="Edit Profile"/>
+        <item android:id="@+id/my_request_history"
+            android:icon="@drawable/ic_my_request_history"
+            android:title="My Request History"/>
+        <item android:id="@+id/my_notification"
+            android:icon="@drawable/ic_my_notifications"
+            android:title="My Notifications"/>
+        <item android:id="@+id/payment_information"
+            android:icon="@drawable/ic_payment_information"
+            android:title="Payment Information"/>
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings"/>
+        <item android:id="@+id/log_out"
+            android:icon="@drawable/ic_log_out"
+            android:title="Log out"/>
+    </group>
+</menu>

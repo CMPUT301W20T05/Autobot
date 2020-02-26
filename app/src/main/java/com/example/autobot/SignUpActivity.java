@@ -26,8 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
         RadioButton radioButtonRider = findViewById(R.id.radioButtonRider);
         CheckBox checkBoxPolicy = findViewById(R.id.checkBoxPolicy);
 
-
-
     }
+
 
 }
