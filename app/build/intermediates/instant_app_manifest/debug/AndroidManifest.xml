@@ -9,9 +9,12 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="29" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -60,6 +63,8 @@
             android:parentActivityName="com.example.autobot.MainActivity" >
         </activity>
         <activity android:name="com.example.autobot.HomePageActivity" />
+        <activity android:name="com.example.autobot.GoogleMapActivity" />
+
         <!-- Needs to be explicitly declared on P+ -->
         <uses-library
             android:name="org.apache.http.legacy"
