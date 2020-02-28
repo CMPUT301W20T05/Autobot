@@ -1,6 +1,8 @@
 package com.example.autobot;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 
 import androidx.appcompat.widget.Toolbar;
 
-public class HomePageActivity extends GoogleMapActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener{
+public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends GoogleMapActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener{
     private DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -39,13 +41,21 @@ public class HomePageActivity extends GoogleMapActivity implements NavigationVie
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
+//        Button HPConfirmButton = findViewById(R.id.HPconfirm);
+//
+//        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+//                startActivity(intentCurRequest);
+//            }
+//        });
 
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
 

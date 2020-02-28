@@ -11,14 +11,14 @@
 9-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml
 10
 11    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-11-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:2-76
-11-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:19-73
+11-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:4:2-76
+11-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:4:19-73
 12    <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
-12-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:6:5-82
-12-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:6:22-79
+12-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:5-82
+12-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:5:22-79
 13    <uses-permission android:name="android.permission.INTERNET" />
-13-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:7:5-67
-13-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:7:22-64
+13-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:6:5-67
+13-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:6:22-64
 14    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
 14-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:10:5-76
 14-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:10:22-73
@@ -45,264 +45,270 @@
 24-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:26:22-107
 25
 26    <application
-26-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:9:5-46:19
+26-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:7:5-44:19
 27        android:name="androidx.multidex.MultiDexApplication"
 28        android:allowBackup="true"
-28-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:10:9-35
+28-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:8:9-35
 29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 29-->[androidx.core:core:1.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\331630a23dfa1f0594bcf54d5352aa36\core-1.1.0\AndroidManifest.xml:24:18-86
 30        android:debuggable="true"
 31        android:icon="@mipmap/ic_launcher"
-31-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:11:9-43
+31-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:9:9-43
 32        android:label="@string/app_name"
-32-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:9-41
+32-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:10:9-41
 33        android:roundIcon="@mipmap/ic_launcher_round"
-33-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:13:9-54
+33-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:11:9-54
 34        android:supportsRtl="true"
-34-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:14:9-35
+34-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:12:9-35
 35        android:testOnly="true"
 36        android:theme="@style/AppTheme" >
-36-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:15:9-40
+36-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:13:9-40
 37        <meta-data
-37-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:9-18:70
+37-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:14:9-15:70
 38            android:name="com.google.android.geo.API_KEY"
-38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:20-65
+38-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:14:20-65
 39            android:value="AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc" />
-39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:18:13-68
+39-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:15:13-68
 40
 41        <activity
-41-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:9-25:20
+41-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:16:9-22:20
 42            android:name="com.example.autobot.SignUpActivity"
-42-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:19-49
+42-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:16:19-49
 43            android:parentActivityName="com.example.autobot.MainActivity" >
-43-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:20:13-55
+43-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:17:13-55
 44
 45            <!-- The meta-data tag is required if you support API level 15 and lower -->
 46            <meta-data
-46-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:22:13-24:49
+46-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:19:13-21:49
 47                android:name="android.support.PARENT_ACTIVITY"
-47-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:17-63
+47-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:20:17-63
 48                android:value=".MainActivity" />
-48-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:24:17-46
+48-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:21:17-46
 49        </activity>
 50        <activity android:name="com.example.autobot.MainActivity" >
-50-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:26:9-32:20
-50-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:26:19-47
+50-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:9-29:20
+50-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:23:19-47
 51            <intent-filter>
-51-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:27:13-31:29
+51-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:24:13-28:29
 52                <action android:name="android.intent.action.MAIN" />
-52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:28:17-69
-52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:28:25-66
+52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:25:17-69
+52-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:25:25-66
 53
 54                <category android:name="android.intent.category.LAUNCHER" />
-54-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:30:17-77
-54-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:30:27-74
+54-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:27:17-77
+54-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:27:27-74
 55            </intent-filter>
 56        </activity>
 57        <activity
-57-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:34:9-36:20
+57-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:30:9-32:20
 58            android:name="com.example.autobot.SetPasswordActivity"
-58-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:34:19-54
+58-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:30:19-54
 59            android:parentActivityName="com.example.autobot.SignUpActivity" >
-59-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:35:13-57
+59-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:31:13-57
 60        </activity>
 61        <activity
-61-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:37:9-39:20
+61-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:33:9-35:20
 62            android:name="com.example.autobot.LoginActivity"
-62-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:37:19-48
+62-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:33:19-48
 63            android:parentActivityName="com.example.autobot.MainActivity" >
-63-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:38:13-55
+63-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:34:13-55
 64        </activity>
 65        <activity
-65-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:40:9-43:20
+65-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:36:9-39:20
 66            android:name="com.example.autobot.HomePageActivity"
-66-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:40:19-51
+66-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:36:19-51
 67            android:theme="@style/AppTheme.NoActionBar" >
-67-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:41:13-56
+67-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:37:13-56
 68        </activity>
 69        <activity android:name="com.example.autobot.GoogleMapActivity" />
-69-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:44:9-55
-69-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:44:19-52
+69-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:40:9-55
+69-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:40:19-52
 70        <activity android:name="com.example.autobot.DrawerActivity" />
-70-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:45:9-52
-70-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:45:19-49
+70-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:41:9-52
+70-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:41:19-49
 71        <activity
-71-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:14:9-20:20
-72            android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
-72-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:15:13-91
-73            android:exported="false"
-73-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:16:13-37
-74            android:label="@string/places_autocomplete_label"
-74-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:17:13-62
-75            android:theme="@style/PlacesAutocompleteOverlay"
-75-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:18:13-61
-76            android:windowSoftInputMode="adjustResize" >
-76-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:19:13-55
-77        </activity>
-78
-79        <service
-79-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:17:9-23:19
-80            android:name="com.google.firebase.components.ComponentDiscoveryService"
-80-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:18:13-84
-81            android:directBootAware="true"
-81-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
-82            android:exported="false" >
-82-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:19:13-37
-83            <meta-data
-83-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:20:13-22:85
-84                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
-84-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:21:17-111
-85                android:value="com.google.firebase.components.ComponentRegistrar" />
-85-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:22:17-82
+71-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:42:9-43:61
+72            android:name="com.example.autobot.UCurRequest"
+72-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:42:19-46
+73            android:parentActivityName="com.example.autobot.HomePageActivity" />
+73-->E:\GitRepo\Autobot\app\src\main\AndroidManifest.xml:43:13-59
+74        <activity
+74-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:14:9-20:20
+75            android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
+75-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:15:13-91
+76            android:exported="false"
+76-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:16:13-37
+77            android:label="@string/places_autocomplete_label"
+77-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:17:13-62
+78            android:theme="@style/PlacesAutocompleteOverlay"
+78-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:18:13-61
+79            android:windowSoftInputMode="adjustResize" >
+79-->[com.google.android.libraries.places:places:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\057f40c317e073b64370727b743c7168\places-2.2.0\AndroidManifest.xml:19:13-55
+80        </activity>
+81
+82        <service
+82-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:17:9-23:19
+83            android:name="com.google.firebase.components.ComponentDiscoveryService"
+83-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:18:13-84
+84            android:directBootAware="true"
+84-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+85            android:exported="false" >
+85-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:19:13-37
 86            <meta-data
-86-->[com.google.android.gms:play-services-measurement-api:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4769d4a1eb92f11d2dcfbb59effe5dbf\play-services-measurement-api-17.2.3\AndroidManifest.xml:30:13-32:85
-87                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-87-->[com.google.android.gms:play-services-measurement-api:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4769d4a1eb92f11d2dcfbb59effe5dbf\play-services-measurement-api-17.2.3\AndroidManifest.xml:31:17-139
+86-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:20:13-22:85
+87                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+87-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:21:17-111
 88                android:value="com.google.firebase.components.ComponentRegistrar" />
-88-->[com.google.android.gms:play-services-measurement-api:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4769d4a1eb92f11d2dcfbb59effe5dbf\play-services-measurement-api-17.2.3\AndroidManifest.xml:32:17-82
+88-->[com.google.firebase:firebase-firestore:21.4.1] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4a30e5f866c25b956d00c9fd6f06a8cf\jetified-firebase-firestore-21.4.1\AndroidManifest.xml:22:17-82
 89            <meta-data
-89-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:32:13-34:85
-90                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
-90-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:33:17-96
+89-->[com.google.android.gms:play-services-measurement-api:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4769d4a1eb92f11d2dcfbb59effe5dbf\play-services-measurement-api-17.2.3\AndroidManifest.xml:30:13-32:85
+90                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+90-->[com.google.android.gms:play-services-measurement-api:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4769d4a1eb92f11d2dcfbb59effe5dbf\play-services-measurement-api-17.2.3\AndroidManifest.xml:31:17-139
 91                android:value="com.google.firebase.components.ComponentRegistrar" />
-91-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:34:17-82
-92        </service> <!-- Needs to be explicitly declared on P+ -->
-93        <uses-library
-93-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
-94            android:name="org.apache.http.legacy"
-94-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
-95            android:required="false" />
-95-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
-96
-97        <receiver
-97-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:37:9-44:20
-98            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-98-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:38:13-78
-99            android:exported="true"
-99-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:39:13-36
-100            android:permission="com.google.android.c2dm.permission.SEND" >
-100-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:40:13-73
-101            <intent-filter>
-101-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:41:13-43:29
-102                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-102-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:42:17-81
-102-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:42:25-78
-103            </intent-filter>
-104        </receiver>
-105
-106        <activity
-106-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-107            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-107-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-108            android:exported="false"
-108-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-109            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-109-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-110
-111        <receiver
-111-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:29:9-33:20
-112            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-112-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:30:13-85
-113            android:enabled="true"
-113-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:31:13-35
-114            android:exported="false" >
-114-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:32:13-37
-115        </receiver>
-116        <receiver
-116-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:34:9-42:20
-117            android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver"
-117-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:35:13-100
-118            android:enabled="true"
-118-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:36:13-35
-119            android:exported="true"
-119-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:37:13-36
-120            android:permission="android.permission.INSTALL_PACKAGES" >
-120-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:38:13-69
-121            <intent-filter>
-121-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:39:13-41:29
-122                <action android:name="com.android.vending.INSTALL_REFERRER" />
-122-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:40:17-79
-122-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:40:25-76
-123            </intent-filter>
-124        </receiver>
-125
-126        <service
-126-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:44:9-47:40
-127            android:name="com.google.android.gms.measurement.AppMeasurementService"
-127-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:45:13-84
-128            android:enabled="true"
-128-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:46:13-35
-129            android:exported="false" />
-129-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:47:13-37
-130        <service
-130-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:48:9-52:72
-131            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
-131-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:49:13-87
-132            android:enabled="true"
-132-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:50:13-35
-133            android:exported="false"
-133-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:51:13-37
-134            android:permission="android.permission.BIND_JOB_SERVICE" />
-134-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:52:13-69
-135
-136        <provider
-136-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
-137            android:name="com.google.firebase.provider.FirebaseInitProvider"
-137-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
-138            android:authorities="com.example.autobot.firebaseinitprovider"
-138-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
-139            android:exported="false"
-139-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
-140            android:initOrder="100" />
-140-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
-141
-142        <meta-data
-142-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\d90d8a718c35601259f2c1ae2c4d8451\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-143            android:name="com.google.android.gms.version"
-143-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\d90d8a718c35601259f2c1ae2c4d8451\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-144            android:value="@integer/google_play_services_version" />
-144-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\d90d8a718c35601259f2c1ae2c4d8451\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-145
-146        <provider
-146-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:25:9-29:43
-147            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
-147-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:26:13-79
-148            android:authorities="com.example.autobot.lifecycle-process"
-148-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:27:13-69
-149            android:exported="false"
-149-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:28:13-37
-150            android:multiprocess="true" />
-150-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:29:13-40
-151
-152        <service
-152-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:29:9-35:19
-153            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
-153-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:30:13-103
-154            android:exported="false" >
-154-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:31:13-37
-155            <meta-data
-155-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:32:13-34:39
-156                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
-156-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:33:17-94
-157                android:value="cct" />
-157-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:34:17-36
-158        </service>
-159        <service
-159-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:26:9-30:19
-160            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
-160-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:27:13-117
-161            android:exported="false"
-161-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:28:13-37
-162            android:permission="android.permission.BIND_JOB_SERVICE" >
-162-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:29:13-69
-163        </service>
-164
-165        <receiver
-165-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:32:9-34:40
-166            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
-166-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:33:13-132
-167            android:exported="false" />
-167-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:34:13-37
-168    </application>
-169
-170</manifest>
+91-->[com.google.android.gms:play-services-measurement-api:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\4769d4a1eb92f11d2dcfbb59effe5dbf\play-services-measurement-api-17.2.3\AndroidManifest.xml:32:17-82
+92            <meta-data
+92-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:32:13-34:85
+93                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+93-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:33:17-96
+94                android:value="com.google.firebase.components.ComponentRegistrar" />
+94-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:34:17-82
+95        </service> <!-- Needs to be explicitly declared on P+ -->
+96        <uses-library
+96-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
+97            android:name="org.apache.http.legacy"
+97-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
+98            android:required="false" />
+98-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\82653396968af777fdb1f59f7c3ba8c3\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
+99
+100        <receiver
+100-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:37:9-44:20
+101            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+101-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:38:13-78
+102            android:exported="true"
+102-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:39:13-36
+103            android:permission="com.google.android.c2dm.permission.SEND" >
+103-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:40:13-73
+104            <intent-filter>
+104-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:41:13-43:29
+105                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+105-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:42:17-81
+105-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\946a39d7756c6b05aa38a853bdffc128\firebase-iid-20.0.2\AndroidManifest.xml:42:25-78
+106            </intent-filter>
+107        </receiver>
+108
+109        <activity
+109-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+110            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+110-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+111            android:exported="false"
+111-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+112            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+112-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\b989d78505a527364775fcd163b70614\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+113
+114        <receiver
+114-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:29:9-33:20
+115            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+115-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:30:13-85
+116            android:enabled="true"
+116-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:31:13-35
+117            android:exported="false" >
+117-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:32:13-37
+118        </receiver>
+119        <receiver
+119-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:34:9-42:20
+120            android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver"
+120-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:35:13-100
+121            android:enabled="true"
+121-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:36:13-35
+122            android:exported="true"
+122-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:37:13-36
+123            android:permission="android.permission.INSTALL_PACKAGES" >
+123-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:38:13-69
+124            <intent-filter>
+124-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:39:13-41:29
+125                <action android:name="com.android.vending.INSTALL_REFERRER" />
+125-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:40:17-79
+125-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:40:25-76
+126            </intent-filter>
+127        </receiver>
+128
+129        <service
+129-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:44:9-47:40
+130            android:name="com.google.android.gms.measurement.AppMeasurementService"
+130-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:45:13-84
+131            android:enabled="true"
+131-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:46:13-35
+132            android:exported="false" />
+132-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:47:13-37
+133        <service
+133-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:48:9-52:72
+134            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+134-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:49:13-87
+135            android:enabled="true"
+135-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:50:13-35
+136            android:exported="false"
+136-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:51:13-37
+137            android:permission="android.permission.BIND_JOB_SERVICE" />
+137-->[com.google.android.gms:play-services-measurement:17.2.3] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\ce3641f79fe4685492a0d3af52dcf29e\play-services-measurement-17.2.3\AndroidManifest.xml:52:13-69
+138
+139        <provider
+139-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+140            android:name="com.google.firebase.provider.FirebaseInitProvider"
+140-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+141            android:authorities="com.example.autobot.firebaseinitprovider"
+141-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+142            android:exported="false"
+142-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+143            android:initOrder="100" />
+143-->[com.google.firebase:firebase-common:19.3.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\c52f2474f8cec3de1130e068cde4ca91\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+144
+145        <meta-data
+145-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\d90d8a718c35601259f2c1ae2c4d8451\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+146            android:name="com.google.android.gms.version"
+146-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\d90d8a718c35601259f2c1ae2c4d8451\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+147            android:value="@integer/google_play_services_version" />
+147-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\d90d8a718c35601259f2c1ae2c4d8451\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+148
+149        <provider
+149-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:25:9-29:43
+150            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+150-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:26:13-79
+151            android:authorities="com.example.autobot.lifecycle-process"
+151-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:27:13-69
+152            android:exported="false"
+152-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:28:13-37
+153            android:multiprocess="true" />
+153-->[androidx.lifecycle:lifecycle-process:2.2.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\538e1bf036d9e31df32f9331477cf520\lifecycle-process-2.2.0\AndroidManifest.xml:29:13-40
+154
+155        <service
+155-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:29:9-35:19
+156            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+156-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:30:13-103
+157            android:exported="false" >
+157-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:31:13-37
+158            <meta-data
+158-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:32:13-34:39
+159                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+159-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:33:17-94
+160                android:value="cct" />
+160-->[com.google.android.datatransport:transport-backend-cct:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\f210870d143747b203db6f7922c8fb71\transport-backend-cct-2.1.0\AndroidManifest.xml:34:17-36
+161        </service>
+162        <service
+162-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:26:9-30:19
+163            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+163-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:27:13-117
+164            android:exported="false"
+164-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:28:13-37
+165            android:permission="android.permission.BIND_JOB_SERVICE" >
+165-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:29:13-69
+166        </service>
+167
+168        <receiver
+168-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:32:9-34:40
+169            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+169-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:33:13-132
+170            android:exported="false" />
+170-->[com.google.android.datatransport:transport-runtime:2.1.0] C:\Users\NOGLUES\.gradle\caches\transforms-2\files-2.1\8851791e6e862b75f5ea5783f7f5c98c\transport-runtime-2.1.0\AndroidManifest.xml:34:13-37
+171    </application>
+172
+173</manifest>

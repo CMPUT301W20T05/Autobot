@@ -70,6 +70,9 @@
         <activity android:name="com.example.autobot.GoogleMapActivity" />
         <activity android:name="com.example.autobot.DrawerActivity" />
         <activity
+            android:name="com.example.autobot.UCurRequest"
+            android:parentActivityName="com.example.autobot.HomePageActivity" />
+        <activity
             android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
             android:exported="false"
             android:label="@string/places_autocomplete_label"

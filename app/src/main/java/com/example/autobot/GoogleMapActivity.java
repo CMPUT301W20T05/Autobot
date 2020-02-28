@@ -88,6 +88,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     private final float DEFAULT_ZOOM = 18;
 
     private static final int REQUEST_CODE = 101;
+    private Object LatLng;
 
     private static final String TAG = "GoogleMapActivity";
 
