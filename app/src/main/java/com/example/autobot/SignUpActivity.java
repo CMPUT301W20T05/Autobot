@@ -37,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setUsername(editTextUserName.getText().toString());
                 user.setEmailAddress(editTextPhoneNumber.getText().toString());
                 Database db = new Database();
-                db.add_new_user(user);
+                //db.add_new_user(user);
 
         }
         });

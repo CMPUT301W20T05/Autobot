@@ -1,54 +1,23 @@
 package com.example.autobot;
 
-import android.Manifest;
-import android.app.FragmentTransaction;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class HomePageActivity extends GoogleMapActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener{
     private DrawerLayout drawer;
@@ -73,17 +42,19 @@ public class HomePageActivity extends GoogleMapActivity implements NavigationVie
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
-        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
+//        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
+//        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
+
+        materialSearchBar = findViewById(R.id.searchBarOriginLocation);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
+            mapView = mapFragment.getView();
         }
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        fetchLocation();
-
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+//        fetchLocation();
 
     }
     @Override
