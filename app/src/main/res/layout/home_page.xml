@@ -24,9 +24,6 @@
             android:elevation="4dp"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragment_container"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:shape="oval"
@@ -41,11 +38,22 @@
                 android:layout_height="match_parent"
                 tools:context=".MainActivity" />
 
+            <ImageView
+                android:id="@+id/currentLocation"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <EditText
                 android:id="@+id/editTextOriginLocation"
-                android:layout_width="290dp"
-                android:layout_height="47dp"
-                android:layout_marginTop="540dp"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="450dp"
                 android:background="@drawable/text_style"
                 android:text=" Where are you"
                 android:textSize="30sp"
@@ -56,8 +64,8 @@
 
             <EditText
                 android:id="@+id/editTextDestinationLocation"
-                android:layout_width="290dp"
-                android:layout_height="47dp"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/text_style"
                 android:text=" Where to go"
@@ -68,7 +76,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/editTextOriginLocation" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

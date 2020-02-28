@@ -42,6 +42,7 @@
 
         </activity>
         <activity android:name=".GoogleMapActivity" />
+        <activity android:name=".DrawerActivity" />
     </application>
 
 </manifest>

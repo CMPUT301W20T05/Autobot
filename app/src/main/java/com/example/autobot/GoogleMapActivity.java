@@ -40,6 +40,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 //        fetchLocation();
     }
 
+    //get current location
     protected void fetchLocation() {
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
