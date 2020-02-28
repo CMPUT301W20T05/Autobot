@@ -11,7 +11,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/logo">
+        android:src="@drawable/default_avatar">
 
     </ImageView>
     <LinearLayout
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Request Number: 1111"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:textSize="18sp">
 
         </TextView>

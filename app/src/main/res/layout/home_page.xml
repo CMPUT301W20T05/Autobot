@@ -36,8 +36,7 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity" />
-
+                tools:context=".MainActivity"/>
             <com.mancj.materialsearchbar.MaterialSearchBar
                 android:id="@+id/searchBarOriginLocation"
                 style="@style/MaterialSearchBarLight"
@@ -56,6 +55,8 @@
                 mapbox:layout_constraintHorizontal_bias="0.49"
                 mapbox:layout_constraintStart_toStartOf="parent"
                 mapbox:layout_constraintTop_toTopOf="parent" />
+
+
 
 <!--            <EditText-->
 <!--                android:id="@+id/editTextOriginLocation"-->
