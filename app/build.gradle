@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5a1a533e1b61960f19c46c4af4fd34d30ea8c9c8
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -7,14 +10,21 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.autobot"
+<<<<<<< HEAD
 
         minSdkVersion 16
 
+=======
+        minSdkVersion 16
+>>>>>>> 5a1a533e1b61960f19c46c4af4fd34d30ea8c9c8
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5a1a533e1b61960f19c46c4af4fd34d30ea8c9c8
         multiDexEnabled true
     }
     buildTypes {
@@ -31,8 +41,11 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+<<<<<<< HEAD
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+=======
+>>>>>>> 5a1a533e1b61960f19c46c4af4fd34d30ea8c9c8
     def nav_version = "2.1.0"
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
@@ -41,6 +54,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
+<<<<<<< HEAD
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.firebase:firebase-firestore:21.4.0'
     implementation 'com.android.support:multidex:1.0.3'
@@ -49,3 +63,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
 }
+=======
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'com.android.support:multidex:1.0.3'
+}
+>>>>>>> 5a1a533e1b61960f19c46c4af4fd34d30ea8c9c8
