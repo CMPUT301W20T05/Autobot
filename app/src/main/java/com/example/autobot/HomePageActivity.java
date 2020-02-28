@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+
 import java.util.ArrayList;
 
 import androidx.appcompat.widget.Toolbar;
@@ -45,14 +47,16 @@ public class HomePageActivity extends GoogleMapActivity implements NavigationVie
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
 
-        materialSearchBar = findViewById(R.id.searchBarOriginLocation);
+        materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        initMap();
 
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-            mapView = mapFragment.getView();
-        }
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+//
+//        if (mapFragment != null) {
+//            mapFragment.getMapAsync(this);
+//            mapView = mapFragment.getView();
+//        }
 //        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        fetchLocation();
 

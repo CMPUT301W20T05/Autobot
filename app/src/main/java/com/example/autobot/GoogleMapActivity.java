@@ -21,6 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
@@ -88,6 +89,8 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private static final int REQUEST_CODE = 101;
 
+    private static final String TAG = "GoogleMapActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +113,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 @Override
                 public void onSearchConfirmed(CharSequence text) {
                     startSearch(text.toString(), true, null, true);
+                    hideSoftKeyboard();
                 }
 
                 @Override
@@ -120,6 +124,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                             break;
                         case MaterialSearchBar.BUTTON_BACK:
                             materialSearchBar.disableSearch();
+                            hideSoftKeyboard();
                             break;
                     }
                 }
@@ -220,6 +225,16 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
                 }
             });
+        }
+    }
+
+    //initialize a map
+    public void initMap(){
+        Log.d(TAG, "initMap: initializing map");
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(GoogleMapActivity.this);
         }
     }
 
@@ -394,6 +409,10 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 fetchLocation();
             }
         }
+    }
+
+    private void hideSoftKeyboard(){
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
 }
