@@ -8,10 +8,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
-<<<<<<< HEAD
-
-=======
->>>>>>> 5a1a533e1b61960f19c46c4af4fd34d30ea8c9c8
         classpath 'com.google.gms:google-services:4.3.3'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -22,6 +18,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" } //https://github.com/mancj/MaterialSearchBar
         
     }
 }
