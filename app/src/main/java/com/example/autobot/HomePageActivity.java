@@ -4,7 +4,12 @@ import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.location.Location;
+
+import android.content.Intent;
+
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -50,7 +55,7 @@ import java.util.Date;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class HomePageActivity extends GoogleMapActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener{
+public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends GoogleMapActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener{
     private DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -68,17 +73,24 @@ public class HomePageActivity extends GoogleMapActivity implements NavigationVie
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        Button HPConfirmButton = findViewById(R.id.HPconfirm);
         EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
         EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
+        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                startActivity(intentCurRequest);
+            }
+        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 
-        if (mapFragment != null) {
+        if (mapFragment!=null) {
             mapFragment.getMapAsync(this);
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
