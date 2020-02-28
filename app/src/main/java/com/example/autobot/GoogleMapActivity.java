@@ -2,7 +2,11 @@
 *  https://www.youtube.com/watch?v=ifoVBdtXsv0*/
 
 /* tips:
-*  mapView = mapFragment.getView();*/
+*  mapView = mapFragment.getView();
+*setContentView(R.layout.google_map);
+SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+fetchLocation();*/
 
 package com.example.autobot;
 
@@ -87,10 +91,6 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.google_map);
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        fetchLocation();
 
         //initialize the location provider
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(GoogleMapActivity.this);
@@ -103,7 +103,8 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
                 @Override
                 public void onSearchStateChanged(boolean enabled) {
-
+                    String s = enabled ? "enabled" : "disabled";
+                    Toast.makeText(GoogleMapActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
