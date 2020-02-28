@@ -1,0 +1,256 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.autobot"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="16"
+8-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+11-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:5:2-76
+11-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:5:19-73
+12    <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
+12-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:6:5-82
+12-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:6:22-79
+13    <uses-permission android:name="android.permission.INTERNET" />
+13-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:7:5-67
+13-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:7:22-64
+14
+15    <!-- Include required permissions for Google Maps API to run. -->
+16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+16-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:23:5-79
+16-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:23:22-76
+17
+18    <uses-feature
+18-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+19        android:glEsVersion="0x00020000"
+19-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+20        android:required="true" />
+20-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+21
+22    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+22-->[com.google.android.gms:play-services-measurement-api:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/3d8bed9a53529358f2c71b6407804b7b/play-services-measurement-api-17.2.2/AndroidManifest.xml:24:5-68
+22-->[com.google.android.gms:play-services-measurement-api:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/3d8bed9a53529358f2c71b6407804b7b/play-services-measurement-api-17.2.2/AndroidManifest.xml:24:22-65
+23    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+23-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:26:5-82
+23-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:26:22-79
+24    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+24-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:26:5-110
+24-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:26:22-107
+25
+26    <application
+26-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:9:5-42:19
+27        android:name="androidx.multidex.MultiDexApplication"
+28        android:allowBackup="true"
+28-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:10:9-35
+29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+29-->[androidx.core:core:1.1.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/331630a23dfa1f0594bcf54d5352aa36/core-1.1.0/AndroidManifest.xml:24:18-86
+30        android:debuggable="true"
+31        android:icon="@mipmap/ic_launcher"
+31-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:11:9-43
+32        android:label="@string/app_name"
+32-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:12:9-41
+33        android:roundIcon="@mipmap/ic_launcher_round"
+33-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:13:9-54
+34        android:supportsRtl="true"
+34-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:14:9-35
+35        android:theme="@style/AppTheme" >
+35-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:15:9-40
+36        <meta-data
+36-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:17:9-18:70
+37            android:name="com.google.android.geo.API_KEY"
+37-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:17:20-65
+38            android:value="AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc" />
+38-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:18:13-68
+39
+40        <activity
+40-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:19:9-25:20
+41            android:name="com.example.autobot.SignUpActivity"
+41-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:19:19-49
+42            android:parentActivityName="com.example.autobot.MainActivity" >
+42-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:20:13-55
+43
+44            <!-- The meta-data tag is required if you support API level 15 and lower -->
+45            <meta-data
+45-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:22:13-24:49
+46                android:name="android.support.PARENT_ACTIVITY"
+46-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:23:17-63
+47                android:value=".MainActivity" />
+47-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:24:17-46
+48        </activity>
+49        <activity android:name="com.example.autobot.MainActivity" >
+49-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:26:9-32:20
+49-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:26:19-47
+50            <intent-filter>
+50-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:27:13-31:29
+51                <action android:name="android.intent.action.MAIN" />
+51-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:28:17-69
+51-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:28:25-66
+52
+53                <category android:name="android.intent.category.LAUNCHER" />
+53-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:30:17-77
+53-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:30:27-74
+54            </intent-filter>
+55        </activity>
+56        <activity
+56-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:34:9-36:20
+57            android:name="com.example.autobot.SetPasswordActivity"
+57-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:34:19-54
+58            android:parentActivityName="com.example.autobot.SignUpActivity" >
+58-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:35:13-57
+59        </activity>
+60        <activity
+60-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:37:9-39:20
+61            android:name="com.example.autobot.LoginActivity"
+61-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:37:19-48
+62            android:parentActivityName="com.example.autobot.MainActivity" >
+62-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:38:13-55
+63        </activity>
+64        <activity android:name="com.example.autobot.HomePageActivity" />
+64-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:40:9-54
+64-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:40:19-51
+65        <activity android:name="com.example.autobot.GoogleMapActivity" />
+65-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:41:9-55
+65-->/Users/crispeng/Autobot/app/src/main/AndroidManifest.xml:41:19-52
+66        <!-- Needs to be explicitly declared on P+ -->
+67        <uses-library
+67-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+68            android:name="org.apache.http.legacy"
+68-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+69            android:required="false" />
+69-->[com.google.android.gms:play-services-maps:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/82653396968af777fdb1f59f7c3ba8c3/play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+70
+71        <service
+71-->[com.google.firebase:firebase-firestore:21.4.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/f375f32f5185bb6311870afe86f4acf7/jetified-firebase-firestore-21.4.0/AndroidManifest.xml:17:9-23:19
+72            android:name="com.google.firebase.components.ComponentDiscoveryService"
+72-->[com.google.firebase:firebase-firestore:21.4.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/f375f32f5185bb6311870afe86f4acf7/jetified-firebase-firestore-21.4.0/AndroidManifest.xml:18:13-84
+73            android:directBootAware="true"
+73-->[com.google.firebase:firebase-common:19.3.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/acc7b592f486626269d98d14949897be/jetified-firebase-common-19.3.0/AndroidManifest.xml:34:13-43
+74            android:exported="false" >
+74-->[com.google.firebase:firebase-firestore:21.4.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/f375f32f5185bb6311870afe86f4acf7/jetified-firebase-firestore-21.4.0/AndroidManifest.xml:19:13-37
+75            <meta-data
+75-->[com.google.firebase:firebase-firestore:21.4.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/f375f32f5185bb6311870afe86f4acf7/jetified-firebase-firestore-21.4.0/AndroidManifest.xml:20:13-22:85
+76                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+76-->[com.google.firebase:firebase-firestore:21.4.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/f375f32f5185bb6311870afe86f4acf7/jetified-firebase-firestore-21.4.0/AndroidManifest.xml:21:17-111
+77                android:value="com.google.firebase.components.ComponentRegistrar" />
+77-->[com.google.firebase:firebase-firestore:21.4.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/f375f32f5185bb6311870afe86f4acf7/jetified-firebase-firestore-21.4.0/AndroidManifest.xml:22:17-82
+78            <meta-data
+78-->[com.google.android.gms:play-services-measurement-api:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/3d8bed9a53529358f2c71b6407804b7b/play-services-measurement-api-17.2.2/AndroidManifest.xml:30:13-32:85
+79                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+79-->[com.google.android.gms:play-services-measurement-api:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/3d8bed9a53529358f2c71b6407804b7b/play-services-measurement-api-17.2.2/AndroidManifest.xml:31:17-139
+80                android:value="com.google.firebase.components.ComponentRegistrar" />
+80-->[com.google.android.gms:play-services-measurement-api:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/3d8bed9a53529358f2c71b6407804b7b/play-services-measurement-api-17.2.2/AndroidManifest.xml:32:17-82
+81            <meta-data
+81-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:32:13-34:85
+82                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+82-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:33:17-96
+83                android:value="com.google.firebase.components.ComponentRegistrar" />
+83-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:34:17-82
+84        </service>
+85
+86        <receiver
+86-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:37:9-44:20
+87            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+87-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:38:13-78
+88            android:exported="true"
+88-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:39:13-36
+89            android:permission="com.google.android.c2dm.permission.SEND" >
+89-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:40:13-73
+90            <intent-filter>
+90-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:41:13-43:29
+91                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+91-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:42:17-81
+91-->[com.google.firebase:firebase-iid:20.0.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/946a39d7756c6b05aa38a853bdffc128/firebase-iid-20.0.2/AndroidManifest.xml:42:25-78
+92            </intent-filter>
+93        </receiver>
+94
+95        <activity
+95-->[com.google.android.gms:play-services-base:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/b989d78505a527364775fcd163b70614/play-services-base-17.0.0/AndroidManifest.xml:23:9-26:75
+96            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+96-->[com.google.android.gms:play-services-base:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/b989d78505a527364775fcd163b70614/play-services-base-17.0.0/AndroidManifest.xml:24:13-79
+97            android:exported="false"
+97-->[com.google.android.gms:play-services-base:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/b989d78505a527364775fcd163b70614/play-services-base-17.0.0/AndroidManifest.xml:25:13-37
+98            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+98-->[com.google.android.gms:play-services-base:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/b989d78505a527364775fcd163b70614/play-services-base-17.0.0/AndroidManifest.xml:26:13-72
+99
+100        <receiver
+100-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:29:9-33:20
+101            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+101-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:30:13-85
+102            android:enabled="true"
+102-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:31:13-35
+103            android:exported="false" >
+103-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:32:13-37
+104        </receiver>
+105        <receiver
+105-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:34:9-42:20
+106            android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver"
+106-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:35:13-100
+107            android:enabled="true"
+107-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:36:13-35
+108            android:exported="true"
+108-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:37:13-36
+109            android:permission="android.permission.INSTALL_PACKAGES" >
+109-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:38:13-69
+110            <intent-filter>
+110-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:39:13-41:29
+111                <action android:name="com.android.vending.INSTALL_REFERRER" />
+111-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:40:17-79
+111-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:40:25-76
+112            </intent-filter>
+113        </receiver>
+114
+115        <service
+115-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:44:9-47:40
+116            android:name="com.google.android.gms.measurement.AppMeasurementService"
+116-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:45:13-84
+117            android:enabled="true"
+117-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:46:13-35
+118            android:exported="false" />
+118-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:47:13-37
+119        <service
+119-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:48:9-52:72
+120            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+120-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:49:13-87
+121            android:enabled="true"
+121-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:50:13-35
+122            android:exported="false"
+122-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:51:13-37
+123            android:permission="android.permission.BIND_JOB_SERVICE" />
+123-->[com.google.android.gms:play-services-measurement:17.2.2] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/ac2605da77983b497481f9e2091aefdd/play-services-measurement-17.2.2/AndroidManifest.xml:52:13-69
+124
+125        <provider
+125-->[com.google.firebase:firebase-common:19.3.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/acc7b592f486626269d98d14949897be/jetified-firebase-common-19.3.0/AndroidManifest.xml:26:9-30:39
+126            android:name="com.google.firebase.provider.FirebaseInitProvider"
+126-->[com.google.firebase:firebase-common:19.3.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/acc7b592f486626269d98d14949897be/jetified-firebase-common-19.3.0/AndroidManifest.xml:27:13-77
+127            android:authorities="com.example.autobot.firebaseinitprovider"
+127-->[com.google.firebase:firebase-common:19.3.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/acc7b592f486626269d98d14949897be/jetified-firebase-common-19.3.0/AndroidManifest.xml:28:13-72
+128            android:exported="false"
+128-->[com.google.firebase:firebase-common:19.3.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/acc7b592f486626269d98d14949897be/jetified-firebase-common-19.3.0/AndroidManifest.xml:29:13-37
+129            android:initOrder="100" />
+129-->[com.google.firebase:firebase-common:19.3.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/acc7b592f486626269d98d14949897be/jetified-firebase-common-19.3.0/AndroidManifest.xml:30:13-36
+130
+131        <meta-data
+131-->[com.google.android.gms:play-services-basement:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/5ca8a01b95880f9d8714c967a1e76081/jetified-play-services-basement-17.0.0/AndroidManifest.xml:23:9-25:69
+132            android:name="com.google.android.gms.version"
+132-->[com.google.android.gms:play-services-basement:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/5ca8a01b95880f9d8714c967a1e76081/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
+133            android:value="@integer/google_play_services_version" />
+133-->[com.google.android.gms:play-services-basement:17.0.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/5ca8a01b95880f9d8714c967a1e76081/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
+134
+135        <provider
+135-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/538e1bf036d9e31df32f9331477cf520/lifecycle-process-2.2.0/AndroidManifest.xml:25:9-29:43
+136            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+136-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/538e1bf036d9e31df32f9331477cf520/lifecycle-process-2.2.0/AndroidManifest.xml:26:13-79
+137            android:authorities="com.example.autobot.lifecycle-process"
+137-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/538e1bf036d9e31df32f9331477cf520/lifecycle-process-2.2.0/AndroidManifest.xml:27:13-69
+138            android:exported="false"
+138-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/538e1bf036d9e31df32f9331477cf520/lifecycle-process-2.2.0/AndroidManifest.xml:28:13-37
+139            android:multiprocess="true" />
+139-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/crispeng/.gradle/caches/transforms-2/files-2.1/538e1bf036d9e31df32f9331477cf520/lifecycle-process-2.2.0/AndroidManifest.xml:29:13-40
+140    </application>
+141
+142</manifest>

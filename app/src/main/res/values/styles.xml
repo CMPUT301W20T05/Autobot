@@ -8,16 +8,15 @@
         <item name="colorAccent">@color/grey</item>
     </style>
 
-<<<<<<< HEAD
-=======
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
->>>>>>> 01f3f5fbac9e2191fafae803ce18a407e7d3d8c0
+
 </resources>

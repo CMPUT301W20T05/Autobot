@@ -14,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setEmailAddress(editTextPhoneNumber.getText().toString());
                 Database db = new Database();
                 db.add_new_user(user);
-
-
-
+                
         }
         });
 
@@ -55,5 +51,4 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
     }
-
 }
