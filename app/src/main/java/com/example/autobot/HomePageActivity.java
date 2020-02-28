@@ -100,7 +100,10 @@ public class HomePageActivity extends GoogleMapActivity implements NavigationVie
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PaymentInformationFragment()).commit();
                 break;
             case R.id.log_out:
-                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(intent);
+                break;
+            case R.id.edit_profile:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditProfilePage()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
