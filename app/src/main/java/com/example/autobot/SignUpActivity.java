@@ -38,7 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setEmailAddress(editTextPhoneNumber.getText().toString());
                 Database db = new Database();
                 db.add_new_user(user);
-                
+
         }
         });
 

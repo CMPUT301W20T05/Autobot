@@ -37,7 +37,10 @@
         <activity android:name=".LoginActivity"
             android:parentActivityName=".MainActivity">
         </activity>
-        <activity android:name=".HomePageActivity" />
+        <activity android:name=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity android:name=".GoogleMapActivity" />
     </application>
 
