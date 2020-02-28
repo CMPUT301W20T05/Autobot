@@ -31,6 +31,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
+    private Object LatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,8 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
             googleMap.addMarker(markerOptions);
+            float zoomlevel = 16.0f;
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomlevel));
         }
     }
 

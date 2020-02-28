@@ -10,6 +10,11 @@
         <item>CA</item>
         <item>US</item>
     </string-array>
+    <string-array name="Models_to_choose">
+        <item>Normal</item>
+        <item>Comfort</item>
+        <item>Luxcury</item>
+    </string-array>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="phonenumber">Phone Number*</string>
