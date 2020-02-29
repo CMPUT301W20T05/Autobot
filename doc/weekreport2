@@ -13,9 +13,11 @@ Xuechun Qiu: write a class for GoogleMap API, it contains the initializeation of
 Zonglun Li: Update the database version to connect to program.
 Wenxhuo Zhang: write a few ui in two versions, figure out automatic zoom in of googlr map
 Weida Wang: Create the firebase database and make connection in some activites
+Yiping Peng: Write the Home page menu for rider version, which contains a tool bar and the inside menu items.
 
 Comments:
 Xuechun Qiu: In order to have more efficient cooperation, we should write some description for every class/activity, and comment the usage of methds.
 Zonglun Li: Everyone should ask members whether the work he will do be done by others.
 Wenzhuo Zhang: we may need to merge and pull master brach more frequently in order to keep the newest version
 Weida Wang: We should put our problem on somewhere that ask other members,that can more quickly and effecial solve problem.
+Yiping Peng: One of our members points out that some of the codes are hard to understand without clear comments, so one of the important things to improve for us is to write comments for others to collaborate easily.
