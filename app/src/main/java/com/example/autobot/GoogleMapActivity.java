@@ -233,12 +233,12 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     public void initMap(){
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        fetchLocation();
 
         if (mapFragment != null) {
             mapView = mapFragment.getView();
             mapFragment.getMapAsync(GoogleMapActivity.this);
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fetchLocation();
         }
     }
 
