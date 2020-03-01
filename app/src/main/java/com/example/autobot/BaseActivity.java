@@ -1,13 +1,3 @@
-/* https://www.tutorialspoint.com/how-to-show-current-location-on-a-google-map-on-android
-*  https://www.youtube.com/watch?v=ifoVBdtXsv0*/
-
-/* tips:
-*  mapView = mapFragment.getView();
-*setContentView(R.layout.google_map);
-SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-fetchLocation();*/
-
 package com.example.autobot;
 
 import android.Manifest;
@@ -20,30 +10,43 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
@@ -54,16 +57,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
@@ -71,7 +65,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+import javax.annotation.Nullable;
+
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener, OnMapReadyCallback{
+
+    DrawerLayout drawer;
+    public ArrayAdapter<PaymentCard> mAdapter;
+    public ArrayList<PaymentCard> mDataList;
+
+    FrameLayout frameLayout;
 
     private GoogleMap mMap;
     View mapView;
@@ -93,23 +95,48 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     private static final String TAG = "GoogleMapActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base);
+
+        //set up google map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fetchLocation();
+        }
+
+        //set framelayout so the extended children of base activity can inflate its own layout
+        frameLayout = (FrameLayout) findViewById(R.id.content);
+
+        //set up tool bar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        //set up drawer
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         //initialize the location provider
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(GoogleMapActivity.this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(BaseActivity.this);
         //initialize the places
-        Places.initialize(GoogleMapActivity.this, "AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc");
+        Places.initialize(BaseActivity.this, "AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc");
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
+        // search bar functions
         if (materialSearchBar != null) {
             //material search bar methods
             materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
                 @Override
                 public void onSearchStateChanged(boolean enabled) {
                     String s = enabled ? "enabled" : "disabled";
-                    Toast.makeText(GoogleMapActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BaseActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -227,21 +254,60 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 }
             });
         }
-
     }
 
-    //initialize a map
-    public void initMap(){
-        Log.d(TAG, "initMap: initializing map");
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        if (mapFragment != null) {
-            mapView = mapFragment.getView();
-            mapFragment.getMapAsync(GoogleMapActivity.this);
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-            fetchLocation();
+        switch(menuItem.getItemId()) {
+            case R.id.my_request_history:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestHistoryFragment()).commit();
+                break;
+            case R.id.settings:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                break;
+            case R.id.payment_information:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PaymentInformationFragment()).commit();
+                break;
+            case R.id.log_out:
+                Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(intent);
+                break;
+            case R.id.edit_profile:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditProfilePage()).commit();
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
+    public void onOkPressed(PaymentCard newPayment) {
+        mDataList.add(newPayment);
+        mAdapter.notifyDataSetChanged();
+    }
+
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) { //will be called when map is ready and loaded
+//        mMap = googleMap;
+//
+//        if (currentLocation != null) {
+//
+//            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+//            MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
+//            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+//            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+//            googleMap.addMarker(markerOptions);
+//        }
+//
+//    }
 
     //get current location
     protected void fetchLocation() {
@@ -260,7 +326,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                     Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
                     assert supportMapFragment != null;
-                    supportMapFragment.getMapAsync(GoogleMapActivity.this);
+                    supportMapFragment.getMapAsync(BaseActivity.this);
                 }
             }
         });
@@ -309,23 +375,23 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
 
-        SettingsClient settingsClient = LocationServices.getSettingsClient(GoogleMapActivity.this);
+        SettingsClient settingsClient = LocationServices.getSettingsClient(BaseActivity.this);
         Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
 
-        task.addOnSuccessListener(GoogleMapActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
+        task.addOnSuccessListener(BaseActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                 getDeviceLocation();
             }
         });
 
-        task.addOnFailureListener(GoogleMapActivity.this, new OnFailureListener() {
+        task.addOnFailureListener(BaseActivity.this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 if (e instanceof ResolvableApiException) {
                     ResolvableApiException resolvable = (ResolvableApiException) e;
                     try {
-                        resolvable.startResolutionForResult(GoogleMapActivity.this, 51);
+                        resolvable.startResolutionForResult(BaseActivity.this, 51);
                     } catch (IntentSender.SendIntentException e1) {
                         e1.printStackTrace();
                     }
@@ -394,7 +460,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
                             }
                         } else {
-                            Toast.makeText(GoogleMapActivity.this, "unable to get last location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BaseActivity.this, "unable to get last location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
