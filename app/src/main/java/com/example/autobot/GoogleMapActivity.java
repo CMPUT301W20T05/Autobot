@@ -104,7 +104,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
         if (materialSearchBar != null) {
-
+            //material search bar methods
             materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
                 @Override
                 public void onSearchStateChanged(boolean enabled) {
@@ -233,6 +233,8 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     public void initMap(){
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLocation();
 
         if (mapFragment != null) {
             mapView = mapFragment.getView();
@@ -277,17 +279,10 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onStop() {
         super.onStop();
     }
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
     }
 
     @Override
