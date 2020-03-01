@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
@@ -47,28 +49,27 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
 
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
-//        Button HPConfirmButton = findViewById(R.id.HPconfirm);
-//
-//        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-//                startActivity(intentCurRequest);
-//            }
-//        });
+        Button HPConfirmButton = findViewById(R.id.HPconfirm);
+
+        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                startActivity(intentCurRequest);
+            }
+        });
 
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
 
         initMap();
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-//
-//        if (mapFragment != null) {
-//            mapFragment.getMapAsync(this);
-//            mapView = mapFragment.getView();
-//        }
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        fetchLocation();
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapView = mapFragment.getView();
+        }
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLocation();*/
 
     }
     @Override
