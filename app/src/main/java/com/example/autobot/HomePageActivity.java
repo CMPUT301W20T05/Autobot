@@ -47,10 +47,10 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        final Intent intent = getIntent();
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
-        /*Button HPConfirmButton = findViewById(R.id.HPconfirm);
+        Button HPConfirmButton = (Button) findViewById(R.id.HPconfirm);
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,9 +58,10 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
                 Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentCurRequest);
             }
-        });*/
+        });
 
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
+
 
         initMap();
         /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
