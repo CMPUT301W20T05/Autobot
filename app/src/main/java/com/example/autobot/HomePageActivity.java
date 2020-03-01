@@ -24,27 +24,20 @@ import java.util.ArrayList;
 
 import androidx.appcompat.widget.Toolbar;
 
-public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends GoogleMapActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener{
-    private DrawerLayout drawer;
-    public ListView paymentList;
-    public ArrayAdapter<PaymentCard> mAdapter;
-    public ArrayList<PaymentCard> mDataList;
+public class HomePageActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_page);
-        setTitle("Home Page");
+        setTitle("Home page");
+        View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //set up EditText and button
+        //EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
+        materialSearchBar = findViewById(R.id.searchBarDestination);
 
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+    }
+}
 
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
@@ -58,9 +51,9 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
 //            }
 //        });
 
-        materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
-
-        initMap();
+//        materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
+//
+//        initMap();
 
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 //
@@ -71,45 +64,4 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
 //        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        fetchLocation();
 
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-        switch(menuItem.getItemId()) {
-            case R.id.my_request_history:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestHistoryFragment()).commit();
-                break;
-            case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-                break;
-            case R.id.payment_information:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PaymentInformationFragment()).commit();
-                break;
-            case R.id.log_out:
-                Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(intent);
-                break;
-            case R.id.edit_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditProfilePage()).commit();
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-
-        return true;
-    }
-
-    @Override
-    public void onBackPressed(){
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-    public void onOkPressed(PaymentCard newPayment) {
-        mDataList.add(newPayment);
-        mAdapter.notifyDataSetChanged();
-    }
-
-}
 
