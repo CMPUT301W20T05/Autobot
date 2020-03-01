@@ -28,17 +28,14 @@ import androidx.appcompat.widget.Toolbar;
 
 public class HomePageActivity extends BaseActivity {
 
+    private Button HPConfirmButton;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setTitle("Home page");
         View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
 
-        //set up EditText and button
-        //EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
-        materialSearchBar = findViewById(R.id.searchBarDestination);
-
-        Button HPConfirmButton = (Button) findViewById(R.id.HPconfirm);
+        HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override

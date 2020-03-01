@@ -24,7 +24,7 @@
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
     <string name="Destination">Destination</string>
     <string name="address">Address</string>
-    <string name="Estimated_fare">Estimate fare:</string>
+    <string name="Estimated_fare">fare:</string>
     <string name="fare">$0.0</string>
     <string name="add_tips">Add tips</string>
     <string name="confirm">Confirm</string>
