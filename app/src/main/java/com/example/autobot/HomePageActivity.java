@@ -50,7 +50,7 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
 
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
-        Button HPConfirmButton = findViewById(R.id.HPconfirm);
+        /*Button HPConfirmButton = findViewById(R.id.HPconfirm);
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class HomePageActivity<mapFragment, fusedLocationProviderClient> extends 
                 Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentCurRequest);
             }
-        });
+        });*/
 
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
 
