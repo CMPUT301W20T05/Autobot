@@ -9,6 +9,7 @@ class PayInfo {
     public PayInfo(){
 
     }
+
     public void setCardNumber(String CardNumber){
         this.CardNumber = CardNumber;
     }

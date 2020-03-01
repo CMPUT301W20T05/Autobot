@@ -6,7 +6,9 @@ import android.location.Location;
 import java.util.Date;
 
 
+
 public class Request {
+
     private User Rider;
     private User Driver;
     private Location Destination;
