@@ -18,10 +18,11 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
+
         final Intent intent = getIntent();
         TextView textViewBackToLogin = findViewById(R.id.textViewGoToSignUp);
-        EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
-        EditText editTextUserName = findViewById(R.id.accountUserName);
+        final EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
+        final EditText editTextUserName = findViewById(R.id.accountUserName);
         Button signUpButton = findViewById(R.id.signUpButton);
         RadioButton radioButtonDriver = findViewById(R.id.radioButtonDriver);
         RadioButton radioButtonRider = findViewById(R.id.radioButtonRider);
@@ -32,6 +33,12 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
                 startActivity(intentSetPassword);
+                User user= new User();
+                user.setUsername(editTextUserName.getText().toString());
+                user.setEmailAddress(editTextPhoneNumber.getText().toString());
+                Database db = new Database();
+                //db.add_new_user(user);
+
         }
         });
 
@@ -44,5 +51,4 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
     }
-
 }
