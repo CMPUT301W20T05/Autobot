@@ -44,5 +44,4 @@
         <activity android:name=".UCurRequest"
             android:parentActivityName=".HomePageActivity"/>
     </application>
-
 </manifest>
