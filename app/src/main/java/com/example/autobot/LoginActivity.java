@@ -13,6 +13,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        setTitle("Login");
 
         Button buttonLogin = findViewById(R.id.buttonLogin);
 

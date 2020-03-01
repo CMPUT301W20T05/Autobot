@@ -6,6 +6,9 @@ class PayInfo {
     private String BillingAddress;
     private String Country;
     private String PostalCode;
+    public PayInfo(){
+
+    }
 
     public void setCardNumber(String CardNumber){
         this.CardNumber = CardNumber;

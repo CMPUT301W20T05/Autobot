@@ -3,39 +3,52 @@ package com.example.autobot;
 import android.location.Location;
 import android.media.Image;
 
+import android.provider.ContactsContract;
+
+import com.google.android.gms.maps.model.LatLng;
+
+
 public class User implements Driver, Rider {
     private String Username;
     private String EmailAddress;
     private String PhoneNumber;
-    private Location CurrentLocation;
+    private LatLng CurrentLocation;
     private String Password;
     private Image Photo;
-    private int Stars;
+    private double Stars;
     private PayInfo PaymentInfo;
     private String UserType;
+    private String FirstName;
+    private String LastName;
 
-    public User(String username, String emailAddress, String password, String usertype, Location location_1, String userType){
-        this.Username = username;
-        this.EmailAddress = emailAddress;
-        this.Password = password;
-        this.UserType = usertype;
-        this.PhoneNumber = "";
-        this.CurrentLocation = new Location(location_1);
-        this.Stars = 5;
-        this.PaymentInfo = new PayInfo();
-        this.UserType = userType;
-    }
-    public User(String username,  String password, String usertype, Location location_1, String userType, String phoneNumber){
-        this.Username = username;
+    public User(){
+        this.Username = "";
         this.EmailAddress = "";
-        this.Password = password;
-        this.UserType = usertype;
-        this.PhoneNumber = phoneNumber;
-        this.CurrentLocation = new Location(location_1);
-        this.Stars = 5;
+        this.Password = "";
+        this.UserType = "";
+        this.PhoneNumber = "";
+        this.CurrentLocation = new LatLng(0,0);
+        this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
-        this.UserType = userType;
     }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
+
     public String getUsername(){
         return this.Username;
     }
@@ -60,7 +73,9 @@ public class User implements Driver, Rider {
     public String getPassword(){
         return this.Password;
     }
-    public void setPassord(String password){
+
+    public void setPassword(String password){
+
         this.Password = password;
     }
     public Image getPhoto(){
@@ -69,9 +84,20 @@ public class User implements Driver, Rider {
     public void uploadPhoto(Image photo){
 
     }
-    public int getStars(){
+
+
+    public Double getStars(){
         return this.Stars;
     }
+
+    public String getUserType() {
+        return UserType;
+    }
+
+    public void setUserType(String userType) {
+        UserType = userType;
+    }
+
     public PayInfo getPayInfo(){
         return this.PaymentInfo;
     }

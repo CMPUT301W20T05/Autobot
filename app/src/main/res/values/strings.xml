@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Autobot</string>
+
     <string name="solgan">Autobot\n always by your side</string>
     <string name="please_input_phone_number">Please input phone number</string>
     <string name="log_in">Log in</string>
@@ -8,6 +9,11 @@
     <string-array name="country">
         <item>CA</item>
         <item>US</item>
+    </string-array>
+    <string-array name="Models">
+        <item>Normal</item>
+        <item>Pleasure</item>
+        <item>Luxury</item>
     </string-array>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
@@ -39,11 +45,14 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
+    <string name="Estimated_Money">Estimated Money</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="where_to_go">Where to go?</string>
+    <string name="where_are_you">Where are you?</string>
 </resources>
+
