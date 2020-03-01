@@ -348,7 +348,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             public boolean onMyLocationButtonClick() {
                 if (materialSearchBar.isSuggestionsVisible())
                     materialSearchBar.clearSuggestions();
-                if (materialSearchBar.isSearchEnabled())
+                if (materialSearchBar.isSearchOpened())
                     materialSearchBar.closeSearch();
                 return false;
             }
