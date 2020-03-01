@@ -114,7 +114,6 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 @Override
                 public void onSearchConfirmed(CharSequence text) {
                     startSearch(text.toString(), true, null, true);
-                    hideSoftKeyboard();
                 }
 
                 @Override
@@ -124,8 +123,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                         case MaterialSearchBar.BUTTON_SPEECH:
                             break;
                         case MaterialSearchBar.BUTTON_BACK:
-                            materialSearchBar.disableSearch();
-                            hideSoftKeyboard();
+                            materialSearchBar.closeSearch();
                             break;
                     }
                 }
@@ -351,7 +349,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 if (materialSearchBar.isSuggestionsVisible())
                     materialSearchBar.clearSuggestions();
                 if (materialSearchBar.isSearchEnabled())
-                    materialSearchBar.disableSearch();
+                    materialSearchBar.closeSearch();
                 return false;
             }
         });
@@ -410,10 +408,6 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 fetchLocation();
             }
         }
-    }
-
-    private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
 }
