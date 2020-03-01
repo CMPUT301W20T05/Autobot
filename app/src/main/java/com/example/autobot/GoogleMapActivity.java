@@ -104,6 +104,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
         if (materialSearchBar != null) {
+
             materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
                 @Override
                 public void onSearchStateChanged(boolean enabled) {
@@ -114,7 +115,6 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 @Override
                 public void onSearchConfirmed(CharSequence text) {
                     startSearch(text.toString(), true, null, true);
-                    hideSoftKeyboard();
                 }
 
                 @Override
@@ -124,8 +124,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                         case MaterialSearchBar.BUTTON_SPEECH:
                             break;
                         case MaterialSearchBar.BUTTON_BACK:
-                            materialSearchBar.disableSearch();
-                            hideSoftKeyboard();
+                            materialSearchBar.closeSearch();
                             break;
                     }
                 }
@@ -139,6 +138,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                     FindAutocompletePredictionsRequest predictionsRequest = FindAutocompletePredictionsRequest.builder()
                             .setTypeFilter(TypeFilter.ADDRESS)
                             .setSessionToken(token)
@@ -235,6 +235,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 
         if (mapFragment != null) {
+            mapView = mapFragment.getView();
             mapFragment.getMapAsync(GoogleMapActivity.this);
         }
     }
@@ -350,8 +351,8 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             public boolean onMyLocationButtonClick() {
                 if (materialSearchBar.isSuggestionsVisible())
                     materialSearchBar.clearSuggestions();
-                if (materialSearchBar.isSearchEnabled())
-                    materialSearchBar.disableSearch();
+                if (materialSearchBar.isSearchOpened())
+                    materialSearchBar.closeSearch();
                 return false;
             }
         });
@@ -410,10 +411,6 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 fetchLocation();
             }
         }
-    }
-
-    private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
 }

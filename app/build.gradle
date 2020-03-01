@@ -43,9 +43,12 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.1'
     implementation 'androidx.navigation:navigation-ui:2.2.1'
 
-    implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.2.0'
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
 }
