@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
@@ -26,42 +28,39 @@ import androidx.appcompat.widget.Toolbar;
 
 public class HomePageActivity extends BaseActivity {
 
+    private Button HPConfirmButton;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setTitle("Home page");
         View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
 
-        //set up EditText and button
-        //EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
-        materialSearchBar = findViewById(R.id.searchBarDestination);
+        HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
 
+        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                startActivity(intentCurRequest);
+            }
+        });
     }
 }
 
+
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
-//        Button HPConfirmButton = findViewById(R.id.HPconfirm);
-//
-//        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-//                startActivity(intentCurRequest);
-//            }
-//        });
 
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 //        materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
 //
 //        initMap();
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-//
-//        if (mapFragment != null) {
-//            mapFragment.getMapAsync(this);
-//            mapView = mapFragment.getView();
-//        }
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        fetchLocation();
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapView = mapFragment.getView();
+        }
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLocation();*/
 
 
