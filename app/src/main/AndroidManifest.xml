@@ -43,9 +43,7 @@
             android:parentActivityName=".MainActivity">
         </activity>
         <activity android:name=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".GoogleMapActivity" />
         <activity android:name=".DrawerActivity" />
         <activity android:name=".UCurRequest"
