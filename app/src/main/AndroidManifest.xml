@@ -4,6 +4,7 @@
 <!--    location permission-->
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 <!--    camera permission-->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -48,5 +49,6 @@
         <activity android:name=".UCurRequest"
             android:parentActivityName=".HomePageActivity"/>
         <activity android:name=".BaseActivity" />
+        <activity android:name=".DriverIsOnTheWayActivity" />
     </application>
 </manifest>

@@ -1,10 +1,14 @@
 package com.example.autobot;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -23,6 +27,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -94,6 +100,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private static final String TAG = "GoogleMapActivity";
 
+    //notification
+    public static final String CHANNEL_ID = "channel";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +137,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Places.initialize(BaseActivity.this, "AIzaSyBH4oSajBSivcwAHF21EL9IwpTxJADA5Zc");
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+
+        createNotificationChannels();
 
         // search bar functions
         if (materialSearchBar != null) {
@@ -475,4 +486,29 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //notification
+    private void createNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Channel",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("This is Notification Channel");
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    public void sendOnChannel() {
+        Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle("New Notification")
+                .setContentText("Message...")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build();
+    }
 }
