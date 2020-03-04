@@ -35,7 +35,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setTitle("Home page");
-        View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
+        View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
 
         /*HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
 
