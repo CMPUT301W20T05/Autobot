@@ -33,9 +33,9 @@ public class HomePageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setTitle("Home page");
-        View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
+        View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
-        HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
+        /*HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +43,7 @@ public class HomePageActivity extends BaseActivity {
                 Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentCurRequest);
             }
-        });
+        });*/
     }
 }
 
