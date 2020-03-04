@@ -54,5 +54,6 @@
     <string name="menu_send">Send</string>
     <string name="where_to_go">Where to go?</string>
     <string name="where_are_you">Where are you?</string>
+    <string name="api_key">AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA</string>
 </resources>
 
