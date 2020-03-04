@@ -1,10 +1,12 @@
 package com.example.autobot;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.content.Intent;
 import android.os.Handler;
+
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,6 +17,8 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.schedule(task,DELAY);
+
 
     }
 }
