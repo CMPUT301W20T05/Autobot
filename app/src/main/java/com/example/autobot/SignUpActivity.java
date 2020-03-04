@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +31,10 @@ import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
 
+
     int Type_Rider = 0 ;
     boolean Checkbox = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +42,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         TextView textViewBackToLogin = findViewById(R.id.textViewGoToSignUp);
+
         Button ContinueButton = findViewById(R.id.ContinueButton);
         final CheckBox checkBoxPolicy = findViewById(R.id.checkBoxPolicy);
-
         final RadioButton radioButtonDriver = findViewById(R.id.radioButtonDriver);
         final RadioButton radioButtonRider = findViewById(R.id.radioButtonRider);
         radioButtonDriver.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -122,8 +125,6 @@ public class SignUpActivity extends AppCompatActivity {
                               }
                           }
                       });
-
-
                   }
                   else{
                       if (Username.length() == 0) editTextUserName.setError("Please input Username!");
