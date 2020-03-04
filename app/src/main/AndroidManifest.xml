@@ -49,6 +49,8 @@
         <activity android:name=".DrawerActivity" />
         <activity android:name=".UCurRequest"
             android:parentActivityName=".HomePageActivity"/>
+        <activity android:name=".DriverhomeActivity"
+            android:parentActivityName=".LoginActivity"/>
         <activity android:name=".BaseActivity" />
         <activity android:name=".DriverIsOnTheWayActivity" />
     </application>

@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.autobot.ui.Driverhomepage;
+
 
 public class LoginActivity extends AppCompatActivity {
     Intent next_activity;
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
                 int user_type = 0;
                 //check what role we are playing
                 if(user_type == 0){
-                    next_activity = new Intent(LoginActivity.this, Driverhomepage.class);
+                    next_activity = new Intent(LoginActivity.this, DriverhomeActivity.class);
                 }
                 //otherwise change to rider version
                 else{
