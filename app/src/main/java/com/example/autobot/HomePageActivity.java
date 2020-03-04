@@ -20,10 +20,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -36,6 +39,15 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         super.onCreate(savedInstanceState);
         setTitle("Home page");
         View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        // Specify the types of place data to return.
+        if (autocompleteFragment != null) {
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            setAutocompleteSupportFragment(autocompleteFragment);
+        }
 
         HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
 
