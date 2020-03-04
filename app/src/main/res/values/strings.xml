@@ -16,7 +16,8 @@
         <item>Luxury</item>
     </string-array>
     <string name="already_have_an_account">Already have an account?</string>
-    <string name="sign_in">Sign in</string>
+    <string name="Continue_button">Continue</string>
+    <string name="Log_on">Log on</string>
     <string name="phonenumber">Phone Number*</string>
     <string name="user_name">User Name*</string>
     <string name="driver">Driver</string>

@@ -1,29 +1,34 @@
 package com.example.autobot;
 
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.Map;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
+import static com.android.volley.VolleyLog.TAG;
 
 public class Database {
-    private FirebaseFirestore db;
-    CollectionReference collectionReference_user;
-    CollectionReference collectionReference_request;
+    protected FirebaseFirestore db;
+    public static CollectionReference collectionReference_user;
+
 
     public Database() {
         db = FirebaseFirestore.getInstance();
         collectionReference_user = db.collection("users");
-        collectionReference_request = db.collection("requests");
     }
+
+    //    CollectionReference collectionReference_request;
+
+
+
+
 
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
@@ -49,5 +54,15 @@ public class Database {
                         Log.d(TAG, "Data addition failed" + e.toString());
                     }
                 });
-}
+    }
+    public static DocumentReference getUsername(String username) {
+        return collectionReference_user.document(username);
+    }
+
+    public  void getPhoneNumber() {
+
+
+    }
+
+
 }

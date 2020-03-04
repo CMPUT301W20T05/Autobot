@@ -65,7 +65,7 @@ public class User implements Driver, Rider {
         return this.PhoneNumber;
     }
     public void setPhoneNumber(String phoneNumber){
-        this.EmailAddress = phoneNumber;
+        this.PhoneNumber = phoneNumber;
     }
     public void getCurrentLocation(){
 
