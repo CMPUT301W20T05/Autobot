@@ -15,9 +15,16 @@ import java.util.HashMap;
 import static com.android.volley.VolleyLog.TAG;
 
 public class Database {
-    public static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    public static CollectionReference collectionReference_user  = db.collection("users");
-//    CollectionReference collectionReference_request;
+    protected FirebaseFirestore db;
+    public static CollectionReference collectionReference_user;
+
+
+    public Database() {
+        db = FirebaseFirestore.getInstance();
+        collectionReference_user = db.collection("users");
+    }
+
+    //    CollectionReference collectionReference_request;
 
 
 
@@ -50,6 +57,12 @@ public class Database {
     }
     public static DocumentReference getUsername(String username) {
         return collectionReference_user.document(username);
+    }
+
+    public  void getPhoneNumber() {
+
 
     }
+
+
 }

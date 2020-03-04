@@ -2,9 +2,11 @@ package com.example.autobot;
 
 import android.location.Location;
 import android.media.Image;
+
 import android.provider.ContactsContract;
 
 import com.google.android.gms.maps.model.LatLng;
+
 
 public class User implements Driver, Rider {
     private String Username;
@@ -46,6 +48,7 @@ public class User implements Driver, Rider {
         LastName = lastName;
     }
 
+
     public String getUsername(){
         return this.Username;
     }
@@ -62,7 +65,7 @@ public class User implements Driver, Rider {
         return this.PhoneNumber;
     }
     public void setPhoneNumber(String phoneNumber){
-        this.EmailAddress = phoneNumber;
+        this.PhoneNumber = phoneNumber;
     }
     public void getCurrentLocation(){
 
@@ -70,7 +73,9 @@ public class User implements Driver, Rider {
     public String getPassword(){
         return this.Password;
     }
+
     public void setPassword(String password){
+
         this.Password = password;
     }
     public Image getPhoto(){
@@ -79,6 +84,8 @@ public class User implements Driver, Rider {
     public void uploadPhoto(Image photo){
 
     }
+
+
     public Double getStars(){
         return this.Stars;
     }

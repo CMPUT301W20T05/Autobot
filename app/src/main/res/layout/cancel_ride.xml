@@ -85,6 +85,7 @@
         android:inputType="textPersonName"
         android:text="Your driver is on the way to pick you up..."
         android:textSize="22sp"
+
         android:textStyle="bold"
         android:textColor="@color/black"
         android:background="@null"
