@@ -158,6 +158,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 public void onPlaceSelected(@NonNull Place place) {
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                     LatLng latLng = place.getLatLng();
+
                     //remove old marker and add new marker
                     if (currentLocationMarker != null) {
                         currentLocationMarker.remove();
@@ -165,10 +166,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
                     mMap.clear();
                     MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                    markerOptions.title("Current Location");
-                    currentLocationMarker = mMap.addMarker(markerOptions);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+                    if (latLng != null) {
+                        markerOptions.position(new LatLng(latLng.latitude, latLng.longitude));
+                        markerOptions.title("Current Location");
+                        currentLocationMarker = mMap.addMarker(markerOptions);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), DEFAULT_ZOOM));
+                    }
                 }
 
                 @Override
@@ -313,10 +316,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPause() {
         super.onPause();
-
         if (googleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,  this);
-
         }
     }
 
