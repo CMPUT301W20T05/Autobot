@@ -16,7 +16,8 @@
         <item>Luxury</item>
     </string-array>
     <string name="already_have_an_account">Already have an account?</string>
-    <string name="sign_in">Sign in</string>
+    <string name="Continue_button">Continue</string>
+    <string name="Log_on">Log on</string>
     <string name="phonenumber">Phone Number*</string>
     <string name="user_name">User Name*</string>
     <string name="driver">Driver</string>
@@ -24,7 +25,7 @@
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
     <string name="Destination">Destination</string>
     <string name="address">Address</string>
-    <string name="Estimated_fare">Estimate fare:</string>
+    <string name="Estimated_fare">fare:</string>
     <string name="fare">$0.0</string>
     <string name="add_tips">Add tips</string>
     <string name="confirm">Confirm</string>
@@ -54,5 +55,6 @@
     <string name="menu_send">Send</string>
     <string name="where_to_go">Where to go?</string>
     <string name="where_are_you">Where are you?</string>
+    <string name="api_key">AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA</string>
 </resources>
 
