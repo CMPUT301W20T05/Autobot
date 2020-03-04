@@ -5,6 +5,7 @@
 <!--    location permission-->
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 <!--    camera permission-->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -20,7 +21,7 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA"/>
+            android:value="@string/api_key"/>
 
         <activity android:name=".SignUpActivity"
             android:parentActivityName=".MainActivity">
@@ -49,5 +50,6 @@
         <activity android:name=".UCurRequest"
             android:parentActivityName=".HomePageActivity"/>
         <activity android:name=".BaseActivity" />
+        <activity android:name=".DriverIsOnTheWayActivity" />
     </application>
 </manifest>

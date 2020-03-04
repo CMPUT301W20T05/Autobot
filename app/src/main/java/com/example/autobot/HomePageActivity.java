@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -26,7 +27,8 @@ import java.util.ArrayList;
 
 import androidx.appcompat.widget.Toolbar;
 
-public class HomePageActivity extends BaseActivity {
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+    public TextView name;
 
     private Button HPConfirmButton;
     @Override
@@ -45,8 +47,13 @@ public class HomePageActivity extends BaseActivity {
             }
         });*/
     }
-}
 
+    @Override
+    public void updateName(String Name) {
+        name = findViewById(R.id.driver_name);
+        name.setText(Name);
+    }
+}
 
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
@@ -62,5 +69,3 @@ public class HomePageActivity extends BaseActivity {
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();*/
-
-

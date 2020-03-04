@@ -7,101 +7,102 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="63dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="490dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView3"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icon" />
 
-    <EditText
+    <TextView
         android:id="@+id/Driver_name"
-        android:layout_width="151dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="490dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:gravity="center"
         android:text="Driver Name"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/mapView3" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView3"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/imageViewAvatar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/see_profile"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="84dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="490dp"
         android:text="See profile"
         android:textColor="@color/blue2"
         android:textSize="11dp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toEndOf="@+id/Driver_name"
-        app:layout_constraintTop_toBottomOf="@+id/mapView3" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/emailButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="490dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView3"
+        app:layout_constraintStart_toEndOf="@+id/phoneButton"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <ImageButton
         android:id="@+id/phoneButton"
-        android:layout_width="44dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/emailButton"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="490dp"
         app:layout_constraintStart_toEndOf="@+id/see_profile"
-        app:layout_constraintTop_toBottomOf="@+id/mapView3"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/stat_sys_phone_call" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/mapView3"
-        app:layout_constraintTop_toTopOf="@+id/mapView3"
+        android:id="@+id/button_back"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_revert" />
 
-    <EditText
-        android:id="@+id/drriver_coming"
-        android:layout_width="412dp"
-        android:layout_height="87dp"
-        android:layout_marginTop="36dp"
+    <TextView
+        android:id="@+id/driver_condition"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="566dp"
+        android:background="@null"
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="Your driver is on the way to pick you up..."
+        android:textColor="@color/black"
         android:textSize="22sp"
 
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:background="@null"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Driver_name" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/cancel_order"
         android:layout_width="218dp"
         android:layout_height="68dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/blue2"
         android:text="Cancel Order"
         android:textColor="@color/white"
-        android:background="@color/blue2"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/driver_condition" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
