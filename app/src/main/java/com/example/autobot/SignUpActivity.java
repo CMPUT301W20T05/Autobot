@@ -3,14 +3,24 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -28,19 +38,11 @@ public class SignUpActivity extends AppCompatActivity {
         RadioButton radioButtonRider = findViewById(R.id.radioButtonRider);
         CheckBox checkBoxPolicy = findViewById(R.id.checkBoxPolicy);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
-                startActivity(intentSetPassword);
-                User user= new User();
-                user.setUsername(editTextUserName.getText().toString());
-                user.setEmailAddress(editTextPhoneNumber.getText().toString());
-                Database db = new Database();
-                //db.add_new_user(user);
 
-        }
-        });
+
+
+
+
 
         textViewBackToLogin.setOnClickListener(new View.OnClickListener() {
             @Override

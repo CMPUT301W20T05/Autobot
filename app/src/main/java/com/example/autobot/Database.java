@@ -34,6 +34,7 @@ public class Database {
         user_data.put("PhoneNumber", user.getPhoneNumber());
         user_data.put("StarsRate", user.getStars().toString());
         user_data.put("Type", user.getUserType());
+        user_data.put("Password",user.getPassword());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
