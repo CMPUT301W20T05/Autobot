@@ -69,7 +69,7 @@ public class AddPaymentFragement extends DialogFragment {
         billingAddress = view.findViewById(R.id.add_billingAddress);
         postalCode = view.findViewById(R.id.add_postalCode);
 
-        mCardList = new ArrayList<>();
+        mCardList = new ArrayList<CardTypeItem>();
         mCardList.add(new CardTypeItem("Visa",R.drawable.visa));
         mCardList.add(new CardTypeItem("Master Card",R.drawable.master));
         mCardList.add(new CardTypeItem("None",R.drawable.empty));
