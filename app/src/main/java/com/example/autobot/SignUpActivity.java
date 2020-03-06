@@ -133,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
                       if (Type_Rider == 1) user.setUserType("Rider");
                       else user.setUserType("Driver");
                       Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
-                      intentSetPassword.putExtra("Username", user.getUsername());
+                      intentSetPassword.putExtra("User",user);
                       startActivity(intentSetPassword);
                   }
               }
