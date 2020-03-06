@@ -39,9 +39,9 @@ public class SignUpActivityTest {
      */
     @Test
     public void checkBackButton() {
-        solo.clickOnButton("Continue");
+        solo.clickOnButton("CONTINUE");
         //assert current activity is mainActivity
-        solo.assertCurrentActivity("Not in MainActivity", MainActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
     }
 
     /**
