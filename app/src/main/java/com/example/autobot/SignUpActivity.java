@@ -136,7 +136,10 @@ public class SignUpActivity extends AppCompatActivity {
                       intentSetPassword.putExtra("User",user);
                       startActivity(intentSetPassword);
                   }
+
               }
+
+
         });
 
 
