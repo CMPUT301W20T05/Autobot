@@ -1,6 +1,8 @@
 package com.example.autobot;
 
 import android.app.Activity;
+import android.widget.EditText;
+import android.widget.RadioButton;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -26,6 +28,10 @@ public class SignUpActivityTest {
     public void setUp() throws Exception{
         //This method used to create the solo object with instrumentation and activity as arguments
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "1234567890");
+        solo.enterText((EditText) solo.getView(R.id.accountUserName), "WoZuiShuai");
+        solo.clickOnRadioButton(1);
+        solo.clickOnCheckBox(0);
     }
 
     @Test
@@ -38,9 +44,8 @@ public class SignUpActivityTest {
      * Check to see if the back button works or not
      */
     @Test
-    public void checkBackButton() {
-        solo.clickOnButton("CONTINUE");
-        //assert current activity is mainActivity
+    public void checkContinueButton() {
+        solo.clickOnButton("Continue");
         solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
     }
 
