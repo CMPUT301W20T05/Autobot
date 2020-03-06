@@ -49,7 +49,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             setAutocompleteSupportFragment(autocompleteFragment);
         }
 
-        HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
+        HPConfirmButton = findViewById(R.id.HP_confirm);
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
