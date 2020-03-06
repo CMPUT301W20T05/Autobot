@@ -35,6 +35,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     int Type_Rider = 0 ;
     boolean Checkbox = false;
+    boolean UserValid = true;
+    boolean PhoneValid = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,50 +94,52 @@ public class SignUpActivity extends AppCompatActivity {
                   final String PhoneNumber = editTextPhoneNumber.getText().toString();
 
 
-                  if (Username.length() != 0 && PhoneNumber.length() != 0 && Type_Rider != 0 && Checkbox == true) {
+                  if (Username.length() != 0 && PhoneNumber.length() != 0) {
                       Database.getUsername(Username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                           @Override
                           public void onSuccess(DocumentSnapshot documentSnapshot) {
                               if (documentSnapshot.exists()) {
                                   editTextUserName.setError("The User name is exist");
-                              }else{
-                                  Query query = Database.collectionReference_user.whereEqualTo("PhoneNumber",PhoneNumber);
-                                  query.get()
-                                          .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-                                              @Override
-                                              public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                  if (task.isSuccessful()){
-                                                      if (task.getResult().size()!=0){
-                                                          editTextPhoneNumber.setError("PhoneNumber is exist");
-                                                      }else{
-                                                          User user = new User();
-                                                          user.setUsername(editTextUserName.getText().toString());
-                                                          user.setPhoneNumber(editTextPhoneNumber.getText().toString());
-                                                          if (Type_Rider == 1) user.setUserType("Rider");
-                                                          else user.setUserType("Driver");
-                                                          db.add_new_user(user);
-                                                          Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
-                                                          intentSetPassword.putExtra("Username",user.getUsername());
-                                                          startActivity(intentSetPassword);
-
-                                                      }
-
-                                                  }
-                                              }
-                                          });
-                              }
+                                  UserValid = false;
+                              } else UserValid = true;
                           }
                       });
+                      Query query = Database.collectionReference_user.whereEqualTo("PhoneNumber", PhoneNumber);
+                      query.get()
+                              .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                  @Override
+                                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                      if (task.isSuccessful()) {
+                                          if (task.getResult().size() != 0) {
+                                              editTextPhoneNumber.setError("PhoneNumber is exist");
+                                              PhoneValid = false;
+                                          } else PhoneValid = true;
+                                      }
+                                  }
+                              });
                   }
-                  else{
-                      if (Username.length() == 0) editTextUserName.setError("Please input Username!");
-                      if (PhoneNumber.length() == 0) editTextPhoneNumber.setError("Please input PhoneNumber!");
-                      if (Type_Rider == 0) radioButtonRider.setError("Please choose Driver or Rider！");
-                      if (Checkbox == false) checkBoxPolicy.setError("Please agree policy！");
+                  else {
+                      if(Username.length() == 0) editTextUserName.setError("Please input Username!");
+                      if (PhoneNumber.length() == 0) editTextPhoneNumber.setError("Please input PhoneNumber!"); }
+                  if (Type_Rider == 0) radioButtonRider.setError("Please choose Driver or Rider！");
+                  else radioButtonRider.setError(null,null);
+                  if (Checkbox == false) checkBoxPolicy.setError("Please agree policy！");
+                  else checkBoxPolicy.setError(null,null);
 
+                  if (UserValid == true && PhoneValid == true && Type_Rider != 0 && Checkbox == true) {
+                      User user = new User();
+                      user.setUsername(editTextUserName.getText().toString());
+                      user.setPhoneNumber(editTextPhoneNumber.getText().toString());
+                      if (Type_Rider == 1) user.setUserType("Rider");
+                      else user.setUserType("Driver");
+                      Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
+                      intentSetPassword.putExtra("Username", user.getUsername());
+                      startActivity(intentSetPassword);
                   }
               }
         });
+
+
 
 
 
