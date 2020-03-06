@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -60,6 +61,37 @@ public class Database {
     }
     public static DocumentReference getUsername(String username) {
         return collectionReference_user.document(username);
+    }
+
+
+    public User rebuildUser(String username){
+        User user = new User();
+        collectionReference_user.document(username)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
+                        user.setFirstName((String) documentSnapshot.get("FirstName"));
+                        user.setLastName((String) documentSnapshot.get("LastName"));
+                        user.setLatitude((Double) documentSnapshot.get("Latitude"));
+                        user.setLongitude((Double) documentSnapshot.get("Longitude"));
+                        user.setPassword((String) documentSnapshot.get("Password"));
+                        user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
+                        user.setStars((Double)documentSnapshot.get("StarsRate"));
+                        user.setUserType((String) documentSnapshot.get("Type"));
+                        user.setUsername((String) documentSnapshot.get("Username"));
+
+
+
+
+
+
+
+
+                    }
+                });
+        return user;
     }
 
 
