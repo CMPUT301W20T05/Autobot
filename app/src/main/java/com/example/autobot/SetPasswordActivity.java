@@ -32,6 +32,7 @@ public class SetPasswordActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         final String Username = intent.getStringExtra("Username");
+        final User user_class = (User) intent.getSerializableExtra("User");
         buttonConfirmPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,21 +52,9 @@ public class SetPasswordActivity extends AppCompatActivity {
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     }else{
-                        HashMap<String,String> user_data = new HashMap<>();
-                        user_data.put("Password",newPassword);
+                        user_class.setPassword(newPassword);
                         Database db = new Database();
-                        db.collectionReference_user.document(Username).update("Password",newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "Data addition successful");
-                            }
-                        })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d(TAG, "Data addition failed" + e.toString());
-                                    }
-                                });
+                        db.add_new_user(user_class);
 
                         Intent intentHomePage = new Intent(SetPasswordActivity.this, HomePageActivity.class);
                         startActivity(intentHomePage);

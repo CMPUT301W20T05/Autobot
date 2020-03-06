@@ -113,11 +113,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                           user.setPhoneNumber(editTextPhoneNumber.getText().toString());
                                                           if (Type_Rider == 1) user.setUserType("Rider");
                                                           else user.setUserType("Driver");
-                                                          db.add_new_user(user);
                                                           Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
-                                                          intentSetPassword.putExtra("Username",user.getUsername());
+                                                          intentSetPassword.putExtra("User",user);
                                                           startActivity(intentSetPassword);
-
                                                       }
 
                                                   }

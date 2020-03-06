@@ -40,6 +40,8 @@ public class Database {
         user_data.put("StarsRate", user.getStars().toString());
         user_data.put("Type", user.getUserType());
         user_data.put("Password",user.getPassword());
+        user_data.put("Longitude",user.getLongitude().toString());
+        user_data.put("Latitude",user.getLatitude().toString());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -60,10 +62,7 @@ public class Database {
         return collectionReference_user.document(username);
     }
 
-    public  void getPhoneNumber() {
 
-
-    }
 
 
 }

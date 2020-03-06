@@ -4,5 +4,5 @@ import android.media.Image;
 
 public interface Driver {
     void AcceptRequest(Request request);
-    void ScanQRcode(Image QRcode);
+    void ScanQRcode(int QRcode);
 }

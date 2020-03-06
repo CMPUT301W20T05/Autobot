@@ -1,6 +1,8 @@
 package com.example.autobot;
 
-class PayInfo {
+import java.io.Serializable;
+
+class PayInfo implements Serializable {
     private String CardNumber;
     private String HolderNmae;
     private String BillingAddress;
