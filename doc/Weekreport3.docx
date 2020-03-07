@@ -13,6 +13,7 @@ zonglun1：Regular expression on password and extract object from database.
 Wenzhuo2: doing more ui that we need and modify the old ui to make them more beautiful
 Yiping1: Improve and perfect menu part, and the inside items functionality.
 jlyu3: Adding show request fragment into the drive activity.
+xqiu1: finish map fuzzy search, modify some layout files, and add tests for some actvities.
 
 
 Comments:
@@ -21,3 +22,4 @@ zonglun1: Members may merge their work more frequently.
 Wenzhuo2: we need more discussion before decision, otherwise what we did might not be perfectly used
 yiping1: Team members are buzy this week, so we don't have much progress. We need to work harder next week.
 jlyu3: We find that reusing function in different class is way efficient than before.
+xqiu1: it's better to finish the whole stucture first rather than focusing on too much details at this time.
