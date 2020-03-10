@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,10 +21,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -36,6 +40,15 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         super.onCreate(savedInstanceState);
         setTitle("Home page");
         View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        // Specify the types of place data to return.
+        if (autocompleteFragment != null) {
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            setAutocompleteSupportFragment(autocompleteFragment);
+        }
 
         HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
 
@@ -51,7 +64,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     @Override
     public void updateName(String Name) {
         name = findViewById(R.id.driver_name);
-        name.setText(Name);
+        name.setText(Name);  // change the name on the profile page to the new input name
+        onResume();  // cancel selected on edit profile page of the menu item
+
+
     }
 }
 
@@ -62,7 +78,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 //        materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBarOriginLocation);
 //
 //        initMap();
-
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
             mapView = mapFragment.getView();

@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:background="@android:color/background_light">
     <ListView
+        android:layout_marginTop="64dp"
         android:id="@+id/payment_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -21,7 +22,9 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/red"
+        android:tint="@color/white"/>
 
 </FrameLayout>
 

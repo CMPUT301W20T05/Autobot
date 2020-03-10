@@ -25,7 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-public class AddPaymentFragement extends DialogFragment {
+public class AddPaymentFragment extends DialogFragment {
     private ArrayList<CardTypeItem> mCardList;
     private CardTypeItemAdapter cAdapter;
     private Spinner cardType;
@@ -36,7 +36,7 @@ public class AddPaymentFragement extends DialogFragment {
     private EditText postalCode;
     private OnFragmentInteractionListener listener;
     private CardTypeItem mCardTypeItem;
-    final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     ListView paymentList;
     ArrayAdapter<PaymentCard> mAdapter;
@@ -115,10 +115,5 @@ public class AddPaymentFragement extends DialogFragment {
                         listener.onOkPressed(new PaymentCard(cardn,holdn,finalEdate,icon,baddress,pcode));
                     }
                 }).create();
-    }
-    public void onOkPressed(PaymentCard newPayment) {
-        mDataList.add(newPayment);
-        mAdapter.notifyDataSetChanged();
-
     }
 }

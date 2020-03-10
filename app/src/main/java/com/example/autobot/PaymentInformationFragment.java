@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class PaymentInformationFragment extends Fragment implements AddPaymentFragement.OnFragmentInteractionListener {
+public class PaymentInformationFragment extends Fragment implements AddPaymentFragment.OnFragmentInteractionListener {
     ListView paymentList;
     ArrayAdapter<PaymentCard> mAdapter;
     ArrayList<PaymentCard> mDataList;
@@ -73,7 +73,7 @@ public class PaymentInformationFragment extends Fragment implements AddPaymentFr
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddPaymentFragement().show(getParentFragmentManager(), "ADD_CITY");
+                new AddPaymentFragment().show(getParentFragmentManager(), "ADD_CITY");
 
                 //Toast.makeText(getContext(), "jump", Toast.LENGTH_SHORT).show();
             }
