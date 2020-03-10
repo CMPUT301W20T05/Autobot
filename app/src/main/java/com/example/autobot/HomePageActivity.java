@@ -50,7 +50,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         }
 
         HPConfirmButton = findViewById(R.id.HP_confirm);
-
+        HPConfirmButton.bringToFront();
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
