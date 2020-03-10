@@ -33,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
     public TextView name;
+    public TextView username;
 
     private Button HPConfirmButton;
     @Override
@@ -51,6 +52,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         }
 
         HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
+        //name = findViewById(R.id.driver_name);
+        //name.setText("####");
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
