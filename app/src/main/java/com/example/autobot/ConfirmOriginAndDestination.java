@@ -85,8 +85,10 @@ public class ConfirmOriginAndDestination extends BaseActivity {
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intentUCurRequest = new Intent(ConfirmOriginAndDestination.this, UCurRequest.class);
                 //Request request = new Request();
-                finish();
+                startActivity(intentUCurRequest);
+                //finish();
             }
         });
 

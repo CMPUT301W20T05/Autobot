@@ -44,6 +44,7 @@ public class RateDriver extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
+                finish();
             }
         });
 
@@ -51,6 +52,7 @@ public class RateDriver extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
+                finish();
             }
         });
     }

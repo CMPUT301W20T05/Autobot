@@ -58,7 +58,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //cancel order
+                //temporary go to next activity
+                Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                startActivity(intentOrderComplete);
             }
         });
 
