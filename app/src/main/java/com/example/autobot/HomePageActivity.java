@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
-    public TextView name;
-    public TextView username;
+public class HomePageActivity extends BaseActivity {
 
     LatLng destination;
     LatLng origin;
@@ -55,15 +53,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 //                startActivity(intentCurRequest);
 //            }
 //        });
-    }
-
-    @Override
-    public void updateName(String Name) {
-        name = findViewById(R.id.driver_name);
-        name.setText(Name);  // change the name on the profile page to the new input name
-        onResume();  // cancel selected on edit profile page of the menu item
-
-
     }
 }
 

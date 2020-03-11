@@ -85,7 +85,7 @@ import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, EditProfilePage.EditProfilePageListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -108,6 +108,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public NavigationView navigationView;
     public Fragment fragment;
 
+    public TextView name;
     private final float DEFAULT_ZOOM = 18;
 
     private static final int REQUEST_CODE = 101;
@@ -238,6 +239,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         for (int i = 0; i < navigationView.getMenu().size(); i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
         }
+    }
+    @Override
+    public void updateName(String Name) {
+        name = findViewById(R.id.driver_name);
+        name.setText(Name);  // change the name on the profile page to the new input name
+        onResume();  // cancel selected on edit profile page of the menu item
+
     }
 
     @Override
