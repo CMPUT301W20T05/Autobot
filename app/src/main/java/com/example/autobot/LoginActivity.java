@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 String Status = spinner.getSelectedItem().toString();
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();
-                if (Status.equals("Phone")){
+                if (Status.equals("Phone Number")){
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
                         Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                     }
                 }
-                else if (Status.equals("User"))
+                else if (Status.equals("User Name"))
                 {
                     if (Account.length() == 0) editAccount.setError("Please input Username");
                     else {
