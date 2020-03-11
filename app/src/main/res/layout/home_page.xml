@@ -37,7 +37,9 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity"/>
+                mapbox:layout_constraintBottom_toBottomOf="parent"
+                mapbox:layout_constraintStart_toStartOf="parent"
+                tools:context=".MainActivity" />
             <com.mancj.materialsearchbar.MaterialSearchBar
                 android:id="@+id/searchBarOriginLocation"
                 style="@style/MaterialSearchBarLight"

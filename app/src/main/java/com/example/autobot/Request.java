@@ -32,6 +32,7 @@ public class Request {
     public User getRider(){
         return this.Rider;
     }
+    public Location getDestination() {return this.Destination;}
     public void setDriver(User driver){
         this.Driver = driver;
     }
@@ -61,5 +62,11 @@ public class Request {
     }
     public void UpdateStatus(String status){
 
+    }
+    //the active request string representation
+    public String get_active_requset_tostring(){
+        //this is the hard coding version, need to modify later
+        String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getLastName(),"sub",13.34,"587-234-1299");
+        return active_requst;
     }
 }

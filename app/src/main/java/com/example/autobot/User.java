@@ -7,8 +7,10 @@ import android.provider.ContactsContract;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 
-public class User implements Driver, Rider {
+
+public class User implements Driver, Rider, Serializable {
     private String Username;
     private String EmailAddress;
     private String PhoneNumber;
