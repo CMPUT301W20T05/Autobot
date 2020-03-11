@@ -74,8 +74,11 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -116,6 +119,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //api key
     String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
 
+    public int anInt = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -244,6 +248,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
+                anInt = 1;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
                 break;
@@ -305,11 +310,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed(); // back to the last activity
         }
     }
+
     @Override
     public void onOkPressed(PaymentCard newPayment) {
-        paymentList = findViewById(R.id.payment_listView);
-        mDataList.add(newPayment);
-        mAdapter.notifyDataSetChanged();
+        ((PaymentInformationFragment) fragment).updateList(newPayment);
     }
 
     @Override
@@ -510,4 +514,5 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
     }
+
 }

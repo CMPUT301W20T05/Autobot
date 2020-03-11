@@ -38,11 +38,6 @@ public class AddPaymentFragment extends DialogFragment {
     private CardTypeItem mCardTypeItem;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    ListView paymentList;
-    ArrayAdapter<PaymentCard> mAdapter;
-    ArrayList<PaymentCard> mDataList;
-
-
     public interface OnFragmentInteractionListener {
         void onOkPressed(PaymentCard newPayment);
 
