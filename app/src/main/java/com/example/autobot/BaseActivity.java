@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
     public DrawerLayout drawer;
+    public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
     public ArrayList<PaymentCard> mDataList;
 
@@ -113,6 +115,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     //api key
     String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -304,6 +307,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public void onOkPressed(PaymentCard newPayment) {
+        paymentList = findViewById(R.id.payment_listView);
         mDataList.add(newPayment);
         mAdapter.notifyDataSetChanged();
     }

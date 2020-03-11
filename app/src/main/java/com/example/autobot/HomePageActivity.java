@@ -52,8 +52,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         }
 
         HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
-        //name = findViewById(R.id.driver_name);
-        //name.setText("####");
 
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
