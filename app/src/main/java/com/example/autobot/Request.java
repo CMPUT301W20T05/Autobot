@@ -20,9 +20,8 @@ public class Request {
     private String RequestStatus;
     private Date ArriveTime;
 
-    public Request(User rider, User driver, Location destination, Location beginningLocation){
+    public Request(User rider, Location destination, Location beginningLocation){
         this.Rider = rider;
-        this.Driver = driver;
         this.Destination = destination;
         this.BeginningLocation = beginningLocation;
         this.SendTime = new Date();
@@ -39,6 +38,7 @@ public class Request {
     public User getDriver(){
         return this.Driver;
     }
+
     public void setDestination(Location destination){
         this.Destination = destination;
     }

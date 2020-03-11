@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,10 +22,11 @@ public class ActiverequestsFragment extends Fragment{
     ArrayList<Request> requests_list;
     //set the interface as listener
     OnBackPressed listener;
-
     public interface OnBackPressed {
         void hide();
     }
+
+
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
@@ -37,7 +39,7 @@ public class ActiverequestsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        View rootView = inflater.inflate(R.layout.show_requirement_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.show_requirement_fragment,container,false);
         //initial all attributes
         requests_view = rootView.findViewById(R.id.active_requests);
         requests_list = new ArrayList<Request>();
@@ -48,7 +50,7 @@ public class ActiverequestsFragment extends Fragment{
         rider = new User();
         rider.setLastName("jc");
         Location location = new Location("");
-        Request request1 = new Request(rider,driver,location,location);
+        Request request1 = new Request(rider,location,location);
         request1.setDestination(location);
         requests_list.add(request1);
         //----------------------------------------------------

@@ -4,5 +4,5 @@ import android.media.Image;
 
 public interface Rider {
     void SendRequest(Request request);
-    Image GanerateQRcode();
+    int GanerateQRcode();
 }

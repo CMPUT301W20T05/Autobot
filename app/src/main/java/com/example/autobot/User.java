@@ -1,6 +1,6 @@
 package com.example.autobot;
 
-import android.location.Location;
+
 import android.media.Image;
 
 import android.provider.ContactsContract;
@@ -10,13 +10,15 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.Serializable;
 
 
+
 public class User implements Driver, Rider, Serializable {
     private String Username;
     private String EmailAddress;
     private String PhoneNumber;
-    private LatLng CurrentLocation;
+    private double longitude;
+    private double latitude;
     private String Password;
-    private Image Photo;
+    private int Photo;
     private double Stars;
     private PayInfo PaymentInfo;
     private String UserType;
@@ -29,7 +31,8 @@ public class User implements Driver, Rider, Serializable {
         this.Password = "";
         this.UserType = "";
         this.PhoneNumber = "";
-        this.CurrentLocation = new LatLng(0,0);
+        this.longitude = 0;
+        this.latitude = 0;
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
     }
@@ -67,7 +70,7 @@ public class User implements Driver, Rider, Serializable {
         return this.PhoneNumber;
     }
     public void setPhoneNumber(String phoneNumber){
-        this.EmailAddress = phoneNumber;
+        this.PhoneNumber = phoneNumber;
     }
     public void getCurrentLocation(){
 
@@ -80,11 +83,14 @@ public class User implements Driver, Rider, Serializable {
 
         this.Password = password;
     }
-    public Image getPhoto(){
+    public int getPhoto(){
         return this.Photo;
     }
-    public void uploadPhoto(Image photo){
+    public void uploadPhoto(int photo){
 
+    }
+    public void setStars(double stars){
+        this.Stars = stars;
     }
 
 
@@ -112,6 +118,20 @@ public class User implements Driver, Rider, Serializable {
     public void ContactOtherByEmail(String Email){
 
     }
+    public Double getLatitude(){
+        return this.latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+    public Double getLongitude(){
+        return this.longitude;
+    }
 
     @Override
     public void AcceptRequest(Request request) {
@@ -119,7 +139,7 @@ public class User implements Driver, Rider, Serializable {
     }
 
     @Override
-    public void ScanQRcode(Image QRcode) {
+    public void ScanQRcode(int QRcode) {
 
     }
 
@@ -129,7 +149,7 @@ public class User implements Driver, Rider, Serializable {
     }
 
     @Override
-    public Image GanerateQRcode() {
-        return null;
+    public int GanerateQRcode() {
+        return 0;
     }
 }

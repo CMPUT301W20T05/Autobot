@@ -53,5 +53,7 @@
             android:parentActivityName=".LoginActivity"/>
         <activity android:name=".BaseActivity" />
         <activity android:name=".DriverIsOnTheWayActivity" />
+        <activity android:name=".ConfirmOriginAndDestination"
+            android:parentActivityName=".HomePageActivity"/>
     </application>
 </manifest>

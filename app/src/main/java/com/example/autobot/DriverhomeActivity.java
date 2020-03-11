@@ -1,11 +1,15 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,12 +18,26 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
 
-public class DriverhomeActivity extends HomePageActivity implements ActiverequestsFragment.OnBackPressed {
+import java.util.Arrays;
+import java.util.zip.Inflater;
+
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener{
     private User user;
     String phone_num;
     FragmentManager active_request_fm;
+    Button confirm;
+    LatLng origin;
+    View header;
+    private static final String TAG = "DriverSearchActivity";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +48,52 @@ public class DriverhomeActivity extends HomePageActivity implements Activereques
         user.setFirstName("jc");
         user.setLastName("lyu");
         update_navigation_view(user);
-        Fragment fragment = new ActiverequestsFragment();
+        //--------------------------------
+        View rootView = getLayoutInflater().inflate(R.layout.choose_origin_and_destination, frameLayout);
+        //hide that useless bar
+        rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.INVISIBLE);
+        //initial the search bar
+        AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
+        // Specify the types of place data to return.
+        if (autocompleteFragmentOrigin != null) {
+            autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            setAutocompleteSupportFragment(autocompleteFragmentOrigin);
+            autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    searchedLatLng = place.getLatLng();
+
+                    //remove old marker and add new marker
+                    if (currentLocationMarker != null) {
+                        currentLocationMarker.remove();
+                    }
+
+                    mMap.clear();
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    if (searchedLatLng != null) {
+                        markerOptions.position(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude));
+                        markerOptions.title("Current Location");
+                        currentLocationMarker = mMap.addMarker(markerOptions);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+                        Fragment fragment = new ActiverequestsFragment();
+                        active_request_fm = getSupportFragmentManager();
+                        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                               // TODO: Handle the error.
+                        Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+        }
+        /*Fragment fragment = new ActiverequestsFragment();
         active_request_fm = getSupportFragmentManager();
-        active_request_fm.beginTransaction()
-                .replace(R.id.myMap,fragment).addToBackStack(null).commit();
+        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();*/
+
     }
 
     public void load_user(){
@@ -44,7 +104,7 @@ public class DriverhomeActivity extends HomePageActivity implements Activereques
     public void update_navigation_view(User user){
         NavigationView navigationView = getWindow().getDecorView().getRootView().findViewById(R.id.nav_view);
         //find the layout of header layout
-        View header = navigationView.getHeaderView(0);
+        header = navigationView.getHeaderView(0);
 
         //find the text view of user name
         TextView user_name = header.findViewById(R.id.driver_name);
@@ -83,6 +143,13 @@ public class DriverhomeActivity extends HomePageActivity implements Activereques
     @Override
     public void hide() {
         active_request_fm.popBackStack();
+    }
+
+    //for edit profile info
+    @Override
+    public void updateName(String Name) {
+        TextView user_name = header.findViewById(R.id.driver_name);
+        user_name.setText(Name);
     }
 
 }

@@ -1,40 +1,22 @@
 package com.example.autobot;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.SupportMapFragment;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.navigation.NavigationView;
-import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+    public TextView name;
 
-import androidx.appcompat.widget.Toolbar;
+    LatLng destination;
+    LatLng origin;
 
-public class HomePageActivity extends BaseActivity {
-
-    private static final String TAG = "BaseActivity";
+    private Button HPConfirmButton;
+    private TextView textViewWhereToGo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,29 +24,43 @@ public class HomePageActivity extends BaseActivity {
         setTitle("Home page");
         View rootView = getLayoutInflater().inflate(R.layout.activity_request_destination, frameLayout);
 
-        //set up search bar
-        //materialSearchBar = findViewById(R.id.searchBar);
-
         // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+//        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+//        // Specify the types of place data to return.
+//        if (autocompleteFragment != null) {
+//            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+//            setAutocompleteSupportFragment(autocompleteFragment);
+//
+//            destination = getSearchedLatLng();
+//        }
 
-        //set up search bar
-        setAutocompleteSupportFragment(autocompleteFragment);
-
-
-        Button HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
-
-        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+        textViewWhereToGo = findViewById(R.id.textViewWhereToGo);
+        textViewWhereToGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-                startActivity(intentCurRequest);
+                Intent intentOriginAndDestination = new Intent(HomePageActivity.this, ConfirmOriginAndDestination.class);
+                startActivity(intentOriginAndDestination);
             }
         });
+
+//        HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
+//
+//        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intentCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+//                startActivity(intentCurRequest);
+//            }
+//        });
+    }
+
+    @Override
+    public void updateName(String Name) {
+        name = findViewById(R.id.driver_name);
+        name.setText(Name);
     }
 }
-
 
 //        EditText editTextOrigin = findViewById(R.id.editTextOriginLocation);
 //        EditText editTextDestination = findViewById(R.id.editTextDestinationLocation);
@@ -80,5 +76,3 @@ public class HomePageActivity extends BaseActivity {
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();*/
-
-
