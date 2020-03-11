@@ -302,29 +302,40 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
-        } else if (onNavigationItemSelected(emItem)){ // if the edit profile page is opened, back to main page
+        }
+        else if (fragment == null){
+            super.onBackPressed(); // back to the last activity
+        }
+        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
             }
+
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
             }
+
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
             }
+
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
             }
-        } else {
-            super.onBackPressed(); // back to the last activity
         }
+
+
     }
 
     @Override
