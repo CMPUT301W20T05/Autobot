@@ -17,8 +17,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.Arrays;
+
+import static android.os.AsyncTask.execute;
 
 public class HomePageActivity extends BaseActivity {
 
@@ -44,18 +47,14 @@ public class HomePageActivity extends BaseActivity {
         // Specify the types of place data to return.
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            autocompleteFragmentOrigin.setHint("Current Location");
             setAutocompleteSupportFragment(autocompleteFragmentOrigin);
-            autocompleteFragmentOrigin.setText("Current Location");
-
-            origin = getOrigin(autocompleteFragmentOrigin);
         }
 
         if (autocompleteFragmentDestination != null) {
             autocompleteFragmentDestination.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            autocompleteFragmentDestination.setHint("Destination");
             setAutocompleteSupportFragment(autocompleteFragmentDestination);
-            autocompleteFragmentDestination.setText("Destination");
-
-            destination = getDestination(autocompleteFragmentDestination);
         }
 
 
@@ -63,33 +62,28 @@ public class HomePageActivity extends BaseActivity {
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                origin = getOrigin(autocompleteFragmentOrigin);
+                destination = getDestination(autocompleteFragmentDestination);
+
+                //distance between two locations
+                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                //draw route between two locations
+                String url = drawRoute(origin, destination);
+
                 //next activity
-                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-                startActivity(intentUCurRequest);
+//                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+//                startActivity(intentUCurRequest);
             }
         });
+
+
     }
 
     public LatLng getOrigin(AutocompleteSupportFragment autocompleteFragmentOrigin){
         Location temp = getCurrentLocation();
         if (temp != null) {
             origin = new LatLng(temp.getLatitude(), temp.getLongitude());
-
-            autocompleteFragmentOrigin.setText("Current Location");
-
-            autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(@NonNull Place place) {
-                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                    origin = place.getLatLng();
-                }
-
-                @Override
-                public void onError(@NonNull Status status) {
-                    // TODO: Handle the error.
-                    Log.i(TAG, "An error occurred: " + status);
-                }
-            });
         }
         return origin;
     }

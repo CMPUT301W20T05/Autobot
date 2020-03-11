@@ -50,7 +50,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/setOriginLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -75,13 +75,13 @@
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/setOriginLocation"
         tools:ignore="MissingConstraints">
 
     </EditText>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/setDestinationLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -105,7 +105,7 @@
         android:layout_marginRight="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/setDestinationLocation"
         tools:ignore="MissingConstraints">
 
     </EditText>
