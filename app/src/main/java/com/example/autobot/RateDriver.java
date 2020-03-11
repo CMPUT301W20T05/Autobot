@@ -15,6 +15,7 @@ public class RateDriver extends BaseActivity {
         super.onCreate(savedInstanceState);
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.rate_driver, frameLayout);
+        findViewById(R.id.myMap).setVisibility(View.GONE);
 
         ImageView Selfie = findViewById(R.id.imageView);
         EditText Driver = findViewById(R.id.Driver_name);

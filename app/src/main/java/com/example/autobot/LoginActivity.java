@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         EditText editAccount = findViewById(R.id.editAccount);
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
 
-
+        TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
+        textViewNoAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intentSignUp);
+            }
+        });
 
         Button buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
