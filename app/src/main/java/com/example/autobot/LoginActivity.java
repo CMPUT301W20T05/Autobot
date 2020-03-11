@@ -43,11 +43,11 @@ public class LoginActivity extends AppCompatActivity {
                 int user_type = 0;
                 //check what role we are playing
                 if(user_type == 0){
-                    next_activity = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                    next_activity = new Intent(LoginActivity.this, HomePageActivity.class);
                 }
                 //otherwise change to rider version
                 else{
-                    next_activity = new Intent(LoginActivity.this, HomePageActivity.class);
+                    next_activity = new Intent(LoginActivity.this, DriverhomeActivity.class);
                 }
                 //Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                 //edit
