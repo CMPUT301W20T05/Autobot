@@ -1,7 +1,5 @@
 package com.example.autobot;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,11 +15,11 @@ public class OrderComplete extends BaseActivity {
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
-        EditText Destination = findViewById(R.id.textView3);
-        EditText OriginalLoc = findViewById(R.id.textView4);
-        EditText Price = findViewById(R.id.textView6);
-        EditText Tips = findViewById(R.id.textView7);
-        Button Confirm = findViewById(R.id.button2);
+        EditText Destination = findViewById(R.id.setOriginLocation);
+        EditText OriginalLoc = findViewById(R.id.setDestinationLocation);
+        EditText Price = findViewById(R.id.setFare);
+        EditText Tips = findViewById(R.id.addTip);
+        Button Confirm = findViewById(R.id.confirmFee);
 
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
