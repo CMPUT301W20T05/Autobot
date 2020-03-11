@@ -22,9 +22,10 @@ public class EditProfilePage extends Fragment {
     private Button btn;
     private EditProfilePageListener listener;
 
-    public interface EditProfilePageListener{
+    public interface EditProfilePageListener {
         void updateName(String Name);
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -54,8 +55,10 @@ public class EditProfilePage extends Fragment {
             public void onClick(View view) {
                 String fName = firstName.getText().toString();
                 String lName = lastName.getText().toString();
-                String fullName = fName+" "+lName;
+                String fullName = fName + " " + lName;
                 listener.updateName(fullName);
+                getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
+
             }
         });
 
