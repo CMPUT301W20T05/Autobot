@@ -88,6 +88,9 @@ public class User implements Driver, Rider , Serializable{
     public void uploadPhoto(int photo){
 
     }
+    public void setStars(double stars){
+        this.Stars = stars;
+    }
 
 
     public Double getStars(){

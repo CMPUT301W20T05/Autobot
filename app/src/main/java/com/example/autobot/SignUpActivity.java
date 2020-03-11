@@ -32,7 +32,6 @@ import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
 
-
     int Type_Rider = 0 ;
     boolean Checkbox = false;
     boolean UserValid = false;
@@ -78,9 +77,6 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
         ContinueButton.setOnClickListener(new OnClickListener() {
               @Override

@@ -34,7 +34,7 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
 
         HistoryRequest historyRequest = historyRequests.get(position); //get the measurement by using its position
 
-        TextView requestNumber = view.findViewById(R.id.request_number); //get each textview
+        TextView requestNumber = view.findViewById(R.id.request_number); //get each textView
         TextView status = view.findViewById(R.id.status);
         TextView dateTime = view.findViewById(R.id.date_time);
         ImageView  profilePhoto = view.findViewById(R.id.profile_photo);
@@ -48,7 +48,7 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
         String d = "Date: " + dateString;
         int p = historyRequest.getPhoto();
 
-        requestNumber.setText(n);        //set the above information on the line(textview)
+        requestNumber.setText(n);        //set the above information on the line(textView)
         status.setText(s);
         dateTime.setText(d);
         profilePhoto.setImageResource(p);

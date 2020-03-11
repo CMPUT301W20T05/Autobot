@@ -42,13 +42,13 @@ public class UCurRequest extends BaseActivity{
 
         final Intent intent = getIntent();
 
-        /*CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
+        CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentCancelRequest = new Intent(UCurRequest.this, CancelRequest.class);
-                startActivity();
+                Intent intentCancelRequest = new Intent(UCurRequest.this, DriverIsOnTheWayActivity.class);
+                startActivity(intentCancelRequest);
             }
-        });*/
+        });
     }
 
 }

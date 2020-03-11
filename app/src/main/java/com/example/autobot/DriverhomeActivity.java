@@ -3,15 +3,17 @@ package com.example.autobot;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
-public class DriverhomeActivity extends HomePageActivity {
+public class DriverhomeActivity extends BaseActivity {
     private User user;
     String phone_num;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        load_user();
+        //View rootView = getLayoutInflater().inflate(..., frameLayout);
         setTitle(phone_num);
+        load_user();
     }
 
     public void load_user(){
