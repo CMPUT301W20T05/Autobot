@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RateDriver"></activity>
+        <activity android:name=".OrderComplete"></activity>
+        <activity android:name=".RateDriver" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -41,10 +42,10 @@
         </activity>
         <activity
             android:name=".SetPasswordActivity"
-            android:parentActivityName=".SignUpActivity"></activity>
+            android:parentActivityName=".SignUpActivity" />
         <activity
             android:name=".LoginActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -58,8 +59,6 @@
             android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".DriverIsOnTheWayActivity" />
-        <activity android:name=".ConfirmOriginAndDestination"
-            android:parentActivityName=".HomePageActivity" />
     </application>
 
 </manifest>

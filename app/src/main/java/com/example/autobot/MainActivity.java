@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     }
     /*change activity*/
     public void log_in_page() {
-        final Intent intentLogin = new Intent(this,SignUpActivity.class);
+        final Intent intentLogin = new Intent(this,LoginActivity.class);
         Timer timer = new Timer();
         TimerTask task = new TimerTask()
         {
