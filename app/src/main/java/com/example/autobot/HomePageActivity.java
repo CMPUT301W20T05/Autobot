@@ -64,6 +64,8 @@ public class HomePageActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
+                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                startActivity(intentUCurRequest);
             }
         });
     }
