@@ -36,7 +36,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         setTitle("Login");
-        Button buttonLogin = findViewById(R.id.buttonLogin);
+        Spinner spinner = findViewById(R.id.spinnerPhoneNumberCountry);
+        EditText editAccount = findViewById(R.id.editAccount);
+        EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
 
         TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
         textViewNoAccount.setOnClickListener(new View.OnClickListener() {
@@ -47,13 +49,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Database db = new Database();
-                Spinner spinner = findViewById(R.id.spinnerPhoneNumberCountry);
-                EditText editAccount = findViewById(R.id.editAccount);
-                EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
                 String Status = spinner.getSelectedItem().toString();
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();
@@ -69,9 +69,19 @@ public class LoginActivity extends AppCompatActivity {
                                             if (task.getResult().size() != 0) {
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                     String TruePassword = document.get("Password").toString();
+                                                    String Type = document.get("Type").toString();
+                                                    String username = document.get("Username").toString();
                                                     if (TruePassword.equals(Password)){
-                                                        Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                        startActivity(intentHomePage);
+                                                        if (Type.equals("Rider")) {
+                                                            Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                            intentHomePage.putExtra("User",username);
+                                                            startActivity(intentHomePage);
+                                                        }
+                                                        else {
+                                                            Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                            intentHomePage.putExtra("User",username);
+                                                            startActivity(intentHomePage);
+                                                        }
                                                     }
                                                     else {
                                                         editTextInputPassword.setError("The Wrong password!");
@@ -94,9 +104,18 @@ public class LoginActivity extends AppCompatActivity {
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists()){
                                             String RightPassword = documentSnapshot.getString("Password");
+                                            String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
-                                                Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                startActivity(intentHomePage);
+                                                if (Type.equals("Rider")) {
+                                                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                    intentHomePage.putExtra("User",Account);
+                                                    startActivity(intentHomePage);
+                                                }
+                                                else {
+                                                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                    intentHomePage.putExtra("User",Account);
+                                                    startActivity(intentHomePage);
+                                                }
                                             }
                                             else editTextInputPassword.setError("The Wrong password!");
                                         }
