@@ -34,15 +34,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     int Type_Rider = 0 ;
     boolean Checkbox = false;
-    boolean UserValid = true;
-    boolean PhoneValid = true;
+    boolean UserValid = false;
+    boolean PhoneValid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
-
-        final Intent intent = getIntent();
         TextView textViewBackToLogin = findViewById(R.id.textViewGoToSignUp);
 
         Button ContinueButton = findViewById(R.id.ContinueButton);
@@ -91,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                   if (Username.length() != 0 && PhoneNumber.length() != 0) {
-                      Database.getUsername(Username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                      db.getRef(Username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                           @Override
                           public void onSuccess(DocumentSnapshot documentSnapshot) {
                               if (documentSnapshot.exists()) {
@@ -100,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
                               } else UserValid = true;
                           }
                       });
-                      Query query = Database.collectionReference_user.whereEqualTo("PhoneNumber", PhoneNumber);
+                      Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", PhoneNumber);
                       query.get()
                               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                   @Override
@@ -128,11 +126,16 @@ public class SignUpActivity extends AppCompatActivity {
                       user.setPhoneNumber(editTextPhoneNumber.getText().toString());
                       if (Type_Rider == 1) user.setUserType("Rider");
                       else user.setUserType("Driver");
+                      UserValid = false;
+                      PhoneValid = false;
                       Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
                       intentSetPassword.putExtra("User",user);
                       startActivity(intentSetPassword);
                   }
+
               }
+
+
         });
 
 

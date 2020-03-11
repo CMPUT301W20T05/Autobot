@@ -17,7 +17,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class Database {
     protected FirebaseFirestore db;
-    public static CollectionReference collectionReference_user;
+    public CollectionReference collectionReference_user;
 
 
     public Database() {
@@ -59,8 +59,8 @@ public class Database {
                     }
                 });
     }
-    public static DocumentReference getUsername(String username) {
-        return collectionReference_user.document(username);
+    public DocumentReference getRef(String username) {
+        return this.collectionReference_user.document(username);
     }
 
 
@@ -97,4 +97,16 @@ public class Database {
 
 
 
+
+
+
+
+
+
+
+
 }
+
+
+
+
