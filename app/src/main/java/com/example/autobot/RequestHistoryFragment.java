@@ -43,7 +43,7 @@ public class RequestHistoryFragment extends Fragment {
 
 
     Date[] dates ={date1,date2,date3};
-    int[] imgs = {R.drawable.logo, R.drawable.logo,R.drawable.logo};
+    int[] imgs = {R.drawable.default_avatar, R.drawable.default_avatar,R.drawable.default_avatar};
     Integer[] request_numbers = {123,222,111};
     String[] status = {"Completed", "Accepted", "Canceled"};
 

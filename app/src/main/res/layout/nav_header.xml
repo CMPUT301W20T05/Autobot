@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
+    android:layout_height="284dp"
     android:background="@drawable/side_nav_bar"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:id="@+id/hear_layout">
     <ImageView
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="94dp"
         android:layout_marginLeft="15dp"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/logo">
+        android:src="@drawable/default_avatar">
 
     </ImageView>
     <TextView

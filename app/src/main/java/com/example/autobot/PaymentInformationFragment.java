@@ -21,11 +21,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class PaymentInformationFragment extends Fragment implements AddPaymentFragement.OnFragmentInteractionListener {
+public class PaymentInformationFragment extends Fragment {
     ListView paymentList;
     ArrayAdapter<PaymentCard> mAdapter;
     ArrayList<PaymentCard> mDataList;
-
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  //format for the date
 
@@ -54,11 +53,16 @@ public class PaymentInformationFragment extends Fragment implements AddPaymentFr
     String[] billing_address = {"8510 111St", "8888 201St", "8231 102St"};
     String[] postal_code = {"T6G 1H7", "T3B 2U8", "E2G 0I1"};
 
+    public void updateList(PaymentCard paymentCard){
+        mDataList.add(paymentCard);
+        mAdapter.notifyDataSetChanged();
+    }
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.payment_list_page, container, false);
 
         paymentList = (ListView) view.findViewById(R.id.payment_listView);
+
         mDataList = new ArrayList<>();
 
         for (int i=0;i<expire_dates.length;i++){
@@ -69,11 +73,12 @@ public class PaymentInformationFragment extends Fragment implements AddPaymentFr
 
         paymentList.setAdapter(mAdapter);
 
+
         FloatingActionButton btn = view.findViewById(R.id.add_payment_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddPaymentFragement().show(getParentFragmentManager(), "ADD_CITY");
+                new AddPaymentFragment().show(getParentFragmentManager(), "ADD_CITY");
 
                 //Toast.makeText(getContext(), "jump", Toast.LENGTH_SHORT).show();
             }
@@ -81,9 +86,4 @@ public class PaymentInformationFragment extends Fragment implements AddPaymentFr
 
         return view;
     }
-    public void onOkPressed(PaymentCard newPayment) {
-        mDataList.add(newPayment);
-        mAdapter.notifyDataSetChanged();
-    }
-
 }

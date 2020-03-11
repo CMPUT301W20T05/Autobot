@@ -20,8 +20,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import java.util.Arrays;
 
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
-    public TextView name;
+public class HomePageActivity extends BaseActivity {
 
     LatLng destination;
     LatLng origin;
