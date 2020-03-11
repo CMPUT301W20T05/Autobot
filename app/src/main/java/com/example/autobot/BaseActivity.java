@@ -96,7 +96,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
-    private Location currentLocation;
+    private static Location currentLocation;
+    private static LatLng searchedLatLng;
     private LocationCallback locationCallback; //for updating users request if last known location is null
     private FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
     private PlacesClient placesClient;
@@ -160,6 +161,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public LatLng getSearchedLatLng() {
+        return searchedLatLng;
+    }
+
     public void setAutocompleteSupportFragment(AutocompleteSupportFragment autocompleteFragment) {
 
         if (autocompleteFragment != null) {
@@ -175,7 +184,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                    LatLng latLng = place.getLatLng();
+                    searchedLatLng = place.getLatLng();
 
                     //remove old marker and add new marker
                     if (currentLocationMarker != null) {
@@ -184,11 +193,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
                     mMap.clear();
                     MarkerOptions markerOptions = new MarkerOptions();
-                    if (latLng != null) {
-                        markerOptions.position(new LatLng(latLng.latitude, latLng.longitude));
+                    if (searchedLatLng != null) {
+                        markerOptions.position(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude));
                         markerOptions.title("Current Location");
                         currentLocationMarker = mMap.addMarker(markerOptions);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), DEFAULT_ZOOM));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
                     }
                 }
 
@@ -198,7 +207,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     Log.i(TAG, "An error occurred: " + status);
                 }
             });
-
         }
 
         // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
@@ -439,7 +447,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d(TAG, "Connection failed: " + connectionResult.toString());
     }
 
 
@@ -453,7 +461,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @SuppressLint("MissingPermission")
-    private void getDeviceLocation() {
+    protected Location getDeviceLocation() {
         fusedLocationProviderClient.getLastLocation()
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -487,6 +495,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                 });
+        return currentLocation;
     }
 
     //notification
