@@ -24,6 +24,7 @@ public class HomePageActivity extends BaseActivity {
 
     LatLng destination;
     LatLng origin;
+    Database db;
 
     private static final String TAG = "HomePageActivity";
 
@@ -31,6 +32,10 @@ public class HomePageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setTitle("Home page");
+        db = new Database();
+        final Intent intent = getIntent();
+        String username = intent.getStringExtra("User");
+        User user = db.rebuildUser(username);
         View rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
 
         // Initialize the AutocompleteSupportFragment.
@@ -64,6 +69,11 @@ public class HomePageActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
+                Request request = new Request();
+                request.setRider(user);
+                request.setDestination(destination);
+                request.setBeginningLocation(origin);
+                db.add_new_request(request);
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentUCurRequest);
             }

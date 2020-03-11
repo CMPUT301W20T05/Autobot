@@ -41,6 +41,7 @@ public class Request {
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         //this.CurrentLocation = getCurrentLocation();
+        generateRequestID();
 
 
 
