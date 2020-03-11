@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.autobot">
-
-<!--    location permission-->
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- location permission -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-<!--    camera permission-->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- camera permission -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.hardware.camera" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
@@ -19,12 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RateDriver"></activity>
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/api_key"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key" />
 
-        <activity android:name=".SignUpActivity"
+        <activity
+            android:name=".SignUpActivity"
             android:parentActivityName=".MainActivity">
+
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -37,23 +39,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SetPasswordActivity"
-            android:parentActivityName=".SignUpActivity">
-        </activity>
-        <activity android:name=".LoginActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
-        <activity android:name=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".SetPasswordActivity"
+            android:parentActivityName=".SignUpActivity"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GoogleMapActivity" />
         <activity android:name=".DrawerActivity" />
-        <activity android:name=".UCurRequest"
-            android:parentActivityName=".HomePageActivity"/>
-        <activity android:name=".DriverhomeActivity"
-            android:parentActivityName=".LoginActivity"/>
+        <activity
+            android:name=".UCurRequest"
+            android:parentActivityName=".HomePageActivity" />
+        <activity
+            android:name=".DriverhomeActivity"
+            android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".DriverIsOnTheWayActivity" />
         <activity android:name=".ConfirmOriginAndDestination"
             android:parentActivityName=".HomePageActivity"/>
     </application>
+
 </manifest>
