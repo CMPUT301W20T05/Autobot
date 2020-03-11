@@ -58,8 +58,8 @@ public class HomePageActivity extends BaseActivity {
             destination = getDestination(autocompleteFragmentDestination);
         }
 
-        HPConfirmButton = (Button) findViewById(R.id.HP_confirm);
-        HPConfirmButton.bringToFront();
+
+        Button HPConfirmButton = (Button) findViewById(R.id.buttonConfirmLocation);
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
