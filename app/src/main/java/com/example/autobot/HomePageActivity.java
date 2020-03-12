@@ -27,6 +27,7 @@ public class HomePageActivity extends BaseActivity {
 
     LatLng destination;
     LatLng origin;
+    Database db;
 
     private static final String TAG = "HomePageActivity";
 
@@ -45,6 +46,10 @@ public class HomePageActivity extends BaseActivity {
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
         // Specify the types of place data to return.
+        db = new Database();
+        final Intent intent = getIntent();
+        String username = intent.getStringExtra("User");
+        User user = db.rebuildUser(username);
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -72,8 +77,14 @@ public class HomePageActivity extends BaseActivity {
                 String url = drawRoute(origin, destination);
 
                 //next activity
-//                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-//                startActivity(intentUCurRequest);
+                Request request = new Request();
+                request.setRider(user);
+                request.setDestination(destination);
+                request.setBeginningLocation(origin);
+                db.add_new_request(request);
+                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                startActivity(intentUCurRequest);
+
             }
         });
 

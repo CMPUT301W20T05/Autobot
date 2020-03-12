@@ -129,7 +129,9 @@ public class SignUpActivity extends AppCompatActivity {
                       UserValid = false;
                       PhoneValid = false;
                       Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
-                      intentSetPassword.putExtra("User",user);
+                      intentSetPassword.putExtra("Username",user.getUsername());
+                      intentSetPassword.putExtra("PhoneNumber",user.getPhoneNumber());
+                      intentSetPassword.putExtra("Type",user.getUserType());
                       startActivity(intentSetPassword);
                   }
 
