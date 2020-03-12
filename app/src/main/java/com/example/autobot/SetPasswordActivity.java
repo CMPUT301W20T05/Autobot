@@ -55,7 +55,8 @@ public class SetPasswordActivity extends AppCompatActivity {
                         user_class.setPassword(newPassword);
                         Database db = new Database();
                         db.add_new_user(user_class);
-                        if (user_class.getUserType().equals("Rider")){
+
+                        if (user_class.getUserType().equals("Rider")) {
                             Intent intentHomePage = new Intent(SetPasswordActivity.this, HomePageActivity.class);
                             startActivity(intentHomePage);
                         } else{
