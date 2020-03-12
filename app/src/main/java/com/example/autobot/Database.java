@@ -80,13 +80,13 @@ public class Database {
                         user.setFirstName((String) documentSnapshot.get("FirstName"));
                         user.setLastName((String) documentSnapshot.get("LastName"));
                         System.out.println(documentSnapshot.get("CurrentLocation"));
-                        double Lat = (double) documentSnapshot.get("CurrentLocationLat");
-                        double Lnt = (double) documentSnapshot.get("CurrentLocationLnt");
+                        double Lat = Double.valueOf((String)documentSnapshot.get("CurrentLocationLat"));
+                        double Lnt = Double.valueOf((String)documentSnapshot.get("CurrentLocationLnt"));
                         LatLng CurrentLocation = new LatLng(Lat,Lnt);
                         user.updateCurrentLocation(CurrentLocation);
                         user.setPassword((String) documentSnapshot.get("Password"));
                         user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
-                        user.setStars((Double)documentSnapshot.get("StarsRate"));
+                        user.setStars(Double.valueOf((String)documentSnapshot.get("StarsRate")));
                         user.setUserType((String) documentSnapshot.get("Type"));
                         user.setUsername((String) documentSnapshot.get("Username"));
 
@@ -141,9 +141,9 @@ public class Database {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        LatLng BeginningLocation = new LatLng((double)documentSnapshot.get("BeginningLocationLat"),(double)documentSnapshot.get("BeginningLocationLnt"));
+                        LatLng BeginningLocation = new LatLng(Double.valueOf((String)documentSnapshot.get("BeginningLocationLat")),Double.valueOf((String)documentSnapshot.get("BeginningLocationLnt")));
                        r.setBeginningLocation(BeginningLocation);
-                        LatLng Destination = new LatLng((double)documentSnapshot.get("DestinationLat"),(double)documentSnapshot.get("DestinationLnt"));
+                        LatLng Destination = new LatLng(Double.valueOf((String)documentSnapshot.get("DestinationLat")),Double.valueOf((String)documentSnapshot.get("DestinationLnt")));
                        r.setDestination(Destination);
                        r.setDriver(rebuildUser((String) documentSnapshot.get("Driver")));
                        r.setRequestID((Long) documentSnapshot.get("RequestID"));
@@ -152,7 +152,7 @@ public class Database {
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
                        r.resetSendTime((Date)documentSnapshot.get("SendTime"));
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                       r.resetEstimateCost((double)documentSnapshot.get("EstimateCost"));
+                       r.resetEstimateCost((Double)documentSnapshot.get("EstimateCost"));
 
 
 
