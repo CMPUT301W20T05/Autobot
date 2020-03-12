@@ -32,10 +32,6 @@ public class Database {
 
     //    CollectionReference collectionReference_request;
 
-
-
-
-
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
         user_data.put("Username", user.getUsername());
