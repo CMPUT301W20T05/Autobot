@@ -32,7 +32,14 @@ public class SetPasswordActivity extends AppCompatActivity {
         Database db = new Database();
         final Intent intent = getIntent();
         final String Username = intent.getStringExtra("Username");
-        User user_class = db.rebuildUser(Username);
+        final String PhoneNumber = intent.getStringExtra("PhoneNumber");
+        final String Type = intent.getStringExtra("Type");
+
+
+        User user_class = new User();
+        user_class.setUsername(Username);
+        user_class.setUserType(Type);
+        user_class.setPhoneNumber(PhoneNumber);
         buttonConfirmPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

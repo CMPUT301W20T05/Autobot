@@ -128,9 +128,10 @@ public class SignUpActivity extends AppCompatActivity {
                       else user.setUserType("Driver");
                       UserValid = false;
                       PhoneValid = false;
-                      db.add_new_user(user);
                       Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
                       intentSetPassword.putExtra("Username",user.getUsername());
+                      intentSetPassword.putExtra("PhoneNumber",user.getPhoneNumber());
+                      intentSetPassword.putExtra("Type",user.getUserType());
                       startActivity(intentSetPassword);
                   }
 

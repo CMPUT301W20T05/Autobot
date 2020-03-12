@@ -23,16 +23,15 @@ public class Request {
     private Date SendTime;
     private Date AcceptTime;
     private double EstimateCost;
-    private LatLng CurrentLocation;
     private String RequestStatus;
     private Date ArriveTime;
     private long RequestID;
     private List<String> requestStatusList;
 
     public Request(){
-        this.Rider = getRider();
-        this.Destination = getDestination();
-        this.BeginningLocation = getBeginningLocation();
+        this.Rider = null;
+        this.Destination = null;
+        this.BeginningLocation = null;
         this.SendTime = new Date();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
@@ -40,7 +39,9 @@ public class Request {
         this.requestStatusList.add("Trip Completed");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        //this.CurrentLocation = getCurrentLocation();
+        this.AcceptTime = null;
+        this.ArriveTime = null;
+        this.EstimateCost = EstimateCost(this.Destination,this.BeginningLocation);
         generateRequestID();
 
 
@@ -102,8 +103,9 @@ public class Request {
     public void getArriveTime(){
         this.ArriveTime = new Date();
     }
-    public void EstimateCost(LatLng destination, LatLng beginningLocation){
+    public double EstimateCost(LatLng destination, LatLng beginningLocation){
         //double distance = destination.distanceTo(beginningLocation);
+        return 0.0;
 
     }
     public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){

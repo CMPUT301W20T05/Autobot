@@ -16,6 +16,12 @@
         <item>Pleasure</item>
         <item>Luxury</item>
     </string-array>
+    <string-array name="Tips">
+        <item>no tip</item>
+        <item>10%</item>
+        <item>15%</item>
+        <item>20%</item>
+    </string-array>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="Continue">Continue</string>
     <string name="phonenumber">Phone Number*</string>
@@ -25,8 +31,8 @@
     <string name="agree_policy_terms">I agree to the following: Privacy Policy, Terms Of Service, Autobot Terms And Conditions.</string>
     <string name="Destination">Destination</string>
     <string name="address">Address</string>
-    <string name="Estimated_fare">fare:</string>
-    <string name="fare">$0.0</string>
+    <string name="Estimated_fare">Fare:</string>
+    <string name="fare">0.0</string>
     <string name="add_tips">Add tips</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
