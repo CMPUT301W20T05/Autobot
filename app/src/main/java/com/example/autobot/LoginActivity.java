@@ -31,6 +31,8 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
+
+    public String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     String username = document.get("Username").toString();
                                                     if (TruePassword.equals(Password)){
                                                         if (Type.equals("Rider")) {
+                                                            userName = username;  // set username to username
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
@@ -103,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists()){
+                                            userName = Account; // set username to username
                                             String RightPassword = documentSnapshot.getString("Password");
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
@@ -126,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                      }
                 }
-                }
+            }
 
 
         });

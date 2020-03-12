@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
+import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -102,11 +103,5 @@ public class HomePageActivity extends BaseActivity {
     public LatLng getDestination(AutocompleteSupportFragment autocompleteFragmentDestination) {
         destination = getSearchedLatLng();
         return destination;
-    }
-
-    @Override
-    public void updateName(String Name) {
-        name = findViewById(R.id.driver_name);
-        name.setText(Name);
     }
 }
