@@ -39,7 +39,8 @@ public class TripComplete extends BaseActivity{
         TCConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //next activity
+                Intent intentRateDriver = new Intent(TripComplete.this, RateDriver.class);
+                startActivity(intentRateDriver);
             }
         });
     }

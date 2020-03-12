@@ -64,6 +64,14 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
             }
         });
 
+        buttonSeeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentOrderInfo = new Intent(DriverIsOnTheWayActivity.this, OrderInfo.class);
+                startActivity(intentOrderInfo);
+            }
+        });
+
         //when driver arrived, show notification
         sendOnChannel();
     }

@@ -2,11 +2,13 @@ package com.example.autobot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class RateDriver extends BaseActivity {
 
@@ -18,7 +20,7 @@ public class RateDriver extends BaseActivity {
         findViewById(R.id.myMap).setVisibility(View.GONE);
 
         ImageView Selfie = findViewById(R.id.imageView);
-        EditText Driver = findViewById(R.id.Driver_name);
+        TextView Driver = findViewById(R.id.Driver_name);
         Button Profile = findViewById(R.id.see_profile);
         EditText Comment = findViewById(R.id.comment);
         Button Skip = findViewById(R.id.skip);
@@ -45,7 +47,8 @@ public class RateDriver extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
-                finish();
+                Intent intentHomePage = new Intent(RateDriver.this, HomePageActivity.class);
+                startActivity(intentHomePage);
             }
         });
 
@@ -53,7 +56,8 @@ public class RateDriver extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
-                finish();
+                Intent intentHomePage = new Intent(RateDriver.this, HomePageActivity.class);
+                startActivity(intentHomePage);
             }
         });
     }
