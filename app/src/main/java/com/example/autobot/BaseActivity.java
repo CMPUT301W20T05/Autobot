@@ -7,6 +7,7 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -114,6 +115,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public AutocompleteSupportFragment autocompleteFragment;
     public NavigationView navigationView;
     public Fragment fragment;
+    public Activity activity;
 
     public TextView name;
     private final float DEFAULT_ZOOM = 18;
@@ -244,7 +246,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() { // cancel all item onClicked
         super.onResume();
-        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {  // cancel selected on edit profile page of the menu item
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
@@ -253,8 +255,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void updateName(String Name) {
         name = findViewById(R.id.driver_name);
         name.setText(Name);  // change the name on the profile page to the new input name
-        onResume();  // cancel selected on edit profile page of the menu item
-
     }
 
     @Override
@@ -265,26 +265,30 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new RequestHistoryFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(1).setChecked(true);
+                setTitle("My Request History");
                 break;
             case R.id.settings:
                 fragment = new SettingsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
+                setTitle("Settings");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
+                setTitle("Payment Information");
                 break;
             case R.id.log_out:
-                Intent logout = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(logout);
+                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
                 navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.edit_profile:
                 fragment = new EditProfilePage();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
                 navigationView.getMenu().getItem(0).setChecked(true);
+                setTitle("Edit Profile");
                 break;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -320,6 +324,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
+                setTitle("Home Page");
             }
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
@@ -327,6 +332,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
+                setTitle("Home Page");
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -334,6 +340,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
+                setTitle("Home Page");
             }
 
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
@@ -341,6 +348,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
+                setTitle("Home Page");
             }
         }
 

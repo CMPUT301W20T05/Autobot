@@ -57,8 +57,8 @@ public class EditProfilePage extends Fragment {
                 String lName = lastName.getText().toString();
                 String fullName = fName + " " + lName;
                 listener.updateName(fullName);
-                getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
-
+                //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
+                getActivity().onBackPressed();
             }
         });
 

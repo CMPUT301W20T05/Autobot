@@ -124,12 +124,14 @@ public class SignUpActivity extends AppCompatActivity {
                       User user = new User();
                       user.setUsername(editTextUserName.getText().toString());
                       user.setPhoneNumber(editTextPhoneNumber.getText().toString());
-                      if (Type_Rider == 1) user.setUserType("Rider");
+                      if (Type_Rider == 2) user.setUserType("Rider");
                       else user.setUserType("Driver");
                       UserValid = false;
                       PhoneValid = false;
                       Intent intentSetPassword = new Intent(SignUpActivity.this, SetPasswordActivity.class);
-                      intentSetPassword.putExtra("User",user);
+                      intentSetPassword.putExtra("Username",user.getUsername());
+                      intentSetPassword.putExtra("PhoneNumber",user.getPhoneNumber());
+                      intentSetPassword.putExtra("Type",user.getUserType());
                       startActivity(intentSetPassword);
                   }
 
