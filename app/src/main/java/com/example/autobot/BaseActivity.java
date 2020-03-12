@@ -1,3 +1,8 @@
+/**
+ * Created by Vishal on 10/20/2018.
+ * direction api example: https://www.youtube.com/watch?v=wRDLjUK8nyU
+ */
+
 package com.example.autobot;
 
 import android.Manifest;
@@ -58,6 +63,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -73,10 +80,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
-import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.example.autobot.TaskLoadedCallback;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -86,7 +91,7 @@ import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, EditProfilePage.EditProfilePageListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, EditProfilePage.EditProfilePageListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -97,13 +102,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
-    private static Location currentLocation;
-    private static LatLng searchedLatLng;
+    protected Location currentLocation;
+    protected LatLng searchedLatLng;
     private LocationCallback locationCallback; //for updating users request if last known location is null
     private FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
     private PlacesClient placesClient;
     private List<AutocompletePrediction> predictionList;
     private Marker currentLocationMarker;
+
+    protected Polyline currentPolyline;
 
     public AutocompleteSupportFragment autocompleteFragment;
     public NavigationView navigationView;
@@ -121,7 +128,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public static final String CHANNEL_ID = "channel";
 
     //api key
-    String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
+    protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
 
     public int anInt = 0;
 
@@ -421,9 +428,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPause() {
         super.onPause();
-        if (googleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,  this);
-        }
+//        if (googleApiClient != null) {
+//            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,  this);
+//        }
     }
 
     @Override
@@ -549,6 +556,47 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setContentText("Message...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
+    }
+
+    //draw route between two locations
+    public String drawRoute(LatLng origin, LatLng destination) {
+        MarkerOptions place1, place2;
+
+        place1 = new MarkerOptions().position(origin).title("Origin");
+        place2 = new MarkerOptions().position(destination).title("Destination");
+        //add marker
+        Log.d("mylog", "Added Markers");
+        mMap.addMarker(place1);
+        mMap.addMarker(place2);
+
+        String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
+
+        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+
+        return url;
+    }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + apiKey;
+        return url;
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 
 }
