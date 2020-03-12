@@ -13,7 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -27,6 +29,7 @@ public class HomePageActivity extends BaseActivity {
 
     LatLng destination;
     LatLng origin;
+    Button HPConfirmButton, HPDirectionButton;
     Database db;
 
     private static final String TAG = "HomePageActivity";
@@ -36,6 +39,9 @@ public class HomePageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setTitle("Home page");
         View rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
+
+        HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
+        HPConfirmButton.setVisibility(View.GONE);
 
         // Initialize the AutocompleteSupportFragment.
         //origin
@@ -63,8 +69,8 @@ public class HomePageActivity extends BaseActivity {
         }
 
 
-        Button HPConfirmButton = (Button) findViewById(R.id.buttonConfirmLocation);
-        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+        HPDirectionButton = (Button) findViewById(R.id.buttonShowDirection);
+        HPDirectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -75,7 +81,15 @@ public class HomePageActivity extends BaseActivity {
                 double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //draw route between two locations
                 String url = drawRoute(origin, destination);
+                HPConfirmButton.setVisibility(View.VISIBLE);
 
+            }
+        });
+
+        HPConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //next activity
                 //next activity
                 Request request = new Request();
                 request.setRider(user);
@@ -84,17 +98,29 @@ public class HomePageActivity extends BaseActivity {
                 db.add_new_request(request);
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentUCurRequest);
-
             }
         });
-
 
     }
 
     public LatLng getOrigin(AutocompleteSupportFragment autocompleteFragmentOrigin){
         Location temp = getCurrentLocation();
         if (temp != null) {
-            origin = new LatLng(temp.getLatitude(), temp.getLongitude());
+            origin = new LatLng(temp.getLatitude(), temp.getLongitude()); //convert to latlng
+
+            autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    origin = place.getLatLng();
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                    // TODO: Handle the error.
+                    Log.i(TAG, "An error occurred: " + status);
+                }
+            });
         }
         return origin;
     }
