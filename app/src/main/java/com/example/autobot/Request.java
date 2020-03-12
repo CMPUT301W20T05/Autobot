@@ -1,13 +1,22 @@
 package com.example.autobot;
 
 import android.location.Location;
+import android.util.Log;
+import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,10 +35,10 @@ public class Request {
     private double EstimateCost;
     private String RequestStatus;
     private Date ArriveTime;
-    private long RequestID;
+    private String RequestID;
     private ArrayList<String> requestStatusList;
 
-    public Request(){
+    public Request() {
         this.Rider = null;
         this.Destination = null;
         this.BeginningLocation = null;
@@ -43,43 +52,33 @@ public class Request {
         this.SendTime = new Date(System.currentTimeMillis());
         this.AcceptTime = null;
         this.ArriveTime = null;
-        this.EstimateCost = EstimateCost(this.Destination,this.BeginningLocation);
+        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
         generateRequestID();
-
+        //this.RequestID = 10;
 
 
     }
-    public Date getSendDate(){
+
+    public Date getSendDate() {
         return this.SendTime;
     }
-    public void generateRequestID(){
-        Database db = new Database();
-        final boolean[] judge = {true};
-        while (judge[0]){
-            final double d = Math.random();
-            final long ID = (long)(d*1000000000);
-            db.collectionReference_request.document(String.valueOf(ID)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                    }else{
-                        judge[0] = false;
-                        setRequestID(ID);
-                    }
-                }
-            });
-        }
 
+    public void generateRequestID() {
+        String ID = this.Rider.getUsername()+this.SendTime.toString();
     }
+
+
+
+
+
+
     public void setRider(User user){
         this.Rider = user;
     }
 
-    public void setRequestID(long ID){
-        this.RequestID = ID;
-    }
+
     public String getRequestID(){
-        return String.valueOf(this.RequestID);
+        return this.RequestID;
     }
     public User getRider(){
         return this.Rider;
@@ -89,6 +88,9 @@ public class Request {
     }
     public User getDriver(){
         return this.Driver;
+    }
+    public void setRequestID(String ID){
+        this.RequestID = ID;
     }
 
     public void setDestination(LatLng destination){
