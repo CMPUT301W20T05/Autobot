@@ -90,7 +90,6 @@ public class HomePageActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //next activity
-                //next activity
                 Request request = new Request();
                 request.setRider(user);
                 request.setDestination(destination);
