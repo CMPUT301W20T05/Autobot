@@ -160,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@color/red"
+        android:background="@drawable/button_red_style"
         android:text="@string/Continue"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
