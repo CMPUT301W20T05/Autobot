@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,13 +27,14 @@ public class Request {
     private String RequestStatus;
     private Date ArriveTime;
     private long RequestID;
-    private List<String> requestStatusList;
+    private ArrayList<String> requestStatusList;
 
     public Request(){
         this.Rider = null;
         this.Destination = null;
         this.BeginningLocation = null;
         this.SendTime = new Date();
+        this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
         this.requestStatusList.add("Rider picked");
