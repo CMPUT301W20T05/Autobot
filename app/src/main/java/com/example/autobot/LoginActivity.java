@@ -28,7 +28,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-
+/**
+ * this is class for login activity
+ * user can login our system using their phone number/user name/email account
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
 
@@ -74,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     String Type = document.get("Type").toString();
                                                     String username = document.get("Username").toString();
                                                     if (TruePassword.equals(Password)){
+                                                        // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
                                                             userName = username;  // set username to username
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);

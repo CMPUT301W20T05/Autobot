@@ -1,8 +1,3 @@
-/**
- * Created by Vishal on 10/20/2018.
- * direction api example: https://www.youtube.com/watch?v=wRDLjUK8nyU
- */
-
 package com.example.autobot;
 
 import android.Manifest;
@@ -101,6 +96,13 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
+/**
+ * this is a class of base activity, it contains google map api, side bar, notifications and so on
+ * Reference:
+ * https://www.tutorialspoint.com/how-to-show-current-location-on-a-google-map-on-android
+ * direction api example: https://www.youtube.com/watch?v=wRDLjUK8nyU, Created by Vishal on 10/20/2018.
+ */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener, EditProfilePage.EditProfilePageListener{
@@ -211,14 +213,27 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    /**
+     * get user current location
+     * @return currentlocation (Location)
+     */
     public Location getCurrentLocation() {
         return currentLocation;
     }
 
+    /**
+     * get the location user searched
+     * @return searched location (Latlng)
+     */
     public LatLng getSearchedLatLng() {
         return searchedLatLng;
     }
 
+    /**
+     * set google autocomplete fragment
+     * it contains setOnPlaceSelectedListener (add marker to the selected location and move camera)
+     * @param autocompleteFragment autocomplete fragment (AutocompleteSupportFragment)
+     */
     public void setAutocompleteSupportFragment(AutocompleteSupportFragment autocompleteFragment) {
 
         if (autocompleteFragment != null) {
@@ -577,7 +592,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 });
     }
 
-    //notification
+    /**
+     * create a notification channel
+     */
     private void createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -594,6 +611,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * send notification to the channel
+     */
     public void sendOnChannel() {
         Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo)
@@ -603,8 +623,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .build();
     }
 
-    //draw route between two locations
-    public String drawRoute(LatLng origin, LatLng destination) {
+    /**
+     * draw route between two locations
+     * @param origin origin of user's request
+     * @param destination destination of user's request
+     */
+    public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
         place1 = new MarkerOptions().position(origin).title("Origin");
@@ -623,16 +647,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         builder.include(destination);
         LatLngBounds bounds = builder.build();
         //Then construct a cameraUpdate
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 128);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 154);
         //Then move the camera
         mMap.animateCamera(cameraUpdate);
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
 //        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-
-        return url;
     }
 
+    /**
+     * connect origin, destination to generate a url
+     * @param origin origin of user's request
+     * @param dest destination of user's request
+     * @param directionMode transportation method
+     * @return url
+     */
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
