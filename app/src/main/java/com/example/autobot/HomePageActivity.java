@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
+import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,9 +17,13 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.Arrays;
@@ -47,7 +52,13 @@ public class HomePageActivity extends BaseActivity {
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
+        db = new Database();
+        final Intent intent = getIntent();
+        String username = intent.getStringExtra("User");
+        setProfile(username); // set profile
+
         // Initialize the AutocompleteSupportFragment.
+        // Specify the types of place data to return.
         //origin
         AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
@@ -55,11 +66,9 @@ public class HomePageActivity extends BaseActivity {
         AutocompleteSupportFragment autocompleteFragmentDestination = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
-        // Specify the types of place data to return.
-        db = new Database();
-        final Intent intent = getIntent();
-        String username = intent.getStringExtra("User");
-        User user = db.rebuildUser(username);
+        String usersname = intent.getStringExtra("User");
+
+        User user = db.rebuildUser(usersname);
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -143,5 +152,4 @@ public class HomePageActivity extends BaseActivity {
         destination = getSearchedLatLng();
         return destination;
     }
-
 }

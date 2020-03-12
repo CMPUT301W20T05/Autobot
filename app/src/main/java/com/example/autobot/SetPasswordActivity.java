@@ -64,7 +64,10 @@ public class SetPasswordActivity extends AppCompatActivity {
                         db.add_new_user(user_class);
 
                         Intent intentHomePage = new Intent(SetPasswordActivity.this, HomePageActivity.class);
+                        intentHomePage.putExtra("User",Username);
                         startActivity(intentHomePage);
+
+
                     }
                 }else{
                     Toast toast = Toast.makeText(getApplicationContext(), "Confirm Password is wrong", Toast.LENGTH_SHORT);
