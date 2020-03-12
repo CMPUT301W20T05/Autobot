@@ -279,7 +279,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 setTitle("Payment Information");
                 break;
             case R.id.log_out:
-                Intent logout = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(logout);
+                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
                 navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.edit_profile:
