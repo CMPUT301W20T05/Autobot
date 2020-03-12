@@ -2,11 +2,13 @@ package com.example.autobot;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,8 @@ public class EditProfilePage extends Fragment {
     private EditText homeAddress;
     private EditText eContact;
     private Button btn;
+    private TextView UserName;
+    private Button Cancel;
     private EditProfilePageListener listener;
 
     public interface EditProfilePageListener {
@@ -37,17 +41,24 @@ public class EditProfilePage extends Fragment {
         }
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        String username = bundle.getString("username");
         View view = inflater.inflate(R.layout.edit_contact_infor_activity, container, false);
 
         firstName = view.findViewById(R.id.editTextFirstName);
         lastName = view.findViewById(R.id.editTextLastName);
-        phoneNumber = view.findViewById(R.id.editTextPhoneNumber);
         emailAddress = view.findViewById(R.id.editTextEmail);
         homeAddress = view.findViewById(R.id.editTextHomeAddress);
         eContact = view.findViewById(R.id.editTextEmergencyContact);
+        UserName = view.findViewById(R.id.Username);
+        Cancel = view.findViewById(R.id.button_cancel);
+        UserName.setText(username);
+
+        Database db = new Database();
 
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +68,34 @@ public class EditProfilePage extends Fragment {
                 String lName = lastName.getText().toString();
                 String fullName = fName + " " + lName;
                 listener.updateName(fullName);
+
+                String Email = emailAddress.getText().toString();
+                String HomeAddress = homeAddress.getText().toString();
+                String EContact = eContact.getText().toString();
+
+                User user = db.rebuildUser(username);
+                user.setUsername(username);
+                String password = user.getPassword();
+                Log.d("password---", password);
+                String phonenumber = user.getPhoneNumber();
+                user.setPassword(password);
+                user.setPhoneNumber(phonenumber);
+                user.setFirstName(fName);
+                user.setLastName(lName);
+                user.setEmailAddress(Email);
+                user.setEmergencyContact(EContact);
+                user.setHomeAddress(HomeAddress);
+
+                db.add_new_user(user);
+
                 //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
+                getActivity().onBackPressed();
+            }
+        });
+
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 getActivity().onBackPressed();
             }
         });
