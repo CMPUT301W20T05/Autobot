@@ -6,103 +6,113 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageViewAvatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="490dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon" />
-
-    <TextView
-        android:id="@+id/Driver_name"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="490dp"
-        android:ems="10"
-        android:gravity="center"
-        android:text="Driver Name"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/imageViewAvatar"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/see_profile"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="84dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="490dp"
-        android:text="See profile"
-        android:textColor="@color/blue2"
-        android:textSize="11dp"
-        android:textStyle="bold|italic"
-        app:layout_constraintStart_toEndOf="@+id/Driver_name"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/emailButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="490dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/phoneButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-    <ImageButton
-        android:id="@+id/phoneButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="490dp"
-        app:layout_constraintStart_toEndOf="@+id/see_profile"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/stat_sys_phone_call" />
-
     <ImageButton
         android:id="@+id/button_back"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_revert" />
 
-    <TextView
-        android:id="@+id/driver_condition"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="566dp"
-        android:background="@null"
-        android:ems="10"
-        android:text="Your driver is on the way to pick you up..."
-        android:textColor="@color/black"
-        android:textSize="22sp"
-
-        android:textStyle="bold"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/layout_style"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/cancel_order"
-        android:layout_width="218dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/blue2"
-        android:text="Cancel Order"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/driver_condition" />
+        <ImageView
+            android:id="@+id/imageViewAvatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/Driver_name"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:gravity="center"
+            android:text="Driver Name"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/imageViewAvatar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/see_profile"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="84dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:text="See profile"
+            android:textColor="@color/blue2"
+            android:textSize="11dp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toEndOf="@+id/Driver_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/emailButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/phoneButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
+
+        <ImageButton
+            android:id="@+id/phoneButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@+id/see_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/stat_sys_phone_call" />
+
+        <TextView
+            android:id="@+id/driver_condition"
+            android:layout_width="296dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:ems="10"
+            android:text="Your driver is on the way to pick you up..."
+            android:textColor="@color/black"
+
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAvatar" />
+
+        <Button
+            android:id="@+id/cancel_order"
+            android:layout_width="218dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/blue2"
+            android:text="Cancel Order"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/driver_condition" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

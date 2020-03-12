@@ -34,7 +34,7 @@ public class ConfirmOriginAndDestination extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = getLayoutInflater().inflate(R.layout.choose_origin_and_destination, frameLayout);
+        View rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
 
         final Intent intent = getIntent();
 

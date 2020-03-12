@@ -9,12 +9,17 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +31,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
@@ -65,19 +74,24 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragement.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, EditProfilePage.EditProfilePageListener{
     public DrawerLayout drawer;
+    public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
     public ArrayList<PaymentCard> mDataList;
 
+    public User user;
     public FrameLayout frameLayout;
 
     //private GoogleMap mMap;
@@ -93,9 +107,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     Marker currentLocationMarker;
 
     public AutocompleteSupportFragment autocompleteFragment;
+    public NavigationView navigationView;
+    public Fragment fragment;
+
 
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
+    public TextView name;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -106,6 +124,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     //api key
     String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
+
+    public int anInt = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,7 +150,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //set up drawer
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -217,26 +237,52 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+    @Override
+    protected void onResume() { // cancel all item onClicked
+        super.onResume();
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
+    }
+    @Override
+    public void updateName(String Name) {
+        name = findViewById(R.id.driver_name);
+        name.setText(Name);  // change the name on the profile page to the new input name
+        onResume();  // cancel selected on edit profile page of the menu item
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch(menuItem.getItemId()) {
             case R.id.my_request_history:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestHistoryFragment()).commit();
+                fragment = new RequestHistoryFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                navigationView.getMenu().getItem(1).setChecked(true);
                 break;
             case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                fragment = new SettingsFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                navigationView.getMenu().getItem(4).setChecked(true);
                 break;
             case R.id.payment_information:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PaymentInformationFragment()).commit();
+                fragment = new PaymentInformationFragment();
+                anInt = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                navigationView.getMenu().getItem(3).setChecked(true);
                 break;
             case R.id.log_out:
-                Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(intent);
+                Intent logout = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(logout);
+                navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.edit_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditProfilePage()).commit();
+                fragment = new EditProfilePage();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                navigationView.getMenu().getItem(0).setChecked(true);
                 break;
+            default:
+                return super.onOptionsItemSelected(menuItem);
         }
         drawer.closeDrawer(GravityCompat.START);
 
@@ -245,16 +291,49 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed(){
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        //MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
+        } else if (onNavigationItemSelected(emItem)){ // if the edit profile page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+            }
+        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+            }
+        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+            }
+        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+            }
         } else {
-            super.onBackPressed();
+            super.onBackPressed(); // back to the last activity
         }
     }
+
     @Override
     public void onOkPressed(PaymentCard newPayment) {
-        mDataList.add(newPayment);
-        mAdapter.notifyDataSetChanged();
+        ((PaymentInformationFragment) fragment).updateList(newPayment);
     }
 
     @Override
@@ -456,4 +535,5 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
     }
+
 }

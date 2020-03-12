@@ -27,21 +27,24 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.Inflater;
 
-public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener{
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress{
     private User user;
     String phone_num;
     FragmentManager active_request_fm;
     Button confirm;
     LatLng origin;
     View header;
+    ArrayList<Request> requests_list;
+    View rootView;
     private static final String TAG = "DriverSearchActivity";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        load_user();
+        //View rootView = getLayoutInflater().inflate(..., frameLayout);
         setTitle(phone_num);
         //testing
         user = new User();
@@ -49,9 +52,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         user.setLastName("lyu");
         update_navigation_view(user);
         //--------------------------------
-        View rootView = getLayoutInflater().inflate(R.layout.choose_origin_and_destination, frameLayout);
+        rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
         //hide that useless bar
         rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.buttonConfirmLocation).setVisibility(View.INVISIBLE);
         //initial the search bar
         AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
@@ -77,9 +81,13 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         markerOptions.title("Current Location");
                         currentLocationMarker = mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
-                        Fragment fragment = new ActiverequestsFragment();
+                        //get all the satisfied active requests
+                        requests_list = new ArrayList<Request>();
+                        //rise the show active requests fragment, manage the fragments activities----------------------
                         active_request_fm = getSupportFragmentManager();
+                        Fragment fragment = new ActiverequestsFragment(requests_list);
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                        //----------------------------------------------------------------------------------------------
                     }
                 }
 
@@ -90,9 +98,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                 }
             });
         }
+
         /*Fragment fragment = new ActiverequestsFragment();
         active_request_fm = getSupportFragmentManager();
         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();*/
+        load_user();
 
     }
 
@@ -133,7 +143,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                 Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(intent);
                 break;
             case R.id.edit_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, new EditProfilePage()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditProfilePage()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -141,8 +151,31 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         return true;
     }
     @Override
-    public void hide() {
+    //--------------listener of show detail of active request fragment
+    public void confirm_request(Request request){
+        //update request in the database
+        request.UpdateStatus(1);
+        //start new activity
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(DriverhomeActivity.this,DriverIsOnTheWayActivity.class);
+        bundle.putSerializable("accepted request",request);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void back_press(){
         active_request_fm.popBackStack();
+    }
+    //-----------------------------------------
+    @Override
+    public void hide() {
+              rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
+    }
+    @Override
+    //show the detail of the selected active request
+    public void show_detail(ShowSelectedActiveRequestFragment fragment) {
+        active_request_fm.beginTransaction().add(R.id.myMap,fragment).addToBackStack(null).commit();
     }
 
     //for edit profile info
