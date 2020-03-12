@@ -14,8 +14,7 @@ public class User implements Driver, Rider , Serializable{
     private String Username;
     private String EmailAddress;
     private String PhoneNumber;
-    private double longitude;
-    private double latitude;
+    private LatLng CurrentLocation;
     private String Password;
     private int Photo;
     private double Stars;
@@ -30,8 +29,7 @@ public class User implements Driver, Rider , Serializable{
         this.Password = "";
         this.UserType = "";
         this.PhoneNumber = "";
-        this.longitude = 0;
-        this.latitude = 0;
+        this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
     }
@@ -71,8 +69,12 @@ public class User implements Driver, Rider , Serializable{
     public void setPhoneNumber(String phoneNumber){
         this.PhoneNumber = phoneNumber;
     }
-    public void getCurrentLocation(){
+    public LatLng getCurrentLocation(){
+        return this.CurrentLocation;
 
+    }
+    public void updateCurrentLocation(LatLng Location){
+        this.CurrentLocation = Location;
     }
     public String getPassword(){
         return this.Password;
@@ -116,20 +118,6 @@ public class User implements Driver, Rider , Serializable{
     }
     public void ContactOtherByEmail(String Email){
 
-    }
-    public Double getLatitude(){
-        return this.latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-    public Double getLongitude(){
-        return this.longitude;
     }
 
     @Override

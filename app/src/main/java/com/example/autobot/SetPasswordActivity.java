@@ -29,10 +29,10 @@ public class SetPasswordActivity extends AppCompatActivity {
         final EditText setPassword = findViewById(R.id.editTextSetPassword);
         final EditText confirmPassord = findViewById(R.id.editTextConfirmPassword);
         Button buttonConfirmPassword = findViewById(R.id.buttonConfirmPassword);
-
+        Database db = new Database();
         final Intent intent = getIntent();
         final String Username = intent.getStringExtra("Username");
-        final User user_class = (User) intent.getSerializableExtra("User");
+        User user_class = db.rebuildUser(Username);
         buttonConfirmPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

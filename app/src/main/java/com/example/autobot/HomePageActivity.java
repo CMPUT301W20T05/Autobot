@@ -32,10 +32,6 @@ public class HomePageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setTitle("Home page");
-        db = new Database();
-        final Intent intent = getIntent();
-        String username = intent.getStringExtra("User");
-        User user = db.rebuildUser(username);
         View rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
 
         // Initialize the AutocompleteSupportFragment.
@@ -47,6 +43,10 @@ public class HomePageActivity extends BaseActivity {
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
         // Specify the types of place data to return.
+        db = new Database();
+        final Intent intent = getIntent();
+        String username = intent.getStringExtra("User");
+        User user = db.rebuildUser(username);
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             setAutocompleteSupportFragment(autocompleteFragmentOrigin);
