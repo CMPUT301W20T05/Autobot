@@ -10,11 +10,12 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.media.Image;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,11 +55,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -72,25 +74,23 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
-import com.example.autobot.TaskLoadedCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, EditProfilePage.EditProfilePageListener{
+//GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener, EditProfilePage.EditProfilePageListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -107,7 +107,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
     private PlacesClient placesClient;
     private List<AutocompletePrediction> predictionList;
-    private Marker currentLocationMarker;
+    protected Marker currentLocationMarker;
 
     protected Polyline currentPolyline;
 
@@ -240,6 +240,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+
     @Override
     protected void onResume() { // cancel all item onClicked
         super.onResume();
@@ -247,6 +248,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
+
     @Override
     public void updateName(String Name) {
         name = findViewById(R.id.driver_name);
@@ -362,7 +364,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                             PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
+                //buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true); //require location permission
                 mMap.getUiSettings().setMyLocationButtonEnabled(true); //my location button will be shown
                 fail = false;
@@ -444,37 +446,38 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // Create the Google API Client with access location
-    public void buildGoogleApiClient(){
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "Connection failed: " + connectionResult.toString());
-    }
+//    public void buildGoogleApiClient(){
+//        googleApiClient = new GoogleApiClient.Builder(this)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//        googleApiClient.connect();
+//    }
+//
+//    @Override
+//    public void onConnected(@Nullable Bundle bundle) {
+//        LocationRequest locationRequest = new LocationRequest();
+//        locationRequest.setInterval(10000);
+//        locationRequest.setFastestInterval(5000);
+//        locationRequest.setSmallestDisplacement(10);
+//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+//        }
+//    }
+//
+//    @Override
+//    public void onConnectionSuspended(int i) {
+//
+//    }
+//
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+//        Log.d(TAG, "Connection failed: " + connectionResult.toString());
+//    }
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -487,7 +490,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @SuppressLint("MissingPermission")
-    protected Location getDeviceLocation() {
+    protected void getDeviceLocation() {
         fusedLocationProviderClient.getLastLocation()
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -500,6 +503,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
                                 locationRequest.setFastestInterval(5000);
+                                locationRequest.setSmallestDisplacement(10);
                                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                                 locationCallback = new LocationCallback() {
                                     @Override
@@ -521,7 +525,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                 });
-        return currentLocation;
     }
 
     //notification
@@ -558,12 +561,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         place2 = new MarkerOptions().position(destination).title("Destination");
         //add marker
         Log.d("mylog", "Added Markers");
+        //remove old marker and add new marker
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
         mMap.addMarker(place1);
         mMap.addMarker(place2);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        // Add your locations to bounds using builder.include, maybe in a loop
+        builder.include(origin);
+        builder.include(destination);
+        LatLngBounds bounds = builder.build();
+        //Then construct a cameraUpdate
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 128);
+        //Then move the camera
+        mMap.animateCamera(cameraUpdate);
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
-
-        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+//        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
 
         return url;
     }
