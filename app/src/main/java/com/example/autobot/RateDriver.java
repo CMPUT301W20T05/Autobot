@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.material.navigation.NavigationView;
+
 public class RateDriver extends BaseActivity {
 
     @Override
