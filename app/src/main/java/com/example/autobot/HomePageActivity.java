@@ -25,6 +25,10 @@ import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
 
+/**
+ * this class is the homepage activity
+ */
+
 public class HomePageActivity extends BaseActivity {
 
     LatLng destination;
@@ -80,7 +84,7 @@ public class HomePageActivity extends BaseActivity {
                 //distance between two locations
                 double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //draw route between two locations
-                String url = drawRoute(origin, destination);
+                drawRoute(origin, destination);
                 HPConfirmButton.setVisibility(View.VISIBLE);
 
             }
@@ -102,6 +106,12 @@ public class HomePageActivity extends BaseActivity {
 
     }
 
+    /**
+     * this function gets the origin location of user request
+     * the default location is the current location, but user can use search bar to choose another location
+     * @param autocompleteFragmentOrigin this is the Google location search bar
+     * @return origin location (Latlng)
+     */
     public LatLng getOrigin(AutocompleteSupportFragment autocompleteFragmentOrigin){
         Location temp = getCurrentLocation();
         if (temp != null) {
@@ -124,14 +134,14 @@ public class HomePageActivity extends BaseActivity {
         return origin;
     }
 
+    /**
+     * this function used to get destination of user's request
+     * @param autocompleteFragmentDestination this is the Google location search bar
+     * @return destination location (Latlng)
+     */
     public LatLng getDestination(AutocompleteSupportFragment autocompleteFragmentDestination) {
         destination = getSearchedLatLng();
         return destination;
     }
 
-    @Override
-    public void updateName(String Name) {
-        name = findViewById(R.id.driver_name);
-        name.setText(Name);
-    }
 }
