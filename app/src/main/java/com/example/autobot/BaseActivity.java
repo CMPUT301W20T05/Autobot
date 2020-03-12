@@ -83,7 +83,6 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
-<<<<<<< HEAD
 import com.example.autobot.TaskLoadedCallback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -93,8 +92,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-=======
->>>>>>> 42c089a13b016c0f3365b1d8d1371a961360fc8d
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,8 +135,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
-    private TextView username;
-    public Database userBase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,29 +166,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         name = header.findViewById(R.id.driver_name);
         name.setText("Edit your Name");
 
-        userBase = new Database();
-
-        Intent i = getIntent();
-        String un = i.getStringExtra("User");
-        DocumentReference docRef = userBase.collectionReference_user.document(un);
-
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        String theUserName = document.getData().get("Username").toString();
-                        username = header.findViewById(R.id.user_name);
-                        username.setText(theUserName);
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -205,6 +178,37 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         createNotificationChannels();
 
+    }
+
+    public void setProfile(String username){
+        Database userBase = new Database();
+
+        drawer = findViewById(R.id.drawer_layout);
+        // get navigation view
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0); // get header of the navigation view
+        name = header.findViewById(R.id.driver_name);
+        name.setText("Edit your Name");
+
+        DocumentReference docRef = userBase.collectionReference_user.document(username);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        String theUserName = document.getData().get("Username").toString();
+                        TextView username = header.findViewById(R.id.user_name);
+                        username.setText(theUserName);
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
     public Location getCurrentLocation() {
@@ -288,9 +292,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void updateName(String Name) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName,String LastName) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
-        name.setText(Name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+
     }
 
     @Override

@@ -23,7 +23,7 @@ public class EditProfilePage extends Fragment {
     private EditProfilePageListener listener;
 
     public interface EditProfilePageListener {
-        void updateName(String Name);
+        void updateInformation(String FirstName, String LastName);
     }
 
     @Override
@@ -55,8 +55,7 @@ public class EditProfilePage extends Fragment {
             public void onClick(View view) {
                 String fName = firstName.getText().toString();
                 String lName = lastName.getText().toString();
-                String fullName = fName + " " + lName;
-                listener.updateName(fullName);
+                listener.updateInformation(fName,lName);
                 //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
                 getActivity().onBackPressed();
             }
