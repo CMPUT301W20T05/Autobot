@@ -28,7 +28,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 
 public class UCurRequest extends BaseActivity{
-    private Button CurRequestConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -36,7 +35,7 @@ public class UCurRequest extends BaseActivity{
         setTitle("UCurRequest");
         View rootView = getLayoutInflater().inflate(R.layout.current_request_of_user, frameLayout);
 
-        CurRequestConfirm = findViewById(R.id.Cur_Request_confirm);
+        Button CurRequestConfirm = findViewById(R.id.Cur_Request_confirm);
         EditText editTextOriginLocation = findViewById(R.id.editText);
         Spinner modelTochoose = findViewById(R.id.spinner);
 

@@ -19,6 +19,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+/**
+ * This is a class for checkout
+ * User can see brief information about the trip and tip driver at this step
+ */
+
 public class TripComplete extends BaseActivity{
 
     @Override

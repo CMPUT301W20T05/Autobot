@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * This is a class for RateDriver activity
+ * User can rate driver at this step
+ */
 public class RateDriver extends BaseActivity {
 
     @Override

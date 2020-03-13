@@ -2,11 +2,17 @@ package com.example.autobot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+/**
+ * This is a class for order information activity
+ * User can see more details about trip at his page
+ */
 
 public class OrderInfo extends BaseActivity {
 
@@ -27,6 +33,12 @@ public class OrderInfo extends BaseActivity {
         TextView ApproDist = findViewById(R.id.Appro_distance);
         TextView ApproPrice = findViewById(R.id.Appro_price);
 
-        
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentDriverIsOnTheWay = new Intent(OrderInfo.this, DriverIsOnTheWayActivity.class);
+                startActivity(intentDriverIsOnTheWay);
+            }
+        });
     }
 }

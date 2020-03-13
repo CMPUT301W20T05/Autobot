@@ -19,9 +19,7 @@ public class DriverIsOnTheWayTest {
     @Before
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
-        solo.clickOnImageButton(0); //backButton
-        solo.clickOnImageButton(1);  //EmailButton
-        solo.clickOnImageButton(2);  //PhoneButton
+
     }
 
     @Test
