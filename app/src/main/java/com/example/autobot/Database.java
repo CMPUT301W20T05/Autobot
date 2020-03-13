@@ -14,6 +14,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +26,6 @@ public class Database {
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
-
 
 
     public Database() {
@@ -90,27 +91,35 @@ public class Database {
 
     public User rebuildUser(String username){
         User user = new User();
-        collectionReference_user.document(username)
+        collectionReference_user
+                .whereEqualTo("Username", username)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
-                            user.setFirstName((String) documentSnapshot.get("FirstName"));
-                            user.setLastName((String) documentSnapshot.get("LastName"));
-                            System.out.println(documentSnapshot.get("CurrentLocation"));
-                            double Lat = Double.valueOf((String) documentSnapshot.get("CurrentLocationLat"));
-                            double Lnt = Double.valueOf((String) documentSnapshot.get("CurrentLocationLnt"));
-                            LatLng CurrentLocation = new LatLng(Lat, Lnt);
-                            user.updateCurrentLocation(CurrentLocation);
-                            user.setPassword((String) documentSnapshot.get("Password"));
-                            user.setHomeAddress((String) documentSnapshot.get("EmergencyContact"));
-                            user.setEmergencyContact((String) documentSnapshot.get("HomeAddress"));
-                            user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
-                            user.setStars(Double.valueOf((String) documentSnapshot.get("StarsRate")));
-                            user.setUserType((String) documentSnapshot.get("Type"));
-                            user.setUsername((String) documentSnapshot.get("Username"));
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                //user = document.toObject(User.class);
+                                user.setEmailAddress((String) document.get("EmailAddress"));
+                                user.setFirstName((String) document.get("FirstName"));
+                                user.setLastName((String) document.get("LastName"));
+                                System.out.println(document.get("CurrentLocation"));
+                                double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                user.updateCurrentLocation(CurrentLocation);
+                                user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                user.setHomeAddress((String) document.get("HomeAddress"));
+                                user.setPassword((String) document.get("Password"));
+                                user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                user.setUserType((String) document.get("Type"));
+                                user.setUsername((String) document.get("Username"));
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
