@@ -203,8 +203,6 @@ public class Database{
                                     r.setDriver(rebuildUser((String) document.get("Driver")));
                                     r.setRequestID((String) document.get("RequestID"));
                                     r.setRider(rebuildUser((String) document.get("Rider")));
-                                    r.resetAcceptTime((Date) document.get("AcceptTime"));
-                                    r.resetArriveTime((Date) document.get("ArriveTime"));
 
                                     SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
                                     try {

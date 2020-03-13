@@ -65,7 +65,7 @@ public class Request implements Serializable {
         String defaultTimeString = "00-0-0000 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
-        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
+        this.EstimateCost = 0.0;
         this.RequestID = generateRequestID();
 
     }
@@ -84,7 +84,7 @@ public class Request implements Serializable {
         String defaultTimeString = "00-0-0000 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
-        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
+        this.EstimateCost = 0.0;
         this.RequestID = generateRequestID();
 
     }
@@ -130,13 +130,13 @@ public class Request implements Serializable {
     }
     public LatLng getBeginningLocation(){return this.BeginningLocation;}
 
-    public double EstimateCost(LatLng destination, LatLng beginningLocation){
+    public void setEstimateCost(LatLng destination, LatLng beginningLocation){
+        double estimateCost = 0.0;
         if (destination != null && beginningLocation != null) {
             double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
-            double estimateCost = 5 + distance * 0.05;
-            return estimateCost;
+            estimateCost = 5 + distance * 0.05;
         }
-        return 0.0;
+        this.EstimateCost = estimateCost;
     }
     public double getEstimateCost() {
         return this.EstimateCost;

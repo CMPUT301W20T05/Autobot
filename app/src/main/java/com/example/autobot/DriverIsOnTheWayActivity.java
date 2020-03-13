@@ -114,23 +114,21 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //when driver arrived, show notification
         sendOnChannel();
 
+        //hardcode for now
+        request.resetRequestStatus("Request picked");
         //when request condition changes to "accept" go to next activity
         String requestState = request.getStatus();
-        final Handler handler = new Handler();
-        while (!requestState.equals("Request Accepted")) {
-            handler.postDelayed(new Runnable() {
-                @SuppressLint("ShowToast")
-                @Override
-                public void run() {
-                    Toast.makeText(DriverIsOnTheWayActivity.this, "Please wait...", Toast.LENGTH_SHORT);
-                }
-            }, 3000);
+
+        if (requestState.equals("Request picked")) {
+            //go to next page
+            Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+            intentOrderComplete.putExtra("Username", username);
+            intentOrderComplete.putExtra("reid", reID);
+            startActivity(intentOrderComplete);
         }
-        //go to next page
-        Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-        intentOrderComplete.putExtra("Username", username);
-        intentOrderComplete.putExtra("reid", reID);
-        startActivity(intentOrderComplete);
+        else {
+            Toast.makeText(DriverIsOnTheWayActivity.this, "Please wait...", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

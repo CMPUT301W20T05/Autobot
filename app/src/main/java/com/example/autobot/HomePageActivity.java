@@ -1,11 +1,14 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -81,17 +84,22 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         HPDirectionButton = (Button) findViewById(R.id.buttonShowDirection);
         HPDirectionButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
 
                 origin = getOrigin(autocompleteFragmentOrigin);
                 destination = getDestination(autocompleteFragmentDestination);
-
-                //distance between two locations
-                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                //draw route between two locations
-                drawRoute(origin, destination);
-                HPConfirmButton.setVisibility(View.VISIBLE);
+                if (destination == null) {
+                    Toast.makeText(HomePageActivity.this, "Please select destination", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //distance between two locations
+                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                    //draw route between two locations
+                    drawRoute(origin, destination);
+                    HPConfirmButton.setVisibility(View.VISIBLE);
+                }
 
             }
         });
@@ -107,6 +115,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 }
 //                request.setDestination(destination);
 //                request.setBeginningLocation(origin);
+                request.setEstimateCost(origin, destination);
                 db.add_new_request(request);
                 String reID = request.getRequestID();
                 //next activity

@@ -85,7 +85,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentCancelRequest = new Intent(UCurRequest.this, DriverIsOnTheWayActivity.class);
+                Intent intentCancelRequest = new Intent(UCurRequest.this, RiderWaitDriverAcceptRequest.class);
                 intentCancelRequest.putExtra("Username",username);
                 intentCancelRequest.putExtra("reid",reID);
                 startActivity(intentCancelRequest);
