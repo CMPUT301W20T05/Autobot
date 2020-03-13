@@ -50,7 +50,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-        db = new Database();
+        db = BaseActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile
@@ -101,18 +101,18 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             public void onClick(View v) {
                 Request request = null;
                 try {
-                    request = new Request(user);
+                    request = new Request(user, origin, destination);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                request.setRider(user);
-                request.setDestination(destination);
-                request.setBeginningLocation(origin);
+//                request.setDestination(destination);
+//                request.setBeginningLocation(origin);
                 db.add_new_request(request);
+                String reID = request.getRequestID();
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 intentUCurRequest.putExtra("Username",username);
-                UCurRequest.user = user;
+                intentUCurRequest.putExtra("reid",reID);
                 startActivity(intentUCurRequest);
             }
         });

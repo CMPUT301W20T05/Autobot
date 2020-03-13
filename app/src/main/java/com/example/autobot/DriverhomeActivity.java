@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.Inflater;
 
-public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress{
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
     private User user;
     private String user_id;
     String phone_num;
@@ -50,9 +50,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     ArrayList<Request> requests_list;
     View rootView;
     private String username;
-
     public static Database db;
-    private static final String TAG = "DriverSearchActivity";
+    private static final String TAG = "DriverhomeActivity";
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requests_list = new ArrayList<Request>();
@@ -127,7 +128,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     }
     //load the driver info from db and rebuilt it
     public void load_user(){
-        db = new Database();
         final Intent intent = getIntent();
         String user_id = intent.getStringExtra("User");
         //user = db.rebuildUser(username);
@@ -136,7 +136,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //loading all the satisfied requests
     public void load_requests(LatLng searchedLatLng){
            requests_list.clear();
-           db = new Database();
            db.collectionReference_request.get()
                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                        @Override
@@ -198,10 +197,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //db.add_new_request(request);
 
 
-        //send the selected request to the next activity
-        DriverIsOnTheWayActivity.request = request;
+
+        DriveIsGoing.request = request;
+
         //start new activity
-        Intent intent = new Intent(DriverhomeActivity.this,DriverIsOnTheWayActivity.class);
+        Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         startActivity(intent);
     }
 
