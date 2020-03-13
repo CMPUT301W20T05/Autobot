@@ -34,13 +34,14 @@ import static android.os.AsyncTask.execute;
  * this class is the homepage activity
  */
 
-public class HomePageActivity extends BaseActivity {
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     LatLng destination;
     LatLng origin;
     Button HPConfirmButton, HPDirectionButton;
     Database db;
     User user;
+    String username;
 
     private static final String TAG = "HomePageActivity";
 
@@ -55,7 +56,7 @@ public class HomePageActivity extends BaseActivity {
 
         db = new Database();
         final Intent intent = getIntent();
-        String username = intent.getStringExtra("User");
+        username = intent.getStringExtra("User");
         setProfile(username); // set profile
 
         // Initialize the AutocompleteSupportFragment.
@@ -154,5 +155,18 @@ public class HomePageActivity extends BaseActivity {
     public LatLng getDestination(AutocompleteSupportFragment autocompleteFragmentDestination) {
         destination = getSearchedLatLng();
         return destination;
+    }
+
+    @Override
+    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+        User newUser = db.rebuildUser(username);
+        newUser.setFirstName(FirstName);
+        newUser.setLastName(LastName);
+
+        db.add_new_user(newUser);
+
     }
 }

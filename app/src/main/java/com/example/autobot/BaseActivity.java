@@ -107,7 +107,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener, EditProfilePage.EditProfilePageListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -306,14 +306,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         for (int i = 0; i < navigationView.getMenu().size(); i++) {  // cancel selected on edit profile page of the menu item
             navigationView.getMenu().getItem(i).setChecked(false);
         }
-    }
-
-    @Override
-    public void updateInformation(String FirstName,String LastName) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-
     }
 
     @Override
