@@ -8,11 +8,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.text.ParseException;
+
 public class OrderComplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     private Database db;
     private String username;
     private User user;
+    private Request request;
+    private String reID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +31,17 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
+        reID = intent.getStringExtra("reid");
+
         setProfile(username); // set profile
+        //get user from firebase
         user = db.rebuildUser(username);
+        //get request from firebase
+        try {
+            request = db.rebuildRequest(reID, user);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
@@ -34,11 +49,17 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         Spinner Tips = findViewById(R.id.addTip);
         Button Confirm = findViewById(R.id.confirmFee);
 
+        LatLng destination = request.getDestination();
+        LatLng origin = request.getBeginningLocation();
+
+        Destination.setText(String.valueOf(destination));
+
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentRateDriver = new Intent(OrderComplete.this, RateDriver.class);
                 intentRateDriver.putExtra("Username",username);
+                intentRateDriver.putExtra("reid",reID);
                 startActivity(intentRateDriver);
             }
         });
@@ -53,8 +74,15 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         User newUser = db.rebuildUser(username);
         newUser.setFirstName(FirstName);
         newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
 
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

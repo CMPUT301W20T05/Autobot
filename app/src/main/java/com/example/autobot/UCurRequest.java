@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.google.protobuf.StringValue;
 
+import java.text.ParseException;
+
 public class UCurRequest extends BaseActivity implements EditProfilePage.EditProfilePageListener{
     private Button CurRequestConfirm;
     private Database db;
@@ -36,7 +38,11 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         //get user from firebase
         user = db.rebuildUser(username);
         //get request from firebase
-        request = db.rebuildRequest(reID, user);
+        try {
+            request = db.rebuildRequest(reID, user);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //calculate estimated fare
         double estimateFare = request.getEstimateCost();
@@ -60,11 +66,17 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
-
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

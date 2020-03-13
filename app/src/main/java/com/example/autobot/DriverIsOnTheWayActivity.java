@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -68,8 +69,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 callIntent.setData(Uri.parse("tel:" + rphoneNumber));//change the number.
                 if (ActivityCompat.checkSelfPermission(DriverIsOnTheWayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(DriverIsOnTheWayActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     startActivity(callIntent);
                 }
             }
@@ -88,7 +88,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //delete current request
                                 //go back to home page
-                                Intent cancelRequest = new Intent(getApplicationContext(),HomePageActivity.class);
+                                Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                                 startActivity(cancelRequest);
                             }
                         })
@@ -110,19 +110,20 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //when request condition changes to "accept" go to next activity
         String requestState = request.getStatus();
         final Handler handler = new Handler();
-        for (!requestState.equals("Request Accepted")) {
+        while (!requestState.equals("Request Accepted")) {
             handler.postDelayed(new Runnable() {
-
+                @SuppressLint("ShowToast")
                 @Override
                 public void run() {
+                    Toast.makeText(DriverIsOnTheWayActivity.this, "Please wait...", Toast.LENGTH_SHORT);
                 }
             }, 3000);
         }
-        if (requestState.equals("Request Accepted")) {
-            Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-            intentOrderComplete.putExtra("Username",username);
-            intentOrderComplete.putExtra("reid",reID);
-            startActivity(intentOrderComplete);
+        //go to next page
+        Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+        intentOrderComplete.putExtra("Username", username);
+        intentOrderComplete.putExtra("reid", reID);
+        startActivity(intentOrderComplete);
 
     }
 
@@ -132,11 +133,17 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
-
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

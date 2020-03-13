@@ -25,12 +25,15 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.text.ParseException;
 import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
+import static com.android.volley.VolleyLog.TAG;
 
 
 /**
@@ -171,12 +174,16 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         name.setText(fullName);
 
         User newUser = user;
-        newUser.setFirstName(FirstName);
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
+
     }
-
-
-
-
+    @Override
+    public String getUsername() {
+        return username;
+    }
 }

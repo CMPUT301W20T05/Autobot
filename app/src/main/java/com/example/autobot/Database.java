@@ -189,6 +189,7 @@ public class Database{
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
                        r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
+
                        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
                         try {
                             r.resetAcceptTime(formatter.parse((String) documentSnapshot.get("AcceptTime")));
@@ -198,8 +199,8 @@ public class Database{
                             e.printStackTrace();
                         }
                         r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                       r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
-                       r.setRequestID((String)documentSnapshot.get("ID"));
+                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
+                        r.setRequestID((String)documentSnapshot.get("ID"));
                     }
                 });
         return r;

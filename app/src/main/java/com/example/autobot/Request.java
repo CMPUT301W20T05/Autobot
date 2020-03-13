@@ -1,5 +1,8 @@
 package com.example.autobot;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
@@ -71,11 +74,6 @@ public class Request implements Serializable {
         String ID = this.Rider.getUsername()+this.SendTime.toString();
         return ID;
     }
-
-
-
-
-
 
     public void setRider(User user){
         this.Rider = user;
