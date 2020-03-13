@@ -45,6 +45,8 @@ public class Database {
         user_data.put("StarsRate", user.getStars().toString());
         user_data.put("Type", user.getUserType());
         user_data.put("Password",user.getPassword());
+        user_data.put("EmergencyContact",user.getEmergencyContact());
+        user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
         collectionReference_user
@@ -158,16 +160,6 @@ public class Database {
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
                        r.setRequestID((String)documentSnapshot.get("ID"));
-
-
-
-
-
-
-
-
-
-
                     }
                 });
         return r;
