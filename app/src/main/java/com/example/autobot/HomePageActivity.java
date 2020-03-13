@@ -1,35 +1,22 @@
 package com.example.autobot;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.location.Location;
-import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import android.content.Intent;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.Arrays;
-
-import static android.os.AsyncTask.execute;
 
 
 /**
@@ -44,7 +31,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     Database db;
     String username;
     User user;
-
+    double distance;
 
     private static final String TAG = "HomePageActivity";
 
@@ -100,7 +87,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 destination = getDestination(autocompleteFragmentDestination);
 
                 //distance between two locations
-                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //draw route between two locations
                 drawRoute(origin, destination);
                 HPConfirmButton.setVisibility(View.VISIBLE);
@@ -118,6 +105,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 db.add_new_request(request);
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                UCurRequest.distance = distance;
                 startActivity(intentUCurRequest);
             }
         });
