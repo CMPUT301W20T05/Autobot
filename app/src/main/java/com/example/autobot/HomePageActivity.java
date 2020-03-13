@@ -164,6 +164,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
+        user = db.rebuildUser(username);
+        user.setFirstName(FirstName);
+        user.setLastName(LastName);
+        db.add_new_user(user);
+
     }
 
 
