@@ -103,7 +103,7 @@ import javax.annotation.Nullable;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener, EditProfilePage.EditProfilePageListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -179,7 +179,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
-
     public void setProfile(String username){
         Database userBase = new Database();
 
@@ -191,7 +190,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         name = header.findViewById(R.id.driver_name);
         name.setText("Edit your Name");
 
-        DocumentReference docRef = userBase.collectionReference_user.document(username);
+        DocumentReference docRef = userBase.getRef(username);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
             @Override
@@ -292,16 +291,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void updateInformation(String FirstName,String LastName) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
         switch(menuItem.getItemId()) {
             case R.id.my_request_history:
                 fragment = new RequestHistoryFragment();
