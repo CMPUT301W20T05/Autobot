@@ -352,6 +352,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.edit_profile:
                 fragment = new EditProfilePage();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("username",username);
+//                fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
                 navigationView.getMenu().getItem(0).setChecked(true);
                 setTitle("Edit Profile");
@@ -362,6 +365,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    public Bundle setUserName(String username) {
+        Bundle bundle = new Bundle();
+        bundle.putString("username",username);
+        return bundle;
     }
 
     @Override
