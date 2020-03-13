@@ -57,7 +57,7 @@
             android:id="@+id/favorable_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="70%"
+            android:text="0%"
             android:layout_marginTop="25dp"
             android:textColor="@color/black"
             tools:ignore="MissingConstraints">
@@ -73,7 +73,7 @@
             android:id="@+id/poor_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="30%"
+            android:text="0%"
             android:layout_marginTop="25dp"
             android:textColor="@color/black"
             tools:ignore="MissingConstraints">

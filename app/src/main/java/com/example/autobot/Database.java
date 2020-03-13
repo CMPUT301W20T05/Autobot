@@ -32,10 +32,6 @@ public class Database {
 
     //    CollectionReference collectionReference_request;
 
-
-
-
-
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
         user_data.put("Username", user.getUsername());
@@ -46,8 +42,8 @@ public class Database {
         user_data.put("StarsRate", user.getStars().toString());
         user_data.put("Type", user.getUserType());
         user_data.put("Password",user.getPassword());
-        user_data.put("Longitude",user.getLongitude().toString());
-        user_data.put("Latitude",user.getLatitude().toString());
+        user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
+        user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -79,11 +75,14 @@ public class Database {
                         user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
                         user.setFirstName((String) documentSnapshot.get("FirstName"));
                         user.setLastName((String) documentSnapshot.get("LastName"));
-                        user.setLatitude((Double) documentSnapshot.get("Latitude"));
-                        user.setLongitude((Double) documentSnapshot.get("Longitude"));
+                        System.out.println(documentSnapshot.get("CurrentLocation"));
+                        double Lat = Double.valueOf((String)documentSnapshot.get("CurrentLocationLat"));
+                        double Lnt = Double.valueOf((String)documentSnapshot.get("CurrentLocationLnt"));
+                        LatLng CurrentLocation = new LatLng(Lat,Lnt);
+                        user.updateCurrentLocation(CurrentLocation);
                         user.setPassword((String) documentSnapshot.get("Password"));
                         user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
-                        user.setStars((Double)documentSnapshot.get("StarsRate"));
+                        user.setStars(Double.valueOf((String)documentSnapshot.get("StarsRate")));
                         user.setUserType((String) documentSnapshot.get("Type"));
                         user.setUsername((String) documentSnapshot.get("Username"));
 
@@ -101,8 +100,12 @@ public class Database {
     public void add_new_request(Request request){
         HashMap<String,String> request_data = new HashMap<>();
         request_data.put("Rider",request.getRider().getUsername());
-        request_data.put("Destination",request.getDestination().toString());
-        request_data.put("BeginningLoctation",request.getBeginningLocation().toString());
+        request_data.put("DestinationLat",String.valueOf(request.getDestination().latitude));
+        request_data.put("DestinationLnt",String.valueOf(request.getDestination().longitude));
+
+        request_data.put("BeginningLocationLat",String.valueOf(request.getBeginningLocation().latitude));
+        request_data.put("BeginningLocationLnt",String.valueOf(request.getBeginningLocation().longitude));
+
         request_data.put("RequestID",request.getRequestID());
         request_data.put("SendTime",request.getSendDate().toString());
         request_data.put("AcceptTime",null);
@@ -134,8 +137,10 @@ public class Database {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                       r.setBeginningLocation((LatLng)documentSnapshot.get("BeginningLocation"));
-                       r.setDestination((LatLng)documentSnapshot.get("Destination"));
+                        LatLng BeginningLocation = new LatLng(Double.valueOf((String)documentSnapshot.get("BeginningLocationLat")),Double.valueOf((String)documentSnapshot.get("BeginningLocationLnt")));
+                       r.setBeginningLocation(BeginningLocation);
+                        LatLng Destination = new LatLng(Double.valueOf((String)documentSnapshot.get("DestinationLat")),Double.valueOf((String)documentSnapshot.get("DestinationLnt")));
+                       r.setDestination(Destination);
                        r.setDriver(rebuildUser((String) documentSnapshot.get("Driver")));
                        r.setRequestID((Long) documentSnapshot.get("RequestID"));
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
@@ -143,7 +148,7 @@ public class Database {
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
                        r.resetSendTime((Date)documentSnapshot.get("SendTime"));
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                       r.resetEstimateCost((double)documentSnapshot.get("EstimateCost"));
+                       r.resetEstimateCost((Double)documentSnapshot.get("EstimateCost"));
 
 
 

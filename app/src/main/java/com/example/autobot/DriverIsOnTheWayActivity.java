@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,7 +20,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class DriverIsOnTheWayActivity extends BaseActivity {
-
+    static Request request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
         Button buttonCancelOrder = findViewById(R.id.cancel_order);
 
-        final String phoneNumber = null;
+        //need to connect to firebase to get phone number
+        final String phoneNumber = "5875576400";
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {

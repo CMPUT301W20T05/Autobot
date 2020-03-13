@@ -1,23 +1,30 @@
+/**
+ * Created by Vishal on 10/20/2018.
+ * direction api example: https://www.youtube.com/watch?v=wRDLjUK8nyU
+ */
+
 package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.media.Image;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +42,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import io.grpc.okhttp.internal.framed.Header;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
@@ -50,13 +58,17 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,50 +77,59 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
-import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.example.autobot.TaskLoadedCallback;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, EditProfilePage.EditProfilePageListener{
+//GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
     public ArrayList<PaymentCard> mDataList;
-
     public User user;
     public FrameLayout frameLayout;
-
+    public String un;
+    //pls dont private these part
     //private GoogleMap mMap;
     GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     //private static Location currentLocation;
     static Location currentLocation;
     static LatLng searchedLatLng;
-    private LocationCallback locationCallback; //for updating users request if last known location is null
-    private FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
-    private PlacesClient placesClient;
-    private List<AutocompletePrediction> predictionList;
+    //----------------------------------
+    LocationCallback locationCallback; //for updating users request if last known location is null
+    FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
+    PlacesClient placesClient;
+    List<AutocompletePrediction> predictionList;
     Marker currentLocationMarker;
 
+    protected Polyline currentPolyline;
     public AutocompleteSupportFragment autocompleteFragment;
     public NavigationView navigationView;
     public Fragment fragment;
+
 
 
     //private final float DEFAULT_ZOOM = 18;
@@ -118,14 +139,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
     private static final String TAG = "BaseActivity";
-
     //notification
     public static final String CHANNEL_ID = "channel";
-
     //api key
-    String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
-
+    protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
+    private TextView username;
+    public Database userBase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,8 +170,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //set up drawer
         drawer = findViewById(R.id.drawer_layout);
+        // get navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0); // get header of the navigation view
+        name = header.findViewById(R.id.driver_name);
+        name.setText("Edit your Name");
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -237,20 +262,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+
     @Override
     protected void onResume() { // cancel all item onClicked
         super.onResume();
-        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {  // cancel selected on edit profile page of the menu item
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
-    @Override
-    public void updateName(String Name) {
-        name = findViewById(R.id.driver_name);
-        name.setText(Name);  // change the name on the profile page to the new input name
-        onResume();  // cancel selected on edit profile page of the menu item
 
-    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -260,26 +281,30 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new RequestHistoryFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
                 navigationView.getMenu().getItem(1).setChecked(true);
+                setTitle("My Request History");
                 break;
             case R.id.settings:
                 fragment = new SettingsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
+                setTitle("Settings");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
+                setTitle("Payment Information");
                 break;
             case R.id.log_out:
-                Intent logout = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(logout);
+                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
                 navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.edit_profile:
                 fragment = new EditProfilePage();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
                 navigationView.getMenu().getItem(0).setChecked(true);
+                setTitle("Edit Profile");
                 break;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -306,29 +331,44 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
-        } else if (onNavigationItemSelected(emItem)){ // if the edit profile page is opened, back to main page
+        }
+        else if (fragment == null){
+            super.onBackPressed(); // back to the last activity
+        }
+        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
+                setTitle("Home Page");
             }
+
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
+                setTitle("Home Page");
             }
+
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
+                setTitle("Home Page");
             }
+
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
+                fragment = null;
+                setTitle("Home Page");
             }
-        } else {
-            super.onBackPressed(); // back to the last activity
         }
+
+
     }
 
     @Override
@@ -348,7 +388,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                             PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
+                //buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true); //require location permission
                 mMap.getUiSettings().setMyLocationButtonEnabled(true); //my location button will be shown
                 fail = false;
@@ -406,9 +446,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPause() {
         super.onPause();
-        if (googleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,  this);
-        }
+//        if (googleApiClient != null) {
+//            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,  this);
+//        }
     }
 
     @Override
@@ -430,37 +470,38 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // Create the Google API Client with access location
-    public void buildGoogleApiClient(){
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "Connection failed: " + connectionResult.toString());
-    }
+//    public void buildGoogleApiClient(){
+//        googleApiClient = new GoogleApiClient.Builder(this)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//        googleApiClient.connect();
+//    }
+//
+//    @Override
+//    public void onConnected(@Nullable Bundle bundle) {
+//        LocationRequest locationRequest = new LocationRequest();
+//        locationRequest.setInterval(10000);
+//        locationRequest.setFastestInterval(5000);
+//        locationRequest.setSmallestDisplacement(10);
+//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+//        }
+//    }
+//
+//    @Override
+//    public void onConnectionSuspended(int i) {
+//
+//    }
+//
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+//        Log.d(TAG, "Connection failed: " + connectionResult.toString());
+//    }
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -473,7 +514,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @SuppressLint("MissingPermission")
-    protected Location getDeviceLocation() {
+    protected void getDeviceLocation() {
         fusedLocationProviderClient.getLastLocation()
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -486,6 +527,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
                                 locationRequest.setFastestInterval(5000);
+                                locationRequest.setSmallestDisplacement(10);
                                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                                 locationCallback = new LocationCallback() {
                                     @Override
@@ -507,7 +549,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                 });
-        return currentLocation;
     }
 
     //notification
@@ -534,6 +575,59 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setContentText("Message...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
+    }
+
+    //draw route between two locations
+    public String drawRoute(LatLng origin, LatLng destination) {
+        MarkerOptions place1, place2;
+
+        place1 = new MarkerOptions().position(origin).title("Origin");
+        place2 = new MarkerOptions().position(destination).title("Destination");
+        //add marker
+        Log.d("mylog", "Added Markers");
+        //remove old marker and add new marker
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
+        mMap.addMarker(place1);
+        mMap.addMarker(place2);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        // Add your locations to bounds using builder.include, maybe in a loop
+        builder.include(origin);
+        builder.include(destination);
+        LatLngBounds bounds = builder.build();
+        //Then construct a cameraUpdate
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 128);
+        //Then move the camera
+        mMap.animateCamera(cameraUpdate);
+
+        String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
+//        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+
+        return url;
+    }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + apiKey;
+        return url;
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 
 }

@@ -23,7 +23,7 @@ public class EditProfilePage extends Fragment {
     private EditProfilePageListener listener;
 
     public interface EditProfilePageListener {
-        void updateName(String Name);
+        void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact);
     }
 
     @Override
@@ -55,10 +55,14 @@ public class EditProfilePage extends Fragment {
             public void onClick(View view) {
                 String fName = firstName.getText().toString();
                 String lName = lastName.getText().toString();
-                String fullName = fName + " " + lName;
-                listener.updateName(fullName);
-                getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
+                String pNumber = phoneNumber.getText().toString();
+                String eAddress = emailAddress.getText().toString();
+                String hAddress = homeAddress.getText().toString();
+                String econtact = eContact.getText().toString();
 
+                listener.updateInformation(fName,lName,pNumber,eAddress,hAddress,econtact);
+                //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
+                getActivity().onBackPressed();
             }
         });
 

@@ -25,24 +25,28 @@ public class Request implements Serializable {
     private Date SendTime;
     private Date AcceptTime;
     private double EstimateCost;
-    private LatLng CurrentLocation;
     private String RequestStatus;
     private Date ArriveTime;
     private long RequestID;
-    private static ArrayList<String> requestStatusList = new ArrayList<String>();
+    private static ArrayList<String> requestStatusList = new ArrayList<String>();;
+
 
     public Request(){
-        this.Rider = getRider();
-        this.Destination = getDestination();
-        this.BeginningLocation = getBeginningLocation();
+        this.Rider = null;
+        this.Destination = null;
+        this.BeginningLocation = null;
         this.SendTime = new Date();
+        //this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        //this.CurrentLocation = getCurrentLocation();
+        this.AcceptTime = null;
+        this.ArriveTime = null;
+        this.EstimateCost = EstimateCost(this.Destination,this.BeginningLocation);
+        generateRequestID();
 
 
 
@@ -53,7 +57,7 @@ public class Request implements Serializable {
     public void generateRequestID(){
         Database db = new Database();
         final boolean[] judge = {true};
-        while (judge[0]){
+        //while (judge[0]){
             final double d = Math.random();
             final long ID = (long)(d*1000000000);
             db.collectionReference_request.document(String.valueOf(ID)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -66,7 +70,7 @@ public class Request implements Serializable {
                     }
                 }
             });
-        }
+        //}
 
     }
     public void setRider(User user){
@@ -104,8 +108,9 @@ public class Request implements Serializable {
     public void getArriveTime(){
         this.ArriveTime = new Date();
     }
-    public void EstimateCost(LatLng destination, LatLng beginningLocation){
+    public double EstimateCost(LatLng destination, LatLng beginningLocation){
         //double distance = destination.distanceTo(beginningLocation);
+        return 0.0;
 
     }
     public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){

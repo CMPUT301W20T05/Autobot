@@ -1,12 +1,12 @@
 package com.example.autobot;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.google.android.material.navigation.NavigationView;
 
 public class RateDriver extends BaseActivity {
 
@@ -22,7 +22,7 @@ public class RateDriver extends BaseActivity {
         Button Profile = findViewById(R.id.see_profile);
         EditText Comment = findViewById(R.id.comment);
         Button Skip = findViewById(R.id.skip);
-        Button Confirm = findViewById(R.id.button2);
+        Button Confirm = findViewById(R.id.confirmFee);
 
         Selfie.setOnClickListener(new View.OnClickListener() {
             @Override

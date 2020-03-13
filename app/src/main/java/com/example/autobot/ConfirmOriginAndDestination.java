@@ -80,7 +80,7 @@ public class ConfirmOriginAndDestination extends BaseActivity {
         }
 
 
-        Button HPConfirmButton = (Button) findViewById(R.id.buttonConfirmLocation);
+        Button HPConfirmButton = (Button) findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

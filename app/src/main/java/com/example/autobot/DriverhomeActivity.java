@@ -22,10 +22,17 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.internal.$Gson$Preconditions;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +40,7 @@ import java.util.zip.Inflater;
 
 public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress{
     private User user;
+    private String user_id;
     String phone_num;
     FragmentManager active_request_fm;
     Button confirm;
@@ -40,22 +48,23 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     View header;
     ArrayList<Request> requests_list;
     View rootView;
+    Database db;
     private static final String TAG = "DriverSearchActivity";
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //View rootView = getLayoutInflater().inflate(..., frameLayout);
-        setTitle(phone_num);
+        //load_user();
+        setTitle("driver mode");
         //testing
-        user = new User();
+        /*user = new User();
         user.setFirstName("jc");
-        user.setLastName("lyu");
-        update_navigation_view(user);
+        user.setLastName("lyu");*/
+        //update_navigation_view(user);
         //--------------------------------
         rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
         //hide that useless bar
         rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.buttonConfirmLocation).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.buttonConfirmRequest).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.buttonShowDirection).setVisibility(View.INVISIBLE);
         //initial the search bar
         AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
@@ -83,6 +92,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
                         //get all the satisfied active requests
                         requests_list = new ArrayList<Request>();
+                        load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
                         active_request_fm = getSupportFragmentManager();
                         Fragment fragment = new ActiverequestsFragment(requests_list);
@@ -102,16 +112,43 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         /*Fragment fragment = new ActiverequestsFragment();
         active_request_fm = getSupportFragmentManager();
         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();*/
-        load_user();
 
     }
-
+    //load the driver info from db and rebuilt it
     public void load_user(){
-        Intent intent = getIntent();
-        phone_num = intent.getExtras().getString("phone number");
+        db = new Database();
+        final Intent intent = getIntent();
+        String user_id = intent.getStringExtra("User");
+        //user = db.rebuildUser(username);
     }
 
-    public void update_navigation_view(User user){
+    //loading all the satisfied requests
+    public void load_requests(LatLng searchedLatLng){
+           db = new Database();
+           db.collectionReference_request.get()
+                   .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                       @Override
+                       public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                           if (task.isSuccessful()){
+                               for (DocumentSnapshot document: task.getResult()){
+                                   //get the location of start
+                                   LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
+                                   //if the distance between beginning location and search place is within the range and the request is inactive, select that request
+                                   if( 3 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && ((String) document.get("RequestStatus") == "Request Sending")){
+                                       //add satisfied request to the active requests list
+                                       String request_id = (String) document.get("RequestID");
+                                       //rebuild request from db
+                                   }
+                                   //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
+                               }
+                           } else {
+                               Log.d("suck", "error getting documents: ", task.getException());
+                           }
+                       }
+                   });
+    }
+
+    /*public void update_navigation_view(User user){
         NavigationView navigationView = getWindow().getDecorView().getRootView().findViewById(R.id.nav_view);
         //find the layout of header layout
         header = navigationView.getHeaderView(0);
@@ -124,42 +161,24 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         user_name.setText(user.getFirstName()+user.getLastName());
         Bitmap pic = Bitmap.createBitmap(200,200,Bitmap.Config.RGB_565);
         profile.setImageBitmap(pic);
-    }
+    }*/
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        switch(menuItem.getItemId()) {
-            case R.id.my_request_history:
-                Log.d("check","1");
-                break;
-            case R.id.settings:
-                Log.d("check","2");
-                break;
-            case R.id.payment_information:
-                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, new PaymentInformationFragment()).commit();
-                break;
-            case R.id.log_out:
-                Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);startActivity(intent);
-                break;
-            case R.id.edit_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EditProfilePage()).commit();
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-
-        return true;
-    }
     @Override
     //--------------listener of show detail of active request fragment
     public void confirm_request(Request request){
         //update request in the database
         request.UpdateStatus(1);
+        //set up the drive
+        request.setDriver(user);
+        //notify need to modify database
+        //db.add_new_request(request);
+
+
+        //send the selected request to the next activity
+        DriverIsOnTheWayActivity.request = request;
         //start new activity
-        Bundle bundle = new Bundle();
         Intent intent = new Intent(DriverhomeActivity.this,DriverIsOnTheWayActivity.class);
-        bundle.putSerializable("accepted request",request);
-        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -180,9 +199,18 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     //for edit profile info
     @Override
-    public void updateName(String Name) {
-        TextView user_name = header.findViewById(R.id.driver_name);
-        user_name.setText(Name);
+    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        TextView name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+        final Intent intent = getIntent();
+        user_id = intent.getStringExtra("User");
+        //User newUser = db.rebuildUser();
+        //newUser.setFirstName(FirstName);
+        //newUser.setLastName(LastName);
+
+        //db.add_new_user(newUser);
+
     }
 
 }
