@@ -63,8 +63,7 @@ public class SetPasswordActivity extends AppCompatActivity {
                         Database db = new Database();
                         db.add_new_user(user_class);
 
-                        Intent intentHomePage = new Intent(SetPasswordActivity.this, HomePageActivity.class);
-                        intentHomePage.putExtra("User",Username);
+                        Intent intentHomePage = new Intent(SetPasswordActivity.this, LoginActivity.class);
                         startActivity(intentHomePage);
 
 

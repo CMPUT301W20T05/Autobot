@@ -60,7 +60,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         setTitle("driver mode");
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
+        username = intent.getStringExtra("User");
         setProfile(username); // set profile
         user = db.rebuildUser(username);
 
