@@ -31,6 +31,7 @@ import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
 
+
 /**
  * this class is the homepage activity
  */
@@ -70,7 +71,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         //get user infor from database
         user = db.rebuildUser(username);
-
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -156,7 +156,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
@@ -168,4 +168,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         db.add_new_user(newUser);
 
     }
+
+
 }
