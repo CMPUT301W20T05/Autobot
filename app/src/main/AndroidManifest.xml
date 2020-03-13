@@ -17,9 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OrderInfo"></activity>
-        <activity android:name=".TripComplete"
-            android:parentActivityName=".DriverIsOnTheWayActivity"/>
+        <activity android:name=".QRCode"></activity>
+        <activity android:name=".OrderInfo" />
+        <activity
+            android:name=".OrderComplete"
+            android:parentActivityName=".DriverIsOnTheWayActivity" />
         <activity android:name=".RateDriver" />
 
         <meta-data
@@ -60,8 +62,9 @@
             android:name=".DriverhomeActivity"
             android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
-        <activity android:name=".DriverIsOnTheWayActivity"
-            android:parentActivityName=".DriverhomeActivity"/>
+        <activity
+            android:name=".DriverIsOnTheWayActivity"
+            android:parentActivityName=".DriverhomeActivity" />
     </application>
 
 </manifest>

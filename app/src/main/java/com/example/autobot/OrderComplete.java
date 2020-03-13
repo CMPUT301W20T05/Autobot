@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -68,10 +67,10 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentRateDriver = new Intent(OrderComplete.this, RateDriver.class);
-                intentRateDriver.putExtra("Username",username);
-                intentRateDriver.putExtra("reid",reID);
-                startActivity(intentRateDriver);
+                Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
+                intentQRCode.putExtra("Username",username);
+                intentQRCode.putExtra("reid", reID);
+                startActivity(intentQRCode);
             }
         });
     }
