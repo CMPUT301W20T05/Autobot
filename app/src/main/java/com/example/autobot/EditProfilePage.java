@@ -143,11 +143,6 @@ public class EditProfilePage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-<<<<<<< HEAD
-        Bundle bundle = getArguments();
-
-=======
->>>>>>> 317c90cc9a5a0f936ed855b68816026f9f80719c
         View view = inflater.inflate(R.layout.edit_contact_infor_activity, container, false);
 
         firstName = view.findViewById(R.id.editTextFirstName);
@@ -155,10 +150,6 @@ public class EditProfilePage extends Fragment {
         emailAddress = view.findViewById(R.id.editTextEmail);
         homeAddress = view.findViewById(R.id.editTextHomeAddress);
         eContact = view.findViewById(R.id.editTextEmergencyContact);
-<<<<<<< HEAD
-        UserName = view.findViewById(R.id.Username);
-=======
->>>>>>> 317c90cc9a5a0f936ed855b68816026f9f80719c
 
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
