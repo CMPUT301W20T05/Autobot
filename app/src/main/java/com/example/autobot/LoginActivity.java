@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
-
+    public static Database db;
     private String userName;
 
     @Override
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Database db = new Database();
+                db = new Database();
                 String Status = spinner.getSelectedItem().toString();
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();

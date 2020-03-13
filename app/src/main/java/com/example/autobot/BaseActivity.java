@@ -357,7 +357,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
+                                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
+                                startActivity(logout);
                                 //need to actual logout
                             }
                         })
