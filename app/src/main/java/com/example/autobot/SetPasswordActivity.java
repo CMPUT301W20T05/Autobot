@@ -29,7 +29,6 @@ public class SetPasswordActivity extends AppCompatActivity {
         final EditText setPassword = findViewById(R.id.editTextSetPassword);
         final EditText confirmPassord = findViewById(R.id.editTextConfirmPassword);
         Button buttonConfirmPassword = findViewById(R.id.buttonConfirmPassword);
-        Database db = new Database();
         final Intent intent = getIntent();
         final String Username = intent.getStringExtra("Username");
         final String PhoneNumber = intent.getStringExtra("PhoneNumber");
@@ -63,8 +62,7 @@ public class SetPasswordActivity extends AppCompatActivity {
                         Database db = new Database();
                         db.add_new_user(user_class);
 
-                        Intent intentHomePage = new Intent(SetPasswordActivity.this, HomePageActivity.class);
-                        intentHomePage.putExtra("User",Username);
+                        Intent intentHomePage = new Intent(SetPasswordActivity.this, LoginActivity.class);
                         startActivity(intentHomePage);
 
 

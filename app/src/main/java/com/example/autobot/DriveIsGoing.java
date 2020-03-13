@@ -94,7 +94,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     }
 
 
-
     //reset the button onclick function--------------------------------------
     /*public void accept_order(){
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {

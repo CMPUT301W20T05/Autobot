@@ -150,6 +150,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
 
+    public static Database db;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +168,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //set framelayout so the extended children of base activity can inflate its own layout
         frameLayout = (FrameLayout) findViewById(R.id.content);
+
+        db = new Database();
 
         //set up tool bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -353,7 +357,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
+                                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
+                                startActivity(logout);
                                 //need to actual logout
                             }
                         })

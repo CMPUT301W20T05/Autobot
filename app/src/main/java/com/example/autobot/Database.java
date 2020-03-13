@@ -188,32 +188,41 @@ public class Database{
      */
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
         Request r = new Request(user);
-        collectionReference_request.document(String.valueOf(RequestID))
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        Query query = collectionReference_request.whereEqualTo("ID", RequestID);
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        LatLng BeginningLocation = new LatLng(Double.valueOf((String)documentSnapshot.get("BeginningLocationLat")),Double.valueOf((String)documentSnapshot.get("BeginningLocationLnt")));
-                       r.setBeginningLocation(BeginningLocation);
-                        LatLng Destination = new LatLng(Double.valueOf((String)documentSnapshot.get("DestinationLat")),Double.valueOf((String)documentSnapshot.get("DestinationLnt")));
-                       r.setDestination(Destination);
-                       r.setDriver(rebuildUser((String) documentSnapshot.get("Driver")));
-                       r.setRequestID((String) documentSnapshot.get("RequestID"));
-                       r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
-                       r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
-                       r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
 
-                       SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
-                        try {
-                            r.resetAcceptTime(formatter.parse((String) documentSnapshot.get("AcceptTime")));
-                            r.resetArriveTime(formatter.parse((String) documentSnapshot.get("ArriveTime")));
-                            r.resetSendTime(formatter.parse((String) documentSnapshot.get("SendTime")));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().size() != 0) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    LatLng BeginningLocation = new LatLng(Double.valueOf((String) document.get("BeginningLocationLat")), Double.valueOf((String) document.get("BeginningLocationLnt")));
+                                    r.setBeginningLocation(BeginningLocation);
+                                    LatLng Destination = new LatLng(Double.valueOf((String) document.get("DestinationLat")), Double.valueOf((String) document.get("DestinationLnt")));
+                                    r.setDestination(Destination);
+                                    r.setDriver(rebuildUser((String) document.get("Driver")));
+                                    r.setRequestID((String) document.get("RequestID"));
+                                    r.setRider(rebuildUser((String) document.get("Rider")));
+                                    r.resetAcceptTime((Date) document.get("AcceptTime"));
+                                    r.resetArriveTime((Date) document.get("ArriveTime"));
+
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                                    try {
+                                        r.resetAcceptTime(formatter.parse((String) document.get("AcceptTime")));
+                                        r.resetArriveTime(formatter.parse((String) document.get("ArriveTime")));
+                                        r.resetSendTime(formatter.parse((String) document.get("SendTime")));
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    r.resetRequestStatus((String) document.get("RequestStatus"));
+                                    r.resetEstimateCost(Double.valueOf((String) document.get("EstimateCost")));
+                                    r.setRequestID((String) document.get("ID"));
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
                         }
-                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
-                        r.setRequestID((String)documentSnapshot.get("ID"));
                     }
                 });
         return r;

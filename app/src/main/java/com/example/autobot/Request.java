@@ -1,5 +1,8 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,7 +20,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,13 +48,32 @@ public class Request implements Serializable {
     private Date ArriveTime;
     private String RequestID;
     private ArrayList<String> requestStatusList;
+    @SuppressLint("SimpleDateFormat")
     SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
 
     public Request(User user) throws ParseException {
         this.Rider = user;
         this.Destination = null;
         this.BeginningLocation = null;
-        this.SendTime = new Date();
+        this.requestStatusList = new ArrayList<>();
+        this.requestStatusList.add("Request Sending");
+        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Rider picked");
+        this.requestStatusList.add("Trip Completed");
+        this.RequestStatus = requestStatusList.get(0);
+        this.SendTime = new Date(System.currentTimeMillis());
+        String defaultTimeString = "00-0-0000 00:00:00";
+        this.AcceptTime = formatter.parse(defaultTimeString);
+        this.ArriveTime = formatter.parse(defaultTimeString);
+        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
+        this.RequestID = generateRequestID();
+
+    }
+
+    public Request(User user, LatLng origin, LatLng destination) throws ParseException {
+        this.Rider = user;
+        this.Destination = destination;
+        this.BeginningLocation = origin;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
@@ -74,11 +98,6 @@ public class Request implements Serializable {
         String ID = this.Rider.getUsername()+this.SendTime.toString();
         return ID;
     }
-
-
-
-
-
 
     public void setRider(User user){
         this.Rider = user;
@@ -112,9 +131,15 @@ public class Request implements Serializable {
     public LatLng getBeginningLocation(){return this.BeginningLocation;}
 
     public double EstimateCost(LatLng destination, LatLng beginningLocation){
-        //double distance = destination.distanceTo(beginningLocation);
+        if (destination != null && beginningLocation != null) {
+            double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
+            double estimateCost = 5 + distance * 0.05;
+            return estimateCost;
+        }
         return 0.0;
-
+    }
+    public double getEstimateCost() {
+        return this.EstimateCost;
     }
     public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){
 
@@ -151,6 +176,18 @@ public class Request implements Serializable {
         this.EstimateCost = cost;
     }
     public String getStatus(){return this.RequestStatus;}
+    public String ReadableAddress(LatLng location, Geocoder geocoder) throws IOException {
+        double lat = location.latitude;
+        double lnt = location.longitude;
+        List<Address> addresses;
+        addresses = geocoder.getFromLocation(lat, lnt, 1);
+        return addresses.get(0).getAddressLine(0)
+                +addresses.get(0).getLocality()
+                +addresses.get(0).getLocality()
+                +addresses.get(0).getCountryName()
+                +addresses.get(0).getPostalCode()
+                +addresses.get(0).getFeatureName();
+    }
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();
     //}

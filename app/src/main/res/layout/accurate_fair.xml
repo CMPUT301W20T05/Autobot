@@ -80,28 +80,16 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintStart_toEndOf="@+id/textView5" />
 
-        <TextView
+        <EditText
             android:id="@+id/textView3"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="97dp"
+            android:layout_height="44dp"
             android:layout_marginStart="48dp"
             android:layout_marginLeft="48dp"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Add"
+            android:text="Add tip"
             app:layout_constraintStart_toEndOf="@+id/setFare"
-            app:layout_constraintTop_toBottomOf="@+id/setDestinationLocation" />
-
-        <Spinner
-            android:id="@+id/addTip"
-            android:layout_width="64dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:entries="@array/Tips"
-            android:gravity="center"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/setDestinationLocation" />
 
         <Button

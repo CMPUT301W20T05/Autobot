@@ -31,10 +31,11 @@ import java.util.List;
 /**
  * this is class for login activity
  * user can login our system using their phone number/user name/email account
+ * But email log in not complete
  */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
-
+    public static Database db;
     private String userName;
 
     @Override
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Database db = new Database();
+                db = new Database();
                 String Status = spinner.getSelectedItem().toString();
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();
@@ -116,8 +117,6 @@ public class LoginActivity extends AppCompatActivity {
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
                                                 if (Type.equals("Rider")) {
-                                                    Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
-                                                    intentBasePage.putExtra("User",Account);
                                                     Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                     intentHomePage.putExtra("User",Account);
 
@@ -126,8 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                     intentHomePage.putExtra("User",Account);
-                                                    Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
-                                                    intentBasePage.putExtra("User",Account);
+
                                                     startActivity(intentHomePage);
                                                 }
                                             }
