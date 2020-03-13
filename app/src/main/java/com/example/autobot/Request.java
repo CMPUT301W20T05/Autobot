@@ -30,6 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Request class is a information collection of request, we can set and get information of request through the method in this class.
+ */
 
 public class Request implements Serializable {
 
@@ -105,12 +108,7 @@ public class Request implements Serializable {
         this.BeginningLocation = beginningLocation;
     }
     public LatLng getBeginningLocation(){return this.BeginningLocation;}
-    public void getAcceptTime(){
-        this.AcceptTime = new Date();
-    }
-    public void getArriveTime(){
-        this.ArriveTime = new Date();
-    }
+
     public double EstimateCost(LatLng destination, LatLng beginningLocation){
         double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
         double estimateCost = 5 + distance * 0.05;
@@ -131,6 +129,12 @@ public class Request implements Serializable {
         //this is the hard coding version, need to modify later
         String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getLastName(),"sub",13.34,"587-234-1299");
         return active_requst;
+    }
+    public Date getAcceptTime(){
+        return this.AcceptTime;
+    }
+    public Date getArriveTime(){
+        return this.ArriveTime;
     }
     public void resetSendTime(Date d){
         this.SendTime = d;
