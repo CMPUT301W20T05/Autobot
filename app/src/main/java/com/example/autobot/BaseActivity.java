@@ -210,6 +210,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
+                        String gr = document.getData().get("StarsRate").toString();
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
@@ -218,6 +219,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         }
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
+                        //TextView
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
