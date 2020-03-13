@@ -41,7 +41,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     Button HPConfirmButton, HPDirectionButton;
     Database db;
     String username;
-    User user;
+    static User user;
 
     private static final String TAG = "HomePageActivity";
 
@@ -68,10 +68,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         AutocompleteSupportFragment autocompleteFragmentDestination = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
-        String usersname = intent.getStringExtra("User");
-
         //get user infor from database
-        user = db.rebuildUser(usersname);
+        user = db.rebuildUser(username);
 
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));

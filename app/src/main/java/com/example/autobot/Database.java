@@ -26,8 +26,6 @@ public class Database {
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
-    private User user;
-
 
     public Database() {
         db = FirebaseFirestore.getInstance();
@@ -71,6 +69,7 @@ public class Database {
 
 
     public User rebuildUser(String username){
+        User user = new User();
         collectionReference_user
                 .whereEqualTo("Username", username)
                 .get()
@@ -78,7 +77,6 @@ public class Database {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            user = new User();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 //user = document.toObject(User.class);
@@ -91,7 +89,7 @@ public class Database {
                                 LatLng CurrentLocation = new LatLng(Lat, Lnt);
                                 user.updateCurrentLocation(CurrentLocation);
                                 user.setPassword((String) document.get("Password"));
-                                user.setPhoneNumber((String) document.get("PhoneNUmber"));
+                                user.setPhoneNumber((String) document.get("PhoneNumber"));
                                 user.setStars(Double.valueOf((String) document.get("StarsRate")));
                                 user.setUserType((String) document.get("Type"));
                                 user.setUsername((String) document.get("Username"));

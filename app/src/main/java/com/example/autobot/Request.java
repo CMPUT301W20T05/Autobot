@@ -55,7 +55,6 @@ public class Request {
         this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
         this.RequestID = generateRequestID();
 
-
     }
 
     public Date getSendDate() {
