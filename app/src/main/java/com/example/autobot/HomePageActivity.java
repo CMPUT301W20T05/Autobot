@@ -14,23 +14,30 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
+import java.text.ParseException;
 import java.util.Arrays;
 
+import static android.os.AsyncTask.execute;
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this class is the homepage activity
  */
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener{
 
-    LatLng destination;
-    LatLng origin;
-    Button HPConfirmButton, HPDirectionButton;
-    Database db;
-    String username;
-    double distance;
-    static User user;
+    private LatLng destination;
+    private LatLng origin;
+    private Button HPConfirmButton, HPDirectionButton;
+    public static Database db;
+    private String username;
+    private static User user;
 
     private static final String TAG = "HomePageActivity";
 
@@ -44,7 +51,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setVisibility(View.GONE);
 
         db = new Database();
-        final Intent intent = getIntent();
+        Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile
 
@@ -59,7 +66,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         //get user infor from database
         user = db.rebuildUser(username);
-
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -82,7 +88,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 destination = getDestination(autocompleteFragmentDestination);
 
                 //distance between two locations
-                distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //draw route between two locations
                 drawRoute(origin, destination);
                 HPConfirmButton.setVisibility(View.VISIBLE);
@@ -93,14 +99,20 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Request request = new Request(user);
+                Request request = null;
+                try {
+                    request = new Request(user);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 request.setRider(user);
                 request.setDestination(destination);
                 request.setBeginningLocation(origin);
                 db.add_new_request(request);
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-                UCurRequest.distance = distance;
+                intentUCurRequest.putExtra("Username",username);
+                UCurRequest.user = user;
                 startActivity(intentUCurRequest);
             }
         });
@@ -146,16 +158,22 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
-
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

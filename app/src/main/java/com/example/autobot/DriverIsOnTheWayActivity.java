@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,13 +13,25 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
-public class DriverIsOnTheWayActivity extends BaseActivity {
+public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+
+    protected static Request request;
+    private Database db;
+    private String username;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
+
+        db = HomePageActivity.db;
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("Username");
+        setProfile(username);         // set profile
+        user = db.rebuildUser(username);
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -55,7 +68,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
             public void onClick(View v) {
                 //temporary go to next activity
                 //should be request delete
-                Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, TripComplete.class);
+
+                Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }
         });
@@ -70,5 +85,25 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
 
         //when driver arrived, show notification
         sendOnChannel();
+    }
+
+    @Override
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
+        newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
+        db.add_new_user(newUser);
+
+    }
+    @Override
+    public String getUsername(){
+        return username;
     }
 }

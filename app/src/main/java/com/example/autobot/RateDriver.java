@@ -1,6 +1,5 @@
 package com.example.autobot;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,13 +12,26 @@ import android.widget.TextView;
  * This is a class for RateDriver activity
  * User can rate driver at this step
  */
-public class RateDriver extends BaseActivity {
+
+public class RateDriver extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+
+    private Database db;
+    private String username;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.rate_driver, frameLayout);
+
+        db = HomePageActivity.db;
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("Username");
+        setProfile(username); // set profile
+        user = db.rebuildUser(username);
+
         findViewById(R.id.myMap).setVisibility(View.GONE);
 
         ImageView Selfie = findViewById(R.id.DriverAvatar);
@@ -63,5 +75,23 @@ public class RateDriver extends BaseActivity {
                 startActivity(intentHomePage);
             }
         });
+    }
+
+    @Override
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+
+        User newUser = db.rebuildUser(username);
+        newUser.setFirstName(FirstName);
+        newUser.setLastName(LastName);
+
+        db.add_new_user(newUser);
+
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

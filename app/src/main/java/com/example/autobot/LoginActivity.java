@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (Status.equals("Phone Number")){
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
+                
                         Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
                         query.get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -80,17 +81,13 @@ public class LoginActivity extends AppCompatActivity {
                                                     if (TruePassword.equals(Password)){
                                                         // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
-                                                            userName = username;  // set username to username
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
-
                                                             startActivity(intentHomePage);
                                                         }
                                                         else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                             intentHomePage.putExtra("User",username);
-                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
-                                                            intentBasePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
                                                         }
                                                     }

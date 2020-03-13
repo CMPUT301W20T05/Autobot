@@ -93,7 +93,10 @@ public class AddPaymentFragment extends DialogFragment {
                         final int icon = (int) mCardTypeItem.getCardTypelogo();// get card type icon
 
                         String temp = cardNumber.getText().toString();
-                        final long cardn = Integer.parseInt(temp); // get card number
+                        long cardn = 0;
+                        if (temp.replace(" ", "").length() != 0){
+                            cardn = Integer.parseInt(temp); // get card number
+                        }
                         final String holdn = holdName.getText().toString();  // get hold name
                         temp = date.getText().toString();
                         Date edate = new Date();

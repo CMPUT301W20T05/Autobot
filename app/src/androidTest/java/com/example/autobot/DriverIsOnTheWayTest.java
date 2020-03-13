@@ -44,7 +44,7 @@ public class DriverIsOnTheWayTest {
     @Test
     public void checkContinueButton() {
         solo.clickOnButton("Cancel Order");
-        solo.assertCurrentActivity("Wrong Activity", TripComplete.class);
+        solo.assertCurrentActivity("Wrong Activity", OrderComplete.class);
     }
 
     @Test

@@ -98,6 +98,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this is a class of base activity, it contains google map api, side bar, notifications and so on
@@ -114,23 +115,32 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public ArrayList<PaymentCard> mDataList;
     public User user;
     public FrameLayout frameLayout;
-    private GoogleMap mMap;
+    public String un;
+    //pls dont private these part
+    //private GoogleMap mMap;
+    GoogleMap mMap;
     private GoogleApiClient googleApiClient;
-    protected Location currentLocation;
-    protected LatLng searchedLatLng;
-    private LocationCallback locationCallback; //for updating users request if last known location is null
-    private FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
-    private PlacesClient placesClient;
-    private List<AutocompletePrediction> predictionList;
-    protected Marker currentLocationMarker;
+    //private static Location currentLocation;
+    static Location currentLocation;
+    static LatLng searchedLatLng;
+    //----------------------------------
+    LocationCallback locationCallback; //for updating users request if last known location is null
+    FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
+    PlacesClient placesClient;
+    List<AutocompletePrediction> predictionList;
+    Marker currentLocationMarker;
 
     protected Polyline currentPolyline;
     public AutocompleteSupportFragment autocompleteFragment;
     public NavigationView navigationView;
     public Fragment fragment;
-    public Activity activity;
+
+
+
+    //private final float DEFAULT_ZOOM = 18;
+    final float DEFAULT_ZOOM = 18;
     public TextView name;
-    private final float DEFAULT_ZOOM = 18;
+
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
     private static final String TAG = "BaseActivity";
@@ -161,7 +171,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //set up drawer
+        //get drawer
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
         navigationView = findViewById(R.id.nav_view);
@@ -200,13 +210,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
+                        String gr = document.getData().get("StarsRate").toString();
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
+
                             name.setText(fullName);
                         }
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
+                        //TextView
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
@@ -307,13 +320,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
-
+    
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
             case R.id.my_request_history:
                 fragment = new RequestHistoryFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
                 navigationView.getMenu().getItem(1).setChecked(true);
                 setTitle("My Request History");
                 break;
