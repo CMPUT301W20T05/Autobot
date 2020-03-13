@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OrderComplete"></activity>
+        <activity android:name=".OrderInfo"></activity>
+        <activity android:name=".TripComplete"
+            android:parentActivityName=".DriverIsOnTheWayActivity"/>
         <activity android:name=".RateDriver" />
 
         <meta-data

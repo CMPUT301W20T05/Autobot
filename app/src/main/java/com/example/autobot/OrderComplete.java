@@ -31,7 +31,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);
-        Spinner Tips = findViewById(R.id.addTip);
+        EditText Tips = findViewById(R.id.textView3);
         Button Confirm = findViewById(R.id.confirmFee);
 
         Confirm.setOnClickListener(new View.OnClickListener() {
