@@ -48,10 +48,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     View header;
     ArrayList<Request> requests_list;
     View rootView;
-    Database db;
+    public static Database db;
     private static final String TAG = "DriverSearchActivity";
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requests_list = new ArrayList<Request>();
         //load_user();
         setTitle("driver mode");
         //testing
@@ -91,10 +92,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         currentLocationMarker = mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
                         //get all the satisfied active requests
-                        requests_list = new ArrayList<Request>();
                         load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
                         active_request_fm = getSupportFragmentManager();
+                        int s = requests_list.size();
                         Fragment fragment = new ActiverequestsFragment(requests_list);
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
@@ -124,6 +125,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     //loading all the satisfied requests
     public void load_requests(LatLng searchedLatLng){
+           requests_list.clear();
            db = new Database();
            db.collectionReference_request.get()
                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -134,11 +136,22 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                    //get the location of start
                                    LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
                                    //if the distance between beginning location and search place is within the range and the request is inactive, select that request
-                                   if( 3 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && ((String) document.get("RequestStatus") == "Request Sending")){
-                                       //add satisfied request to the active requests list
+                                   long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
+                                   String b = (String) document.get("RequestStatus");
+                                   if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                       //                                       //add satisfied request to the active requests list
                                        String request_id = (String) document.get("RequestID");
+                                       String user_id = (String) document.get("Rider");
                                        //rebuild request from db
+                                       Log.d("loc",request_id);
+                                       Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                       requests_list.add(active_request);
                                    }
+                                   //testing
+                                   User user3 = new User("jc");
+                                   Request request1 = new Request(user3);
+                                   request1.UpdateStatus(0);
+                                   requests_list.add(request1);
                                    //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                }
                            } else {
@@ -176,9 +189,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
 
         //send the selected request to the next activity
-        DriverIsOnTheWayActivity.request = request;
+        DriveIsGoing.request = request;
         //start new activity
-        Intent intent = new Intent(DriverhomeActivity.this,DriverIsOnTheWayActivity.class);
+        Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         startActivity(intent);
     }
 
@@ -199,7 +212,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     //for edit profile info
     @Override
-    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) {
         TextView name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
@@ -210,7 +223,5 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //newUser.setLastName(LastName);
 
         //db.add_new_user(newUser);
-
     }
-
 }
