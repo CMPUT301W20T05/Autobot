@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class Request implements Serializable {
         this.Rider = user;
         this.Destination = null;
         this.BeginningLocation = null;
-        this.SendTime = new Date();
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
@@ -110,9 +110,12 @@ public class Request implements Serializable {
         this.ArriveTime = new Date();
     }
     public double EstimateCost(LatLng destination, LatLng beginningLocation){
-        //double distance = destination.distanceTo(beginningLocation);
-        return 0.0;
-
+        double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
+        double estimateCost = 5 + distance * 0.05;
+        return estimateCost;
+    }
+    public double getEstimateCost() {
+        return this.EstimateCost;
     }
     public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){
 

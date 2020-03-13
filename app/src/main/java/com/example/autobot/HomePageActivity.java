@@ -109,10 +109,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 request.setDestination(destination);
                 request.setBeginningLocation(origin);
                 db.add_new_request(request);
+                String reID = request.getRequestID();
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 intentUCurRequest.putExtra("Username",username);
-                UCurRequest.user = user;
+                intentUCurRequest.putExtra("reid",reID);
                 startActivity(intentUCurRequest);
             }
         });

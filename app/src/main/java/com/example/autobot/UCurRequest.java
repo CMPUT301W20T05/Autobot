@@ -7,11 +7,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.protobuf.StringValue;
+
 public class UCurRequest extends BaseActivity implements EditProfilePage.EditProfilePageListener{
     private Button CurRequestConfirm;
     private Database db;
     private String username;
-    protected static User user;
+    private User user;
+    private Request request;
+    private String reID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -26,11 +30,17 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         db = HomePageActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
+        reID = intent.getStringExtra("reid");
+
         setProfile(username); // set profile
-        //user = db.rebuildUser(username);
+        //get user from firebase
+        user = db.rebuildUser(username);
+        //get request from firebase
+        request = db.rebuildRequest(reID, user);
 
         //calculate estimated fare
-        //EstimatedFare.setText(...);
+        double estimateFare = request.getEstimateCost();
+        EstimatedFare.setText(String.valueOf(estimateFare));
 
 
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +48,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
             public void onClick(View v) {
                 Intent intentCancelRequest = new Intent(UCurRequest.this, DriverIsOnTheWayActivity.class);
                 intentCancelRequest.putExtra("Username",username);
+                intentCancelRequest.putExtra("reid",reID);
                 startActivity(intentCancelRequest);
             }
         });

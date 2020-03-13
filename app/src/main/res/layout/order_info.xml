@@ -8,7 +8,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="@drawable/layout_style">
+        android:background="@drawable/layout_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

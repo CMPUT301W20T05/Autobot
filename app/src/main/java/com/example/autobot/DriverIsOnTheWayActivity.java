@@ -1,30 +1,27 @@
 package com.example.autobot;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
-    protected static Request request;
+    private Request request;
     private Database db;
     private String username;
     private User user;
+    private String reID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +33,12 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
+        reID = intent.getStringExtra("reid");
         setProfile(username); // set profile
+        //get user from firebase
         user = db.rebuildUser(username);
+        //get request from firebase
+        request = db.rebuildRequest(reID, user);
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -45,37 +46,57 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
         Button buttonCancelOrder = findViewById(R.id.cancel_order);
 
-        //need to connect to firebase to get phone number
-        final String phoneNumber = "5875576400";
+        //use request to get infor
+        User driver = request.getDriver();
+        User rider = request.getRider();
+        //for rider to call driver
+        String rphoneNumber = driver.getPhoneNumber();
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + rphoneNumber));//change the number.
                 if (ActivityCompat.checkSelfPermission(DriverIsOnTheWayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
+                    Toast.makeText(DriverIsOnTheWayActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
                 }
-                startActivity(callIntent);
-
+                else {
+                    startActivity(callIntent);
+                }
             }
         });
 
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //temporary go to next activity
+                //pop out dialog
+                final AlertDialog.Builder alert = new AlertDialog.Builder(DriverIsOnTheWayActivity.this);
+                alert.setTitle("Cancel Order");
+                alert.setMessage("Are you sure you wish to cancel current request?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //delete current request
+                                //go back to home page
+                                Intent cancelRequest = new Intent(getApplicationContext(),HomePageActivity.class);
+                                startActivity(cancelRequest);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+
+                alert.show();
+                //when request condition changes to "accept" go to next activity
                 //should be request delete
                 Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
                 intentOrderComplete.putExtra("Username",username);
+                intentOrderComplete.putExtra("reid",reID);
                 startActivity(intentOrderComplete);
             }
         });
