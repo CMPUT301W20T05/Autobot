@@ -59,7 +59,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-        db = new Database();
+        db = BaseActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile

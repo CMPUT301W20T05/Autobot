@@ -50,16 +50,17 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     ArrayList<Request> requests_list;
     View rootView;
     private String username;
-
     public static Database db;
     private static final String TAG = "DriverSearchActivity";
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requests_list = new ArrayList<Request>();
         //load_user();
         setTitle("driver mode");
 
-        db = new Database();
+        db = BaseActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile
