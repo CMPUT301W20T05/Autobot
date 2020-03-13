@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/DriverAvatar"
         android:layout_width="73dp"
         android:layout_height="61dp"
         android:layout_marginTop="40dp"
@@ -55,16 +55,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:srcCompat="@drawable/icon" />
 
-    <EditText
+    <TextView
         android:id="@+id/Driver_name"
         android:layout_width="103dp"
         android:layout_height="44dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="Driver Name"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView" />
+        app:layout_constraintBottom_toBottomOf="@+id/DriverAvatar"
+        app:layout_constraintStart_toEndOf="@+id/DriverAvatar" />
 
     <Button
         android:id="@+id/see_profile"
@@ -134,7 +133,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/DriverAvatar"
         app:srcCompat="@drawable/ic_edit_profile" />
 
     <TextView
@@ -148,7 +147,7 @@
         android:textSize="24sp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/DriverAvatar" />
 
     <EditText
         android:id="@+id/comment"
@@ -160,7 +159,7 @@
         android:ems="10"
         android:gravity="top"
         android:inputType="textPersonName"
-        android:text="Type your comment here"
+        android:hint="Type your comment here"
         android:textColor="@color/quantum_grey700"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -177,7 +176,7 @@
         android:layout_marginTop="28dp"
         android:text="Skip"
         android:textColor="@color/blue2"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comment" />

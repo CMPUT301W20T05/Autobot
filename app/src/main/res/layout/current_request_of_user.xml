@@ -23,10 +23,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
-            android:id="@+id/editText"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="80dp"
@@ -38,7 +38,7 @@
             android:text="@string/Estimated_Money"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerCarModel" />
 
         <TextView
             android:id="@+id/estimatedFare"
@@ -49,11 +49,11 @@
             android:layout_marginTop="16dp"
             android:hint="fare"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/editText"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerCarModel" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinnerCarModel"
             android:layout_width="250dp"
             android:layout_height="40dp"
             android:layout_marginTop="24dp"

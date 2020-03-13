@@ -38,8 +38,8 @@ public class Request {
     private String RequestID;
     private ArrayList<String> requestStatusList;
 
-    public Request() {
-        this.Rider = null;
+    public Request(User user) {
+        this.Rider = user;
         this.Destination = null;
         this.BeginningLocation = null;
         this.SendTime = new Date();
@@ -53,8 +53,7 @@ public class Request {
         this.AcceptTime = null;
         this.ArriveTime = null;
         this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
-        generateRequestID();
-        //this.RequestID = 10;
+        this.RequestID = generateRequestID();
 
 
     }
@@ -63,8 +62,9 @@ public class Request {
         return this.SendTime;
     }
 
-    public void generateRequestID() {
+    public String generateRequestID() {
         String ID = this.Rider.getUsername()+this.SendTime.toString();
+        return ID;
     }
 
 
