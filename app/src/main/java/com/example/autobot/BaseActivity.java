@@ -166,9 +166,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // get navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header = navigationView.getHeaderView(0); // get header of the navigation view
-        name = header.findViewById(R.id.driver_name);
-        name.setText("Edit your Name");
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -192,7 +189,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
-        name.setText("Edit your Name");
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -204,6 +200,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
+                        Object temp = document.getData().get("FirstName");
+                        if (temp != null) {
+                            String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
+                            name.setText(fullName);
+                        }
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
                     }
@@ -354,6 +355,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.edit_profile:
                 fragment = new EditProfilePage();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("username",username);
+//                fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
                 navigationView.getMenu().getItem(0).setChecked(true);
                 setTitle("Edit Profile");
@@ -364,6 +368,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    public Bundle setUserName(String username) {
+        Bundle bundle = new Bundle();
+        bundle.putString("username",username);
+        return bundle;
     }
 
     @Override

@@ -60,6 +60,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //temporary go to next activity
+                //should be request delete
                 Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
                 startActivity(intentOrderComplete);
             }

@@ -12,9 +12,10 @@
         android:id="@+id/imageView2"
         android:layout_width="99dp"
         android:layout_height="99dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/default_avatar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,11 +23,52 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.096">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_name"
+            android:textSize="14dp"
+            android:textColor="@color/blue" />
+
+        <TextView
+            android:id="@+id/Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/blue" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <TextView
             android:layout_width="100dp"
@@ -39,34 +81,10 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:textColor="@color/blue"
-            android:singleLine="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/last_name"
+            android:singleLine="true"
             android:textColor="@color/blue" />
 
-        <EditText
-            android:id="@+id/editTextLastName"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textColor="@color/blue"
-            android:singleLine="true"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -80,20 +98,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
         tools:ignore="MissingConstraints">
-
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/phone_number"
+            android:text="@string/last_name"
             android:textColor="@color/blue" />
 
         <EditText
-            android:id="@+id/editTextPhoneNumber"
+            android:id="@+id/editTextLastName"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="textPersonName"
             android:textColor="@color/blue"
             android:singleLine="true"/>
+
+
 
     </LinearLayout>
 
@@ -101,7 +120,7 @@
         android:id="@+id/linearLayout6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,32 +138,32 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textColor="@color/blue"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:textColor="@color/blue" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/setFare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="@string/home_address"
         android:textColor="@color/blue"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmergencyContact"
-        tools:layout_editor_absoluteX="0dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp" />
 
     <EditText
         android:id="@+id/editTextHomeAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:inputType="text"
+        android:singleLine="true"
         android:textColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setFare"
-        android:singleLine="true"/>
+        app:layout_constraintTop_toBottomOf="@+id/setFare" />
 
     <TextView
         android:id="@+id/textView5"
@@ -163,22 +182,38 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:inputType="number"
+        android:singleLine="true"
         android:textColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
-        tools:ignore="MissingConstraints"
-        android:singleLine="true"/>
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/button_red_style"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@color/red"
         android:text="@string/confirm"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextHomeAddress" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="108dp"
+        android:layout_marginRight="108dp"
+        android:background="@color/red"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/editTextHomeAddress"
+        app:layout_constraintVertical_bias="0.052" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

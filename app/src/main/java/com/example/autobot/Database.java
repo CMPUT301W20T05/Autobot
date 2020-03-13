@@ -14,6 +14,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,8 +26,6 @@ public class Database {
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
-
-
 
     public Database() {
         db = FirebaseFirestore.getInstance();
@@ -45,6 +45,8 @@ public class Database {
         user_data.put("StarsRate", user.getStars().toString());
         user_data.put("Type", user.getUserType());
         user_data.put("Password",user.getPassword());
+        user_data.put("EmergencyContact",user.getEmergencyContact());
+        user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
         collectionReference_user
@@ -70,24 +72,34 @@ public class Database {
 
     public User rebuildUser(String username){
         User user = new User();
-        collectionReference_user.document(username)
+        collectionReference_user
+                .whereEqualTo("Username", username)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
-                        user.setFirstName((String) documentSnapshot.get("FirstName"));
-                        user.setLastName((String) documentSnapshot.get("LastName"));
-                        System.out.println(documentSnapshot.get("CurrentLocation"));
-                        double Lat = Double.valueOf((String) documentSnapshot.get("CurrentLocationLat"));
-                        double Lnt = Double.valueOf((String) documentSnapshot.get("CurrentLocationLnt"));
-                        LatLng CurrentLocation = new LatLng(Lat, Lnt);
-                        user.updateCurrentLocation(CurrentLocation);
-                        user.setPassword((String) documentSnapshot.get("Password"));
-                        user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
-                        user.setStars(Double.valueOf((String) documentSnapshot.get("StarsRate")));
-                        user.setUserType((String) documentSnapshot.get("Type"));
-                        user.setUsername((String) documentSnapshot.get("Username"));
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                //user = document.toObject(User.class);
+                                user.setEmailAddress((String) document.get("EmailAddress"));
+                                user.setFirstName((String) document.get("FirstName"));
+                                user.setLastName((String) document.get("LastName"));
+                                System.out.println(document.get("CurrentLocation"));
+                                double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                user.updateCurrentLocation(CurrentLocation);
+                                user.setPassword((String) document.get("Password"));
+                                user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                user.setUserType((String) document.get("Type"));
+                                user.setUsername((String) document.get("Username"));
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
                     }
                 });
 
@@ -148,16 +160,6 @@ public class Database {
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
                        r.setRequestID((String)documentSnapshot.get("ID"));
-
-
-
-
-
-
-
-
-
-
                     }
                 });
         return r;

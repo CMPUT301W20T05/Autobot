@@ -24,14 +24,13 @@ import java.util.Arrays;
  */
 public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
-
     LatLng destination;
     LatLng origin;
     Button HPConfirmButton, HPDirectionButton;
     Database db;
     String username;
-    User user;
     double distance;
+    static User user;
 
     private static final String TAG = "HomePageActivity";
 
@@ -58,12 +57,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         AutocompleteSupportFragment autocompleteFragmentDestination = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
-        user = db.rebuildUser(username);
-
-        String usersname = intent.getStringExtra("User");
-
         //get user infor from database
-        user = db.rebuildUser(usersname);
+        user = db.rebuildUser(username);
 
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
