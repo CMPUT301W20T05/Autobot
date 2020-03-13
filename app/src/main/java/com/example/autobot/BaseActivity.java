@@ -314,6 +314,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         for (int i = 0; i < navigationView.getMenu().size(); i++) {  // cancel selected on edit profile page of the menu item
             navigationView.getMenu().getItem(i).setChecked(false);
+        }
+    }
     
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

@@ -14,22 +14,35 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 import static com.android.volley.VolleyLog.TAG;
+import static java.text.SimpleDateFormat.*;
 
-public class Database {
+public class Database{
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
+    User user = new User("");
 
 
     public Database() {
+        FirebaseFirestore.getInstance().clearPersistence();
         db = FirebaseFirestore.getInstance();
+        // to disable clean-up.
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .build();
+
+        db.setFirestoreSettings(settings);
         collectionReference_user = db.collection("users");
         collectionReference_request = db.collection("Request");
     }
@@ -40,9 +53,6 @@ public class Database {
      * if username exist, the new information will cover the old information.
      * @param user
      */
-
-
-
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
         user_data.put("Username", user.getUsername());
@@ -90,36 +100,35 @@ public class Database {
      */
 
     public User rebuildUser(String username){
-        User user = new User();
-        collectionReference_user
-                .whereEqualTo("Username", username)
-                .get()
+        user.setUsername(username);
+        Query query = collectionReference_user.whereEqualTo("Username", username);
+        query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                //user = document.toObject(User.class);
-                                user.setEmailAddress((String) document.get("EmailAddress"));
-                                user.setFirstName((String) document.get("FirstName"));
-                                user.setLastName((String) document.get("LastName"));
-                                System.out.println(document.get("CurrentLocation"));
-                                double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
-                                double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
-                                LatLng CurrentLocation = new LatLng(Lat, Lnt);
-                                user.updateCurrentLocation(CurrentLocation);
-                                user.setEmergencyContact((String) document.get("EmergencyContact"));
-                                user.setHomeAddress((String) document.get("HomeAddress"));
-                                user.setPassword((String) document.get("Password"));
-                                user.setPhoneNumber((String) document.get("PhoneNumber"));
-                                user.setStars(Double.valueOf((String) document.get("StarsRate")));
-                                user.setUserType((String) document.get("Type"));
-                                user.setUsername((String) document.get("Username"));
-                            }
-
-                        } else {
+                            if (task.getResult().size() != 0) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    user.setEmailAddress((String) document.get("EmailAddress"));
+                                    user.setFirstName((String) document.get("FirstName"));
+                                    user.setLastName((String) document.get("LastName"));
+                                    System.out.println(document.get("CurrentLocation"));
+                                    double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                    double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                    LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                    user.updateCurrentLocation(CurrentLocation);
+                                    user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                    user.setHomeAddress((String) document.get("HomeAddress"));
+                                    user.setPassword((String) document.get("Password"));
+                                    user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                    user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                    user.setUserType((String) document.get("Type"));
+                                    user.setUsername((String) document.get("Username"));
+                                }
+                            } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
                         }
                     }
                 });
@@ -162,7 +171,7 @@ public class Database {
                 });
 
     }
-    public Request rebuildRequest(long RequestID, User user){
+    public Request rebuildRequest(String RequestID, User user){
         Request r = new Request(user);
         collectionReference_request.document(String.valueOf(RequestID))
                 .get()
@@ -178,7 +187,7 @@ public class Database {
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
                        r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
-                       r.resetSendTime((Date)documentSnapshot.get("SendTime"));
+                       r.resetSendTime((Date)String.valueOf(documentSnapshot.get("SendTime")));
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
                        r.setRequestID((String)documentSnapshot.get("ID"));

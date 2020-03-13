@@ -44,7 +44,7 @@ public class Request implements Serializable {
         this.Destination = null;
         this.BeginningLocation = null;
         this.SendTime = new Date();
-        //this.requestStatusList = new ArrayList<>();
+        this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
         this.requestStatusList.add("Rider picked");

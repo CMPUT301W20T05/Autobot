@@ -54,15 +54,15 @@ public class ActiverequestsFragment extends Fragment{
         requests_view = rootView.findViewById(R.id.active_requests);
 
         //those code is for testing----------------------------
-        User rider;
-        rider = new User();
-        rider.setLastName("jc");
-        //Location location = new Location("");
-        Request request1 = new Request();
-
-        request1.setRider(rider);
-        //request1.setDestination();
-        requests_list.add(request1);
+//        User rider;
+//        rider = new User();
+//        rider.setLastName("jc");
+//        //Location location = new Location("");
+//        Request request1 = new Request();
+//
+//        request1.setRider(rider);
+//        //request1.setDestination();
+//        requests_list.add(request1);
         //----------------------------------------------------
 
         //bound data and adapter to list view

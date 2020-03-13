@@ -3,11 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:background="@color/red3"
-    android:orientation="vertical"
-    tools:layout_editor_absoluteY="106dp">
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/layout_style">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/imageViewAvatar"
@@ -85,9 +88,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-
-        android:background="@color/blue2"
-        android:text="@string/confirm"
         android:background="@drawable/button_blue_style"
         android:text="Cancel Order"
         android:textColor="@color/white"
