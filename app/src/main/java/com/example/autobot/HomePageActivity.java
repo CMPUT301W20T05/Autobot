@@ -31,25 +31,21 @@ import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
 
-<<<<<<< HEAD
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
-=======
+
 /**
  * this class is the homepage activity
  */
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
-public class HomePageActivity extends BaseActivity {
->>>>>>> 72f91461056f3f8a1b0da124b3c0ac88a6a343ae
 
     LatLng destination;
     LatLng origin;
     Button HPConfirmButton, HPDirectionButton;
     Database db;
-<<<<<<< HEAD
     String username;
-=======
     User user;
->>>>>>> 72f91461056f3f8a1b0da124b3c0ac88a6a343ae
+    String username;
+
 
     private static final String TAG = "HomePageActivity";
 
@@ -76,15 +72,13 @@ public class HomePageActivity extends BaseActivity {
         AutocompleteSupportFragment autocompleteFragmentDestination = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
-<<<<<<< HEAD
-        User user = db.rebuildUser(username);
-=======
+        user = db.rebuildUser(username);
+
         String usersname = intent.getStringExtra("User");
 
         //get user infor from database
         user = db.rebuildUser(usersname);
 
->>>>>>> 72f91461056f3f8a1b0da124b3c0ac88a6a343ae
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -174,6 +168,7 @@ public class HomePageActivity extends BaseActivity {
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+
         User newUser = db.rebuildUser(username);
         newUser.setFirstName(FirstName);
         newUser.setLastName(LastName);
