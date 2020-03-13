@@ -171,7 +171,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //set up drawer
+        //get drawer
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
         navigationView = findViewById(R.id.nav_view);

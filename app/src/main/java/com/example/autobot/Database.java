@@ -187,7 +187,8 @@ public class Database{
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
                        r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
-                       r.resetSendTime((Date)String.valueOf(documentSnapshot.get("SendTime")));
+                       r.resetSendTime((Date)documentSnapshot.get("SendTime"));
+                       //r.resetSendTime((Date)String.valueOf(documentSnapshot.get("SendTime")));
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
                        r.setRequestID((String)documentSnapshot.get("ID"));

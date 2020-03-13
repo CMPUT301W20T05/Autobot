@@ -2,11 +2,18 @@ package com.example.autobot;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +27,7 @@ public class EditProfilePage extends Fragment {
     private EditText eContact;
     private Button btn;
     private EditProfilePageListener listener;
+    private Database db;
 
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact);
@@ -47,6 +55,8 @@ public class EditProfilePage extends Fragment {
         homeAddress = view.findViewById(R.id.editTextHomeAddress);
         eContact = view.findViewById(R.id.editTextEmergencyContact);
 
+        db = HomePageActivity.db;
+
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +68,6 @@ public class EditProfilePage extends Fragment {
                 String econtact = eContact.getText().toString();
 
                 listener.updateInformation(fName,lName,eAddress,hAddress,econtact);
-                //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
                 getActivity().onBackPressed();
             }
         });
