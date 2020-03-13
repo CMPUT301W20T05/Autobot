@@ -149,8 +149,8 @@ public class Database{
         request_data.put("RequestID",request.getRequestID());
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
         request_data.put("SendTime",formatter.format(request.getSendDate()));
-        request_data.put("AcceptTime",null);
-        request_data.put("ArriveTime",null);
+        request_data.put("AcceptTime",formatter.format(request.getAcceptTime()));
+        request_data.put("ArriveTime",formatter.format(request.getArriveTime()));
         //request_data.put("CurrentLocation",)
         request_data.put("RequestStatus",request.getStatus());
         request_data.put("EstimateCost","0");
