@@ -22,6 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * this is class for main activity(first page of our app)
+ */
 public class MainActivity extends AppCompatActivity {
     Button get_start;
     Handler handler;

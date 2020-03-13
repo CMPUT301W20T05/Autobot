@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/linearLayout5"
+        android:id="@+id/SearchBar"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
@@ -34,14 +34,28 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttonConfirmLocation"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonShowDirection"
+        android:layout_width="200dp"
         android:layout_height="36dp"
         android:layout_marginTop="16dp"
-        android:background="@color/red"
-        android:text="Confirm"
+        android:text="Direction"
+        android:textColor="@color/white"
+        android:background="@drawable/button_red_style"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+        app:layout_constraintTop_toBottomOf="@+id/SearchBar" />
+
+    <Button
+        android:id="@+id/buttonConfirmRequest"
+        android:layout_width="200dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="400dp"
+        android:text="Confirm Request"
+        android:textColor="@color/white"
+        android:background="@drawable/button_blue_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonShowDirection" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

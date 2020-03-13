@@ -27,7 +27,7 @@ public class EditProfilePage extends Fragment {
     private EditProfilePageListener listener;
 
     public interface EditProfilePageListener {
-        void updateName(String Name);
+        void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact);
     }
 
     @Override
@@ -66,28 +66,12 @@ public class EditProfilePage extends Fragment {
             public void onClick(View view) {
                 String fName = firstName.getText().toString();
                 String lName = lastName.getText().toString();
-                String fullName = fName + " " + lName;
-                listener.updateName(fullName);
+                String pNumber = phoneNumber.getText().toString();
+                String eAddress = emailAddress.getText().toString();
+                String hAddress = homeAddress.getText().toString();
+                String econtact = eContact.getText().toString();
 
-                String Email = emailAddress.getText().toString();
-                String HomeAddress = homeAddress.getText().toString();
-                String EContact = eContact.getText().toString();
-
-                User user = db.rebuildUser(username);
-                user.setUsername(username);
-                String password = user.getPassword();
-                Log.d("password---", password);
-                String phonenumber = user.getPhoneNumber();
-                user.setPassword(password);
-                user.setPhoneNumber(phonenumber);
-                user.setFirstName(fName);
-                user.setLastName(lName);
-                user.setEmailAddress(Email);
-                user.setEmergencyContact(EContact);
-                user.setHomeAddress(HomeAddress);
-
-                db.add_new_user(user);
-
+                listener.updateInformation(fName,lName,pNumber,eAddress,hAddress,econtact);
                 //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
                 getActivity().onBackPressed();
             }

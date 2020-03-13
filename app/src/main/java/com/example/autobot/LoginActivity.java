@@ -28,9 +28,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-
+/**
+ * this is class for login activity
+ * user can login our system using their phone number/user name/email account
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
+
+    public String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     String Type = document.get("Type").toString();
                                                     String username = document.get("Username").toString();
                                                     if (TruePassword.equals(Password)){
+                                                        // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
-                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
-                                                            intentBasePage.putExtra("User",username);
+                                                            userName = username;  // set username to username
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
 
@@ -108,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists()){
+                                            userName = Account; // set username to username
                                             String RightPassword = documentSnapshot.getString("Password");
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
@@ -136,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                      }
                 }
-                }
+            }
 
 
         });
