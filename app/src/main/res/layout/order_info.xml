@@ -2,9 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@color/red3"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteY="106dp">
 
     <ImageView
         android:id="@+id/imageViewAvatar"
@@ -68,9 +71,9 @@
         android:id="@+id/button_back"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="176dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_revert" />
@@ -82,6 +85,9 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+
+        android:background="@color/blue2"
+        android:text="@string/confirm"
         android:background="@drawable/button_blue_style"
         android:text="Cancel Order"
         android:textColor="@color/white"
@@ -90,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Appro_price" />
 
-    <EditText
+    <TextView
         android:id="@+id/origin_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,7 +109,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Driver_name" />
 
-    <EditText
+    <TextView
         android:id="@+id/Destination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -116,7 +122,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/origin_loc" />
 
-    <EditText
+    <TextView
         android:id="@+id/Appro_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -129,7 +135,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Destination" />
 
-    <EditText
+    <TextView
         android:id="@+id/Appro_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

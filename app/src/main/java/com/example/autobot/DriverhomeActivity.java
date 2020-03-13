@@ -1,32 +1,216 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.internal.$Gson$Preconditions;
+import com.google.maps.android.SphericalUtil;
 
-public class DriverhomeActivity extends BaseActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.zip.Inflater;
+
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress{
     private User user;
+    private String user_id;
     String phone_num;
-
-    @Override
+    FragmentManager active_request_fm;
+    Button confirm;
+    LatLng origin;
+    View header;
+    ArrayList<Request> requests_list;
+    View rootView;
+    Database db;
+    private static final String TAG = "DriverSearchActivity";
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //View rootView = getLayoutInflater().inflate(..., frameLayout);
-        setTitle(phone_num);
-        load_user();
+        //load_user();
+        setTitle("driver mode");
+        //testing
+        /*user = new User();
+        user.setFirstName("jc");
+        user.setLastName("lyu");*/
+        //update_navigation_view(user);
+        //--------------------------------
+        rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
+        //hide that useless bar
+        rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.buttonConfirmRequest).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.buttonShowDirection).setVisibility(View.INVISIBLE);
+        //initial the search bar
+        AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
+        // Specify the types of place data to return.
+        if (autocompleteFragmentOrigin != null) {
+            autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+            setAutocompleteSupportFragment(autocompleteFragmentOrigin);
+            autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    searchedLatLng = place.getLatLng();
+
+                    //remove old marker and add new marker
+                    if (currentLocationMarker != null) {
+                        currentLocationMarker.remove();
+                    }
+
+                    mMap.clear();
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    if (searchedLatLng != null) {
+                        markerOptions.position(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude));
+                        markerOptions.title("Current Location");
+                        currentLocationMarker = mMap.addMarker(markerOptions);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+                        //get all the satisfied active requests
+                        requests_list = new ArrayList<Request>();
+                        load_requests(searchedLatLng);
+                        //rise the show active requests fragment, manage the fragments activities----------------------
+                        active_request_fm = getSupportFragmentManager();
+                        Fragment fragment = new ActiverequestsFragment(requests_list);
+                        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                        //----------------------------------------------------------------------------------------------
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                               // TODO: Handle the error.
+                        Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+        }
+
+        /*Fragment fragment = new ActiverequestsFragment();
+        active_request_fm = getSupportFragmentManager();
+        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();*/
+
+    }
+    //load the driver info from db and rebuilt it
+    public void load_user(){
+        db = new Database();
+        final Intent intent = getIntent();
+        String user_id = intent.getStringExtra("User");
+        //user = db.rebuildUser(username);
     }
 
-    public void load_user(){
-        Intent intent = getIntent();
-        if(intent != null){
-            Log.d("check","exist");
-        }else{
-            Log.d("check","fail");
-        }
-        phone_num = intent.getExtras().getString("phone number");
+    //loading all the satisfied requests
+    public void load_requests(LatLng searchedLatLng){
+           db = new Database();
+           db.collectionReference_request.get()
+                   .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                       @Override
+                       public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                           if (task.isSuccessful()){
+                               for (DocumentSnapshot document: task.getResult()){
+                                   //get the location of start
+                                   LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
+                                   //if the distance between beginning location and search place is within the range and the request is inactive, select that request
+                                   if( 3 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && ((String) document.get("RequestStatus") == "Request Sending")){
+                                       //add satisfied request to the active requests list
+                                       String request_id = (String) document.get("RequestID");
+                                       //rebuild request from db
+                                   }
+                                   //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
+                               }
+                           } else {
+                               Log.d("suck", "error getting documents: ", task.getException());
+                           }
+                       }
+                   });
+    }
+
+    /*public void update_navigation_view(User user){
+        NavigationView navigationView = getWindow().getDecorView().getRootView().findViewById(R.id.nav_view);
+        //find the layout of header layout
+        header = navigationView.getHeaderView(0);
+
+        //find the text view of user name
+        TextView user_name = header.findViewById(R.id.driver_name);
+        ImageView profile = header.findViewById(R.id.profile_photo);
+
+        //edit
+        user_name.setText(user.getFirstName()+user.getLastName());
+        Bitmap pic = Bitmap.createBitmap(200,200,Bitmap.Config.RGB_565);
+        profile.setImageBitmap(pic);
+    }*/
+
+
+    @Override
+    //--------------listener of show detail of active request fragment
+    public void confirm_request(Request request){
+        //update request in the database
+        request.UpdateStatus(1);
+        //set up the drive
+        request.setDriver(user);
+        //notify need to modify database
+        //db.add_new_request(request);
+
+
+        //send the selected request to the next activity
+        DriverIsOnTheWayActivity.request = request;
+        //start new activity
+        Intent intent = new Intent(DriverhomeActivity.this,DriverIsOnTheWayActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void back_press(){
+        active_request_fm.popBackStack();
+    }
+    //-----------------------------------------
+    @Override
+    public void hide() {
+              rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
+    }
+    @Override
+    //show the detail of the selected active request
+    public void show_detail(ShowSelectedActiveRequestFragment fragment) {
+        active_request_fm.beginTransaction().add(R.id.myMap,fragment).addToBackStack(null).commit();
+    }
+
+    //for edit profile info
+    @Override
+    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        TextView name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+        final Intent intent = getIntent();
+        user_id = intent.getStringExtra("User");
+        //User newUser = db.rebuildUser();
+        //newUser.setFirstName(FirstName);
+        //newUser.setLastName(LastName);
+
+        //db.add_new_user(newUser);
+
     }
 
 }
