@@ -18,13 +18,24 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-public class DriverIsOnTheWayActivity extends BaseActivity {
+public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+
+    private Database db;
+    private String username;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
+
+        db = new Database();
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("Username");
+        setProfile(username); // set profile
+        user = db.rebuildUser(username);
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -62,11 +73,26 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                 //temporary go to next activity
                 //should be request delete
                 Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }
         });
 
         //when driver arrived, show notification
         sendOnChannel();
+    }
+
+    @Override
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+
+        User newUser = db.rebuildUser(username);
+        newUser.setFirstName(FirstName);
+        newUser.setLastName(LastName);
+
+        db.add_new_user(newUser);
+
     }
 }

@@ -35,14 +35,14 @@ import static android.os.AsyncTask.execute;
 /**
  * this class is the homepage activity
  */
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener{
 
-    LatLng destination;
-    LatLng origin;
-    Button HPConfirmButton, HPDirectionButton;
-    Database db;
-    String username;
-    static User user;
+    private LatLng destination;
+    private LatLng origin;
+    private Button HPConfirmButton, HPDirectionButton;
+    private Database db;
+    private String username;
+    private static User user;
 
     private static final String TAG = "HomePageActivity";
 
@@ -56,7 +56,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setVisibility(View.GONE);
 
         db = new Database();
-        final Intent intent = getIntent();
+        Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile
 
@@ -111,6 +111,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 db.add_new_request(request);
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+                intentUCurRequest.putExtra("Username",username);
                 startActivity(intentUCurRequest);
             }
         });
