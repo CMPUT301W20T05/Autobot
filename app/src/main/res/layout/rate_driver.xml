@@ -57,10 +57,11 @@
 
     <TextView
         android:id="@+id/Driver_name"
-        android:layout_width="103dp"
+        android:layout_width="100dp"
         android:layout_height="44dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
+        android:textSize="20sp"
         android:text="Driver Name"
         app:layout_constraintBottom_toBottomOf="@+id/DriverAvatar"
         app:layout_constraintStart_toEndOf="@+id/DriverAvatar" />

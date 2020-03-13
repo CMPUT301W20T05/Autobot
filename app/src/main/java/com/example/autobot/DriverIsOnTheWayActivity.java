@@ -100,7 +100,14 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                         });
 
                 alert.show();
+            }
+        });
 
+        buttonSeeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentOrderInfo = new Intent(DriverIsOnTheWayActivity.this, OrderInfo.class);
+                startActivity(intentOrderInfo);
             }
         });
 

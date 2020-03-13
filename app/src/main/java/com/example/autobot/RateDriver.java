@@ -7,8 +7,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.text.ParseException;
+
+/**
+ * This is a class for RateDriver activity
+ * User can rate driver at this step
+ */
 
 public class RateDriver extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -70,7 +74,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
             @Override
             public void onClick(View v) {
                 //next activity
-                finish();
+                Intent intentHomePage = new Intent(RateDriver.this, HomePageActivity.class);
+                startActivity(intentHomePage);
             }
         });
 
@@ -78,7 +83,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
             @Override
             public void onClick(View v) {
                 //next activity
-                finish();
+                Intent intentHomePage = new Intent(RateDriver.this, HomePageActivity.class);
+                startActivity(intentHomePage);
             }
         });
     }

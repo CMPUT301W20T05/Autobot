@@ -51,8 +51,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     View rootView;
     private String username;
     public static Database db;
-
     private static final String TAG = "DriverhomeActivity";
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +62,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
         db = new Database();
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
+        username = intent.getStringExtra("User");
         setProfile(username); // set profile
         user = db.rebuildUser(username);
 

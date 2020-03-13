@@ -150,6 +150,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
 
+    public static Database db;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +168,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //set framelayout so the extended children of base activity can inflate its own layout
         frameLayout = (FrameLayout) findViewById(R.id.content);
+
+        db = new Database();
 
         //set up tool bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -210,6 +214,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
+                        String gr = document.getData().get("StarsRate").toString();
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
@@ -218,6 +223,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         }
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
+                        //TextView
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());

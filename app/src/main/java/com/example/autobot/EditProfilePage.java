@@ -59,7 +59,7 @@ public class EditProfilePage extends Fragment {
         homeAddress = view.findViewById(R.id.editTextHomeAddress);
         eContact = view.findViewById(R.id.editTextEmergencyContact);
 
-        db = HomePageActivity.db;
+        db = BaseActivity.db;
         User user = db.rebuildUser(listener.getUsername());
 
         userName.setText(user.getUsername());

@@ -12,16 +12,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class SignUpActivityTest {
+public class SetPasswordTest {
     private Solo solo;
 
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instance.
-     * @throws Exception
-     */
     @Before
     public void setUp() throws Exception{
         //This method used to create the solo object with instrumentation and activity as arguments
@@ -33,27 +29,23 @@ public class SignUpActivityTest {
         solo.enterText((EditText) solo.getView(R.id.accountUserName), "WoZuiShuai");
         solo.clickOnRadioButton(1);
         solo.clickOnCheckBox(0);
+        solo.clickOnButton("Continue");
+        //SetPasswordTest
+        solo.enterText((EditText) solo.getView(R.id.editTextSetPassword), "2zZ.");
+        solo.enterText((EditText) solo.getView(R.id.editTextConfirmPassword), "2zZ.");
     }
 
     @Test
     public void checkActivityChange() {
-        // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
-        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-    }
-
-    /**
-     * Check to see if the back button works or not
-     */
-    @Test
-    public void checkContinueButton() {
-        solo.clickOnButton("Continue");
+        // Asserts that the current activity is the SetPassword. Otherwise, show wrong message
         solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
     }
 
-    /**
-     * Closes the activity after each test
-     * @throws Exception
-     */
+    @Test
+    public void checkConfirmButton(){
+        solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
+    }
+
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

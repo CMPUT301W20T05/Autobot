@@ -12,16 +12,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class HomePageActivityTest {
+public class DriverIsOnTheWayTest {
     private Solo solo;
 
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instance.
-     * @throws Exception
-     */
     @Before
     public void setUp() throws Exception{
         //This method used to create the solo object with instrumentation and activity as arguments
@@ -33,17 +29,28 @@ public class HomePageActivityTest {
         //HomePageActivity steps
         //seaechbar fill in
         solo.clickOnButton("Direction");
-    }
-    @Test
-    public void checkActivityChange() {
-        // Asserts that the current activity is the HomePage. Otherwise, show wrong message
-        solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
+        solo.clickOnButton("Confirm Request");
+        //CurRequestActivity
+        solo.pressSpinnerItem(0,0);
+        solo.clickOnButton("Confirm");
+
     }
 
     @Test
-    public void ConfirmRequestButton(){
-        solo.clickOnButton("Confirm Request");
-        solo.assertCurrentActivity("Wrong Activity", UCurRequest.class);
+    public void checkActivityChange(){
+        solo.assertCurrentActivity("Wrong Activity", DriverIsOnTheWayActivity.class);
+    }
+
+    @Test
+    public void checkContinueButton() {
+        solo.clickOnButton("Cancel Order");
+        solo.assertCurrentActivity("Wrong Activity", OrderComplete.class);
+    }
+
+    @Test
+    public void checkSeeProfileButton(){
+        solo.clickOnButton("See profile");
+        solo.assertCurrentActivity("Wrong Activity", OrderInfo.class);
     }
 
     @After
