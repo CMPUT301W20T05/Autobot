@@ -10,7 +10,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.Serializable;
 
 
-public class User implements Driver, Rider , Serializable{
+
+public class User implements Driver, Rider, Serializable {
     private String Username;
     private String EmailAddress;
     private String PhoneNumber;
@@ -25,8 +26,8 @@ public class User implements Driver, Rider , Serializable{
     private String EmergencyContact;
     private String HomeAddress;
 
-    public User(){
-        this.Username = "";
+    public User(String username){
+        this.Username = username;
         this.EmailAddress = "";
         this.Password = "";
         this.UserType = "";

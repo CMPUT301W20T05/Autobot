@@ -18,13 +18,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 
-public class Request {
+public class Request implements Serializable {
 
     private User Rider;
     private User Driver;
@@ -61,6 +62,7 @@ public class Request {
         return this.SendTime;
     }
 
+
     public String generateRequestID() {
         String ID = this.Rider.getUsername()+this.SendTime.toString();
         return ID;
@@ -82,6 +84,7 @@ public class Request {
     public User getRider(){
         return this.Rider;
     }
+    //public Location getDestination() {return this.Destination;}
     public void setDriver(User driver){
         this.Driver = driver;
     }
@@ -117,6 +120,12 @@ public class Request {
     public void UpdateStatus(int item){
         this.RequestStatus = requestStatusList.get(item);
 
+    }
+    //the active request string representation
+    public String get_active_requset_tostring(){
+        //this is the hard coding version, need to modify later
+        String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getLastName(),"sub",13.34,"587-234-1299");
+        return active_requst;
     }
     public void resetSendTime(Date d){
         this.SendTime = d;
