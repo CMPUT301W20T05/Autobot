@@ -36,18 +36,19 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
 
         db = HomePageActivity.db;
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
-        reID = intent.getStringExtra("reid");
+        //username = intent.getStringExtra("Username");
+        //reID = intent.getStringExtra("reid");
+
+        //get user from firebase
+        //user = db.rebuildUser(username);
+        user = HomePageActivity.user;
+        username = user.getUsername();
+        //get request from firebase
+        //request = db.rebuildRequest(reID, user);
+        request = HomePageActivity.request;
+        reID = request.getRequestID();
 
         setProfile(username); // set profile
-        //get user from firebase
-        user = db.rebuildUser(username);
-        //get request from firebase
-        try {
-            request = db.rebuildRequest(reID, user);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         //calculate estimated fare
         double estimateFare = request.getEstimateCost();
@@ -85,9 +86,10 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Intent intentCancelRequest = new Intent(UCurRequest.this, RiderWaitDriverAcceptRequest.class);
                 Intent intentCancelRequest = new Intent(UCurRequest.this, RiderWaitDriverAcceptRequest.class);
-                intentCancelRequest.putExtra("Username",username);
-                intentCancelRequest.putExtra("reid",reID);
+//                intentCancelRequest.putExtra("Username",user.getUsername());
+//                intentCancelRequest.putExtra("reid",request.getRequestID());
                 startActivity(intentCancelRequest);
             }
         });

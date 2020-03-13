@@ -30,18 +30,22 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
         db = HomePageActivity.db;
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
-        reID = intent.getStringExtra("reid");
+        //username = intent.getStringExtra("Username");
+        //reID = intent.getStringExtra("reid");
+
+        //get user from firebase
+        //user = db.rebuildUser(username);
+        user = HomePageActivity.user;
+        username = user.getUsername();
+        //get request from firebase
+        //request = db.rebuildRequest(reID, user);
+        request = HomePageActivity.request;
+        reID = request.getRequestID();
 
         setProfile(username); // set profile
-        //get user from firebase
-        user = db.rebuildUser(username);
-        //get request from firebase
-        try {
-            request = db.rebuildRequest(reID, user);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        //when driver arrived, show notification
+        sendOnChannel();
 
         Button cancelRequest = findViewById(R.id.cancel_order);
         cancelRequest.setOnClickListener(new View.OnClickListener() {
@@ -59,21 +63,27 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
                                 //delete current request
                                 //go back to home page
                                 Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+//                                cancelRequest.putExtra("Username",user.getUsername());
+//                                cancelRequest.putExtra("reid",request.getRequestID());
                                 startActivity(cancelRequest);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                return;
                             }
                         });
 
                 alert.show();
 
-                //when driver arrived, show notification
-                sendOnChannel();
+            }
+        });
 
+        Button continueButton = findViewById(R.id.ContinueButton);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 //hardcode for now
                 request.resetRequestStatus("Request Accepted");
                 //when request condition changes to "accept" go to next activity
@@ -81,15 +91,14 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
                 if (requestState.equals("Request Accepted")) {
                     //go to next page
-                    Intent intentCancelRequest = new Intent(RiderWaitDriverAcceptRequest.this, DriverIsOnTheWayActivity.class);
-                    intentCancelRequest.putExtra("Username",username);
-                    intentCancelRequest.putExtra("reid",reID);
-                    startActivity(intentCancelRequest);
+                    Intent intentWait = new Intent(RiderWaitDriverAcceptRequest.this, DriverIsOnTheWayActivity.class);
+//                    intentWait.putExtra("Username",user.getUsername());
+//                    intentWait.putExtra("reid",request.getRequestID());
+                    startActivity(intentWait);
                 }
                 else {
                     Toast.makeText(RiderWaitDriverAcceptRequest.this, "Please wait...", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

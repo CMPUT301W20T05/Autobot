@@ -29,6 +29,8 @@ public class QRCode extends BaseActivity {
     private Database db;
     private String username;
     private User user;
+    private Request request;
+    private String reID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +41,19 @@ public class QRCode extends BaseActivity {
         db = HomePageActivity.db;
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
+        //username = intent.getStringExtra("Username");
+        //reID = intent.getStringExtra("reid");
+
+        //get user from firebase
+        //user = db.rebuildUser(username);
+        user = HomePageActivity.user;
+        username = user.getUsername();
+        //get request from firebase
+        //request = db.rebuildRequest(reID, user);
+        request = HomePageActivity.request;
+        reID = request.getRequestID();
+
         setProfile(username); // set profile
-        user = db.rebuildUser(username);
 
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
         fare = (TextView)findViewById(R.id.textView4);
@@ -75,7 +87,8 @@ public class QRCode extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
-                intentRateDriver.putExtra("Username",username);
+//                intentRateDriver.putExtra("Username",user.getUsername());
+//                intentRateDriver.putExtra("reid",request.getRequestID());
                 startActivity(intentRateDriver);
             }
         });

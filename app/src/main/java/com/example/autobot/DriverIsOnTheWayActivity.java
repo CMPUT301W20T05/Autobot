@@ -37,17 +37,19 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         db = HomePageActivity.db;
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
-        reID = intent.getStringExtra("reid");
-        setProfile(username); // set profile
+        //username = intent.getStringExtra("Username");
+        //reID = intent.getStringExtra("reid");
+
         //get user from firebase
-        user = db.rebuildUser(username);
+        //user = db.rebuildUser(username);
+        user = HomePageActivity.user;
+        username = user.getUsername();
         //get request from firebase
-        try {
-            request = db.rebuildRequest(reID, user);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //request = db.rebuildRequest(reID, user);
+        request = HomePageActivity.request;
+        reID = request.getRequestID();
+
+        setProfile(username); // set profile
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -59,7 +61,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         User driver = request.getDriver();
         User rider = request.getRider();
         //for rider to call driver
-        String rphoneNumber = driver.getPhoneNumber();
+        //String rphoneNumber = driver.getPhoneNumber();
+        String rphoneNumber = "5875576400";
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +92,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                                 //delete current request
                                 //go back to home page
                                 Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+//                                cancelRequest.putExtra("Username",user.getUsername());
+//                                cancelRequest.putExtra("reid",request.getRequestID());
                                 startActivity(cancelRequest);
                             }
                         })
@@ -122,8 +127,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         if (requestState.equals("Request picked")) {
             //go to next page
             Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-            intentOrderComplete.putExtra("Username", username);
-            intentOrderComplete.putExtra("reid", reID);
+//            intentOrderComplete.putExtra("Username", username);
+//            intentOrderComplete.putExtra("reid", reID);
             startActivity(intentOrderComplete);
         }
         else {

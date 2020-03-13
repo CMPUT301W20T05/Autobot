@@ -33,18 +33,19 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         db = HomePageActivity.db;
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
-        reID = intent.getStringExtra("reid");
+        //username = intent.getStringExtra("Username");
+        //reID = intent.getStringExtra("reid");
+
+        //get user from firebase
+        //user = db.rebuildUser(username);
+        user = HomePageActivity.user;
+        username = user.getUsername();
+        //get request from firebase
+        //request = db.rebuildRequest(reID, user);
+        request = HomePageActivity.request;
+        reID = request.getRequestID();
 
         setProfile(username); // set profile
-        //get user from firebase
-        user = db.rebuildUser(username);
-        //get request from firebase
-        try {
-            request = db.rebuildRequest(reID, user);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
@@ -54,22 +55,24 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 
         LatLng destination = request.getDestination();
         LatLng origin = request.getBeginningLocation();
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            String oaddress = request.ReadableAddress(origin, geocoder);
-            String daddress = request.ReadableAddress(destination, geocoder);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (destination != null && origin != null) {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                String oaddress = request.ReadableAddress(origin, geocoder);
+                String daddress = request.ReadableAddress(destination, geocoder);
+                OriginalLoc.setText(oaddress);
+                Destination.setText(daddress);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        Destination.setText(String.valueOf(destination));
 
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
-                intentQRCode.putExtra("Username",username);
-                intentQRCode.putExtra("reid", reID);
+//                intentQRCode.putExtra("Username",user.getUsername());
+//                intentQRCode.putExtra("reid", request.getRequestID());
                 startActivity(intentQRCode);
             }
         });
