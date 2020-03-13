@@ -27,7 +27,7 @@ public class EditProfilePage extends Fragment {
     private EditProfilePageListener listener;
 
     public interface EditProfilePageListener {
-        void updateInformation(String FirstName, String LastName);
+        void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class EditProfilePage extends Fragment {
                 user.setHomeAddress(HomeAddress);
 
                 db.add_new_user(user);
-                listener.updateInformation(fName,lName);
+
                 //getFragmentManager().beginTransaction().remove(EditProfilePage.this).commit();
                 getActivity().onBackPressed();
             }

@@ -1,17 +1,14 @@
-/**
- * Created by Vishal on 10/20/2018.
- * direction api example: https://www.youtube.com/watch?v=wRDLjUK8nyU
- */
-
 package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -102,8 +99,15 @@ import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+/**
+ * this is a class of base activity, it contains google map api, side bar, notifications and so on
+ * Reference:
+ * https://www.tutorialspoint.com/how-to-show-current-location-on-a-google-map-on-android
+ * direction api example: https://www.youtube.com/watch?v=wRDLjUK8nyU, Created by Vishal on 10/20/2018.
+ */
+
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener, EditProfilePage.EditProfilePageListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -179,7 +183,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
-
     public void setProfile(String username){
         Database userBase = new Database();
 
@@ -191,7 +194,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         name = header.findViewById(R.id.driver_name);
         name.setText("Edit your Name");
 
-        DocumentReference docRef = userBase.collectionReference_user.document(username);
+        DocumentReference docRef = userBase.getRef(username);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
             @Override
@@ -211,14 +214,27 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    /**
+     * get user current location
+     * @return currentlocation (Location)
+     */
     public Location getCurrentLocation() {
         return currentLocation;
     }
 
+    /**
+     * get the location user searched
+     * @return searched location (Latlng)
+     */
     public LatLng getSearchedLatLng() {
         return searchedLatLng;
     }
 
+    /**
+     * set google autocomplete fragment
+     * it contains setOnPlaceSelectedListener (add marker to the selected location and move camera)
+     * @param autocompleteFragment autocomplete fragment (AutocompleteSupportFragment)
+     */
     public void setAutocompleteSupportFragment(AutocompleteSupportFragment autocompleteFragment) {
 
         if (autocompleteFragment != null) {
@@ -292,17 +308,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void updateInformation(String FirstName,String LastName) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Intent i = getIntent();
-        String username = i.getStringExtra("User");
         switch(menuItem.getItemId()) {
             case R.id.my_request_history:
                 fragment = new RequestHistoryFragment();
@@ -324,8 +330,27 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 setTitle("Payment Information");
                 break;
             case R.id.log_out:
-                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
                 navigationView.getMenu().getItem(5).setChecked(true);
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(BaseActivity.this);
+                alert.setTitle("Logout");
+                alert.setMessage("Are you sure you wish to logout?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
+                                //need to actual logout
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                navigationView.getMenu().getItem(5).setChecked(false);
+                            }
+                        });
+
+                alert.show();
                 break;
             case R.id.edit_profile:
                 fragment = new EditProfilePage();
@@ -587,7 +612,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 });
     }
 
-    //notification
+    /**
+     * create a notification channel
+     */
     private void createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -604,6 +631,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * send notification to the channel
+     */
     public void sendOnChannel() {
         Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo)
@@ -613,8 +643,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .build();
     }
 
-    //draw route between two locations
-    public String drawRoute(LatLng origin, LatLng destination) {
+    /**
+     * draw route between two locations
+     * @param origin origin of user's request
+     * @param destination destination of user's request
+     */
+    public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
         place1 = new MarkerOptions().position(origin).title("Origin");
@@ -633,16 +667,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         builder.include(destination);
         LatLngBounds bounds = builder.build();
         //Then construct a cameraUpdate
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 128);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
         //Then move the camera
         mMap.animateCamera(cameraUpdate);
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
 //        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-
-        return url;
     }
 
+    /**
+     * connect origin, destination to generate a url
+     * @param origin origin of user's request
+     * @param dest destination of user's request
+     * @param directionMode transportation method
+     * @return url
+     */
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;

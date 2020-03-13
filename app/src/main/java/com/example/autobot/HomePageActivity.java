@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -30,12 +31,13 @@ import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
 
-public class HomePageActivity extends BaseActivity {
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     LatLng destination;
     LatLng origin;
     Button HPConfirmButton, HPDirectionButton;
     Database db;
+    String username;
 
     private static final String TAG = "HomePageActivity";
 
@@ -48,13 +50,13 @@ public class HomePageActivity extends BaseActivity {
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-        // Initialize the AutocompleteSupportFragment.
-        // Specify the types of place data to return.
-
         db = new Database();
         final Intent intent = getIntent();
-        String username = intent.getStringExtra("User");
+        username = intent.getStringExtra("User");
         setProfile(username); // set profile
+
+        // Initialize the AutocompleteSupportFragment.
+        // Specify the types of place data to return.
         //origin
         AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
@@ -62,9 +64,7 @@ public class HomePageActivity extends BaseActivity {
         AutocompleteSupportFragment autocompleteFragmentDestination = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
-        String usersname = intent.getStringExtra("User");
-
-        User user = db.rebuildUser(usersname);
+        User user = db.rebuildUser(username);
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -89,7 +89,7 @@ public class HomePageActivity extends BaseActivity {
                 //distance between two locations
                 double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //draw route between two locations
-                String url = drawRoute(origin, destination);
+                drawRoute(origin, destination);
                 HPConfirmButton.setVisibility(View.VISIBLE);
 
             }
@@ -98,13 +98,12 @@ public class HomePageActivity extends BaseActivity {
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //next activity
-                //next activity
-                Request request = new Request();
+                Request request = new Request(user);
                 request.setRider(user);
                 request.setDestination(destination);
                 request.setBeginningLocation(origin);
                 db.add_new_request(request);
+                //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentUCurRequest);
             }
@@ -112,6 +111,12 @@ public class HomePageActivity extends BaseActivity {
 
     }
 
+    /**
+     * this function gets the origin location of user request
+     * the default location is the current location, but user can use search bar to choose another location
+     * @param autocompleteFragmentOrigin this is the Google location search bar
+     * @return origin location (Latlng)
+     */
     public LatLng getOrigin(AutocompleteSupportFragment autocompleteFragmentOrigin){
         Location temp = getCurrentLocation();
         if (temp != null) {
@@ -134,8 +139,26 @@ public class HomePageActivity extends BaseActivity {
         return origin;
     }
 
+    /**
+     * this function used to get destination of user's request
+     * @param autocompleteFragmentDestination this is the Google location search bar
+     * @return destination location (Latlng)
+     */
     public LatLng getDestination(AutocompleteSupportFragment autocompleteFragmentDestination) {
         destination = getSearchedLatLng();
         return destination;
+    }
+
+    @Override
+    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+        User newUser = db.rebuildUser(username);
+        newUser.setFirstName(FirstName);
+        newUser.setLastName(LastName);
+
+        db.add_new_user(newUser);
+
     }
 }
