@@ -120,6 +120,7 @@ public class Database {
         request_data.put("EstimateCost","0");
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
+
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -136,8 +137,8 @@ public class Database {
                 });
 
     }
-    public Request rebuildRequest(long RequestID){
-        Request r = new Request();
+    public Request rebuildRequest(long RequestID, User user){
+        Request r = new Request(user);
         collectionReference_request.document(String.valueOf(RequestID))
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -40,6 +40,7 @@ public class HomePageActivity extends BaseActivity {
     LatLng origin;
     Button HPConfirmButton, HPDirectionButton;
     Database db;
+    User user;
 
     private static final String TAG = "HomePageActivity";
 
@@ -68,7 +69,9 @@ public class HomePageActivity extends BaseActivity {
 
         String usersname = intent.getStringExtra("User");
 
-        User user = db.rebuildUser(usersname);
+        //get user infor from database
+        user = db.rebuildUser(usersname);
+
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -102,12 +105,12 @@ public class HomePageActivity extends BaseActivity {
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //next activity
-                Request request = new Request();
+                Request request = new Request(user);
                 request.setRider(user);
                 request.setDestination(destination);
                 request.setBeginningLocation(origin);
                 db.add_new_request(request);
+                //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 startActivity(intentUCurRequest);
             }

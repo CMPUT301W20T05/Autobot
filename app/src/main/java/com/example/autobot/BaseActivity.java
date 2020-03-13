@@ -3,10 +3,12 @@ package com.example.autobot;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -338,8 +340,27 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 setTitle("Payment Information");
                 break;
             case R.id.log_out:
-                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
                 navigationView.getMenu().getItem(5).setChecked(true);
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(BaseActivity.this);
+                alert.setTitle("Logout");
+                alert.setMessage("Are you sure you wish to logout?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent logout = new Intent(getApplicationContext(),LoginActivity.class);startActivity(logout);
+                                //need to actual logout
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                navigationView.getMenu().getItem(5).setChecked(false);
+                            }
+                        });
+
+                alert.show();
                 break;
             case R.id.edit_profile:
                 fragment = new EditProfilePage();
@@ -647,7 +668,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         builder.include(destination);
         LatLngBounds bounds = builder.build();
         //Then construct a cameraUpdate
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 154);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
         //Then move the camera
         mMap.animateCamera(cameraUpdate);
 
