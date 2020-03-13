@@ -11,7 +11,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     private Button CurRequestConfirm;
     private Database db;
     private String username;
-    private User user;
+    protected static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -23,12 +23,11 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         TextView EstimatedFare = findViewById(R.id.estimatedFare);
         Spinner modelTochoose = findViewById(R.id.spinnerCarModel);
 
-        db = new Database();
-
+        db = HomePageActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
         setProfile(username); // set profile
-        user = db.rebuildUser(username);
+        //user = db.rebuildUser(username);
 
         //calculate estimated fare
         //EstimatedFare.setText(...);

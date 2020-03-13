@@ -81,18 +81,13 @@ public class LoginActivity extends AppCompatActivity {
                                                     if (TruePassword.equals(Password)){
                                                         // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
-                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
-                                                            intentBasePage.putExtra("User",username);
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
-
                                                             startActivity(intentHomePage);
                                                         }
                                                         else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                             intentHomePage.putExtra("User",username);
-                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
-                                                            intentBasePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
                                                         }
                                                     }

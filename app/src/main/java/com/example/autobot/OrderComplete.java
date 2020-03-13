@@ -21,7 +21,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
-        db = new Database();
+        db = HomePageActivity.db;
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");

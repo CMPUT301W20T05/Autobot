@@ -21,6 +21,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
+    protected static Request request;
     private Database db;
     private String username;
     private User user;
@@ -31,7 +32,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
-        db = new Database();
+        db = HomePageActivity.db;
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");

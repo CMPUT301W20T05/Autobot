@@ -40,7 +40,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private LatLng destination;
     private LatLng origin;
     private Button HPConfirmButton, HPDirectionButton;
-    private Database db;
+    public static Database db;
     private String username;
     private static User user;
 
@@ -112,6 +112,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
                 intentUCurRequest.putExtra("Username",username);
+                UCurRequest.user = user;
                 startActivity(intentUCurRequest);
             }
         });
@@ -162,13 +163,13 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
-        User newUser = db.rebuildUser(username);
+        User newUser = user;
         newUser.setFirstName(FirstName);
         newUser.setLastName(LastName);
-
         db.add_new_user(newUser);
-
     }
+
+
 
 
 }
