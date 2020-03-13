@@ -1,7 +1,9 @@
 package com.example.autobot;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -141,12 +144,11 @@ public class Database{
         request_data.put("Rider",request.getRider().getUsername());
         request_data.put("DestinationLat",String.valueOf(request.getDestination().latitude));
         request_data.put("DestinationLnt",String.valueOf(request.getDestination().longitude));
-
         request_data.put("BeginningLocationLat",String.valueOf(request.getBeginningLocation().latitude));
         request_data.put("BeginningLocationLnt",String.valueOf(request.getBeginningLocation().longitude));
-
         request_data.put("RequestID",request.getRequestID());
-        request_data.put("SendTime",request.getSendDate().toString());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        request_data.put("SendTime",formatter.format(request.getSendDate()));
         request_data.put("AcceptTime",null);
         request_data.put("ArriveTime",null);
         //request_data.put("CurrentLocation",)
@@ -171,7 +173,7 @@ public class Database{
                 });
 
     }
-    public Request rebuildRequest(String RequestID, User user){
+    public Request rebuildRequest(String RequestID, User user) throws ParseException {
         Request r = new Request(user);
         collectionReference_request.document(String.valueOf(RequestID))
                 .get()
@@ -187,14 +189,43 @@ public class Database{
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
                        r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
-                       r.resetSendTime((Date)documentSnapshot.get("SendTime"));
-                       //r.resetSendTime((Date)String.valueOf(documentSnapshot.get("SendTime")));
-                       r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                       r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
-                       r.setRequestID((String)documentSnapshot.get("ID"));
+
+                       SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                        try {
+                            r.resetAcceptTime(formatter.parse((String) documentSnapshot.get("AcceptTime")));
+                            r.resetArriveTime(formatter.parse((String) documentSnapshot.get("ArriveTime")));
+                            r.resetSendTime(formatter.parse((String) documentSnapshot.get("SendTime")));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
+                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
+                        r.setRequestID((String)documentSnapshot.get("ID"));
                     }
                 });
         return r;
+    }
+    public void CancelRequest(String requestID){
+        collectionReference_request.document(requestID)
+                .delete()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data deleting failed" + e.toString());
+                    }
+                });
+
+    }
+
+    public void CancelUser(String username){
+        collectionReference_user.document(username)
+                .delete()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data deleting failed" + e.toString());
+                    }
+                });
     }
 
 

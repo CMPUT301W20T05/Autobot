@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.internal.$Gson$Preconditions;
 import com.google.maps.android.SphericalUtil;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.Inflater;
@@ -152,7 +153,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        String user_id = (String) document.get("Rider");
                                        //rebuild request from db
                                        Log.d("loc",request_id);
-                                       Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                       Request active_request = null;
+                                       try {
+                                           active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                       } catch (ParseException e) {
+                                           e.printStackTrace();
+                                       }
                                        requests_list.add(active_request);
                                    }
                                    //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));

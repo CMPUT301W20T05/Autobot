@@ -19,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +40,9 @@ public class Request implements Serializable {
     private Date ArriveTime;
     private String RequestID;
     private ArrayList<String> requestStatusList;
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
 
-    public Request(User user) {
+    public Request(User user) throws ParseException {
         this.Rider = user;
         this.Destination = null;
         this.BeginningLocation = null;
@@ -51,8 +54,9 @@ public class Request implements Serializable {
         this.requestStatusList.add("Trip Completed");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        this.AcceptTime = null;
-        this.ArriveTime = null;
+        String defaultTimeString = "00-0-0000 00:00:00";
+        this.AcceptTime = formatter.parse(defaultTimeString);
+        this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
         this.RequestID = generateRequestID();
 

@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
+import java.text.ParseException;
 import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
@@ -107,7 +108,12 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Request request = new Request(user);
+                Request request = null;
+                try {
+                    request = new Request(user);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 request.setRider(user);
                 request.setDestination(destination);
                 request.setBeginningLocation(origin);
