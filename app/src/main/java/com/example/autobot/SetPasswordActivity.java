@@ -36,7 +36,7 @@ public class SetPasswordActivity extends AppCompatActivity {
         final String Type = intent.getStringExtra("Type");
 
 
-        User user_class = new User();
+        User user_class = new User(Username);
         user_class.setUsername(Username);
         user_class.setUserType(Type);
         user_class.setPhoneNumber(PhoneNumber);

@@ -34,11 +34,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.internal.$Gson$Preconditions;
 import com.google.maps.android.SphericalUtil;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.Inflater;
 
-public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress{
+public class DriverhomeActivity  extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress {
     private User user;
     private String user_id;
     String phone_num;
@@ -48,6 +49,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     View header;
     ArrayList<Request> requests_list;
     View rootView;
+    private String username;
     public static Database db;
     private static final String TAG = "DriverSearchActivity";
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,13 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         requests_list = new ArrayList<Request>();
         //load_user();
         setTitle("driver mode");
+
+        db = new Database();
+        Intent intent = getIntent();
+        username = intent.getStringExtra("User");
+        setProfile(username); // set profile
+        user = db.rebuildUser(username);
+
         //testing
         /*user = new User();
         user.setFirstName("jc");
@@ -144,14 +153,23 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        String user_id = (String) document.get("Rider");
                                        //rebuild request from db
                                        Log.d("loc",request_id);
-                                       Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                       Request active_request = null;
+                                       try {
+                                           active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                       } catch (ParseException e) {
+                                           e.printStackTrace();
+                                       }
                                        requests_list.add(active_request);
                                    }
                                    //testing
+                                   try{
                                    User user3 = new User("jc");
                                    Request request1 = new Request(user3);
                                    request1.UpdateStatus(0);
-                                   requests_list.add(request1);
+                                   requests_list.add(request1);}
+                                   catch (ParseException e) {
+                                       e.printStackTrace();
+                                   }
                                    //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                }
                            } else {
@@ -216,12 +234,20 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         TextView name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
-        final Intent intent = getIntent();
-        user_id = intent.getStringExtra("User");
-        //User newUser = db.rebuildUser();
-        //newUser.setFirstName(FirstName);
-        //newUser.setLastName(LastName);
 
         //db.add_new_user(newUser);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
+        newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
+        db.add_new_user(newUser);
+
     }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
 }

@@ -19,11 +19,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Request class is a information collection of request, we can set and get information of request through the method in this class.
+ */
 
 public class Request implements Serializable {
 
@@ -38,21 +43,23 @@ public class Request implements Serializable {
     private Date ArriveTime;
     private String RequestID;
     private ArrayList<String> requestStatusList;
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
 
-    public Request(User user) {
+    public Request(User user) throws ParseException {
         this.Rider = user;
         this.Destination = null;
         this.BeginningLocation = null;
         this.SendTime = new Date();
-        //this.requestStatusList = new ArrayList<>();
+        this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
         this.requestStatusList.add("Request Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        this.AcceptTime = null;
-        this.ArriveTime = null;
+        String defaultTimeString = "00-0-0000 00:00:00";
+        this.AcceptTime = formatter.parse(defaultTimeString);
+        this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
         this.RequestID = generateRequestID();
 
@@ -103,12 +110,7 @@ public class Request implements Serializable {
         this.BeginningLocation = beginningLocation;
     }
     public LatLng getBeginningLocation(){return this.BeginningLocation;}
-    public void getAcceptTime(){
-        this.AcceptTime = new Date();
-    }
-    public void getArriveTime(){
-        this.ArriveTime = new Date();
-    }
+
     public double EstimateCost(LatLng destination, LatLng beginningLocation){
         //double distance = destination.distanceTo(beginningLocation);
         return 0.0;
@@ -126,6 +128,12 @@ public class Request implements Serializable {
         //this is the hard coding version, need to modify later
         String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getLastName(),"sub",13.34,"587-234-1299");
         return active_requst;
+    }
+    public Date getAcceptTime(){
+        return this.AcceptTime;
+    }
+    public Date getArriveTime(){
+        return this.ArriveTime;
     }
     public void resetSendTime(Date d){
         this.SendTime = d;

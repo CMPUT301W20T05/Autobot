@@ -88,6 +88,11 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         db.add_new_user(newUser);
 
     }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
 
 
     //reset the button onclick function--------------------------------------

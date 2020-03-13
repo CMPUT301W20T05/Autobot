@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,10 @@ import androidx.fragment.app.Fragment;
 
 public class RequestHistoryFragment extends Fragment {
 
-    ListView requestList;
-    ArrayAdapter<HistoryRequest> mAdapter;
-    ArrayList<HistoryRequest> mDataList;
+    private ListView requestList;
+    private ArrayAdapter<HistoryRequest> mAdapter;
+    private ArrayList<HistoryRequest> mDataList;
+    private Database db;
 
     // use temp data first, later use database's data
 

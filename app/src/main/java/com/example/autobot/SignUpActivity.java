@@ -121,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
                   else checkBoxPolicy.setError(null,null);
 
                   if (UserValid == true && PhoneValid == true && Type_Rider != 0 && Checkbox == true) {
-                      User user = new User();
+                      User user = new User(Username);
                       user.setUsername(editTextUserName.getText().toString());
                       user.setPhoneNumber(editTextPhoneNumber.getText().toString());
                       if (Type_Rider == 2) user.setUserType("Rider");
