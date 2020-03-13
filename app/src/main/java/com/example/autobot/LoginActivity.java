@@ -35,7 +35,8 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
 
-    public String userName;
+    private String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
