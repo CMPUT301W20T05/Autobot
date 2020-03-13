@@ -126,6 +126,12 @@ public class Database {
         return user;
     }
 
+    /**
+     * This function is store request to firebase
+     * The request id is primary key that consist of Username and order time so it is unique
+     * All information will auto get such as location, time
+     * @param request
+     */
     
     public void add_new_request(Request request){
         HashMap<String,String> request_data = new HashMap<>();
@@ -162,6 +168,13 @@ public class Database {
                 });
 
     }
+
+    /**
+     * This function is to get all information from the RequsetionID and user
+     * @param RequestID
+     * @param user
+     * @return r is the all information of request that can be used from other class
+     */
     public Request rebuildRequest(long RequestID, User user){
         Request r = new Request(user);
         collectionReference_request.document(String.valueOf(RequestID))
