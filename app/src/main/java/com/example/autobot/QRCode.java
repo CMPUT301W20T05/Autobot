@@ -16,7 +16,9 @@ import com.google.zxing.WriterException;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-
+/**
+ * This is a class for generating qrcode based on the price of the trip
+ */
 public class QRCode extends BaseActivity {
 
     String TAG = "Generate QRCode";
@@ -49,6 +51,7 @@ public class QRCode extends BaseActivity {
         button3 = (Button) findViewById(R.id.button3);
 
         fare.setText("10");//price of the trip
+
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
