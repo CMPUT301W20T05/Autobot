@@ -31,7 +31,10 @@ import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
 
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener{
+/**
+ * this class is the homepage activity
+ */
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     LatLng destination;
     LatLng origin;
@@ -159,6 +162,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+
         User newUser = db.rebuildUser(username);
         newUser.setFirstName(FirstName);
         newUser.setLastName(LastName);
