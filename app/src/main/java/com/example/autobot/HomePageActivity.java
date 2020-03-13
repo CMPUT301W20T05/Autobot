@@ -44,7 +44,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     Database db;
     String username;
     User user;
-    String username;
 
 
     private static final String TAG = "HomePageActivity";
