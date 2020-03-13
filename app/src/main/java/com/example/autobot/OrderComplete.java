@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 public class OrderComplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -37,9 +36,9 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentRateDriver = new Intent(OrderComplete.this, RateDriver.class);
-                intentRateDriver.putExtra("Username",username);
-                startActivity(intentRateDriver);
+                Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
+                intentQRCode.putExtra("Username",username);
+                startActivity(intentQRCode);
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -21,10 +22,13 @@ public class QRCode extends BaseActivity {
     String TAG = "Generate QRCode";
     TextView fare;
     ImageView qrimg;
-    Button generate;
+    Button generate, button3;
     String inputvalue;
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
+    private Database db;
+    private String username;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +36,17 @@ public class QRCode extends BaseActivity {
         super.onCreate(savedInstanceState);
         View rootView = getLayoutInflater().inflate(R.layout.qrcodd_scanner, frameLayout);
 
+        db = HomePageActivity.db;
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("Username");
+        setProfile(username); // set profile
+        user = db.rebuildUser(username);
+
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
         fare = (TextView)findViewById(R.id.textView4);
         generate = (Button) findViewById(R.id.button2);
+        button3 = (Button) findViewById(R.id.button3);
 
         fare.setText("10");//price of the trip
         generate.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +69,14 @@ public class QRCode extends BaseActivity {
                 catch (WriterException e){
                     Log.v(TAG, e.toString());
                 }
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
+                intentRateDriver.putExtra("Username",username);
+                startActivity(intentRateDriver);
             }
         });
     }
