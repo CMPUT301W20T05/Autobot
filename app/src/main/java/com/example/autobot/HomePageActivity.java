@@ -162,6 +162,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+
+
         User newUser = db.rebuildUser(username);
         newUser.setFirstName(FirstName);
         newUser.setLastName(LastName);
