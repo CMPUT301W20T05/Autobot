@@ -24,7 +24,7 @@ public class Database {
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
-
+    static User user = new User();
 
 
     public Database() {
@@ -69,7 +69,7 @@ public class Database {
 
 
     public User rebuildUser(String username){
-        User user = new User();
+
         collectionReference_user.document(username)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
