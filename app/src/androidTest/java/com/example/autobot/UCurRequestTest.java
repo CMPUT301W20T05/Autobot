@@ -1,8 +1,6 @@
 package com.example.autobot;
 
-import android.app.Activity;
 import android.widget.EditText;
-import android.widget.RadioButton;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -24,7 +22,7 @@ public class UCurRequestTest {
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         solo.pressSpinnerItem(0,0);
-        solo.enterText((EditText) solo.getView(R.id.editText),"$10");
+        solo.enterText((EditText) solo.getView(R.id.textView),"$10");
         solo.clickOnButton(0);
     }
 

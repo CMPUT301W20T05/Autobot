@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/DriverAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
@@ -29,7 +29,7 @@
         android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/DriverAvatar"
         tools:ignore="MissingConstraints">
 
     </TextView>
@@ -160,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@color/red"
+        android:background="@drawable/button_red_style"
         android:text="@string/Continue"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
