@@ -1,28 +1,20 @@
 package com.example.autobot;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.location.Location;
-import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import android.content.Intent;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -34,7 +26,6 @@ import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
 import static com.android.volley.VolleyLog.TAG;
-
 
 /**
  * this class is the homepage activity
@@ -59,7 +50,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-        db = new Database();
+        db = BaseActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile
