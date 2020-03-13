@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,8 +10,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firestore.v1.StructuredQuery;
 
+import java.io.IOException;
 import java.text.ParseException;
+import java.util.Locale;
 
 public class OrderComplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -51,6 +55,13 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 
         LatLng destination = request.getDestination();
         LatLng origin = request.getBeginningLocation();
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            String oaddress = request.ReadableAddress(origin, geocoder);
+            String daddress = request.ReadableAddress(destination, geocoder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Destination.setText(String.valueOf(destination));
 
