@@ -60,7 +60,7 @@
             android:name=".DriverhomeActivity"
             android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
-        <activity android:name=".DriverIsOnTheWayActivity"
+        <activity android:name=".DriveIsGoing"
             android:parentActivityName=".DriverhomeActivity"/>
     </application>
 

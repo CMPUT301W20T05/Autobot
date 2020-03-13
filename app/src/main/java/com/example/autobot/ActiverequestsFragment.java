@@ -29,9 +29,11 @@ public class ActiverequestsFragment extends Fragment{
     //set the interface as listener
     OnBackPressed listener;
     FragmentManager fm;
+    ActiveRequestsAdapter adapter;
     public interface OnBackPressed {
         void hide();
         void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment);
+        void update_adapter(ActiveRequestsAdapter adapter);
     }
 
     public ActiverequestsFragment(ArrayList<Request> requests_list){
@@ -66,7 +68,9 @@ public class ActiverequestsFragment extends Fragment{
         //----------------------------------------------------
 
         //bound data and adapter to list view
-        requests_view.setAdapter(new ActiveRequestsAdapter(getActivity(),0,requests_list));
+        adapter = new ActiveRequestsAdapter(getActivity(),0,requests_list);
+        requests_view.setAdapter(adapter);
+        //adapter.notifyDataSetChanged();
 
         //set up list view listener
         rootView.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +94,9 @@ public class ActiverequestsFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(),requests_list.get(position).get_active_requset_tostring(),Toast.LENGTH_SHORT).show();
                 //show the detail of the clicked request
-                listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position))); }
+                listener.update_adapter(adapter);
+                listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position)));
+                ;}
         });
         return rootView;
     }

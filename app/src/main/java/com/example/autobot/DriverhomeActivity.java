@@ -52,11 +52,16 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     private String username;
     public static Database db;
     private static final String TAG = "DriverhomeActivity";
+    Fragment fragment;
+    ActiveRequestsAdapter adapter;
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requests_list = new ArrayList<Request>();
+        fragment = new ActiverequestsFragment(requests_list);
+        adapter = new ActiveRequestsAdapter(fragment.getActivity(),0,requests_list);
+        
         //load_user();
         setTitle("driver mode");
 
@@ -107,7 +112,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         //rise the show active requests fragment, manage the fragments activities----------------------
                         active_request_fm = getSupportFragmentManager();
                         int s = requests_list.size();
-                        Fragment fragment = new ActiverequestsFragment(requests_list);
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
                     }
@@ -134,8 +138,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     }
 
     //loading all the satisfied requests
-    public void load_requests(LatLng searchedLatLng){
+    public void load_requests(LatLng searchedLatLng) {
            requests_list.clear();
+           try{
+           User user3 = new User("jc");
+           Request active_request = new Request(user3);
+           requests_list.add(active_request);} catch (ParseException e){}
            db.collectionReference_request.get()
                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                        @Override
@@ -153,13 +161,18 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        String user_id = (String) document.get("Rider");
                                        //rebuild request from db
                                        Log.d("loc",request_id);
-                                       Request active_request = null;
                                        try {
-                                           active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                           //active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
+                                           //testing
+                                           User user3 = new User("jc");
+                                           Request active_request = new Request(user3);
+                                           requests_list.add(active_request);
+
+
                                        } catch (ParseException e) {
                                            e.printStackTrace();
                                        }
-                                       requests_list.add(active_request);
+                                       //requests_list.add(active_request);
                                    }
                                    //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                }
@@ -212,6 +225,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //-----------------------------------------
     @Override
     public void hide() {
+              active_request_fm.popBackStack();
               rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
     }
     @Override
@@ -235,6 +249,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public void update_adapter(ActiveRequestsAdapter adapter){
+        adapter.notifyDataSetChanged();
     }
     @Override
     public String getUsername() {
