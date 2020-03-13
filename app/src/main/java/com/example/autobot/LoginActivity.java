@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (Status.equals("Phone Number")){
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
+                
                         Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
                         query.get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
