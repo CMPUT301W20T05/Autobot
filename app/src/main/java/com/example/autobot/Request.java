@@ -131,9 +131,12 @@ public class Request implements Serializable {
     public LatLng getBeginningLocation(){return this.BeginningLocation;}
 
     public double EstimateCost(LatLng destination, LatLng beginningLocation){
-        double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
-        double estimateCost = 5 + distance * 0.05;
-        return estimateCost;
+        if (destination != null && beginningLocation != null) {
+            double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
+            double estimateCost = 5 + distance * 0.05;
+            return estimateCost;
+        }
+        return 0.0;
     }
     public double getEstimateCost() {
         return this.EstimateCost;
