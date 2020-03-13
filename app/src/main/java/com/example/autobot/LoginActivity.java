@@ -31,6 +31,7 @@ import java.util.List;
 /**
  * this is class for login activity
  * user can login our system using their phone number/user name/email account
+ * But email log in not complete
  */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
@@ -124,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                     intentHomePage.putExtra("User",Account);
+
                                                     startActivity(intentHomePage);
                                                 }
                                             }
