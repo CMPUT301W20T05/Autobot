@@ -199,11 +199,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        String theUserName = document.getData().get("Username").toString();
-                        String fullName = document.getData().get("FirstName").toString() + " " + document.getData().get("LastName").toString();
-                        TextView username = header.findViewById(R.id.user_name);
-                        username.setText(theUserName);
-                        name.setText(fullName);
+//                        String theUserName = document.getData().get("Username").toString();
+//                        String fullName = document.getData().get("FirstName").toString() + " " + document.getData().get("LastName").toString();
+//                        TextView username = header.findViewById(R.id.user_name);
+//                        username.setText(theUserName);
+//                        name.setText(fullName);
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());

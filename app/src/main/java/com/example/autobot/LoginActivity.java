@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
                                                         if (Type.equals("Rider")) {
                                                             Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
                                                             intentBasePage.putExtra("User",username);
-
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
 
