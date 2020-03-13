@@ -57,4 +57,8 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         db.add_new_user(newUser);
 
     }
+    @Override
+    public String getUsername() {
+        return username;
+    }
 }

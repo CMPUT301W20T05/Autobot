@@ -25,12 +25,14 @@ public class EditProfilePage extends Fragment {
     private EditText emailAddress;
     private EditText homeAddress;
     private EditText eContact;
+    private TextView userName;
     private Button btn;
     private EditProfilePageListener listener;
     private Database db;
 
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact);
+        String getUsername();
     }
 
     @Override
@@ -49,6 +51,8 @@ public class EditProfilePage extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_contact_infor_activity, container, false);
 
+
+        userName = view.findViewById(R.id.Username);
         firstName = view.findViewById(R.id.editTextFirstName);
         lastName = view.findViewById(R.id.editTextLastName);
         emailAddress = view.findViewById(R.id.editTextEmail);
@@ -56,6 +60,15 @@ public class EditProfilePage extends Fragment {
         eContact = view.findViewById(R.id.editTextEmergencyContact);
 
         db = HomePageActivity.db;
+        User user = db.rebuildUser(listener.getUsername());
+
+        userName.setText(user.getUsername());
+        firstName.setText(user.getFirstName());
+        lastName.setText(user.getLastName());
+        emailAddress.setText(user.getEmailAddress());
+        homeAddress.setText(user.getHomeAddress());
+        eContact.setText(user.getEmergencyContact());
+
 
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {

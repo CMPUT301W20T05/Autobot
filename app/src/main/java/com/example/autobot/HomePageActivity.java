@@ -175,8 +175,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         db.add_new_user(newUser);
 
     }
-
-
-
-
+    @Override
+    public String getUsername() {
+        return username;
+    }
 }

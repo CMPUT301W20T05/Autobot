@@ -49,11 +49,17 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
-
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

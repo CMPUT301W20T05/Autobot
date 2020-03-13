@@ -48,6 +48,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     View header;
     ArrayList<Request> requests_list;
     View rootView;
+    private String username;
+
     public static Database db;
     private static final String TAG = "DriverSearchActivity";
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         requests_list = new ArrayList<Request>();
         //load_user();
         setTitle("driver mode");
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("Username");
+        setProfile(username); // set profile
+        user = db.rebuildUser(username);
+
         //testing
         /*user = new User();
         user.setFirstName("jc");
@@ -207,16 +215,22 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     //for edit profile info
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) {
-        TextView name = findViewById(R.id.driver_name);
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
-        final Intent intent = getIntent();
-        user_id = intent.getStringExtra("User");
-        //User newUser = db.rebuildUser();
-        //newUser.setFirstName(FirstName);
-        //newUser.setLastName(LastName);
 
-        //db.add_new_user(newUser);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
+        newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
+        db.add_new_user(newUser);
+
+    }
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

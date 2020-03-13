@@ -83,4 +83,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         db.add_new_user(newUser);
 
     }
+    @Override
+    public String getUsername() {
+        return username;
+    }
 }

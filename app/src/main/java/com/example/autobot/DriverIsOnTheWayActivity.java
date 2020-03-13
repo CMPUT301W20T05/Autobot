@@ -36,7 +36,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
-        setProfile(username); // set profile
+        setProfile(username);         // set profile
         user = db.rebuildUser(username);
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
@@ -90,11 +90,17 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
-
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public String getUsername(){
+        return username;
     }
 }
