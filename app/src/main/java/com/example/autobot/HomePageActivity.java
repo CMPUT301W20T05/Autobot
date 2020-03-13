@@ -110,13 +110,12 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             public void onClick(View v) {
                 Request request = null;
                 try {
-                    request = new Request(user);
+                    request = new Request(user, origin, destination);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                request.setRider(user);
-                request.setDestination(destination);
-                request.setBeginningLocation(origin);
+//                request.setDestination(destination);
+//                request.setBeginningLocation(origin);
                 db.add_new_request(request);
                 String reID = request.getRequestID();
                 //next activity
