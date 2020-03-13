@@ -35,7 +35,8 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
 
-    public String userName;
+    private String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +83,14 @@ public class LoginActivity extends AppCompatActivity {
                                                             userName = username;  // set username to username
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
+
                                                             startActivity(intentHomePage);
                                                         }
                                                         else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                             intentHomePage.putExtra("User",username);
+                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                            intentBasePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
                                                         }
                                                     }
@@ -115,13 +119,18 @@ public class LoginActivity extends AppCompatActivity {
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
                                                 if (Type.equals("Rider")) {
+                                                    Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                    intentBasePage.putExtra("User",Account);
                                                     Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                     intentHomePage.putExtra("User",Account);
+
                                                     startActivity(intentHomePage);
                                                 }
                                                 else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                     intentHomePage.putExtra("User",Account);
+                                                    Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                    intentBasePage.putExtra("User",Account);
                                                     startActivity(intentHomePage);
                                                 }
                                             }

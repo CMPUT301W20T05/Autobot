@@ -22,6 +22,8 @@ public class User implements Driver, Rider , Serializable{
     private String UserType;
     private String FirstName;
     private String LastName;
+    private String EmergencyContact;
+    private String HomeAddress;
 
     public User(){
         this.Username = "";
@@ -29,9 +31,27 @@ public class User implements Driver, Rider , Serializable{
         this.Password = "";
         this.UserType = "";
         this.PhoneNumber = "";
+        this.EmergencyContact = "";
+        this.HomeAddress = "";
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
+    }
+
+    public String getEmergencyContact() {
+        return EmergencyContact;
+    }
+
+    public void setEmergencyContact(String emergencyContact) {
+        EmergencyContact = emergencyContact;
+    }
+
+    public String getHomeAddress() {
+        return HomeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        HomeAddress = homeAddress;
     }
 
     public String getFirstName() {
