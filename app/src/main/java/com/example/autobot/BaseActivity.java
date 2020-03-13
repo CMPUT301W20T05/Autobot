@@ -98,6 +98,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this is a class of base activity, it contains google map api, side bar, notifications and so on
@@ -203,6 +204,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
+
                             name.setText(fullName);
                         }
                         TextView username = header.findViewById(R.id.user_name);

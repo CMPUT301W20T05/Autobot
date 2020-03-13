@@ -25,11 +25,14 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.Arrays;
 
 import static android.os.AsyncTask.execute;
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this class is the homepage activity
@@ -41,7 +44,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     Button HPConfirmButton, HPDirectionButton;
     Database db;
     String username;
-    static User user;
+    User user;
 
     private static final String TAG = "HomePageActivity";
 
@@ -156,16 +159,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String PhoneNumber, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
-
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
-        newUser.setLastName(LastName);
-
-        db.add_new_user(newUser);
 
     }
 }
