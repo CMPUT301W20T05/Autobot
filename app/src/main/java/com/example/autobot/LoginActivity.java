@@ -36,7 +36,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
     public static Database db;
-    private String userName;
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,16 +79,18 @@ public class LoginActivity extends AppCompatActivity {
                                                     String TruePassword = document.get("Password").toString();
                                                     String Type = document.get("Type").toString();
                                                     String username = document.get("Username").toString();
+                                                    //get user infor from database
+                                                    user = db.rebuildUser(username);
                                                     if (TruePassword.equals(Password)){
                                                         // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                            intentHomePage.putExtra("User",username);
+                                                            //intentHomePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
                                                         }
                                                         else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                            intentHomePage.putExtra("User",username);
+                                                            //intentHomePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
                                                         }
                                                     }
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists()){
-                                            userName = Account; // set username to username
+                                            String userName = Account; // set username to username
                                             String RightPassword = documentSnapshot.getString("Password");
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {

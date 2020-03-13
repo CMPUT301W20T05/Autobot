@@ -31,18 +31,19 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         db = HomePageActivity.db;
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
-        reID = intent.getStringExtra("reid");
+        //username = intent.getStringExtra("Username");
+        //reID = intent.getStringExtra("reid");
+
+        //get user from firebase
+        //user = db.rebuildUser(username);
+        user = HomePageActivity.user;
+        username = user.getUsername();
+        //get request from firebase
+        //request = db.rebuildRequest(reID, user);
+        request = HomePageActivity.request;
+        reID = request.getRequestID();
 
         setProfile(username); // set profile
-        //get user from firebase
-        user = db.rebuildUser(username);
-        //get request from firebase
-        try {
-            request = db.rebuildRequest(reID, user);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         findViewById(R.id.myMap).setVisibility(View.GONE);
 
@@ -73,18 +74,22 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         Skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //next activity
-                Intent intentHomePage = new Intent(RateDriver.this, HomePageActivity.class);
-                startActivity(intentHomePage);
+                //go back to home page
+                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+//                                finishRequest.putExtra("Username",user.getUsername());
+//                                finishRequest.putExtra("reid",request.getRequestID());
+                startActivity(finishRequest);
             }
         });
 
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //next activity
-                Intent intentHomePage = new Intent(RateDriver.this, HomePageActivity.class);
-                startActivity(intentHomePage);
+                //go back to home page
+                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+//                                finishRequest.putExtra("Username",user.getUsername());
+//                                finishRequest.putExtra("reid",request.getRequestID());
+                startActivity(finishRequest);
             }
         });
     }
