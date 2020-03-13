@@ -166,9 +166,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // get navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header = navigationView.getHeaderView(0); // get header of the navigation view
-        name = header.findViewById(R.id.driver_name);
-        name.setText("Edit your Name");
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -192,7 +189,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
-        name.setText("Edit your Name");
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -204,8 +200,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
+                        String fullName = document.getData().get("FirstName").toString() + " " + document.getData().get("LastName").toString();
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
+                        name.setText(fullName);
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());

@@ -24,7 +24,6 @@ public class Database {
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
-    static User user = new User();
 
 
 
@@ -72,26 +71,29 @@ public class Database {
 
 
     public User rebuildUser(String username){
+        User user = new User();
         collectionReference_user.document(username)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
-                        user.setFirstName((String) documentSnapshot.get("FirstName"));
-                        user.setLastName((String) documentSnapshot.get("LastName"));
-                        System.out.println(documentSnapshot.get("CurrentLocation"));
-                        double Lat = Double.valueOf((String) documentSnapshot.get("CurrentLocationLat"));
-                        double Lnt = Double.valueOf((String) documentSnapshot.get("CurrentLocationLnt"));
-                        LatLng CurrentLocation = new LatLng(Lat, Lnt);
-                        user.updateCurrentLocation(CurrentLocation);
-                        user.setPassword((String) documentSnapshot.get("Password"));
-                        user.setHomeAddress((String) documentSnapshot.get("EmergencyContact") );
-                        user.setEmergencyContact((String) documentSnapshot.get("HomeAddress"));
-                        user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
-                        user.setStars(Double.valueOf((String) documentSnapshot.get("StarsRate")));
-                        user.setUserType((String) documentSnapshot.get("Type"));
-                        user.setUsername((String) documentSnapshot.get("Username"));
+                        if (documentSnapshot.exists()) {
+                            user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
+                            user.setFirstName((String) documentSnapshot.get("FirstName"));
+                            user.setLastName((String) documentSnapshot.get("LastName"));
+                            System.out.println(documentSnapshot.get("CurrentLocation"));
+                            double Lat = Double.valueOf((String) documentSnapshot.get("CurrentLocationLat"));
+                            double Lnt = Double.valueOf((String) documentSnapshot.get("CurrentLocationLnt"));
+                            LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                            user.updateCurrentLocation(CurrentLocation);
+                            user.setPassword((String) documentSnapshot.get("Password"));
+                            user.setHomeAddress((String) documentSnapshot.get("EmergencyContact"));
+                            user.setEmergencyContact((String) documentSnapshot.get("HomeAddress"));
+                            user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
+                            user.setStars(Double.valueOf((String) documentSnapshot.get("StarsRate")));
+                            user.setUserType((String) documentSnapshot.get("Type"));
+                            user.setUsername((String) documentSnapshot.get("Username"));
+                        }
                     }
                 });
         return user;
