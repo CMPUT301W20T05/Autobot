@@ -1,7 +1,9 @@
 package com.example.autobot;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,22 +16,36 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 import static com.android.volley.VolleyLog.TAG;
+import static java.text.SimpleDateFormat.*;
 
-public class Database {
+public class Database{
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
+    User user = new User("");
 
 
     public Database() {
+        FirebaseFirestore.getInstance().clearPersistence();
         db = FirebaseFirestore.getInstance();
+        // to disable clean-up.
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .build();
+
+        db.setFirestoreSettings(settings);
         collectionReference_user = db.collection("users");
         collectionReference_request = db.collection("Request");
     }
@@ -40,9 +56,6 @@ public class Database {
      * if username exist, the new information will cover the old information.
      * @param user
      */
-
-
-
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
         user_data.put("Username", user.getUsername());
@@ -90,36 +103,35 @@ public class Database {
      */
 
     public User rebuildUser(String username){
-        User user = new User();
-        collectionReference_user
-                .whereEqualTo("Username", username)
-                .get()
+        user.setUsername(username);
+        Query query = collectionReference_user.whereEqualTo("Username", username);
+        query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                //user = document.toObject(User.class);
-                                user.setEmailAddress((String) document.get("EmailAddress"));
-                                user.setFirstName((String) document.get("FirstName"));
-                                user.setLastName((String) document.get("LastName"));
-                                System.out.println(document.get("CurrentLocation"));
-                                double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
-                                double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
-                                LatLng CurrentLocation = new LatLng(Lat, Lnt);
-                                user.updateCurrentLocation(CurrentLocation);
-                                user.setEmergencyContact((String) document.get("EmergencyContact"));
-                                user.setHomeAddress((String) document.get("HomeAddress"));
-                                user.setPassword((String) document.get("Password"));
-                                user.setPhoneNumber((String) document.get("PhoneNumber"));
-                                user.setStars(Double.valueOf((String) document.get("StarsRate")));
-                                user.setUserType((String) document.get("Type"));
-                                user.setUsername((String) document.get("Username"));
-                            }
-
-                        } else {
+                            if (task.getResult().size() != 0) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    user.setEmailAddress((String) document.get("EmailAddress"));
+                                    user.setFirstName((String) document.get("FirstName"));
+                                    user.setLastName((String) document.get("LastName"));
+                                    System.out.println(document.get("CurrentLocation"));
+                                    double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                    double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                    LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                    user.updateCurrentLocation(CurrentLocation);
+                                    user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                    user.setHomeAddress((String) document.get("HomeAddress"));
+                                    user.setPassword((String) document.get("Password"));
+                                    user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                    user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                    user.setUserType((String) document.get("Type"));
+                                    user.setUsername((String) document.get("Username"));
+                                }
+                            } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
                         }
                     }
                 });
@@ -138,14 +150,13 @@ public class Database {
         request_data.put("Rider",request.getRider().getUsername());
         request_data.put("DestinationLat",String.valueOf(request.getDestination().latitude));
         request_data.put("DestinationLnt",String.valueOf(request.getDestination().longitude));
-
         request_data.put("BeginningLocationLat",String.valueOf(request.getBeginningLocation().latitude));
         request_data.put("BeginningLocationLnt",String.valueOf(request.getBeginningLocation().longitude));
-
         request_data.put("RequestID",request.getRequestID());
-        request_data.put("SendTime",request.getSendDate().toString());
-        request_data.put("AcceptTime",null);
-        request_data.put("ArriveTime",null);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        request_data.put("SendTime",formatter.format(request.getSendDate()));
+        request_data.put("AcceptTime",formatter.format(request.getAcceptTime()));
+        request_data.put("ArriveTime",formatter.format(request.getArriveTime()));
         //request_data.put("CurrentLocation",)
         request_data.put("RequestStatus",request.getStatus());
         request_data.put("EstimateCost","0");
@@ -175,7 +186,7 @@ public class Database {
      * @param user
      * @return r is the all information of request that can be used from other class
      */
-    public Request rebuildRequest(long RequestID, User user){
+    public Request rebuildRequest(String RequestID, User user) throws ParseException {
         Request r = new Request(user);
         collectionReference_request.document(String.valueOf(RequestID))
                 .get()
@@ -191,13 +202,43 @@ public class Database {
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
                        r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
-                       r.resetSendTime((Date)documentSnapshot.get("SendTime"));
-                       r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                       r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
-                       r.setRequestID((String)documentSnapshot.get("ID"));
+
+                       SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                        try {
+                            r.resetAcceptTime(formatter.parse((String) documentSnapshot.get("AcceptTime")));
+                            r.resetArriveTime(formatter.parse((String) documentSnapshot.get("ArriveTime")));
+                            r.resetSendTime(formatter.parse((String) documentSnapshot.get("SendTime")));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
+                        r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
+                        r.setRequestID((String)documentSnapshot.get("ID"));
                     }
                 });
         return r;
+    }
+    public void CancelRequest(String requestID){
+        collectionReference_request.document(requestID)
+                .delete()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data deleting failed" + e.toString());
+                    }
+                });
+
+    }
+
+    public void CancelUser(String username){
+        collectionReference_user.document(username)
+                .delete()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data deleting failed" + e.toString());
+                    }
+                });
     }
 
 

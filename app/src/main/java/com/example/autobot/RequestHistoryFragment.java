@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,26 @@ import androidx.fragment.app.Fragment;
 
 public class RequestHistoryFragment extends Fragment {
 
-    ListView requestList;
-    ArrayAdapter<HistoryRequest> mAdapter;
-    ArrayList<HistoryRequest> mDataList;
+    private ListView requestList;
+    private ArrayAdapter<HistoryRequest> mAdapter;
+    private ArrayList<HistoryRequest> mDataList;
+    private RequestHistoryListener listener;
+    private Database db;
 
+    public interface RequestHistoryListener {
+        String getUsername();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof RequestHistoryListener) {
+            listener = (RequestHistoryListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement RequestHistoryListener");
+        }
+    }
     // use temp data first, later use database's data
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  //format for the date
@@ -50,6 +67,10 @@ public class RequestHistoryFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
+
+        db = HomePageActivity.db;
+        User user = db.rebuildUser(listener.getUsername());
+
 
         requestList = (ListView) view.findViewById(R.id.requests_list);
 
