@@ -27,13 +27,21 @@ public class Database {
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
 
+
     public Database() {
         db = FirebaseFirestore.getInstance();
         collectionReference_user = db.collection("users");
         collectionReference_request = db.collection("Request");
     }
 
-    //    CollectionReference collectionReference_request;
+    /**
+     * This function is to add and edit user information and store them to firestone.
+     * The primary key is username, if username not exist, will add a new user document
+     * if username exist, the new information will cover the old information.
+     * @param user
+     */
+
+
 
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
@@ -65,10 +73,21 @@ public class Database {
                     }
                 });
     }
+
+    /**
+     * This is for get DocumentReference from username
+     * @param username
+     * @return the documentReference
+     */
     public DocumentReference getRef(String username) {
         return this.collectionReference_user.document(username);
     }
 
+    /**
+     * This function is to get the all information by the username
+     * @param username
+     * @return the User that include all information
+     */
 
     public User rebuildUser(String username){
         User user = new User();
@@ -90,6 +109,8 @@ public class Database {
                                 double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
                                 LatLng CurrentLocation = new LatLng(Lat, Lnt);
                                 user.updateCurrentLocation(CurrentLocation);
+                                user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                user.setHomeAddress((String) document.get("HomeAddress"));
                                 user.setPassword((String) document.get("Password"));
                                 user.setPhoneNumber((String) document.get("PhoneNumber"));
                                 user.setStars(Double.valueOf((String) document.get("StarsRate")));
@@ -102,9 +123,10 @@ public class Database {
                         }
                     }
                 });
-
         return user;
     }
+
+    
     public void add_new_request(Request request){
         HashMap<String,String> request_data = new HashMap<>();
         request_data.put("Rider",request.getRider().getUsername());

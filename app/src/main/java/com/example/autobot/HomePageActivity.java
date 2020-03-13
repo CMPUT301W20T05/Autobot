@@ -34,6 +34,7 @@ import java.util.Arrays;
 import static android.os.AsyncTask.execute;
 import static com.android.volley.VolleyLog.TAG;
 
+
 /**
  * this class is the homepage activity
  */
@@ -73,7 +74,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         //get user infor from database
         user = db.rebuildUser(username);
-
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -165,4 +165,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         name.setText(fullName);
 
     }
+
+
 }
