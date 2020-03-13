@@ -1,13 +1,22 @@
 package com.example.autobot;
 
 import android.location.Location;
+import android.util.Log;
+import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,12 +36,11 @@ public class Request implements Serializable {
     private double EstimateCost;
     private String RequestStatus;
     private Date ArriveTime;
-    private long RequestID;
-    private static ArrayList<String> requestStatusList = new ArrayList<String>();;
+    private String RequestID;
+    private ArrayList<String> requestStatusList;
 
-
-    public Request(){
-        this.Rider = null;
+    public Request(User user) {
+        this.Rider = user;
         this.Destination = null;
         this.BeginningLocation = null;
         this.SendTime = new Date();
@@ -45,43 +53,33 @@ public class Request implements Serializable {
         this.SendTime = new Date(System.currentTimeMillis());
         this.AcceptTime = null;
         this.ArriveTime = null;
-        this.EstimateCost = EstimateCost(this.Destination,this.BeginningLocation);
-        generateRequestID();
-
-
+        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
+        this.RequestID = generateRequestID();
 
     }
-    public Date getSendDate(){
+
+    public Date getSendDate() {
         return this.SendTime;
     }
-    public void generateRequestID(){
-        Database db = new Database();
-        final boolean[] judge = {true};
-        //while (judge[0]){
-            final double d = Math.random();
-            final long ID = (long)(d*1000000000);
-            db.collectionReference_request.document(String.valueOf(ID)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                    }else{
-                        judge[0] = false;
-                        setRequestID(ID);
-                    }
-                }
-            });
-        //}
 
+
+    public String generateRequestID() {
+        String ID = this.Rider.getUsername()+this.SendTime.toString();
+        return ID;
     }
+
+
+
+
+
+
     public void setRider(User user){
         this.Rider = user;
     }
 
-    public void setRequestID(long ID){
-        this.RequestID = ID;
-    }
+
     public String getRequestID(){
-        return String.valueOf(this.RequestID);
+        return this.RequestID;
     }
     public User getRider(){
         return this.Rider;
@@ -92,6 +90,9 @@ public class Request implements Serializable {
     }
     public User getDriver(){
         return this.Driver;
+    }
+    public void setRequestID(String ID){
+        this.RequestID = ID;
     }
 
     public void setDestination(LatLng destination){

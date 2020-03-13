@@ -1,16 +1,21 @@
 package com.example.autobot;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -23,14 +28,20 @@ public class Database {
     public CollectionReference collectionReference_request;
 
 
-
     public Database() {
         db = FirebaseFirestore.getInstance();
         collectionReference_user = db.collection("users");
         collectionReference_request = db.collection("Request");
     }
 
-    //    CollectionReference collectionReference_request;
+    /**
+     * This function is to add and edit user information and store them to firestone.
+     * The primary key is username, if username not exist, will add a new user document
+     * if username exist, the new information will cover the old information.
+     * @param user
+     */
+
+
 
     public void add_new_user(User user) {
         HashMap<String,String> user_data = new HashMap<>();
@@ -42,6 +53,8 @@ public class Database {
         user_data.put("StarsRate", user.getStars().toString());
         user_data.put("Type", user.getUserType());
         user_data.put("Password",user.getPassword());
+        user_data.put("EmergencyContact",user.getEmergencyContact());
+        user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
         collectionReference_user
@@ -60,43 +73,60 @@ public class Database {
                     }
                 });
     }
+
+    /**
+     * This is for get DocumentReference from username
+     * @param username
+     * @return the documentReference
+     */
     public DocumentReference getRef(String username) {
         return this.collectionReference_user.document(username);
     }
 
+    /**
+     * This function is to get the all information by the username
+     * @param username
+     * @return the User that include all information
+     */
 
     public User rebuildUser(String username){
         User user = new User();
-        collectionReference_user.document(username)
+        collectionReference_user
+                .whereEqualTo("Username", username)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        user.setEmailAddress((String) documentSnapshot.get("EmailAddress"));
-                        user.setFirstName((String) documentSnapshot.get("FirstName"));
-                        user.setLastName((String) documentSnapshot.get("LastName"));
-                        System.out.println(documentSnapshot.get("CurrentLocation"));
-                        double Lat = Double.valueOf((String)documentSnapshot.get("CurrentLocationLat"));
-                        double Lnt = Double.valueOf((String)documentSnapshot.get("CurrentLocationLnt"));
-                        LatLng CurrentLocation = new LatLng(Lat,Lnt);
-                        user.updateCurrentLocation(CurrentLocation);
-                        user.setPassword((String) documentSnapshot.get("Password"));
-                        user.setPhoneNumber((String) documentSnapshot.get("PhoneNUmber"));
-                        user.setStars(Double.valueOf((String)documentSnapshot.get("StarsRate")));
-                        user.setUserType((String) documentSnapshot.get("Type"));
-                        user.setUsername((String) documentSnapshot.get("Username"));
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                //user = document.toObject(User.class);
+                                user.setEmailAddress((String) document.get("EmailAddress"));
+                                user.setFirstName((String) document.get("FirstName"));
+                                user.setLastName((String) document.get("LastName"));
+                                System.out.println(document.get("CurrentLocation"));
+                                double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                user.updateCurrentLocation(CurrentLocation);
+                                user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                user.setHomeAddress((String) document.get("HomeAddress"));
+                                user.setPassword((String) document.get("Password"));
+                                user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                user.setUserType((String) document.get("Type"));
+                                user.setUsername((String) document.get("Username"));
+                            }
 
-
-
-
-
-
-
-
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
                     }
                 });
         return user;
     }
+
+    
     public void add_new_request(Request request){
         HashMap<String,String> request_data = new HashMap<>();
         request_data.put("Rider",request.getRider().getUsername());
@@ -114,6 +144,8 @@ public class Database {
         request_data.put("RequestStatus",request.getStatus());
         request_data.put("EstimateCost","0");
         request_data.put("Driver","");
+        request_data.put("ID",request.getRequestID());
+
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -130,8 +162,8 @@ public class Database {
                 });
 
     }
-    public Request rebuildRequest(long RequestID){
-        Request r = new Request();
+    public Request rebuildRequest(long RequestID, User user){
+        Request r = new Request(user);
         collectionReference_request.document(String.valueOf(RequestID))
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -142,23 +174,14 @@ public class Database {
                         LatLng Destination = new LatLng(Double.valueOf((String)documentSnapshot.get("DestinationLat")),Double.valueOf((String)documentSnapshot.get("DestinationLnt")));
                        r.setDestination(Destination);
                        r.setDriver(rebuildUser((String) documentSnapshot.get("Driver")));
-                       r.setRequestID((Long) documentSnapshot.get("RequestID"));
+                       r.setRequestID((String) documentSnapshot.get("RequestID"));
                        r.setRider(rebuildUser((String)documentSnapshot.get("Rider")));
                        r.resetAcceptTime((Date)documentSnapshot.get("AcceptTime"));
                        r.resetArriveTime((Date)documentSnapshot.get("ArriveTime"));
                        r.resetSendTime((Date)documentSnapshot.get("SendTime"));
                        r.resetRequestStatus((String) documentSnapshot.get("RequestStatus"));
-                       r.resetEstimateCost((Double)documentSnapshot.get("EstimateCost"));
-
-
-
-
-
-
-
-
-
-
+                       r.resetEstimateCost(Double.valueOf((String)documentSnapshot.get("EstimateCost")));
+                       r.setRequestID((String)documentSnapshot.get("ID"));
                     }
                 });
         return r;

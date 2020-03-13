@@ -28,11 +28,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-
+/**
+ * this is class for login activity
+ * user can login our system using their phone number/user name/email account
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
 
-    public String userName;
+    private String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (Status.equals("Phone Number")){
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
-                        //testing------------------------
-                        Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                        intentHomePage.putExtra("User","jjjj");
-                        startActivity(intentHomePage);
-                        //------------------------------
+                
                         Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
                         query.get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -79,17 +79,20 @@ public class LoginActivity extends AppCompatActivity {
                                                     String Type = document.get("Type").toString();
                                                     String username = document.get("Username").toString();
                                                     if (TruePassword.equals(Password)){
+                                                        // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
-                                                            userName = username;  // set username to username
+                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                            intentBasePage.putExtra("User",username);
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             intentHomePage.putExtra("User",username);
+
                                                             startActivity(intentHomePage);
                                                         }
                                                         else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                             intentHomePage.putExtra("User",username);
-                                                            Intent intentBase = new Intent(LoginActivity.this, BaseActivity.class);
-                                                            intentBase.putExtra("User",username);
+                                                            Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                            intentBasePage.putExtra("User",username);
                                                             startActivity(intentHomePage);
                                                         }
                                                     }
@@ -118,13 +121,18 @@ public class LoginActivity extends AppCompatActivity {
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
                                                 if (Type.equals("Rider")) {
+                                                    Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                    intentBasePage.putExtra("User",Account);
                                                     Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                     intentHomePage.putExtra("User",Account);
+
                                                     startActivity(intentHomePage);
                                                 }
                                                 else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                     intentHomePage.putExtra("User",Account);
+                                                    Intent intentBasePage = new Intent(LoginActivity.this, BaseActivity.class);
+                                                    intentBasePage.putExtra("User",Account);
                                                     startActivity(intentHomePage);
                                                 }
                                             }
