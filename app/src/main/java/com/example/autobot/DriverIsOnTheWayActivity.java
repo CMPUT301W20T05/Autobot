@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+
+import java.text.ParseException;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -38,7 +42,11 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //get user from firebase
         user = db.rebuildUser(username);
         //get request from firebase
-        request = db.rebuildRequest(reID, user);
+        try {
+            request = db.rebuildRequest(reID, user);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -92,17 +100,30 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                         });
 
                 alert.show();
-                //when request condition changes to "accept" go to next activity
-                //should be request delete
-                Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-                intentOrderComplete.putExtra("Username",username);
-                intentOrderComplete.putExtra("reid",reID);
-                startActivity(intentOrderComplete);
+
             }
         });
 
         //when driver arrived, show notification
         sendOnChannel();
+
+        //when request condition changes to "accept" go to next activity
+        String requestState = request.getStatus();
+        final Handler handler = new Handler();
+        for (!requestState.equals("Request Accepted")) {
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                }
+            }, 3000);
+        }
+        if (requestState.equals("Request Accepted")) {
+            Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+            intentOrderComplete.putExtra("Username",username);
+            intentOrderComplete.putExtra("reid",reID);
+            startActivity(intentOrderComplete);
+
     }
 
     @Override
