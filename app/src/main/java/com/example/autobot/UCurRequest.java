@@ -9,11 +9,17 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.protobuf.StringValue;
+
+import java.text.ParseException;
+
 public class UCurRequest extends BaseActivity implements EditProfilePage.EditProfilePageListener{
     private Button CurRequestConfirm;
     private Database db;
     private String username;
-    protected static User user;
+    private User user;
+    private Request request;
+    private String reID;
     static double distance;
     public double fare;
     public String model;
@@ -31,11 +37,22 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         db = HomePageActivity.db;
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
+        reID = intent.getStringExtra("reid");
+
         setProfile(username); // set profile
-        //user = db.rebuildUser(username);
+        //get user from firebase
+        user = db.rebuildUser(username);
+        //get request from firebase
+        try {
+            request = db.rebuildRequest(reID, user);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //calculate estimated fare
-        //EstimatedFare.setText(...);
+        double estimateFare = request.getEstimateCost();
+        EstimatedFare.setText(String.valueOf(estimateFare));
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Models, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modelTochoose.setAdapter(adapter);
@@ -70,6 +87,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
             public void onClick(View v) {
                 Intent intentCancelRequest = new Intent(UCurRequest.this, DriverIsOnTheWayActivity.class);
                 intentCancelRequest.putExtra("Username",username);
+                intentCancelRequest.putExtra("reid",reID);
                 startActivity(intentCancelRequest);
             }
         });

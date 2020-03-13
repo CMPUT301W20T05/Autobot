@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.Inflater;
 
-public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress{
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
     private User user;
     private String user_id;
     String phone_num;
@@ -51,7 +51,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     View rootView;
     private String username;
     public static Database db;
-    private static final String TAG = "DriverSearchActivity";
+    private static final String TAG = "DriverhomeActivity";
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //load_user();
         setTitle("driver mode");
 
-        db = BaseActivity.db;
+        db = new Database();
         Intent intent = getIntent();
         username = intent.getStringExtra("User");
         setProfile(username); // set profile
@@ -197,7 +197,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //db.add_new_request(request);
 
 
+
         DriveIsGoing.request = request;
+
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         startActivity(intent);

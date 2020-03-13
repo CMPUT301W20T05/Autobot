@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.text.ParseException;
 
 /**
  * This is a class for RateDriver activity
@@ -18,6 +19,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     private Database db;
     private String username;
     private User user;
+    private Request request;
+    private String reID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,17 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
+        reID = intent.getStringExtra("reid");
+
         setProfile(username); // set profile
+        //get user from firebase
         user = db.rebuildUser(username);
+        //get request from firebase
+        try {
+            request = db.rebuildRequest(reID, user);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         findViewById(R.id.myMap).setVisibility(View.GONE);
 
@@ -86,6 +98,9 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         User newUser = db.rebuildUser(username);
         newUser.setFirstName(FirstName);
         newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
 
         db.add_new_user(newUser);
 
