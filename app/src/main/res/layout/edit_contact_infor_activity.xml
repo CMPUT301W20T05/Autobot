@@ -124,7 +124,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/setFare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -143,7 +143,7 @@
         android:textColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/setFare"
         android:singleLine="true"/>
 
     <TextView
@@ -173,10 +173,11 @@
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginTop="32dp"
-        android:background="@color/red"
+        android:background="@drawable/button_red_style"
         android:text="@string/confirm"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextHomeAddress" />
 

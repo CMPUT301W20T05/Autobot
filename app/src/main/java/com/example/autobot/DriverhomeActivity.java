@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 public class DriverhomeActivity extends BaseActivity {
     private User user;
     String phone_num;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

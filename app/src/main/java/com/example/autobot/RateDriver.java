@@ -1,6 +1,5 @@
 package com.example.autobot;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,12 +22,12 @@ public class RateDriver extends BaseActivity {
         View rootView = getLayoutInflater().inflate(R.layout.rate_driver, frameLayout);
         findViewById(R.id.myMap).setVisibility(View.GONE);
 
-        ImageView Selfie = findViewById(R.id.imageView);
+        ImageView Selfie = findViewById(R.id.DriverAvatar);
         TextView Driver = findViewById(R.id.Driver_name);
         Button Profile = findViewById(R.id.see_profile);
         EditText Comment = findViewById(R.id.comment);
         Button Skip = findViewById(R.id.skip);
-        Button Confirm = findViewById(R.id.button2);
+        Button Confirm = findViewById(R.id.confirmFee);
 
         Selfie.setOnClickListener(new View.OnClickListener() {
             @Override

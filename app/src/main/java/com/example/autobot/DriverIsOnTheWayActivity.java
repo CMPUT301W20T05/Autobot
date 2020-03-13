@@ -32,7 +32,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
         Button buttonCancelOrder = findViewById(R.id.cancel_order);
 
-        final String phoneNumber = null;
+        //need to connect to firebase to get phone number
+        final String phoneNumber = "5875576400";
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
