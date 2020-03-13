@@ -1,5 +1,7 @@
 package com.example.autobot;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -151,6 +154,18 @@ public class Request implements Serializable {
         this.EstimateCost = cost;
     }
     public String getStatus(){return this.RequestStatus;}
+    public String ReadableAddress(LatLng location, Geocoder geocoder) throws IOException {
+        double lat = location.latitude;
+        double lnt = location.longitude;
+        List<Address> addresses;
+        addresses = geocoder.getFromLocation(lat, lnt, 1);
+        return addresses.get(0).getAddressLine(0)
+                +addresses.get(0).getLocality()
+                +addresses.get(0).getLocality()
+                +addresses.get(0).getCountryName()
+                +addresses.get(0).getPostalCode()
+                +addresses.get(0).getFeatureName();
+    }
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();
     //}
