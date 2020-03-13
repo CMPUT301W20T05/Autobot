@@ -146,6 +146,10 @@ public class User implements Driver, Rider, Serializable {
         request.setDriver(this);
     }
 
+
+
+
+
     @Override
     public void ScanQRcode(int QRcode) {
 
@@ -156,8 +160,12 @@ public class User implements Driver, Rider, Serializable {
 
     }
 
+
+
     @Override
     public int GanerateQRcode() {
         return 0;
     }
+
+
 }
