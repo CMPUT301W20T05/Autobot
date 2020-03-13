@@ -1,5 +1,7 @@
 package com.example.autobot;
 
+import android.widget.EditText;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -18,7 +20,19 @@ public class DriverIsOnTheWayTest {
 
     @Before
     public void setUp() throws Exception{
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        //This method used to create the solo object with instrumentation and activity as arguments
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        //LoginActivity steps
+        solo.enterText((EditText) solo.getView(R.id.editAccount), "111");
+        solo.enterText((EditText) solo.getView(R.id.editTextConfirmPassword), "1zZ.");
+        solo.clickOnButton("Log in");
+        //HomePageActivity steps
+        //seaechbar fill in
+        solo.clickOnButton("Direction");
+        solo.clickOnButton("Confirm Request");
+        //CurRequestActivity
+        solo.pressSpinnerItem(0,0);
+        solo.clickOnButton("Confirm");
 
     }
 

@@ -20,10 +20,19 @@ public class UCurRequestTest {
 
     @Before
     public void setup() throws Exception{
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        //This method used to create the solo object with instrumentation and activity as arguments
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        //LoginActivity steps
+        solo.enterText((EditText) solo.getView(R.id.editAccount), "111");
+        solo.enterText((EditText) solo.getView(R.id.editTextConfirmPassword), "1zZ.");
+        solo.clickOnButton("Log in");
+        //HomePageActivity steps
+        //seaechbar fill in
+        solo.clickOnButton("Direction");
+        solo.clickOnButton("Confirm Request");
+        //CurRequestActivity
         solo.pressSpinnerItem(0,0);
-        solo.enterText((EditText) solo.getView(R.id.textView),"$10");
-        solo.clickOnButton(0);
+
     }
 
     @Test

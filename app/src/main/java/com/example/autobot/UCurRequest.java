@@ -8,13 +8,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class UCurRequest extends BaseActivity implements AdapterView.OnItemSelectedListener {
+public class UCurRequest extends BaseActivity {
 
     static double distance;
-    private String model;
     public double fare;
+    public String model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -33,15 +32,30 @@ public class UCurRequest extends BaseActivity implements AdapterView.OnItemSelec
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Models, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modelTochoose.setAdapter(adapter);
-        modelTochoose.setOnItemSelectedListener(this);
 
-        if (model.equals("Normal")){
-            fare = 5 + 2 * distance;
-        }else if(model.equals("Pleasure")){
-            fare = 8+ 2 * distance;
-        }else{
-            fare = 10 + 2 * distance;
-        }
+        modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                model = parent.getItemAtPosition(position).toString();
+                adapter.notifyDataSetChanged();
+                if ("Normal".equals(model)){
+                    fare = 5 + 2 * 10;
+                }else if("Pleasure".equals(model)){
+                    fare = 8+ 2 * 10;
+                }else{
+                    fare = 10 + 2 * 10;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                model = "Normal";
+                fare = 5 + 2 * 10;
+            }
+        });
+
+        //Toast.makeText(UCurRequest,String.valueOf(distance),Toast.LENGTH_SHORT).show();
+
         EstimatedFare.setText(String.valueOf(fare));
 
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
@@ -51,15 +65,5 @@ public class UCurRequest extends BaseActivity implements AdapterView.OnItemSelec
                 startActivity(intentCancelRequest);
             }
         });
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        model = parent.getItemAtPosition(position).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }

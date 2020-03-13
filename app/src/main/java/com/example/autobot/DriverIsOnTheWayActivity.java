@@ -1,22 +1,16 @@
 package com.example.autobot;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class DriverIsOnTheWayActivity extends BaseActivity {
 
@@ -61,7 +55,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
             public void onClick(View v) {
                 //temporary go to next activity
                 //should be request delete
-                Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, TripComplete.class);
                 startActivity(intentOrderComplete);
             }
         });
