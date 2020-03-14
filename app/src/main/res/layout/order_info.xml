@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-<<<<<<< HEAD
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="400dp"
@@ -17,8 +16,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-=======
->>>>>>> d63023d11b64b957120021565f8c21ab1f42e9b7
 
     <ImageView
         android:id="@+id/imageViewAvatar"
