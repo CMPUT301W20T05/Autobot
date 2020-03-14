@@ -68,6 +68,8 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
                 listener.back_press();
             }
         });
+
+
         return rootView;
     }
 }
