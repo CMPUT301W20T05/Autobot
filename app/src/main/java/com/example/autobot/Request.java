@@ -134,7 +134,7 @@ public class Request implements Serializable {
         double estimateCost = 0.0;
         if (destination != null && beginningLocation != null) {
             double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
-            estimateCost = 5 + distance * 0.05;
+            estimateCost = 5.0 + distance * 0.01;
         }
         this.EstimateCost = estimateCost;
     }

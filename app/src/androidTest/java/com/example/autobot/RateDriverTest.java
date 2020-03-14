@@ -22,6 +22,7 @@ public class RateDriverTest {
     public void setUp() throws Exception{
         //This method used to create the solo object with instrumentation and activity as arguments
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+
         solo.enterText((EditText) solo.getView(R.id.comment), "Good");
     }
 
