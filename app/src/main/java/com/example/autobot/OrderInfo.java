@@ -79,7 +79,7 @@ public class OrderInfo extends BaseActivity {
         //distance from current to destination
         //ApproDist
         //ApproPrice = EstimateCost()
-        
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
