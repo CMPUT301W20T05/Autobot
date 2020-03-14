@@ -28,10 +28,10 @@ public class PaymentCard {
     void setBillingAddress(String b) {this.billingAddress = b;}
     void setPostalCode(String p) {this.postalCode = p;}
 
-    Long getCardNumber() { return this.cardNumber; }  // can get the value using these getter
-    String getHoldName() { return this.holdName; }
-    Date getExpireDate() { return this.expireDate; }
-    int getCardLogo() { return this.cardLogo; }
-    String getBillingAddress() { return this.billingAddress;}
-    String getPostalCode() {return this.postalCode;}
+    public Long getCardNumber() { return this.cardNumber; }  // can get the value using these getter
+    public String getHoldName() { return this.holdName; }
+    public Date getExpireDate() { return this.expireDate; }
+    public int getCardLogo() { return this.cardLogo; }
+    public String getBillingAddress() { return this.billingAddress;}
+    public String getPostalCode() {return this.postalCode;}
 }

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class LoginTest {
+public class  LoginTest {
     private Solo solo;
 
     @Rule
@@ -21,8 +21,9 @@ public class LoginTest {
     @Before
     public void setup() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        solo.enterText((EditText) solo.getView(R.id.editAccount), "111");
-        solo.enterText((EditText) solo.getView(R.id.editTextConfirmPassword), "1zZ.");
+
+        solo.enterText((EditText) solo.getView(R.id.editAccount), "1");
+        solo.enterText((EditText) solo.getView(R.id.editTextInputPassword), "1");
     }
 
     @Test
@@ -32,9 +33,14 @@ public class LoginTest {
     }
 
     @Test
+    public void checkAccountExist() {
+
+    }
+
+    @Test
     public void checkLoginButton(){
         solo.clickOnButton("Log in");
-        solo.assertCurrentActivity("Wrong Activity", DriverIsOnTheWayActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
     }
 
     @After

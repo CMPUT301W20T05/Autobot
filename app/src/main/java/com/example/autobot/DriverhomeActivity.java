@@ -40,7 +40,7 @@ import java.util.Arrays;
 import java.util.zip.Inflater;
 
 public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
-    private User user;
+    public static User user;
     private String user_id;
     String phone_num;
     FragmentManager active_request_fm;
@@ -58,8 +58,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         super.onCreate(savedInstanceState);
         requests_list = new ArrayList<Request>();
 
-
-
         //load_user();
         setTitle("driver mode");
 
@@ -67,7 +65,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
         setProfile(username); // set profile
-
 
         //testing
         /*user = new User();

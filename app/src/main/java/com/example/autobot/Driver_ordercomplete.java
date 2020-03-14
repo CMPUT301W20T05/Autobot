@@ -67,6 +67,14 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
             e.printStackTrace();
         }
 
+        Confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intenthome = new Intent(Driver_ordercomplete.this, DriverhomeActivity.class);
+                startActivity(intenthome);
+            }
+        });
+
 
     }
 

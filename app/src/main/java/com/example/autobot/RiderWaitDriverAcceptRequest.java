@@ -47,6 +47,9 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
         //when driver arrived, show notification
         sendOnChannel();
 
+        //check if database changed
+
+
         Button cancelRequest = findViewById(R.id.cancel_order);
         cancelRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +64,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //delete current request
+                                db.CancelRequest(reID);
                                 //go back to home page
                                 Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
 //                                cancelRequest.putExtra("Username",user.getUsername());
