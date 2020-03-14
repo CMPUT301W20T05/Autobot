@@ -229,6 +229,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //-----------------------------------------
     @Override
     public void hide() {
+              //hide the request list view
               active_request_fm.popBackStack();
               rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
     }
