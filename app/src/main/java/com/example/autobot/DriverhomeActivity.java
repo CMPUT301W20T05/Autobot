@@ -52,16 +52,14 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     private String username;
     public static Database db;
     private static final String TAG = "DriverhomeActivity";
-    Fragment fragment;
-    ActiveRequestsAdapter adapter;
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requests_list = new ArrayList<Request>();
-        fragment = new ActiverequestsFragment(requests_list);
-        adapter = new ActiveRequestsAdapter(fragment.getActivity(),0,requests_list);
-        
+
+
+
         //load_user();
         setTitle("driver mode");
 
@@ -108,10 +106,15 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         currentLocationMarker = mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
                         //get all the satisfied active requests
-                        load_requests(searchedLatLng);
+                        //load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
+                        requests_list = new ArrayList<Request>();
+                        try{
+                            User user3 = new User("jc");
+                            Request active_request = new Request(user3);
+                            requests_list.add(active_request);} catch (ParseException e){}
+                        Fragment fragment = new ActiverequestsFragment(requests_list);
                         active_request_fm = getSupportFragmentManager();
-                        int s = requests_list.size();
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
                     }
@@ -139,7 +142,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     //loading all the satisfied requests
     public void load_requests(LatLng searchedLatLng) {
-           requests_list.clear();
+           requests_list = new ArrayList<Request>();
            try{
            User user3 = new User("jc");
            Request active_request = new Request(user3);
@@ -215,6 +218,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
+        intent.putExtra("Username",username);
         startActivity(intent);
     }
 
@@ -231,7 +235,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     @Override
     //show the detail of the selected active request
     public void show_detail(ShowSelectedActiveRequestFragment fragment) {
-        active_request_fm.beginTransaction().add(R.id.myMap,fragment).addToBackStack(null).commit();
+        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
     }
 
     //for edit profile info

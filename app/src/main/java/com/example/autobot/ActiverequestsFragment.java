@@ -54,7 +54,7 @@ public class ActiverequestsFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.show_requirement_fragment,container,false);
         //initial all attributes
         requests_view = rootView.findViewById(R.id.active_requests);
-
+        requests_view.setAdapter(new ActiveRequestsAdapter(getActivity(),0,requests_list));
         //those code is for testing----------------------------
 //        User rider;
 //        rider = new User();
@@ -68,8 +68,6 @@ public class ActiverequestsFragment extends Fragment{
         //----------------------------------------------------
 
         //bound data and adapter to list view
-        adapter = new ActiveRequestsAdapter(getActivity(),0,requests_list);
-        requests_view.setAdapter(adapter);
         //adapter.notifyDataSetChanged();
 
         //set up list view listener
@@ -94,7 +92,7 @@ public class ActiverequestsFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(),requests_list.get(position).get_active_requset_tostring(),Toast.LENGTH_SHORT).show();
                 //show the detail of the clicked request
-                listener.update_adapter(adapter);
+                //listener.update_adapter(new ActiveRequestsAdapter(getActivity(),0,requests_list));
                 listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position)));
                 ;}
         });
