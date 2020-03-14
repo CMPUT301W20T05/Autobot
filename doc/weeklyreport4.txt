@@ -1,0 +1,5 @@
+As a team: This week we already finished most functions. Firstly we finsih the login and signup page. Then finish the rider pages and driver pages. We can send request and
+accept request. In addition , we can edit profile of users. We can also estimate value of travel. We also add the test for our project.
+
+As a team member:
+zonglun1: modify the database to ensure download and upload data succesfully. Add some detail paramters to base class and some methods in base class.
