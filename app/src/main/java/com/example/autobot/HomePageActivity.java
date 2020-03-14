@@ -1,11 +1,14 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -37,7 +40,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private Button HPConfirmButton, HPDirectionButton;
     public static Database db;
     private String username;
-    private static User user;
+    public static User user;
+    public static Request request;
 
     private static final String TAG = "HomePageActivity";
 
@@ -50,9 +54,12 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-        db = BaseActivity.db;
+
         Intent intent = getIntent();
-        username = intent.getStringExtra("User");
+        db = LoginActivity.db;
+        user = LoginActivity.user;
+        username = user.getUsername();
+        //username = intent.getStringExtra("User");
         setProfile(username); // set profile
 
         // Initialize the AutocompleteSupportFragment.
@@ -65,7 +72,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_destination);
 
         //get user infor from database
-        user = db.rebuildUser(username);
+        //user = db.rebuildUser(username);
+
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
@@ -81,17 +89,22 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         HPDirectionButton = (Button) findViewById(R.id.buttonShowDirection);
         HPDirectionButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
 
                 origin = getOrigin(autocompleteFragmentOrigin);
                 destination = getDestination(autocompleteFragmentDestination);
-
-                //distance between two locations
-                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                //draw route between two locations
-                drawRoute(origin, destination);
-                HPConfirmButton.setVisibility(View.VISIBLE);
+                if (destination == null) {
+                    Toast.makeText(HomePageActivity.this, "Please select destination", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //distance between two locations
+                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                    //draw route between two locations
+                    drawRoute(origin, destination);
+                    HPConfirmButton.setVisibility(View.VISIBLE);
+                }
 
             }
         });
@@ -99,7 +112,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Request request = null;
+                request = null;
                 try {
                     request = new Request(user, origin, destination);
                 } catch (ParseException e) {
@@ -107,12 +120,13 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 }
 //                request.setDestination(destination);
 //                request.setBeginningLocation(origin);
+                request.setEstimateCost(origin, destination);
                 db.add_new_request(request);
                 String reID = request.getRequestID();
                 //next activity
                 Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-                intentUCurRequest.putExtra("Username",username);
-                intentUCurRequest.putExtra("reid",reID);
+                intentUCurRequest.putExtra("Username",user.getUsername());
+                intentUCurRequest.putExtra("reid",request.getRequestID());
                 startActivity(intentUCurRequest);
             }
         });

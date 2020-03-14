@@ -62,9 +62,12 @@
             android:name=".DriverhomeActivity"
             android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
-        <activity
-            android:name=".DriverIsOnTheWayActivity"
-            android:parentActivityName=".DriverhomeActivity" />
+        <activity android:name=".DriveIsGoing"
+            android:parentActivityName=".DriverhomeActivity"/>
+        <activity android:name=".RiderWaitDriverAcceptRequest"
+            android:parentActivityName=".UCurRequest"/>
+        <activity android:name=".DriverIsOnTheWayActivity"
+            android:parentActivityName=".RiderWaitDriverAcceptRequest"/>
     </application>
 
 </manifest>
