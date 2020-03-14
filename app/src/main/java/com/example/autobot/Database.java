@@ -33,6 +33,7 @@ public class Database{
     protected FirebaseFirestore db;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
+    public CollectionReference collectionReference_payment;
     User user = new User("");
 
 
@@ -48,6 +49,7 @@ public class Database{
         db.setFirestoreSettings(settings);
         collectionReference_user = db.collection("users");
         collectionReference_request = db.collection("Request");
+        collectionReference_payment = db.collection("PaymentInf");
     }
 
     /**
@@ -248,7 +250,33 @@ public class Database{
                 });
     }
 
-
+    /**
+     * Add information about payment card to firebase
+     * @param PayInfCard
+     */
+    public void add_new_Payment(PaymentCard PayInfCard) {
+        HashMap<String,String> payment_data = new HashMap<>();
+        payment_data.put("CardNumber",PayInfCard.getCardNumber().toString() );
+        payment_data.put("HoldName", PayInfCard.getHoldName());
+        payment_data.put("ExpireDate", PayInfCard.getExpireDate().toString());
+        payment_data.put("BillingAddress",PayInfCard.getBillingAddress());
+        payment_data.put("PostalCode", PayInfCard.getPostalCode());
+        collectionReference_payment
+                .document(payment_data.get("CardNumber"))
+                .set(payment_data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
 
 
 

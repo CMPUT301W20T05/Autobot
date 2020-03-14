@@ -34,7 +34,7 @@ public class SignUpActivityTest {
         solo.clickOnText("@string/no_account");
         //SignUpActivity Steps
         solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "1234567890");
-        solo.enterText((EditText) solo.getView(R.id.accountUserName), "Qq.1");
+        solo.enterText((EditText) solo.getView(R.id.accountUserName), "TestSignUp");
         solo.clickOnRadioButton(1);
         solo.clickOnCheckBox(0);
     }
