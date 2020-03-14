@@ -34,14 +34,17 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
-        db = DriverhomeActivity.db;
-
-        Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
+        db = LoginActivity.db;
+        user = LoginActivity.user; // get User
+        username = user.getUsername(); // get username
         setProfile(username); // set profile
-        user = db.rebuildUser(username);
+        //Log.d("debug",username);
 
-        TextView textViewDriverCondition = findViewById(R.id.driver_condition);
+        User rider = request.getRider();
+        TextView reminder = findViewById(R.id.driver_condition);
+        reminder.setText("drive safe");
+        TextView rider_name = findViewById(R.id.Driver_name);
+        rider_name.setText("passenger: "+rider.getUsername());
         Button buttonSeeProfile = findViewById(R.id.see_profile);
         ImageButton imageButtonPhone = findViewById(R.id.phoneButton);
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
@@ -136,7 +139,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 request.UpdateStatus(2);
                 //need to add
                 //update db
-                Intent intentOrderComplete = new Intent(DriveIsGoing.this, OrderComplete.class);
+                Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }

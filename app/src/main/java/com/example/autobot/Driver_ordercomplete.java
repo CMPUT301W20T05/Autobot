@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -15,7 +16,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class OrderComplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+
+public class Driver_ordercomplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     private Database db;
     private String username;
@@ -38,45 +40,34 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 
         //get user from firebase
         //user = db.rebuildUser(username);
-        user = HomePageActivity.user;
+        request = DriveIsGoing.request;
+        user = request.getDriver();
         username = user.getUsername();
-
+        request.setRequestID("818922938922");
         //get request from firebase
         //request = db.rebuildRequest(reID, user);
-        request = HomePageActivity.request;
+        //request = HomePageActivity.request;
         reID = request.getRequestID();
 
         setProfile(username); // set profile
-
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);
         EditText Tips = findViewById(R.id.textView3);
         Button Confirm = findViewById(R.id.confirmFee);
 
-        LatLng destination = request.getDestination();
-        LatLng origin = request.getBeginningLocation();
-        if (destination != null && origin != null) {
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                String oaddress = request.ReadableAddress(origin, geocoder);
-                String daddress = request.ReadableAddress(destination, geocoder);
-                OriginalLoc.setText(oaddress);
-                Destination.setText(daddress);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Price.setText("fee: "+String.valueOf(13.34));
+        Destination.setText("southgate");
+        //get begining location name
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try{
+        String oaddress = request.ReadableAddress(request.getBeginningLocation(),geocoder);
+        OriginalLoc.setText(oaddress);
+        }catch(IOException e){
+            e.printStackTrace();
         }
 
-        Confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
-//                intentQRCode.putExtra("Username",user.getUsername());
-//                intentQRCode.putExtra("reid", request.getRequestID());
-                startActivity(intentQRCode);
-            }
-        });
+
     }
 
     @Override

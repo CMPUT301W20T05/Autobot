@@ -36,8 +36,12 @@ public class ActiverequestsFragment extends Fragment{
         void update_adapter(ActiveRequestsAdapter adapter);
     }
 
-    public ActiverequestsFragment(ArrayList<Request> requests_list){
-        this.requests_list = requests_list;
+    public ActiverequestsFragment(ArrayList<Request> requests_list_o){
+        //this.requests_list = requests_list;
+        this.requests_list = new ArrayList<Request>();
+        for(int i=0; i< requests_list_o.size();i++){
+            this.requests_list.add(requests_list_o.get(i));
+        }
     }
     @Override
     public void onAttach(Context context){

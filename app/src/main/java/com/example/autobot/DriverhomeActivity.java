@@ -63,11 +63,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //load_user();
         setTitle("driver mode");
 
-        db = new Database();
-        Intent intent = getIntent();
-        username = intent.getStringExtra("User");
+        db = LoginActivity.db; // get database
+        user = LoginActivity.user; // get User
+        username = user.getUsername(); // get username
         setProfile(username); // set profile
-        user = db.rebuildUser(username);
+
 
         //testing
         /*user = new User();
@@ -106,13 +106,13 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         currentLocationMarker = mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
                         //get all the satisfied active requests
-                        //load_requests(searchedLatLng);
+                        load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
-                        requests_list = new ArrayList<Request>();
+                        /*requests_list = new ArrayList<Request>();
                         try{
                             User user3 = new User("jc");
                             Request active_request = new Request(user3);
-                            requests_list.add(active_request);} catch (ParseException e){}
+                            requests_list.add(active_request);} catch (ParseException e){}*/
                         Fragment fragment = new ActiverequestsFragment(requests_list);
                         active_request_fm = getSupportFragmentManager();
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
@@ -146,6 +146,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
            try{
            User user3 = new User("jc");
            Request active_request = new Request(user3);
+           active_request.setBeginningLocation(searchedLatLng);
            requests_list.add(active_request);} catch (ParseException e){}
            db.collectionReference_request.get()
                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -165,10 +166,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        //rebuild request from db
                                        Log.d("loc",request_id);
                                        try {
-                                           //active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
+                                           Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
                                            //testing
                                            User user3 = new User("jc");
-                                           Request active_request = new Request(user3);
+                                           //Request active_request = new Request(user3);
                                            requests_list.add(active_request);
 
 
@@ -211,7 +212,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.setDriver(user);
         //notify need to modify database
         //db.add_new_request(request);
-
+        Log.d("debug",request.getStatus());
 
 
         DriveIsGoing.request = request;
