@@ -43,7 +43,7 @@ public class SetPasswordTest {
 
     @Test
     public void checkConfirmButton(){
-        solo.clickOnButton("CONFIRM");
+        solo.clickOnButton("Confirm");
         solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
     }
 

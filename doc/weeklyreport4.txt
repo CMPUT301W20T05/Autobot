@@ -1,0 +1,13 @@
+As a team: This week we already finished most functions. Firstly we finsih the login and signup page. Then finish the rider pages and driver pages. We can send request and
+accept request. In addition , we can edit profile of users. We can also estimate value of travel. We also add the test for our project.
+
+As a team member:
+zonglun1: modify the database to ensure download and upload data succesfully. Add some detail paramters to base class and some methods in base class.
+yiping1: connected the menu page to the database, to show the Name and username of the user on the page. Enabled editing profile for user... Updated backlog. Worked together with group members.
+xqiu1: update some features: draw route between beginning location and destination, make phone call. Also, connect rider activities to database, help to find bugs in database class.
+jlyu3:link all the drivers’ activities together and figure how can drives qurey requests and receiving results.
+weida:Update Database and User process. Add some method to complete function for app.
+Comment
+zonglun1: we need do work together which will cause less conflicts.
+jlyu3: We need to figure out how to reuse our code by class extension, For the sake of improving the efficiency.
+weida:We need to reduce same code part and better connect each activaty.

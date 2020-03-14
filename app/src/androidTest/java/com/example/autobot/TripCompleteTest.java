@@ -37,13 +37,13 @@ public class TripCompleteTest {
         solo.clickOnButton("Cancel Order");
     }
 
-    @Test
+  //  @Test
     public void checkActivityChange() {
         // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
         solo.assertCurrentActivity("Wrong Activity", TripComplete.class);
     }
 
-    @Test
+   // @Test
     public void checkConfirmButton() {
         solo.clickOnButton("Confirm");
         solo.assertCurrentActivity("Wrong Activity", RateDriver.class);
