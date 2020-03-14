@@ -40,7 +40,7 @@ import java.util.Arrays;
 import java.util.zip.Inflater;
 
 public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
-    private User user;
+    public static User user;
     private String user_id;
     String phone_num;
     FragmentManager active_request_fm;

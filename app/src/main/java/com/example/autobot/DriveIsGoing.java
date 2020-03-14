@@ -2,8 +2,10 @@ package com.example.autobot;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -27,6 +30,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     private String username;
     private User user;
     private Button buttonCancelOrder;
+    private static final int REQUEST_PHONE_CALL = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,8 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
-        db = LoginActivity.db;
-        user = LoginActivity.user; // get User
+        db = DriverhomeActivity.db;
+        user = DriverhomeActivity.user; // get User
         username = user.getUsername(); // get username
         setProfile(username); // set profile
         //Log.d("debug",username);
@@ -50,29 +54,55 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
         buttonCancelOrder = findViewById(R.id.cancel_order);
 
-        //need to connect to firebase to get phone number
-        final String phoneNumber = "5875576400";
+        //for driver to call rider
+        //String dphoneNumber = rider.getPhoneNumber();
+        String rphoneNumber = "5875576400";
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + rphoneNumber));//change the number.
                 if (ActivityCompat.checkSelfPermission(DriveIsGoing.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
+                    Toast.makeText(DriveIsGoing.this, "No permission for calling", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(DriveIsGoing.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+                } else {
+                    startActivity(callIntent);
                 }
-                startActivity(callIntent);
-
             }
         });
+
+        buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pop out dialog
+                final AlertDialog.Builder alert = new AlertDialog.Builder(DriveIsGoing.this);
+                alert.setTitle("Cancel Order");
+                alert.setMessage("Are you sure you wish to cancel current request?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //delete current request
+                                //go back to home page
+                                Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+//                                cancelRequest.putExtra("Username",user.getUsername());
+//                                cancelRequest.putExtra("reid",request.getRequestID());
+                                startActivity(cancelRequest);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+
+                alert.show();
+            }
+        });
+
         //set the onclick function for button
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
@@ -140,7 +170,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 //need to add
                 //update db
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
-                intentOrderComplete.putExtra("Username",username);
+                //intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }
         });

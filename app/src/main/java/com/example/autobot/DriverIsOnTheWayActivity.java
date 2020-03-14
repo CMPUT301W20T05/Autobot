@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat;
 
 import java.text.ParseException;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     private Request request;
@@ -27,6 +29,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     private String username;
     private User user;
     private String reID;
+    private static final int REQUEST_PHONE_CALL = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 callIntent.setData(Uri.parse("tel:" + rphoneNumber));//change the number.
                 if (ActivityCompat.checkSelfPermission(DriverIsOnTheWayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(DriverIsOnTheWayActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(DriverIsOnTheWayActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
                 } else {
                     startActivity(callIntent);
                 }
@@ -90,6 +94,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //delete current request
+                                db.CancelRequest(reID);
                                 //go back to home page
                                 Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
 //                                cancelRequest.putExtra("Username",user.getUsername());
