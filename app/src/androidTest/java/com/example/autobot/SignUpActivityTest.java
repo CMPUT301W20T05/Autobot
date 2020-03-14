@@ -49,9 +49,10 @@ public class SignUpActivityTest {
      * Check to see if the back button works or not
      */
     @Test
-    public void checkContinueButton() {
-        solo.clickOnButton("CONTINUE");
-        solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
+    public void checkContinueButton() throws InterruptedException {
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
 
     /**

@@ -54,8 +54,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         EditText Comment = findViewById(R.id.comment);
         Button Skip = findViewById(R.id.skip);
         Button Confirm = findViewById(R.id.confirmFee);
-        ImageButton goodButton = findViewById(R.id.good);
-        ImageButton badButton = findViewById(R.id.bad);
+        ImageView goodButton = findViewById(R.id.good);
+        ImageView badButton = findViewById(R.id.bad);
 
         goodButton.setOnClickListener(new View.OnClickListener() {
             @Override

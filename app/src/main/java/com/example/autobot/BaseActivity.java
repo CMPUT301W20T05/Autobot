@@ -150,8 +150,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
 
-    //public static Database db; 不需要再base里面吧
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,8 +166,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //set framelayout so the extended children of base activity can inflate its own layout
         frameLayout = (FrameLayout) findViewById(R.id.content);
-
-        //db = new Database(); 为什么放这？
 
         //set up tool bar
         Toolbar toolbar = findViewById(R.id.toolbar);
