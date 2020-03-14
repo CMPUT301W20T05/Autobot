@@ -54,12 +54,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-
-        Intent intent = getIntent();
-        db = LoginActivity.db;
-        user = LoginActivity.user;
-        username = user.getUsername();
-        //username = intent.getStringExtra("User");
+        db = LoginActivity.db; // get database
+        user = LoginActivity.user; // get User
+        username = user.getUsername(); // get username
         setProfile(username); // set profile
 
         // Initialize the AutocompleteSupportFragment.

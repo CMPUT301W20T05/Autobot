@@ -45,7 +45,16 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.order_info, container, false);
         TextView drive_name = rootView.findViewById(R.id.Driver_name);
         drive_name.setText(request.getRider().getLastName());
+        TextView cost = rootView.findViewById(R.id.Appro_price);
+        TextView distance = rootView.findViewById(R.id.Appro_distance);
+        TextView origin = rootView.findViewById(R.id.origin_loc);
+        TextView destination = rootView.findViewById(R.id.Destination);
+        distance.setText(distance.getText().toString()+": "+String.valueOf(13)+"km");
+        origin.setText(origin.getText().toString()+": "+"southgate");
+        destination.setText(destination.getText().toString()+": "+"sub");
+        cost.setText(cost.getText().toString()+": "+"13.34");
         Button confirm = rootView.findViewById(R.id.cancel_order);
+        confirm.setText("CONFIRM");
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
