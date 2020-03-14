@@ -7,12 +7,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:background="@drawable/layout_style"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintStart_toStartOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,9 +108,6 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="36dp"
         android:ems="10"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:inputType="textPersonName"
         android:text="Origin location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Driver_name" />
@@ -123,9 +120,6 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:inputType="textPersonName"
         android:text="@string/Destination"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/origin_loc" />
@@ -139,8 +133,6 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:inputType="textPersonName"
         android:text="Approximated distance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Destination" />
@@ -154,8 +146,6 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:inputType="textPersonName"
         android:text="Approximated price"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Appro_distance" />
