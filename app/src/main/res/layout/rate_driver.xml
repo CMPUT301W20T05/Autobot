@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/Driver_name"
         app:layout_constraintStart_toEndOf="@+id/Driver_name" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/good"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:srcCompat="@drawable/gg1" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/bad"
         android:layout_width="60dp"
         android:layout_height="60dp"

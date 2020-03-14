@@ -690,7 +690,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         mMap.animateCamera(cameraUpdate);
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
-//        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
     }
 
     /**

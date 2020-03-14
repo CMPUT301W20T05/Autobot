@@ -64,6 +64,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //delete current request
+                                db.CancelRequest(reID);
                                 //go back to home page
                                 Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
 //                                cancelRequest.putExtra("Username",user.getUsername());
