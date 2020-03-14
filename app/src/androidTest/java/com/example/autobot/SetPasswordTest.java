@@ -23,7 +23,7 @@ public class SetPasswordTest {
         //This method used to create the solo object with instrumentation and activity as arguments
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         //LoginActivity Step
-        solo.clickOnButton("No account?");
+        solo.clickOnText("No account?");
         //SignUpActivity Steps
         solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "1234567890");
         solo.enterText((EditText) solo.getView(R.id.accountUserName), "WoZuiShuai");
@@ -43,6 +43,7 @@ public class SetPasswordTest {
 
     @Test
     public void checkConfirmButton(){
+        solo.clickOnButton("CONFIRM");
         solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
     }
 

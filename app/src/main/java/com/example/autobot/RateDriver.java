@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.text.ParseException;
@@ -53,6 +54,22 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         EditText Comment = findViewById(R.id.comment);
         Button Skip = findViewById(R.id.skip);
         Button Confirm = findViewById(R.id.confirmFee);
+        ImageButton goodButton = findViewById(R.id.good);
+        ImageButton badButton = findViewById(R.id.bad);
+
+        goodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        badButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         Selfie.setOnClickListener(new View.OnClickListener() {
             @Override

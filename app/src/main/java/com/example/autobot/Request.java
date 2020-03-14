@@ -134,7 +134,7 @@ public class Request implements Serializable {
         double estimateCost = 0.0;
         if (destination != null && beginningLocation != null) {
             double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
-            estimateCost = 5 + distance * 0.05;
+            estimateCost = 5.0 + distance * 0.01;
         }
         this.EstimateCost = estimateCost;
     }
@@ -151,7 +151,7 @@ public class Request implements Serializable {
     //the active request string representation
     public String get_active_requset_tostring(){
         //this is the hard coding version, need to modify later
-        String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getLastName(),"sub",13.34,"587-234-1299");
+        String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getUsername(),"sub",13.34,"587-234-1299");
         return active_requst;
     }
     public Date getAcceptTime(){
