@@ -11,11 +11,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
 /**
  * This is a class for generating qrcode based on the price of the trip
  */
@@ -28,6 +32,7 @@ public class QRCode extends BaseActivity {
     String inputvalue;
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
+    //ZXingScannerView ScannerView;
     private Database db;
     private String username;
     private User user;
@@ -61,6 +66,7 @@ public class QRCode extends BaseActivity {
         fare = (TextView)findViewById(R.id.textView4);
         generate = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+        //ScannerView = findViewById(R.id.qrCodeScanner);
 
         fare.setText("10");//price of the trip
 
@@ -96,4 +102,24 @@ public class QRCode extends BaseActivity {
             }
         });
     }
+
+    /*@Override
+    public void handleResult(Result result) {
+        Toast.makeText(getApplicationContext(),"Pay Successful", Toast.LENGTH_SHORT).show();
+        onBackPressed();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        ScannerView.stopCamera();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        ScannerView.setResultHandler(this);
+        ScannerView.startCamera();
+    }*/
+
 }
