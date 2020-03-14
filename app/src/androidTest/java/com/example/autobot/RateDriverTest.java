@@ -26,19 +26,19 @@ public class RateDriverTest {
         solo.enterText((EditText) solo.getView(R.id.comment), "Good");
     }
 
-    @Test
+    //@Test
     public void checkActivityChange() {
         // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
         solo.assertCurrentActivity("Wrong Activity", RateDriver.class);
     }
 
-    @Test
+    //@Test
     public void checkConfirmButton() {
         solo.clickOnButton("Confirm");
         solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
     }
 
-    @Test
+   // @Test
     public void checkSkipButton() {
         solo.clickOnButton("Skip");
         solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
