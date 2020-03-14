@@ -14,3 +14,4 @@ zonglun1: we need do work together which will cause less conflicts.
 jlyu3: We need to figure out how to reuse our code by class extension, For the sake of improving the efficiency.
 weida:We need to reduce same code part and better connect each activaty.
 Wenzhuo2: we need to start much more earlier
+xqiu1: we should have a well discussion before we start coding. And team members should focus on the project earlier.
