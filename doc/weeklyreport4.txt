@@ -3,3 +3,4 @@ accept request. In addition , we can edit profile of users. We can also estimate
 
 As a team member:
 zonglun1: modify the database to ensure download and upload data succesfully. Add some detail paramters to base class and some methods in base class.
+yiping1: connected the menu page to the database, to show the Name and username of the user on the page. Enabled editing profile for user... Updated backlog. Worked together with group members.
