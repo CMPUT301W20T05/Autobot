@@ -68,6 +68,8 @@
             android:parentActivityName=".UCurRequest"/>
         <activity android:name=".DriverIsOnTheWayActivity"
             android:parentActivityName=".RiderWaitDriverAcceptRequest"/>
+        <activity android:name=".Driver_ordercomplete"
+            android:parentActivityName=".DriveIsGoing"/>
     </application>
 
 </manifest>
