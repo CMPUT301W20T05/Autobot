@@ -31,7 +31,7 @@ public class SignUpActivityTest {
         //This method used to create the solo object with instrumentation and activity as arguments
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         //LoginActivity Step
-        solo.clickOnText("@string/no_account");
+        solo.clickOnText("No account?");
         //SignUpActivity Steps
         solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "1234567890");
         solo.enterText((EditText) solo.getView(R.id.accountUserName), "Qq.1");
@@ -49,9 +49,10 @@ public class SignUpActivityTest {
      * Check to see if the back button works or not
      */
     @Test
-    public void checkContinueButton() {
-        solo.clickOnButton("Continue");
-        solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
+    public void checkContinueButton() throws InterruptedException {
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
 
     /**

@@ -106,9 +106,9 @@ public class SignUpActivity extends AppCompatActivity {
                   else {
                       if(Username.length() == 0) editTextUserName.setError("Please input Username!");
                       if (PhoneNumber.length() == 0) editTextPhoneNumber.setError("Please input PhoneNumber!"); }
-                  if (Type_Rider == 0) radioButtonRider.setError("Please choose Driver or Rider！");
+                  if (Type_Rider == 0) radioButtonRider.setError("Please choose Driver or Rider!");
                   else radioButtonRider.setError(null,null);
-                  if (Checkbox == false) checkBoxPolicy.setError("Please agree policy！");
+                  if (Checkbox == false) checkBoxPolicy.setError("Please agree policy!");
                   else checkBoxPolicy.setError(null,null);
 
                   if (UserValid == true && PhoneValid == true && Type_Rider != 0 && Checkbox == true) {

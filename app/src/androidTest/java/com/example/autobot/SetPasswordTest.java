@@ -29,7 +29,7 @@ public class SetPasswordTest {
         solo.enterText((EditText) solo.getView(R.id.accountUserName), "WoZuiShuai");
         solo.clickOnRadioButton(1);
         solo.clickOnCheckBox(0);
-        solo.clickOnButton("Continue");
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
         //SetPasswordTest
         solo.enterText((EditText) solo.getView(R.id.editTextSetPassword), "2zZ.");
         solo.enterText((EditText) solo.getView(R.id.editTextConfirmPassword), "2zZ.");
