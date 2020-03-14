@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -32,10 +33,6 @@ public class  LoginTest {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
 
-    @Test
-    public void checkAccountExist() {
-
-    }
 
     @Test
     public void checkLoginButton(){
@@ -47,4 +44,5 @@ public class  LoginTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
+
 }

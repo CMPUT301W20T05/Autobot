@@ -24,13 +24,13 @@ public class OrderInfoTest {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
 
-    @Test
+   // @Test
     public void checkActivityChange() {
         // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
         solo.assertCurrentActivity("Wrong Activity", OrderInfo.class);
     }
 
-    @Test
+  //  @Test
     public void checkImageBackButton() {
         solo.clickOnImageButton(2);
         solo.assertCurrentActivity("Wrong Activity", DriverIsOnTheWayActivity.class);

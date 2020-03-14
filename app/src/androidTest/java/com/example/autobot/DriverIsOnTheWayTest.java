@@ -36,18 +36,18 @@ public class DriverIsOnTheWayTest {
 
     }
 
-    @Test
+   // @Test
     public void checkActivityChange(){
         solo.assertCurrentActivity("Wrong Activity", DriverIsOnTheWayActivity.class);
     }
 
-    @Test
+   /// @Test
     public void checkContinueButton() {
         solo.clickOnButton("Cancel Order");
         solo.assertCurrentActivity("Wrong Activity", OrderComplete.class);
     }
 
-    @Test
+   // @Test
     public void checkSeeProfileButton(){
         solo.clickOnButton("See profile");
         solo.assertCurrentActivity("Wrong Activity", OrderInfo.class);
