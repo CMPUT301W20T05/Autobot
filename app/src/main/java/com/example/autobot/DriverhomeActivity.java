@@ -155,11 +155,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        Log.d("loc",request_id);
                                        Request active_request = null;
                                        try {
-                                           active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                           active_request = db.rebuildRequest((String)request_id, db.rebuildUser(username));
+                                           requests_list.add(active_request);
                                        } catch (ParseException e) {
                                            e.printStackTrace();
                                        }
-                                       requests_list.add(active_request);
+
                                    }
                                    //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                }
