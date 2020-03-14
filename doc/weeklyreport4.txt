@@ -6,3 +6,5 @@ zonglun1: modify the database to ensure download and upload data succesfully. Ad
 yiping1: connected the menu page to the database, to show the Name and username of the user on the page. Enabled editing profile for user... Updated backlog. Worked together with group members.
 xqiu1: update some features: draw route between beginning location and destination, make phone call. Also, connect rider activities to database, help to find bugs in database class.
 
+Comment:
+zonglun1: we need do work together which will cause less conflicts.
