@@ -87,31 +87,6 @@ public class AddPaymentFragment extends DialogFragment {
         return builder.setView(view)
                 .setTitle("Add Payment Information")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        final int icon = (int) mCardTypeItem.getCardTypelogo();// get card type icon
-
-                        String temp = cardNumber.getText().toString();
-                        long cardn = 0;
-                        if (temp.replace(" ", "").length() != 0){
-                            cardn = Long.parseLong(temp); // get card number
-                        }
-                        final String holdn = holdName.getText().toString();  // get hold name
-                        temp = date.getText().toString();
-                        Date edate = new Date();
-                        formatter.setLenient(false);
-                        try {
-                            edate = formatter.parse(temp);  // make it date format
-                        } catch (ParseException e) {
-                            int p = 0;
-                        }
-                        final Date finalEdate = edate; // get expire date
-
-                        final String baddress = billingAddress.getText().toString();
-                        final String pcode = postalCode.getText().toString();
-                        listener.onOkPressed(new PaymentCard(cardn,holdn,finalEdate,icon,baddress,pcode));
-                    }
-                }).create();
+                .setPositiveButton("Confirm",null).create();
     }
 }
