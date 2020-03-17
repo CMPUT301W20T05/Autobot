@@ -34,11 +34,10 @@
             android:text="@string/first_name"
             android:textColor="@color/blue" />
 
-        <EditText
-            android:id="@+id/editTextFirstName"
+        <TextView
+            android:id="@+id/FirstName"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
             android:textColor="@color/blue"
             android:singleLine="true"/>
 
@@ -60,11 +59,10 @@
             android:text="@string/last_name"
             android:textColor="@color/blue" />
 
-        <EditText
-            android:id="@+id/editTextLastName"
+        <TextView
+            android:id="@+id/LastName"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
             android:textColor="@color/blue"
             android:singleLine="true"/>
     </LinearLayout>
@@ -87,11 +85,10 @@
             android:text="@string/phone_number"
             android:textColor="@color/blue" />
 
-        <EditText
-            android:id="@+id/editTextPhoneNumber"
+        <TextView
+            android:id="@+id/PhoneNumber"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
             android:textColor="@color/blue"
             android:singleLine="true"/>
 
@@ -114,71 +111,12 @@
             android:text="@string/email"
             android:textColor="@color/blue" />
 
-        <EditText
-            android:id="@+id/editTextEmail"
+        <TextView
+            android:id="@+id/EmailAddress"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
             android:textColor="@color/blue"
             android:singleLine="true"/>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/setFare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/home_address"
-        android:textColor="@color/blue"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmergencyContact"
-        tools:layout_editor_absoluteX="0dp"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/editTextHomeAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:inputType="text"
-        android:textColor="@color/blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setFare"
-        android:singleLine="true"/>
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/emergency_contact"
-        android:textColor="@color/blue"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
-        tools:layout_editor_absoluteX="0dp"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/editTextEmergencyContact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:inputType="number"
-        android:textColor="@color/blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        tools:ignore="MissingConstraints"
-        android:singleLine="true"/>
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/button_red_style"
-        android:text="@string/confirm"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextHomeAddress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,6 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
-        //db = HomePageActivity.db;
         db = DriverhomeActivity.db;
 
         Intent intent = getIntent();

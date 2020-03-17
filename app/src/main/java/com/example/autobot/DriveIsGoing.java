@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -72,6 +73,34 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 }
             }
         });
+
+        // added by yiping, implementation of view profile of the rider
+
+        Button see_profile_button = rootView.findViewById(R.id.see_profile); // 需改button id
+        see_profile_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view = LayoutInflater.from(DriveIsGoing.this).inflate(R.layout.profile_viewer, null);
+
+
+                TextView fname = view.findViewById(R.id.FirstName);
+                TextView lname = view.findViewById(R.id.LastName);
+                TextView pnumber = view.findViewById(R.id.PhoneNumber);
+                TextView email = view.findViewById(R.id.EmailAddress);
+
+                fname.setText(rider.getFirstName());
+                lname.setText(rider.getLastName());
+                pnumber.setText(rider.getPhoneNumber());
+                email.setText(rider.getEmailAddress());
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(DriveIsGoing.this);
+                alert.setView(view)
+                        .setTitle("Details")
+                        .setNegativeButton("Close",null);
+                alert.show();
+            }
+        });
+
 
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override

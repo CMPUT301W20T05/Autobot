@@ -37,7 +37,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
-        db = HomePageActivity.db;
+        db = DriverhomeActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
