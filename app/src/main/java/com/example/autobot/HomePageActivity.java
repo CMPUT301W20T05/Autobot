@@ -1,18 +1,26 @@
 package com.example.autobot;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,14 +28,17 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Locale;
 
 import static android.os.AsyncTask.execute;
 import static com.android.volley.VolleyLog.TAG;
@@ -35,15 +46,17 @@ import static com.android.volley.VolleyLog.TAG;
 /**
  * this class is the homepage activity
  */
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener, RiderBottomSheetFragment.BottomSheetListener {
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     private LatLng destination;
     private LatLng origin;
     private Button HPConfirmButton, HPDirectionButton;
-    public static Database db;
+    public  Database db;
     private String username;
     public static User user;
     public static Request request;
+
+    private static final int REQUEST_PHONE_CALL = 101;
 
     private static final String TAG = "HomePageActivity";
 
@@ -59,7 +72,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         db = LoginActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
@@ -117,14 +134,88 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-//                request.setDestination(destination);
-//                request.setBeginningLocation(origin);
                 request.setEstimateCost(origin, destination);
                 db.add_new_request(request);
                 String reID = request.getRequestID();
 
-                RiderBottomSheetFragment bottomSheetFragment = new RiderBottomSheetFragment();
-                bottomSheetFragment.show(getSupportFragmentManager(), "RiderBottomSheet");
+                //RiderBottomSheetFragment bottomSheetFragment = new RiderBottomSheetFragment();
+                //bottomSheetFragment.show(getSupportFragmentManager(), "RiderBottomSheet");
+
+                final BottomSheetDialog dialog = new BottomSheetDialog(HomePageActivity.this);
+                dialog.setContentView(R.layout.rider_bottom_sheet);
+                dialog.setCanceledOnTouchOutside(false);
+
+                TextView driverCondition = dialog.findViewById(R.id.driver_condition);
+                TextView startLocation = dialog.findViewById(R.id.origin_loc);
+                TextView endLocation = dialog.findViewById(R.id.Destination);
+                TextView approDistance = dialog.findViewById(R.id.Appro_distance);
+                TextView approPrice = dialog.findViewById(R.id.Appro_price);
+
+                //set location for dialog
+                LatLng destination = request.getDestination();
+                LatLng origin = request.getBeginningLocation();
+                if (destination != null && origin != null) {
+                    Geocoder geocoder = new Geocoder(HomePageActivity.this, Locale.getDefault());
+                    try {
+                        String oaddress = request.ReadableAddress(origin, geocoder);
+                        String daddress = request.ReadableAddress(destination, geocoder);
+                        startLocation.setText(oaddress);
+                        endLocation.setText(daddress);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //set distance and price for dialog
+
+                //change driver condition when needed
+                //driverCondition.setText("");
+
+                Button cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //pop out dialog
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+                        alert.setTitle("Cancel Order");
+                        alert.setMessage("Are you sure you wish to cancel current request?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //delete current request
+                                        db.CancelRequest(reID);
+                                        //close dialog
+                                        dialog.dismiss();
+                                        //set homepage to initial state
+                                        recreateActivity();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        return;
+                                    }
+                                });
+
+                        alert.show();
+                    }
+                });
+
+                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
+                phoneButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
+                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
+                        } else {
+                            startActivity(callIntent);
+                        }
+                    }
+                });
+                dialog.show();
 
                 //next activity
 //                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
@@ -194,32 +285,14 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         return username;
     }
 
-    @Override
-    public void onButtonClicked(String text) {
-        //pop out dialog
-        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
-        alert.setTitle("Cancel Order");
-        alert.setMessage("Are you sure you wish to cancel current request?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //delete current request
-                        //db.CancelRequest(reID);
-                        //go back to home page
-//                        Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
-////                                cancelRequest.putExtra("Username",user.getUsername());
-////                                cancelRequest.putExtra("reid",request.getRequestID());
-//                        startActivity(cancelRequest);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        return;
-                    }
-                });
+    public void recreateActivity() {
+        Intent intent = getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
 
-        alert.show();
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
+
 }

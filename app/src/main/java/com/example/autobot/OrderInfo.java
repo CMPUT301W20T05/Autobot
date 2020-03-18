@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Locale;
 
 /**
@@ -35,7 +36,7 @@ public class OrderInfo extends BaseActivity {
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.order_info, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
@@ -50,7 +51,11 @@ public class OrderInfo extends BaseActivity {
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         Button viewDetail = findViewById(R.id.View_Detail);
         ImageButton emailButton = findViewById(R.id.emailButton);

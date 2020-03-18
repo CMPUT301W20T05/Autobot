@@ -29,6 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     boolean Checkbox = false;
     boolean UserValid = false;
     boolean PhoneValid = false;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,8 @@ public class SignUpActivity extends AppCompatActivity {
         ContinueButton.setOnClickListener(new OnClickListener() {
               @Override
               public void onClick(View v) {
-                  final Database db;
-                  db = new Database();
 
+                  db = MainActivity.db;
                   final EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
                   final EditText editTextUserName = findViewById(R.id.accountUserName);
                   final String Username = editTextUserName.getText().toString();

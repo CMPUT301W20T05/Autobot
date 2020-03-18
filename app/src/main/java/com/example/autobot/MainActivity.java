@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,9 +30,15 @@ public class MainActivity extends AppCompatActivity {
     Button get_start;
     Handler handler;
     int DELAY = 3*1000;
+    public static Database db ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            db = new Database();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_main);
         log_in_page();
 

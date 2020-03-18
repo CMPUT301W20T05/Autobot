@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -23,10 +24,22 @@ public class RiderBottomSheetFragment extends BottomSheetDialogFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onButtonClicked("Cancel Buttom clicked");
+                mListener.onButtonClicked("Cancel Button clicked");
                 dismiss();
             }
         });
+
+        ImageButton emailButton = v.findViewById(R.id.emailButton);
+
+        ImageButton phoneButton = v.findViewById(R.id.phoneButton);
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onButtonClicked("Phone Button clicked");
+                dismiss();
+            }
+        });
+
 
         return v;
     }

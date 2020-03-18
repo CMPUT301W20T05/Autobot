@@ -1,9 +1,6 @@
 package com.example.autobot;
 
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -23,11 +20,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import static com.android.volley.VolleyLog.TAG;
-import static java.text.SimpleDateFormat.*;
 
 public class Database{
     protected FirebaseFirestore db;
@@ -35,7 +30,7 @@ public class Database{
     public CollectionReference collectionReference_request;
     public CollectionReference collectionReference_payment;
     User user = new User("");
-    Request r = new Request(null);
+    Request r = new Request();
 
 
     public Database() throws ParseException {
@@ -162,7 +157,7 @@ public class Database{
         request_data.put("ArriveTime",formatter.format(request.getArriveTime()));
         //request_data.put("CurrentLocation",)
         request_data.put("RequestStatus",request.getStatus());
-        request_data.put("EstimateCost","0");
+        request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
 
@@ -191,41 +186,38 @@ public class Database{
      */
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
         r.setRider(user);
-        Query query = collectionReference_request.whereEqualTo("ID", RequestID);
-        query.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collectionReference_request
+                .document(RequestID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
 
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().size() != 0) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    LatLng BeginningLocation = new LatLng(Double.valueOf((String) document.get("BeginningLocationLat")), Double.valueOf((String) document.get("BeginningLocationLnt")));
-                                    r.setBeginningLocation(BeginningLocation);
-                                    LatLng Destination = new LatLng(Double.valueOf((String) document.get("DestinationLat")), Double.valueOf((String) document.get("DestinationLnt")));
-                                    r.setDestination(Destination);
-                                    r.setDriver(rebuildUser((String) document.get("Driver")));
-                                    r.setRequestID((String) document.get("RequestID"));
-                                    r.setRider(rebuildUser((String) document.get("Rider")));
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            LatLng BeginningLocation = new LatLng(Double.valueOf((String) documentSnapshot.getString("BeginningLocationLat")), Double.parseDouble((String) documentSnapshot.getString("BeginningLocationLnt")));
+                            r.setBeginningLocation(BeginningLocation);
+                            LatLng Destination = new LatLng(Double.valueOf((String) documentSnapshot.getString("DestinationLat")), Double.valueOf((String) documentSnapshot.getString("DestinationLnt")));
+                            r.setDestination(Destination);
+                            r.setDriver(rebuildUser((String) documentSnapshot.getString("Driver")));
+                            r.setRequestID((String) documentSnapshot.getString("RequestID"));
+                            r.setRider(rebuildUser((String) documentSnapshot.getString("Rider")));
 
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
-                                    try {
-                                        r.resetAcceptTime(formatter.parse((String) document.get("AcceptTime")));
-                                        r.resetArriveTime(formatter.parse((String) document.get("ArriveTime")));
-                                        r.resetSendTime(formatter.parse((String) document.get("SendTime")));
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    r.resetRequestStatus((String) document.get("RequestStatus"));
-                                    r.resetEstimateCost(Double.valueOf((String) document.get("EstimateCost")));
-                                    r.setRequestID((String) document.get("ID"));
-                                }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                            try {
+                                r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
+                                r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
+                                r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
+                            r.resetRequestStatus((String) documentSnapshot.getString("RequestStatus"));
+                            r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
+                            r.setRequestID((String) documentSnapshot.getString("ID"));
                         }
+
                     }
                 });
+
         return r;
     }
     public void CancelRequest(String requestID){
@@ -278,6 +270,8 @@ public class Database{
                     }
                 });
     }
+
+   //public String StatusChangeNotify
 
 
 
