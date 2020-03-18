@@ -2,18 +2,15 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,13 +33,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import io.grpc.okhttp.internal.framed.Header;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -80,25 +75,15 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
-import com.example.autobot.TaskLoadedCallback;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this is a class of base activity, it contains google map api, side bar, notifications and so on
@@ -109,6 +94,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
+    public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -190,8 +176,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
-    public void setProfile(String username){
-        Database userBase = new Database();
+    public void setProfile(String username) throws ParseException {
+        userbase = LoginActivity.db;
 
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
@@ -200,7 +186,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
 
-        DocumentReference docRef = userBase.getRef(username);
+        DocumentReference docRef = userbase.getRef(username);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
             @Override

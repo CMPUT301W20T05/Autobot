@@ -3,13 +3,10 @@ package com.example.autobot;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.protobuf.StringValue;
 
 import java.text.ParseException;
 
@@ -34,21 +31,30 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         TextView EstimatedFare = findViewById(R.id.estimatedFare);
         Spinner modelTochoose = (Spinner) findViewById(R.id.spinnerCarModel);
 
-        db = HomePageActivity.db;
+        db = MainActivity.db;
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
-        //reID = intent.getStringExtra("reid");
+        reID = intent.getStringExtra("reid");
 
         //get user from firebase
         //user = db.rebuildUser(username);
         user = HomePageActivity.user;
         username = user.getUsername();
         //get request from firebase
-        //request = db.rebuildRequest(reID, user);
-        request = HomePageActivity.request;
+        try {
+            request = db.rebuildRequest(reID, user);
+            //request = db.rebuildRequest(reID, user);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //calculate estimated fare
         double estimateFare = request.getEstimateCost();

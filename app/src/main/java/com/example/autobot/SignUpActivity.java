@@ -21,12 +21,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+
 public class SignUpActivity extends AppCompatActivity {
 
     int Type_Rider = 0 ;
     boolean Checkbox = false;
     boolean UserValid = false;
     boolean PhoneValid = false;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
         ContinueButton.setOnClickListener(new OnClickListener() {
               @Override
               public void onClick(View v) {
-                  final Database db = new Database();
+                  db = MainActivity.db;
                   final EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
                   final EditText editTextUserName = findViewById(R.id.accountUserName);
                   final String Username = editTextUserName.getText().toString();

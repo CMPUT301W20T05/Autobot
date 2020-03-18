@@ -29,7 +29,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.rate_driver, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
@@ -44,7 +44,11 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         findViewById(R.id.myMap).setVisibility(View.GONE);
 

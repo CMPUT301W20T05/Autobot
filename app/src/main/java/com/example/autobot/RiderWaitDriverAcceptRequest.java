@@ -24,11 +24,12 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = MainActivity.db;
         super.onCreate(savedInstanceState);
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.rider_wait_accept_request, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
         //reID = intent.getStringExtra("reid");
@@ -42,7 +43,11 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //when driver arrived, show notification
         sendOnChannel();
