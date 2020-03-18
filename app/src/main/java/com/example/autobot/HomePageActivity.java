@@ -1,6 +1,8 @@
 package com.example.autobot;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -33,7 +35,7 @@ import static com.android.volley.VolleyLog.TAG;
 /**
  * this class is the homepage activity
  */
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener{
+public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener, RiderBottomSheetFragment.BottomSheetListener {
 
     private LatLng destination;
     private LatLng origin;
@@ -120,11 +122,15 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 request.setEstimateCost(origin, destination);
                 db.add_new_request(request);
                 String reID = request.getRequestID();
+
+                RiderBottomSheetFragment bottomSheetFragment = new RiderBottomSheetFragment();
+                bottomSheetFragment.show(getSupportFragmentManager(), "RiderBottomSheet");
+
                 //next activity
-                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-                intentUCurRequest.putExtra("Username",user.getUsername());
-                intentUCurRequest.putExtra("reid",request.getRequestID());
-                startActivity(intentUCurRequest);
+//                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
+//                intentUCurRequest.putExtra("Username",user.getUsername());
+//                intentUCurRequest.putExtra("reid",request.getRequestID());
+//                startActivity(intentUCurRequest);
             }
         });
 
@@ -186,5 +192,34 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public void onButtonClicked(String text) {
+        //pop out dialog
+        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+        alert.setTitle("Cancel Order");
+        alert.setMessage("Are you sure you wish to cancel current request?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //delete current request
+                        //db.CancelRequest(reID);
+                        //go back to home page
+//                        Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+////                                cancelRequest.putExtra("Username",user.getUsername());
+////                                cancelRequest.putExtra("reid",request.getRequestID());
+//                        startActivity(cancelRequest);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+
+        alert.show();
     }
 }
