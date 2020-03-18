@@ -30,7 +30,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
@@ -46,7 +46,11 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);

@@ -16,12 +16,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class SetPasswordActivity extends AppCompatActivity {
+    Database db;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +62,7 @@ public class SetPasswordActivity extends AppCompatActivity {
                         toast.show();
                     }else{
                         user_class.setPassword(newPassword);
-                        Database db = new Database();
+                        db = MainActivity.db;
                         db.add_new_user(user_class);
 
                         Intent intentHomePage = new Intent(SetPasswordActivity.this, LoginActivity.class);

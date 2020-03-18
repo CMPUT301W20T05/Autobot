@@ -4,22 +4,10 @@ import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -29,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Request class is a information collection of request, we can set and get information of request through the method in this class.
@@ -67,6 +54,24 @@ public class Request implements Serializable {
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
         this.RequestID = generateRequestID();
+
+    }
+    public Request() throws ParseException {
+        this.Rider = null;
+        this.Destination = null;
+        this.BeginningLocation = null;
+        this.requestStatusList = new ArrayList<>();
+        this.requestStatusList.add("Request Sending");
+        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Rider picked");
+        this.requestStatusList.add("Trip Completed");
+        this.RequestStatus = requestStatusList.get(0);
+        this.SendTime = new Date(System.currentTimeMillis());
+        String defaultTimeString = "00-0-0000 00:00:00";
+        this.AcceptTime = formatter.parse(defaultTimeString);
+        this.ArriveTime = formatter.parse(defaultTimeString);
+        this.EstimateCost = 0.0;
+        this.RequestID = null;
 
     }
 

@@ -1,25 +1,17 @@
 package com.example.autobot;
 
 import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.firebase.firestore.util.Assert;
 
 import java.util.ArrayList;
 

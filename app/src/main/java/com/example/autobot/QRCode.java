@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 
+import java.text.ParseException;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -45,7 +47,7 @@ public class QRCode extends BaseActivity {
         super.onCreate(savedInstanceState);
         View rootView = getLayoutInflater().inflate(R.layout.qrcodd_scanner, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
@@ -60,7 +62,11 @@ public class QRCode extends BaseActivity {
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        try {
+            setProfile(username); // set profile
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
         fare = (TextView)findViewById(R.id.textView4);
