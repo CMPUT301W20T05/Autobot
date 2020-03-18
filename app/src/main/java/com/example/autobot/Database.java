@@ -35,9 +35,10 @@ public class Database{
     public CollectionReference collectionReference_request;
     public CollectionReference collectionReference_payment;
     User user = new User("");
+    Request r = new Request(null);
 
 
-    public Database() {
+    public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
         db = FirebaseFirestore.getInstance();
         // to disable clean-up.
@@ -189,7 +190,7 @@ public class Database{
      * @return r is the all information of request that can be used from other class
      */
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
-        Request r = new Request(user);
+        r.setRider(user);
         Query query = collectionReference_request.whereEqualTo("ID", RequestID);
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
