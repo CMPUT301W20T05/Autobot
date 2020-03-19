@@ -13,13 +13,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.Status;
@@ -28,9 +33,13 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
@@ -69,7 +78,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton = findViewById(R.id.buttonConfirmRequest);
         HPConfirmButton.setVisibility(View.GONE);
 
-        db = LoginActivity.db; // get database
+        db = MainActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
         try {
@@ -137,14 +146,53 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 request.setEstimateCost(origin, destination);
                 db.add_new_request(request);
                 String reID = request.getRequestID();
+                //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
+                //for model choosing
+                final BottomSheetDialog uCurRequestDialog = new BottomSheetDialog(HomePageActivity.this);
+                uCurRequestDialog.setContentView(R.layout.current_request_of_user);
+                uCurRequestDialog.setCancelable(false);
+
+                //for wait for driver accept
                 //RiderBottomSheetFragment bottomSheetFragment = new RiderBottomSheetFragment();
                 //bottomSheetFragment.show(getSupportFragmentManager(), "RiderBottomSheet");
-
                 final BottomSheetDialog dialog = new BottomSheetDialog(HomePageActivity.this);
                 dialog.setContentView(R.layout.rider_bottom_sheet);
-                dialog.setCanceledOnTouchOutside(false);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setCancelable(false);
 
+
+                //1: for uCurRequestDialog
+                Button CurRequestConfirm = uCurRequestDialog.findViewById(R.id.Cur_Request_confirm);
+                TextView EstimatedFare = uCurRequestDialog.findViewById(R.id.estimatedFare);
+                Spinner modelTochoose = uCurRequestDialog.findViewById(R.id.spinnerCarModel);
+
+                //calculate estimated fare
+                double estimateFare = request.getEstimateCost();
+                if (EstimatedFare != null) {
+                    EstimatedFare.setText(String.valueOf(estimateFare));
+                }
+
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                modelTochoose.setAdapter(adapter);
+
+                CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //choose model
+
+                        //finish current activity
+                        uCurRequestDialog.dismiss();
+                        //wait driver to accept
+                        Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
+                        db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
+                        dialog.show();
+                    }
+                });
+                uCurRequestDialog.show();
+
+                //2: bottom sheet for waiting driver to accept
                 TextView driverCondition = dialog.findViewById(R.id.driver_condition);
                 TextView startLocation = dialog.findViewById(R.id.origin_loc);
                 TextView endLocation = dialog.findViewById(R.id.Destination);
@@ -166,9 +214,35 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                 }
                 //set distance and price for dialog
+                //approDistance.setText(String.valueOf());
+                approPrice.setText(String.valueOf(request.getEstimateCost()));
 
                 //change driver condition when needed
                 //driverCondition.setText("");
+
+                Button seeProfile = dialog.findViewById(R.id.see_profile);
+                seeProfile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.profile_viewer, null);
+
+                        TextView fname = view.findViewById(R.id.FirstName);
+                        TextView lname = view.findViewById(R.id.LastName);
+                        TextView pnumber = view.findViewById(R.id.PhoneNumber);
+                        TextView email = view.findViewById(R.id.EmailAddress);
+                        //should be set as driver's infor
+                        fname.setText(user.getFirstName());
+                        lname.setText(user.getLastName());
+                        pnumber.setText(user.getPhoneNumber());
+                        email.setText(user.getEmailAddress());
+
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+                        alert.setView(view)
+                                .setTitle("Details")
+                                .setNegativeButton("Close",null);
+                        alert.show();
+                    }
+                });
 
                 Button cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
                 cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -215,13 +289,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                         }
                     }
                 });
-                dialog.show();
 
-                //next activity
-//                Intent intentUCurRequest = new Intent(HomePageActivity.this, UCurRequest.class);
-//                intentUCurRequest.putExtra("Username",user.getUsername());
-//                intentUCurRequest.putExtra("reid",request.getRequestID());
-//                startActivity(intentUCurRequest);
             }
         });
 

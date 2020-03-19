@@ -640,6 +640,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setContentTitle("New Notification")
                 .setContentText("Message...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true) //用户点按通知后自动移除通知
                 .build();
     }
 
