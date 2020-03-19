@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -152,6 +153,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
+    public Bitmap mybitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

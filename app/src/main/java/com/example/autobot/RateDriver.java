@@ -134,4 +134,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

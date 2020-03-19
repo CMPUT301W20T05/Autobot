@@ -64,6 +64,7 @@ public class EditProfilePage extends Fragment {
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap);
         String getUsername();
+        Bitmap getBitmap();
     }
 
     @Override
@@ -83,6 +84,8 @@ public class EditProfilePage extends Fragment {
         View view = inflater.inflate(R.layout.edit_contact_infor_activity, container,false);
 
         pPhoto = view.findViewById(R.id.imageView2);
+        bitmap = listener.getBitmap();
+        if (bitmap != null) pPhoto.setImageBitmap(bitmap);
         userName = view.findViewById(R.id.Username);
         firstName = view.findViewById(R.id.editTextFirstName);
         lastName = view.findViewById(R.id.editTextLastName);
@@ -125,7 +128,6 @@ public class EditProfilePage extends Fragment {
                 bottomSheetDialog = new BottomSheetDialog(getContext());
                 bottomSheetDialog.setContentView(view1);
                 bottomSheetDialog.show();
-
 
             }
         });

@@ -118,4 +118,8 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

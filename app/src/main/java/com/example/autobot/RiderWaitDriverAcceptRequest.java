@@ -130,4 +130,8 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }
