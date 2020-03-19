@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -98,10 +99,13 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        profilePhoto.setImageBitmap(bitmap);
+
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user

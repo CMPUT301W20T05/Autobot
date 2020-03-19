@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import android.provider.ContactsContract;
@@ -25,6 +26,7 @@ public class User implements Driver, Rider, Serializable {
     private String LastName;
     private String EmergencyContact;
     private String HomeAddress;
+    private Bitmap bitmap;
 
     public User(String username){
         this.Username = username;
@@ -37,6 +39,7 @@ public class User implements Driver, Rider, Serializable {
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
+        this.bitmap = null;
     }
 
     public String getEmergencyContact() {
@@ -47,31 +50,31 @@ public class User implements Driver, Rider, Serializable {
         EmergencyContact = emergencyContact;
     }
 
+    // added by yiping
+
+    public Bitmap getBitmap(){return bitmap;}
+    public void setBitmap(Bitmap bitmapp){bitmap = bitmapp;}
+
+    //-----------------------------------
+
     public String getHomeAddress() {
         return HomeAddress;
     }
-
     public void setHomeAddress(String homeAddress) {
         HomeAddress = homeAddress;
     }
-
     public String getFirstName() {
         return FirstName;
     }
-
     public void setFirstName(String firstName) {
         FirstName = firstName;
     }
-
     public String getLastName() {
         return LastName;
     }
-
     public void setLastName(String lastName) {
         LastName = lastName;
     }
-
-
     public String getUsername(){
         return this.Username;
     }
@@ -92,7 +95,6 @@ public class User implements Driver, Rider, Serializable {
     }
     public LatLng getCurrentLocation(){
         return this.CurrentLocation;
-
     }
     public void updateCurrentLocation(LatLng Location){
         this.CurrentLocation = Location;
@@ -145,10 +147,6 @@ public class User implements Driver, Rider, Serializable {
     public void AcceptRequest(Request request) {
         request.setDriver(this);
     }
-
-
-
-
 
     @Override
     public void ScanQRcode(int QRcode) {

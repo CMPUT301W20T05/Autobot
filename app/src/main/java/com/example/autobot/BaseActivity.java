@@ -37,6 +37,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.grpc.okhttp.internal.framed.Header;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -127,7 +129,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
     public TextView name;
-    public ImageView profilePhoto;
+    public CircleImageView profilePhoto;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
