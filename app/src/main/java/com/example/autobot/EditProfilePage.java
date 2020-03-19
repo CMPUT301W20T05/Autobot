@@ -1,19 +1,28 @@
 package com.example.autobot;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.io.File;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +38,10 @@ public class EditProfilePage extends Fragment {
     private Button btn;
     private EditProfilePageListener listener;
     private Database db;
+    private TextView changePhoto;
+    private File file;
+    private TextView getLibrary, takePhoto, cancel;
+    private BottomSheetDialog bottomSheetDialog;
 
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact);
@@ -58,6 +71,16 @@ public class EditProfilePage extends Fragment {
         emailAddress = view.findViewById(R.id.editTextEmail);
         homeAddress = view.findViewById(R.id.editTextHomeAddress);
         eContact = view.findViewById(R.id.editTextEmergencyContact);
+        changePhoto = view.findViewById(R.id.change_photo);
+        changePhoto.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // set underline
+        changePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bottomSheetDialog == null){
+                    View view1 = LayoutInflater.from(getContext()).inflate(R.layout.)
+                }
+            }
+        });
 
         //db = BaseActivity.db;
         db = LoginActivity.db;
@@ -88,4 +111,5 @@ public class EditProfilePage extends Fragment {
 
         return view;
     }
+
 }

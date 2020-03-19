@@ -44,7 +44,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         findViewById(R.id.myMap).setVisibility(View.GONE);
 

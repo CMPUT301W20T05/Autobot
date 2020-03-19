@@ -49,7 +49,7 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         //request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);

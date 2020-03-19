@@ -48,7 +48,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         //calculate estimated fare
         double estimateFare = request.getEstimateCost();

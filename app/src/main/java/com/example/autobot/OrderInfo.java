@@ -50,7 +50,7 @@ public class OrderInfo extends BaseActivity {
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         Button viewDetail = findViewById(R.id.View_Detail);
         ImageButton emailButton = findViewById(R.id.emailButton);

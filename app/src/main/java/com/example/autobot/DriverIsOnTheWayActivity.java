@@ -52,7 +52,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);

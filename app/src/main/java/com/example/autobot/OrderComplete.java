@@ -46,7 +46,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);

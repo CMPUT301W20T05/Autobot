@@ -42,7 +42,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         db = DriverhomeActivity.db;
         user = DriverhomeActivity.user; // get User
         username = user.getUsername(); // get username
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
         //Log.d("debug",username);
 
         User rider = request.getRider();

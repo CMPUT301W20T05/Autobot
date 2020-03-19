@@ -42,7 +42,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         //when driver arrived, show notification
         sendOnChannel();

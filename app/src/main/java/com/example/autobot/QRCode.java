@@ -60,7 +60,7 @@ public class QRCode extends BaseActivity {
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
         fare = (TextView)findViewById(R.id.textView4);

@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -140,6 +141,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
     public TextView name;
+    public ImageView profilePhoto;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -177,6 +179,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View header = navigationView.getHeaderView(0); // get header of the navigation view
+        profilePhoto = header.findViewById(R.id.profile_photo);
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment = new EditProfilePage();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                navigationView.getMenu().getItem(0).setChecked(true);
+                setTitle("Edit Profile");
+                if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -190,8 +207,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
-    public void setProfile(String username){
-        Database userBase = new Database();
+    public void setProfile(String username, Database db){
+        Database userBase = db;
 
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view

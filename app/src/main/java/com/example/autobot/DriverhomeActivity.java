@@ -64,7 +64,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         db = LoginActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
-        setProfile(username); // set profile
+        setProfile(username,db); // set profile
 
         //testing
         /*user = new User();
