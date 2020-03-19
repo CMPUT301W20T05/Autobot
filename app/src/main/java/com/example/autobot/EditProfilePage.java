@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 public class EditProfilePage extends Fragment {
@@ -39,6 +45,7 @@ public class EditProfilePage extends Fragment {
     private TextView getLibrary, takePhoto, cancel;
     private BottomSheetDialog bottomSheetDialog;
     private static final int CAMERA_REQUEST = 1;
+    private String currentPhotoPath;
 
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact);
@@ -89,7 +96,7 @@ public class EditProfilePage extends Fragment {
                 takePhoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        openCamera();
+                        //dispatchTakePictureIntent();
                         bottomSheetDialog.dismiss();
                     }
                 });
@@ -138,16 +145,15 @@ public class EditProfilePage extends Fragment {
         return view;
     }
 
-    private void openCamera() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-
-    }
-
     private void openLibrary() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(
                 "content://media/internal/images/media"));
         startActivity(intent);
+        pickPicture();
+
+    }
+
+    private void pickPicture() {
 
     }
 }
