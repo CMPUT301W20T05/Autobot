@@ -32,7 +32,7 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
-        db = DriverhomeActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
@@ -50,6 +50,7 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         reID = request.getRequestID();
 
         setProfile(username,db); // set profile
+
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);

@@ -29,7 +29,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.rate_driver, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");

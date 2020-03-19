@@ -56,6 +56,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = LoginActivity.db;
         requests_list = new ArrayList<Request>();
 
         //load_user();
@@ -64,7 +65,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         db = LoginActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
+
         setProfile(username,db); // set profile
+
 
         //testing
         /*user = new User();

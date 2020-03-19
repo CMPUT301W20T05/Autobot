@@ -1,11 +1,9 @@
 package com.example.autobot;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -24,11 +22,12 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = MainActivity.db;
         super.onCreate(savedInstanceState);
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.rider_wait_accept_request, frameLayout);
 
-        db = HomePageActivity.db;
+        db = LoginActivity.db;
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
         //reID = intent.getStringExtra("reid");
@@ -83,6 +82,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
             }
         });
+        db.NotifyStatusChange(reID,"Request Accepted",this);
 
         Button continueButton = findViewById(R.id.ContinueButton);
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +95,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
                 if (requestState.equals("Request Accepted")) {
                     //go to next page
+
                     Intent intentWait = new Intent(RiderWaitDriverAcceptRequest.this, DriverIsOnTheWayActivity.class);
 //                    intentWait.putExtra("Username",user.getUsername());
 //                    intentWait.putExtra("reid",request.getRequestID());

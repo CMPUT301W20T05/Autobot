@@ -24,6 +24,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.text.ParseException;
+
 public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     protected static Request request;
@@ -42,7 +44,9 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         db = DriverhomeActivity.db;
         user = DriverhomeActivity.user; // get User
         username = user.getUsername(); // get username
+
         setProfile(username,db); // set profile
+
         //Log.d("debug",username);
 
         User rider = request.getRider();

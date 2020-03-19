@@ -26,6 +26,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = MainActivity.db;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         setTitle("Login");
@@ -60,7 +62,11 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db = new Database();
+                try {
+                    db = new Database();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 String Status = spinner.getSelectedItem().toString();
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();

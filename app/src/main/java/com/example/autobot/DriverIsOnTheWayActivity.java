@@ -37,7 +37,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
-        db = DriverhomeActivity.db;
+        db = LoginActivity.db;
 
         Intent intent = getIntent();
         //username = intent.getStringExtra("Username");
@@ -53,6 +53,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         reID = request.getRequestID();
 
         setProfile(username,db); // set profile
+
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);

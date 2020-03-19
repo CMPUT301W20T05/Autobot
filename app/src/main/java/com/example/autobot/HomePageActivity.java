@@ -38,7 +38,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private LatLng destination;
     private LatLng origin;
     private Button HPConfirmButton, HPDirectionButton;
-    public static Database db;
+    public  Database db;
     private String username;
     public static User user;
     public static Request request;
@@ -57,6 +57,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         db = LoginActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
+
         setProfile(username,db); // set profile
 
         // Initialize the AutocompleteSupportFragment.
