@@ -1,19 +1,15 @@
 package com.example.autobot;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,6 +38,7 @@ public class EditProfilePage extends Fragment {
     private File file;
     private TextView getLibrary, takePhoto, cancel;
     private BottomSheetDialog bottomSheetDialog;
+    private static final int CAMERA_REQUEST = 1;
 
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact);
@@ -62,7 +59,7 @@ public class EditProfilePage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.edit_contact_infor_activity, container, false);
+        View view = inflater.inflate(R.layout.edit_contact_infor_activity, container,false);
 
 
         userName = view.findViewById(R.id.Username);
@@ -76,9 +73,38 @@ public class EditProfilePage extends Fragment {
         changePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bottomSheetDialog == null){
-                    View view1 = LayoutInflater.from(getContext()).inflate(R.layout.)
-                }
+
+                View view1 = LayoutInflater.from(getContext()).inflate(R.layout.bottom_options,null);
+                getLibrary = view1.findViewById(R.id.get_library);
+                takePhoto = view1.findViewById(R.id.take_photo);
+                cancel = view1.findViewById(R.id.cancel);
+
+                getLibrary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openLibrary();
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+                takePhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openCamera();
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+
+                bottomSheetDialog = new BottomSheetDialog(getContext());
+                bottomSheetDialog.setContentView(view1);
+                bottomSheetDialog.show();
+
+
             }
         });
 
@@ -112,4 +138,16 @@ public class EditProfilePage extends Fragment {
         return view;
     }
 
+    private void openCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+    }
+
+    private void openLibrary() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                "content://media/internal/images/media"));
+        startActivity(intent);
+
+    }
 }
