@@ -1,11 +1,9 @@
 package com.example.autobot;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -88,6 +86,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
             }
         });
+        db.NotifyStatusChange(reID,"Request Accepted",this);
 
         Button continueButton = findViewById(R.id.ContinueButton);
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +99,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
                 if (requestState.equals("Request Accepted")) {
                     //go to next page
+
                     Intent intentWait = new Intent(RiderWaitDriverAcceptRequest.this, DriverIsOnTheWayActivity.class);
 //                    intentWait.putExtra("Username",user.getUsername());
 //                    intentWait.putExtra("reid",request.getRequestID());

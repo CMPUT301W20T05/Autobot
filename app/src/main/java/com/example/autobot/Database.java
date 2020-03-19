@@ -1,8 +1,10 @@
 package com.example.autobot;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -12,7 +14,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,7 +40,7 @@ public class Database{
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
         db = FirebaseFirestore.getInstance();
-        // to disable clean-up.
+    // to disable clean-up.
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
@@ -46,6 +50,27 @@ public class Database{
         collectionReference_user = db.collection("users");
         collectionReference_request = db.collection("Request");
         collectionReference_payment = db.collection("PaymentInf");
+    }
+    public void NotifyStatusChange(String requestID, String requeststatus,  RiderWaitDriverAcceptRequest r){
+        final Boolean[] newStatus = {false};
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        Intent intentWait = new Intent(r, DriverIsOnTheWayActivity.class);
+                        r.startActivity(intentWait);
+                    }
+                }
+
+            }
+        });
     }
 
     /**
