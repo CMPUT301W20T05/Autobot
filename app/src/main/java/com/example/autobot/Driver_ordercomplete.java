@@ -102,4 +102,8 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

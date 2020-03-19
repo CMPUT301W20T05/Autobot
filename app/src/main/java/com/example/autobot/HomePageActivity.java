@@ -337,7 +337,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        profilePhoto.setImageBitmap(bitmap);
+        mybitmap = bitmap;
+        profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -363,4 +364,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         overridePendingTransition(0, 0);
     }
 
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

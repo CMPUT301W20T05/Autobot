@@ -267,4 +267,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

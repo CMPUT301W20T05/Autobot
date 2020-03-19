@@ -102,4 +102,8 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

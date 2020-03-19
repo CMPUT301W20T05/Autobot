@@ -166,4 +166,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

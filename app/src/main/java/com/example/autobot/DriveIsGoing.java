@@ -164,6 +164,10 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     public String getUsername() {
         return username;
     }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 
 
     //reset the button onclick function--------------------------------------
