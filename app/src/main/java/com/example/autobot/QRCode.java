@@ -11,16 +11,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.zxing.Result;
 import com.google.zxing.WriterException;
-
-import java.text.ParseException;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
  * This is a class for generating qrcode based on the price of the trip
