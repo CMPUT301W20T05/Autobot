@@ -82,7 +82,6 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
             }
         });
-        db.NotifyStatusChange(reID,"Request Accepted",this);
 
         Button continueButton = findViewById(R.id.ContinueButton);
         continueButton.setOnClickListener(new View.OnClickListener() {
