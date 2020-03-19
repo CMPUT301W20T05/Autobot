@@ -125,8 +125,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public NavigationView navigationView;
     public Fragment fragment;
 
-
-
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
     public TextView name;

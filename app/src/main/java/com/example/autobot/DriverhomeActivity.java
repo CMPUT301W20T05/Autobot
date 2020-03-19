@@ -247,8 +247,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        profilePhoto.setImageBitmap(bitmap);
-
+        mybitmap = bitmap;
+        profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
