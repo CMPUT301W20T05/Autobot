@@ -75,16 +75,16 @@ public class SignUpActivity extends AppCompatActivity {
         ContinueButton.setOnClickListener(new OnClickListener() {
               @Override
               public void onClick(View v) {
+
                   db = MainActivity.db;
                   final EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
                   final EditText editTextUserName = findViewById(R.id.accountUserName);
                   final String Username = editTextUserName.getText().toString();
                   final String PhoneNumber = editTextPhoneNumber.getText().toString();
 
-
                   if (Username.length() != 0 && PhoneNumber.length() != 0) {
                       db.getRef(Username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                              @Override
+                          @Override
                           public void onSuccess(DocumentSnapshot documentSnapshot) {
                               if (documentSnapshot.exists()) {
                                   editTextUserName.setError("The User name is exist");
@@ -128,6 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
                       intentSetPassword.putExtra("Type",user.getUserType());
                       startActivity(intentSetPassword);
                   }
+
 
               }
 
