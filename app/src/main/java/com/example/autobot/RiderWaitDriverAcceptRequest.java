@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -108,10 +109,13 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        profilePhoto.setImageBitmap(bitmap);
+
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
