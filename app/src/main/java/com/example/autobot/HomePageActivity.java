@@ -9,22 +9,18 @@ import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.Status;
@@ -32,25 +28,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
-
-import static android.os.AsyncTask.execute;
-import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this class is the homepage activity
@@ -293,6 +277,26 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     /**
+     * two time back pressed will return to home window
+     */
+    private long firstPressedTime;
+    private Toast backToast;
+    @Override
+    public void onBackPressed(){
+        if(System.currentTimeMillis() - firstPressedTime<2000){
+            backToast.cancel();
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        }else{
+            backToast = Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
+            backToast.show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
      * this function gets the origin location of user request
      * the default location is the current location, but user can use search bar to choose another location
      * @param autocompleteFragmentOrigin this is the Google location search bar
@@ -359,5 +363,31 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         startActivity(intent);
         overridePendingTransition(0, 0);
     }
+
+    /*
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            if (System.currentTimeMillis() - firstPressedTime < 2000){
+                this.finish();
+                System.exit(0);
+            }else {
+                Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT).show();
+                firstPressedTime = System.currentTimeMillis();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
+    /*@Override
+    public void onBackPressed(){
+        if(System.currentTimeMillis() - firstPressedTime<2000){
+            System.exit(0);
+        }else{
+            Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT).show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }*/
+
 
 }

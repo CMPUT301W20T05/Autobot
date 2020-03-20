@@ -17,8 +17,6 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     private User user;
     private Request request;
     private String reID;
-    static double distance;
-    public double fare;
     public String model;
 
     @Override
@@ -80,10 +78,6 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
                 fare = 5 + 2 * 10;
             }*/
         //});
-
-        //Toast.makeText(UCurRequest,String.valueOf(distance),Toast.LENGTH_SHORT).show();
-
-        //EstimatedFare.setText(String.valueOf(fare));
 
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
