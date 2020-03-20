@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,10 +79,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -121,11 +124,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public NavigationView navigationView;
     public Fragment fragment;
 
-
-
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
     public TextView name;
+    public CircleImageView profilePhoto;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -135,6 +137,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
+    public Bitmap mybitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -163,6 +166,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View header = navigationView.getHeaderView(0); // get header of the navigation view
+        profilePhoto = header.findViewById(R.id.profile_photo);
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment = new EditProfilePage();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                navigationView.getMenu().getItem(0).setChecked(true);
+                setTitle("Edit Profile");
+                if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -176,8 +194,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
-    public void setProfile(String username) throws ParseException {
-        userbase = LoginActivity.db;
+    public void setProfile(String username, Database db){
+        Database userBase = db;
 
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
@@ -186,7 +204,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
 
-        DocumentReference docRef = userbase.getRef(username);
+        DocumentReference docRef = userBase.getRef(username);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
             @Override
@@ -329,6 +347,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
+            case R.id.my_notification:
+                fragment = new Notifications();
+                anInt = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                navigationView.getMenu().getItem(2).setChecked(true);
+                setTitle("My Notifications");
+                break;
             case R.id.log_out:
                 navigationView.getMenu().getItem(5).setChecked(true);
 
@@ -385,9 +410,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu(); // get the menu
         MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
         MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
-        //MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
         MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
         MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
 
         //  store the menu to var when creating options menu
 
@@ -396,8 +422,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (fragment == null){
             super.onBackPressed(); // back to the last activity
-        }
-        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
@@ -422,6 +448,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             }
 
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
@@ -515,12 +548,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
+        Database db2 = MainActivity.db;
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        HashMap<String, String> CurrentLocation = new HashMap<>();
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+
+        db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                .set(CurrentLocation)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
@@ -640,6 +692,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setContentTitle("New Notification")
                 .setContentText("Message...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true) //用户点按通知后自动移除通知
                 .build();
     }
 

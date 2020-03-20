@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="Request Detail"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dp"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewAvatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@drawable/icon"/>
+
+        <TextView
+            android:id="@+id/Driver_name"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:ems="10"
+            android:text="Driver Name"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/see_profile"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="See profile"
+            android:textColor="@color/blue2"
+            android:textSize="11sp"
+            android:textStyle="bold|italic"/>
+
+        <ImageButton
+            android:id="@+id/phoneButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@android:drawable/stat_sys_phone_call"/>
+
+        <ImageButton
+            android:id="@+id/emailButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@android:drawable/ic_dialog_email"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/driver_condition"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:text="Please wait for driver to accpet your request"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/origin_loc"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Origin location"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/Destination"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="@string/Destination"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/Appro_distance"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Approximated distance"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/Appro_price"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Approximated price"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/cancel_order"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:background="@drawable/button_blue_style"
+        android:text="Cancel Order"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

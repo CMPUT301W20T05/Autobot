@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -52,11 +56,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        try {
-            setProfile(username); // set profile
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        setProfile(username,db); // set profile
+
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -147,10 +148,19 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(DriverIsOnTheWayActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -164,5 +174,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     @Override
     public String getUsername() {
         return username;
+    }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 }

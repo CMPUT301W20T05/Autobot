@@ -1,13 +1,19 @@
 package com.example.autobot;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 
 public class UCurRequest extends BaseActivity implements EditProfilePage.EditProfilePageListener{
@@ -50,11 +56,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         //request = HomePageActivity.request;
         reID = request.getRequestID();
 
-        try {
-            setProfile(username); // set profile
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        setProfile(username,db); // set profile
 
         //calculate estimated fare
         double estimateFare = request.getEstimateCost();
@@ -102,10 +104,19 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(UCurRequest.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -119,5 +130,9 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     @Override
     public String getUsername() {
         return username;
+    }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 }

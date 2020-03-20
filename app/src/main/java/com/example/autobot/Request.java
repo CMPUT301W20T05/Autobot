@@ -186,12 +186,8 @@ public class Request implements Serializable {
         double lnt = location.longitude;
         List<Address> addresses;
         addresses = geocoder.getFromLocation(lat, lnt, 1);
-        return addresses.get(0).getAddressLine(0)
-                +addresses.get(0).getLocality()
-                +addresses.get(0).getLocality()
-                +addresses.get(0).getCountryName()
-                +addresses.get(0).getPostalCode()
-                +addresses.get(0).getFeatureName();
+        return addresses.get(0).getAddressLine(0);
+                //+addresses.get(0).getFeatureName();
     }
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();

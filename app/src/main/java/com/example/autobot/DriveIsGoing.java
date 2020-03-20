@@ -8,6 +8,8 @@ import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +26,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 
 public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -44,11 +48,9 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         db = DriverhomeActivity.db;
         user = DriverhomeActivity.user; // get User
         username = user.getUsername(); // get username
-        try {
-            setProfile(username); // set profile
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        setProfile(username,db); // set profile
+
         //Log.d("debug",username);
 
         User rider = request.getRider();
@@ -144,21 +146,36 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(DriveIsGoing.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
-
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
         db.add_new_user(newUser);
 
     }
     @Override
     public String getUsername() {
         return username;
+    }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 
 

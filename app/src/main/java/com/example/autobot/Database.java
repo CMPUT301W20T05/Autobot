@@ -41,7 +41,9 @@ public class Database{
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
         db1 = FirebaseFirestore.getInstance();
-    // to disable clean-up.
+
+        // to disable clean-up.
+
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
