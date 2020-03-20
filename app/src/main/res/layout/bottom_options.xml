@@ -6,33 +6,36 @@
     android:orientation="vertical">
     <TextView
         android:id="@+id/get_library"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:gravity="center_vertical"
         android:padding="10dp"
-        android:text="Choose From Library"
-        android:textColor="@color/red">
+        android:text=" Choose From Library"
+        android:textColor="@color/red"
+        android:background="?android:selectableItemBackground">
     </TextView>
     <TextView
         android:id="@+id/take_photo"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:gravity="center_vertical"
-        android:text="Take Photo"
+        android:text=" Take Photo"
         android:textColor="@color/red"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="?android:selectableItemBackground">
     </TextView>
     <TextView
         android:id="@+id/cancel"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:gravity="center_vertical"
-        android:text="Cancel"
+        android:text=" Cancel"
         android:textColor="@color/blue2"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="?android:selectableItemBackground">
     </TextView>
 
 </LinearLayout>

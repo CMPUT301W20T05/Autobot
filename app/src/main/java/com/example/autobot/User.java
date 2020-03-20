@@ -4,6 +4,7 @@ package com.example.autobot;
 import android.graphics.Bitmap;
 import android.media.Image;
 
+import android.net.Uri;
 import android.provider.ContactsContract;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -26,7 +27,7 @@ public class User implements Driver, Rider, Serializable {
     private String LastName;
     private String EmergencyContact;
     private String HomeAddress;
-    private Bitmap bitmap;
+    private Uri uri;
 
     public User(String username){
         this.Username = username;
@@ -39,7 +40,7 @@ public class User implements Driver, Rider, Serializable {
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
-        this.bitmap = null;
+        this.uri = null;
     }
 
     public String getEmergencyContact() {
@@ -52,8 +53,8 @@ public class User implements Driver, Rider, Serializable {
 
     // added by yiping
 
-    public Bitmap getBitmap(){return bitmap;}
-    public void setBitmap(Bitmap bitmapp){bitmap = bitmapp;}
+    public Uri getUri(){return uri;}
+    public void setUri(Uri urii){uri = urii;}
 
     //-----------------------------------
 

@@ -60,10 +60,11 @@ public class EditProfilePage extends Fragment {
     private static final int RESULT_LOAD_IMAGE = 2;
     private String currentPhotoPath;
     public Bitmap bitmap;
+    public Uri imageUri;
 
 
     public interface EditProfilePageListener {
-        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap);
+        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri);
         String getUsername();
         Bitmap getBitmap();
     }
@@ -87,6 +88,43 @@ public class EditProfilePage extends Fragment {
         pPhoto = view.findViewById(R.id.imageView2);
         bitmap = listener.getBitmap();
         if (bitmap != null) pPhoto.setImageBitmap(bitmap);
+        pPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View view1 = LayoutInflater.from(getContext()).inflate(R.layout.bottom_options,null);
+                getLibrary = view1.findViewById(R.id.get_library);
+                takePhoto = view1.findViewById(R.id.take_photo);
+                cancel = view1.findViewById(R.id.cancel);
+
+                getLibrary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openLibrary();
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+                takePhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dispatchTakePictureIntent();
+                        //galleryAddPic();
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+
+                bottomSheetDialog = new BottomSheetDialog(getContext());
+                bottomSheetDialog.setContentView(view1);
+                bottomSheetDialog.show();
+
+            }
+        });
+
         userName = view.findViewById(R.id.Username);
         firstName = view.findViewById(R.id.editTextFirstName);
         lastName = view.findViewById(R.id.editTextLastName);
@@ -95,10 +133,9 @@ public class EditProfilePage extends Fragment {
         eContact = view.findViewById(R.id.editTextEmergencyContact);
         changePhoto = view.findViewById(R.id.change_photo);
         changePhoto.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // set underline
-        changePhoto.setOnClickListener(new View.OnClickListener() {
+        changePhoto.setOnClickListener(new View.OnClickListener() { // set onClick listener for change photo
             @Override
             public void onClick(View view) {
-
                 View view1 = LayoutInflater.from(getContext()).inflate(R.layout.bottom_options,null);
                 getLibrary = view1.findViewById(R.id.get_library);
                 takePhoto = view1.findViewById(R.id.take_photo);
@@ -134,8 +171,7 @@ public class EditProfilePage extends Fragment {
         });
 
         //db = BaseActivity.db;
-        db = LoginActivity.db;
-        User user = db.rebuildUser(listener.getUsername());
+        User user = LoginActivity.user;
 
         userName.setText(user.getUsername());
         firstName.setText(user.getFirstName());
@@ -143,7 +179,6 @@ public class EditProfilePage extends Fragment {
         emailAddress.setText(user.getEmailAddress());
         homeAddress.setText(user.getHomeAddress());
         eContact.setText(user.getEmergencyContact());
-
 
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -155,14 +190,13 @@ public class EditProfilePage extends Fragment {
                 String hAddress = homeAddress.getText().toString();
                 String econtact = eContact.getText().toString();
 
-                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,bitmap);
+                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,imageUri);
                 getActivity().onBackPressed();
             }
         });
 
         return view;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -173,7 +207,7 @@ public class EditProfilePage extends Fragment {
                 pPhoto.setImageBitmap(bitmap);
             }else if (requestCode == 2){
                 try {
-                    Uri imageUri = data.getData();
+                    imageUri = data.getData();
                     InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     bitmap = BitmapFactory.decodeStream(imageStream);
                     pPhoto.setImageBitmap(bitmap);
@@ -200,10 +234,10 @@ public class EditProfilePage extends Fragment {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                imageUri = FileProvider.getUriForFile(getContext(),
                         "com.example.autobot.fileprovider",
                         photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }

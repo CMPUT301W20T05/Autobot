@@ -348,6 +348,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
+            case R.id.my_notification:
+                fragment = new Notifications();
+                anInt = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                navigationView.getMenu().getItem(2).setChecked(true);
+                setTitle("My Notifications");
+                break;
             case R.id.log_out:
                 navigationView.getMenu().getItem(5).setChecked(true);
 
@@ -404,7 +411,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu(); // get the menu
         MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
         MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
-        //MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
         MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
         MenuItem sItem = menu.findItem(R.id.settings); // item settings
         MenuItem lItem = menu.findItem(R.id.log_out); // item log out
@@ -416,8 +423,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (fragment == null){
             super.onBackPressed(); // back to the last activity
-        }
-        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
@@ -442,6 +449,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             }
 
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();

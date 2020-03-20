@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -45,7 +46,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -332,13 +335,19 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        profilePhoto.setImageBitmap(mybitmap);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user

@@ -12,11 +12,11 @@
         android:layout_width="99dp"
         android:layout_height="99dp"
         android:layout_marginTop="28dp"
-        android:background="@drawable/default_avatar"
+        android:src="@drawable/default_avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 <!--    <ImageView&ndash;&gt;-->
 <!--    &lt;!&ndash;        android:id="@+id/imageView2"&ndash;&gt;-->
 <!--    &lt;!&ndash;        android:layout_width="99dp"&ndash;&gt;-->
