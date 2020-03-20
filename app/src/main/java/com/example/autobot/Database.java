@@ -3,6 +3,7 @@ package com.example.autobot;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,6 +57,14 @@ public class Database{
         collectionReference_request = db1.collection("Request");
         collectionReference_payment = db1.collection("PaymentInf");
     }
+
+    /**
+     *
+     * @param requestID
+     * @param requeststatus
+     * @param start
+     * @param intent
+     */
     public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -67,6 +78,33 @@ public class Database{
                     if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
                         Log.d(TAG,"Current status: "+ requeststatus);
                         start.startActivity(intent);
+                    }
+                }
+
+            }
+        });
+    }
+
+    /**
+     * This function is to change interface textview if database has specific change
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param textView which textView u want to change
+     * @param text the changed content of textView
+     */
+    public void NotifyStatusChangeEditText(String requestID, String requeststatus, TextView textView, String text){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        textView.setText(text);
                     }
                 }
 

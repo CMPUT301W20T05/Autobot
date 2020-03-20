@@ -85,7 +85,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         DecimalFormat df = new DecimalFormat("0.00");
         textViewEstimateDist.setText(df.format(distance));
         //calculate time
-        double time = distance / 1008.00;
+        double time = distance / 1008.00 + 5.00;
         textViewEstimateTime.setText(df.format(time));
 
         //use request to get infor
@@ -142,10 +142,12 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 alert.show();
             }
         });
+        //picked up rider
+        db.NotifyStatusChangeEditText(reID, "Request picked", textViewDriverCondition, "Driving to destination...");
 
-        //wait driver to accept
+        //arrive destination
         Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-        db.NotifyStatusChange(reID, "Request picked", DriverIsOnTheWayActivity.this, intentComplete);
+        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
 
     }
 
