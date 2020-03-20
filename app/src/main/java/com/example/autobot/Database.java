@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import static com.android.volley.VolleyLog.TAG;
 
 public class Database{
-    protected FirebaseFirestore db;
+    protected FirebaseFirestore db1;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
     public CollectionReference collectionReference_payment;
@@ -39,20 +40,19 @@ public class Database{
 
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
-        db = FirebaseFirestore.getInstance();
+        db1 = FirebaseFirestore.getInstance();
     // to disable clean-up.
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
                 .build();
 
-        db.setFirestoreSettings(settings);
-        collectionReference_user = db.collection("users");
-        collectionReference_request = db.collection("Request");
-        collectionReference_payment = db.collection("PaymentInf");
+        db1.setFirestoreSettings(settings);
+        collectionReference_user = db1.collection("users");
+        collectionReference_request = db1.collection("Request");
+        collectionReference_payment = db1.collection("PaymentInf");
     }
-    public void NotifyStatusChange(String requestID, String requeststatus,  RiderWaitDriverAcceptRequest r){
-        final Boolean[] newStatus = {false};
+    public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -64,8 +64,7 @@ public class Database{
                 if(documentSnapshot != null&&documentSnapshot.exists()){
                     if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
                         Log.d(TAG,"Current status: "+ requeststatus);
-                        Intent intentWait = new Intent(r, DriverIsOnTheWayActivity.class);
-                        r.startActivity(intentWait);
+                        start.startActivity(intent);
                     }
                 }
 

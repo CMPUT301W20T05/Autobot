@@ -86,7 +86,8 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
             }
         });
-        db.NotifyStatusChange(reID,"Request Accepted",this);
+        Intent intent1 = new Intent(this,DriverIsOnTheWayActivity.class);
+        db.NotifyStatusChange(reID,"Request Accepted",this, intent1);
 
         Button continueButton = findViewById(R.id.ContinueButton);
         continueButton.setOnClickListener(new View.OnClickListener() {
