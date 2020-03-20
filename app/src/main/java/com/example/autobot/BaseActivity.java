@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -56,6 +57,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -194,6 +196,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
+
     public void setProfile(String username, Database db){
         Database userBase = db;
 
@@ -706,14 +709,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
+        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
+
+        if (mMap != null) {
+            mMap.addMarker(place1);
+            mMap.addMarker(place2);
+        }
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         // Add your locations to bounds using builder.include, maybe in a loop
         builder.include(origin);
@@ -722,7 +730,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //Then construct a cameraUpdate
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
         //Then move the camera
-        mMap.animateCamera(cameraUpdate);
+        if (mMap != null) {
+            mMap.animateCamera(cameraUpdate);
+        }
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");

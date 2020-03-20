@@ -40,6 +40,7 @@ public class Request implements Serializable {
 
     public Request(User user) throws ParseException {
         this.Rider = user;
+        this.Driver = null;
         this.Destination = null;
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
@@ -58,6 +59,7 @@ public class Request implements Serializable {
     }
     public Request() throws ParseException {
         this.Rider = null;
+        this.Driver = null;
         this.Destination = null;
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
@@ -77,6 +79,7 @@ public class Request implements Serializable {
 
     public Request(User user, LatLng origin, LatLng destination) throws ParseException {
         this.Rider = user;
+        this.Driver = null;
         this.Destination = destination;
         this.BeginningLocation = origin;
         this.requestStatusList = new ArrayList<>();

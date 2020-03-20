@@ -45,15 +45,28 @@
                 android:text="Driver Name"
                 android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/see_profile"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="See profile"
-                android:textColor="@color/blue2"
-                android:textSize="11sp"
-                android:textStyle="bold|italic" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="60dp"
+                app:srcCompat = "@drawable/star"/>
+
+            <TextView
+                android:id="@+id/driverRate"
+                android:layout_width="45dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:text="5.0"
+                android:textSize="18sp"/>
+
+<!--            <Button-->
+<!--                android:id="@+id/see_profile"-->
+<!--                style="@style/Widget.AppCompat.Button.Borderless.Colored"-->
+<!--                android:layout_width="80dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:text="See profile"-->
+<!--                android:textColor="@color/blue2"-->
+<!--                android:textSize="11sp"-->
+<!--                android:textStyle="bold|italic" />-->
 
             <ImageButton
                 android:id="@+id/phoneButton"

@@ -162,9 +162,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 Spinner modelTochoose = uCurRequestDialog.findViewById(R.id.spinnerCarModel);
 
                 //calculate estimated fare
+                DecimalFormat df = new DecimalFormat("0.00");
                 double estimateFare = request.getEstimateCost();
                 if (EstimatedFare != null) {
-                    EstimatedFare.setText(String.valueOf(estimateFare));
+                    EstimatedFare.setText(String.valueOf(df.format(estimateFare)));
                 }
 
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
@@ -210,36 +211,36 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 //set distance and price for dialog
                 //distance between two locations
                 double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                DecimalFormat df = new DecimalFormat("0.00");
+                //DecimalFormat df = new DecimalFormat("0.00");
                 approDistance.setText(df.format(distance));
-                approPrice.setText(String.valueOf(request.getEstimateCost()));
+                approPrice.setText(df.format(request.getEstimateCost()));
 
                 //change driver condition when needed
                 //driverCondition.setText("");
 
-                Button seeProfile = dialog.findViewById(R.id.see_profile);
-                seeProfile.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.profile_viewer, null);
-
-                        TextView fname = view.findViewById(R.id.FirstName);
-                        TextView lname = view.findViewById(R.id.LastName);
-                        TextView pnumber = view.findViewById(R.id.PhoneNumber);
-                        TextView email = view.findViewById(R.id.EmailAddress);
-                        //should be set as driver's infor
-                        fname.setText(user.getFirstName());
-                        lname.setText(user.getLastName());
-                        pnumber.setText(user.getPhoneNumber());
-                        email.setText(user.getEmailAddress());
-
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
-                        alert.setView(view)
-                                .setTitle("Details")
-                                .setNegativeButton("Close",null);
-                        alert.show();
-                    }
-                });
+//                Button seeProfile = dialog.findViewById(R.id.see_profile);
+//                seeProfile.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.profile_viewer, null);
+//
+//                        TextView fname = view.findViewById(R.id.FirstName);
+//                        TextView lname = view.findViewById(R.id.LastName);
+//                        TextView pnumber = view.findViewById(R.id.PhoneNumber);
+//                        TextView email = view.findViewById(R.id.EmailAddress);
+//                        //should be set as driver's infor
+//                        fname.setText(user.getFirstName());
+//                        lname.setText(user.getLastName());
+//                        pnumber.setText(user.getPhoneNumber());
+//                        email.setText(user.getEmailAddress());
+//
+//                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+//                        alert.setView(view)
+//                                .setTitle("Details")
+//                                .setNegativeButton("Close",null);
+//                        alert.show();
+//                    }
+//                });
 
                 Button cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
                 cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -272,20 +273,20 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                 });
 
-                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
-                phoneButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
-                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-                        } else {
-                            startActivity(callIntent);
-                        }
-                    }
-                });
+//                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
+//                phoneButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+//                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
+//                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+//                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
+//                        } else {
+//                            startActivity(callIntent);
+//                        }
+//                    }
+//                });
 
             }
         });
