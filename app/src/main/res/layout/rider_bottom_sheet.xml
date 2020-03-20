@@ -23,8 +23,6 @@
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"/>
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,41 +79,91 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/origin_loc"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:padding="16dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="Origin location"
-        android:textSize="18sp"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:textColor="@color/blue2"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
 
-    <TextView
-        android:id="@+id/Destination"
-        android:layout_width="match_parent"
-        android:padding="16dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="@string/Destination"
-        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/origin_loc"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="Origin location"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/Appro_distance"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:padding="16dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="Approximated distance"
-        android:textSize="18sp"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="End"
+            android:textColor="@color/blue2"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
 
-    <TextView
-        android:id="@+id/Appro_price"
+        <TextView
+            android:id="@+id/Destination"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="@string/Destination"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:padding="16dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="Approximated price"
-        android:textSize="18sp" />
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="Distance"
+            android:textColor="@color/blue2"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/Appro_distance"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="Approximated distance"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="Fare"
+            android:textColor="@color/blue2"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/Appro_price"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="Approximated price"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/cancel_order"
