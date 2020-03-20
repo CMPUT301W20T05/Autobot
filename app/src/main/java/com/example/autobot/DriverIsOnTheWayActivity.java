@@ -130,10 +130,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
                 //should be set as driver's infor
-                fname.setText(user.getFirstName());
-                lname.setText(user.getLastName());
-                pnumber.setText(user.getPhoneNumber());
-                email.setText(user.getEmailAddress());
+                fname.setText(driver.getFirstName());
+                lname.setText(driver.getLastName());
+                pnumber.setText(driver.getPhoneNumber());
+                email.setText(driver.getEmailAddress());
 
                 final AlertDialog.Builder alert = new AlertDialog.Builder(DriverIsOnTheWayActivity.this);
                 alert.setView(view)

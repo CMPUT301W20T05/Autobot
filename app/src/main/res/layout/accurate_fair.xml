@@ -109,7 +109,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
             <EditText
-                android:id="@+id/textView3"
+                android:id="@+id/addTip"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:hint="2"
