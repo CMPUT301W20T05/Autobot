@@ -33,18 +33,11 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -214,7 +207,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                 }
                 //set distance and price for dialog
-                //approDistance.setText(String.valueOf());
+                //distance between two locations
+                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                DecimalFormat df = new DecimalFormat("0.00");
+                approDistance.setText(df.format(distance));
                 approPrice.setText(String.valueOf(request.getEstimateCost()));
 
                 //change driver condition when needed

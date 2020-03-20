@@ -57,10 +57,9 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);
-        EditText Tips = findViewById(R.id.textView3);
         Button Confirm = findViewById(R.id.confirmFee);
 
-        Price.setText("fee: "+String.valueOf(13.34));
+        Price.setText("fee: "+String.valueOf(0));
         Destination.setText("southgate");
         //get begining location name
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());

@@ -52,25 +52,24 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
             e.printStackTrace();
         }
 
-        TextView Destination = findViewById(R.id.setOriginLocation);
-        TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
+//        TextView Destination = findViewById(R.id.setOriginLocation);
+//        TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);
-        EditText Tips = findViewById(R.id.textView3);
         Button Confirm = findViewById(R.id.confirmFee);
 
-        LatLng destination = request.getDestination();
-        LatLng origin = request.getBeginningLocation();
-        if (destination != null && origin != null) {
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                String oaddress = request.ReadableAddress(origin, geocoder);
-                String daddress = request.ReadableAddress(destination, geocoder);
-                OriginalLoc.setText(oaddress);
-                Destination.setText(daddress);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        LatLng destination = request.getDestination();
+//        LatLng origin = request.getBeginningLocation();
+//        if (destination != null && origin != null) {
+//            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+//            try {
+//                String oaddress = request.ReadableAddress(origin, geocoder);
+//                String daddress = request.ReadableAddress(destination, geocoder);
+//                OriginalLoc.setText(oaddress);
+//                Destination.setText(daddress);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
