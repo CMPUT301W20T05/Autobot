@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -36,8 +38,10 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -74,11 +78,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         db = MainActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
-        try {
-            setProfile(username); // set profile
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        setProfile(username,db); // set profile
 
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
@@ -330,10 +331,19 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -359,4 +369,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         overridePendingTransition(0, 0);
     }
 
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }
