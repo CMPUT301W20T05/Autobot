@@ -31,6 +31,7 @@ public class Request implements Serializable {
     private Date SendTime;
     private Date AcceptTime;
     private double EstimateCost;
+    private double Cost;
     private String RequestStatus;
     private Date ArriveTime;
     private String RequestID;
@@ -54,6 +55,7 @@ public class Request implements Serializable {
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
+        this.Cost = 0.0;
         this.RequestID = generateRequestID();
 
     }
@@ -73,6 +75,7 @@ public class Request implements Serializable {
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
+        this.Cost = 0.0;
         this.RequestID = null;
 
     }
@@ -93,6 +96,7 @@ public class Request implements Serializable {
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
+        this.Cost = 0.0;
         this.RequestID = generateRequestID();
 
     }
@@ -149,6 +153,18 @@ public class Request implements Serializable {
     public double getEstimateCost() {
         return this.EstimateCost;
     }
+    public void EstimateAddModelFee(double addPrice) {
+        this.EstimateCost += addPrice;
+    }
+
+    public void setCost(double cost) {
+        this.Cost = cost;
+    }
+
+    public double getCost() {
+        return this.Cost;
+    }
+
     public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){
 
     }
