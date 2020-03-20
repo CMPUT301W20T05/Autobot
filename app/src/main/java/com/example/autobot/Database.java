@@ -41,7 +41,9 @@ public class Database{
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
         db1 = FirebaseFirestore.getInstance();
+
         // to disable clean-up.
+
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
@@ -52,7 +54,6 @@ public class Database{
         collectionReference_request = db1.collection("Request");
         collectionReference_payment = db1.collection("PaymentInf");
     }
-
     public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
