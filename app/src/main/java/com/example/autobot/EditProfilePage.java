@@ -58,13 +58,12 @@ public class EditProfilePage extends Fragment {
 
 
     public interface EditProfilePageListener {
-        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri);
+        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap);
 
         String getUsername();
 
         Bitmap getBitmap();
 
-        Uri getUri();
     }
 
     @Override
@@ -86,7 +85,6 @@ public class EditProfilePage extends Fragment {
         pPhoto = view.findViewById(R.id.imageView2);
         bitmap = listener.getBitmap();
         if (bitmap != null) pPhoto.setImageBitmap(bitmap);
-        imageUri = listener.getUri();
         pPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,8 +196,7 @@ public class EditProfilePage extends Fragment {
                 String hAddress = homeAddress.getText().toString();
                 String econtact = eContact.getText().toString();
 
-                if (imageUri == null) { imageUri = Uri.parse("http://www.google.com"); }
-                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,imageUri);
+                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,bitmap);
                 getActivity().onBackPressed();
             }
         });
