@@ -48,9 +48,6 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
         setProfile(username,db); // set profile
 
-        //when driver arrived, show notification
-        sendOnChannel();
-
         //check if database changed
 
 
