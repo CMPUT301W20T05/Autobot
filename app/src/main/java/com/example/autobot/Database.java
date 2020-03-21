@@ -2,7 +2,6 @@ package com.example.autobot;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -131,7 +130,9 @@ public class Database{
         user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
-        user_data.put("ImageUri",user.getUri().toString());
+        user_data.put("ImageUri",user.getUri());
+        user_data.put("GoodRate",user.getGoodRate());
+        user_data.put("BadRate",user.getBadRate());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -191,9 +192,12 @@ public class Database{
                                     user.setUserType((String) document.get("Type"));
                                     user.setUsername((String) document.get("Username"));
                                     String uri = ((String) document.get("ImageUri"));
-                                    if (uri != null) {
-                                        user.setUri(Uri.parse(uri));
-                                    }
+//                                    if (uri != null) {
+//                                        user.setUri(Uri.parse(uri));
+//                                    }
+                                    user.setUri(uri);
+                                    user.setGoodRate((String) document.get("GoodRate"));
+                                    user.setBadRate((String) document.get("BadRate"));
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

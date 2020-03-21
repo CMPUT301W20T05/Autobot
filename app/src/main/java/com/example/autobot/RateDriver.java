@@ -32,7 +32,10 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     private User user;
     private Request request;
     private String reID;
-
+    private String goodrate;
+    private String badrate;
+    private Boolean Good = true;
+    private Boolean Bad = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         //request = db.rebuildRequest(reID, user);
         request = HomePageActivity.request;
         reID = request.getRequestID();
+        goodrate = user.getGoodRate();
+        badrate = user.getBadRate();
 
         setProfile(username,db); // set profile
 
@@ -75,12 +80,14 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         thumb.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-
+                Good = true;
+                Bad = false;
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
-
+                Good = false;
+                Bad = true;
             }
         });
 
@@ -124,6 +131,17 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
             @Override
             public void onClick(View v) {
                 //go back to home page
+                if (Good == true){
+                    int good = Integer.parseInt(goodrate);
+                    good += 1;
+                    user.setGoodRate(String.valueOf(good));
+                }
+                else {
+                    int bad = Integer.parseInt(badrate);
+                    bad += 1;
+                    user.setBadRate(String.valueOf(bad));
+                }
+                db.add_new_user(user);
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);

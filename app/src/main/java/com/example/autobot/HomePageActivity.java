@@ -1,53 +1,40 @@
 package com.example.autobot;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
-
-import static android.os.AsyncTask.execute;
-import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this class is the homepage activity
@@ -352,7 +339,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        newUser.setUri(imageUri);
+        newUser.setUri(imageUri.toString());
         db.add_new_user(newUser);
 
     }
