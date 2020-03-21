@@ -111,6 +111,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         profilePhoto = findViewById(R.id.profile_photo);
         try {
             if (imageUri != Uri.parse("http://www.google.com")) {
+                myuri = imageUri;
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 mybitmap = BitmapFactory.decodeStream(imageStream);
                 profilePhoto.setImageBitmap(mybitmap);
@@ -126,7 +127,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
+        if (imageUri != Uri.parse("http://www.google.com")) {newUser.setUri(imageUri.toString());}
         db.add_new_user(newUser);
 
     }
@@ -137,5 +138,9 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
+    }
+    @Override
+    public Uri getUri(){
+        return myuri;
     }
 }

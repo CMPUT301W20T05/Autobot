@@ -92,6 +92,7 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         profilePhoto = findViewById(R.id.profile_photo);
         try {
             if (imageUri != Uri.parse("http://www.google.com")) {
+                myuri = imageUri;
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 mybitmap = BitmapFactory.decodeStream(imageStream);
                 profilePhoto.setImageBitmap(mybitmap);
@@ -118,5 +119,9 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
+    }
+    @Override
+    public Uri getUri(){
+        return myuri;
     }
 }

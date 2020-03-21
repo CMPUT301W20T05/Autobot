@@ -326,6 +326,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         profilePhoto = findViewById(R.id.profile_photo);
         try {
             if (imageUri != Uri.parse("http://www.google.com")) {
+                myuri = imageUri;
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 mybitmap = BitmapFactory.decodeStream(imageStream);
                 profilePhoto.setImageBitmap(mybitmap);
@@ -363,5 +364,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
+    }
+    @Override
+    public Uri getUri(){
+        return myuri;
     }
 }

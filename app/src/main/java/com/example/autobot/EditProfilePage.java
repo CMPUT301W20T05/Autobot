@@ -59,8 +59,12 @@ public class EditProfilePage extends Fragment {
 
     public interface EditProfilePageListener {
         void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri);
+
         String getUsername();
+
         Bitmap getBitmap();
+
+        Uri getUri();
     }
 
     @Override
@@ -82,6 +86,7 @@ public class EditProfilePage extends Fragment {
         pPhoto = view.findViewById(R.id.imageView2);
         bitmap = listener.getBitmap();
         if (bitmap != null) pPhoto.setImageBitmap(bitmap);
+        imageUri = listener.getUri();
         pPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

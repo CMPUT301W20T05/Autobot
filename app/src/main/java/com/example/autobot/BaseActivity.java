@@ -13,6 +13,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -140,6 +141,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
     public Bitmap mybitmap;
+    public Uri myuri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
