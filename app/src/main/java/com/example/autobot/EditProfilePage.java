@@ -193,6 +193,7 @@ public class EditProfilePage extends Fragment {
                 String hAddress = homeAddress.getText().toString();
                 String econtact = eContact.getText().toString();
 
+                if (imageUri == null) { imageUri = Uri.parse("http://www.google.com"); }
                 listener.updateInformation(fName,lName,eAddress,hAddress,econtact,imageUri);
                 getActivity().onBackPressed();
             }
@@ -216,7 +217,7 @@ public class EditProfilePage extends Fragment {
                     pPhoto.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                 }
 
             }
