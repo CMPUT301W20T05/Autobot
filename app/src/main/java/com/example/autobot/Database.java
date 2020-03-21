@@ -251,11 +251,12 @@ public class Database{
     }
 
     /**
-     * This function is to get all information from the RequsetionID and user
-     * @param RequestID
-     * @param user
-     * @return r is the all information of request that can be used from other class
+     *  This function is to get all information from the RequsetionID and user
+     *      * @param RequestID
+     *      * @param user
+     *      * @return r is the all information of request that can be used from other class
      */
+
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
         r.setRider(user);
         collectionReference_request
@@ -329,6 +330,25 @@ public class Database{
         collectionReference_payment
                 .document(payment_data.get("CardNumber"))
                 .set(payment_data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+    public void ChangeRequestStatus(Request request){
+        HashMap<String,String> requestChanged = new HashMap<>();
+        requestChanged.put("RequestStatus",request.getStatus());
+        requestChanged.put("Driver",request.getDriver().getUsername());
+        collectionReference_request.document(request.getRequestID())
+                .set(requestChanged)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
