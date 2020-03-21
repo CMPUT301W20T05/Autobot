@@ -36,11 +36,9 @@ public class User implements Driver, Rider, Serializable {
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
-        this.uri = null;
+        this.uri = "";
         this.GoodRate = "0";
         this.BadRate = "0";
-
-
     }
 
     public String getEmergencyContact() {
