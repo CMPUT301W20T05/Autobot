@@ -74,11 +74,11 @@ dependencies {
     // Optional -- Robolectric environment
     testImplementation 'androidx.test:core:1.2.0'
 
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
 
     //thumb up
-    compile 'com.github.jd-alexander:LikeButton:0.2.3'
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 }

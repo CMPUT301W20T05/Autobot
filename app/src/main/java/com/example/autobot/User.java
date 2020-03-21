@@ -59,38 +59,38 @@ public class User implements Driver, Rider, Serializable {
     //-----------------------------------
 
     public String getGoodRate() {
-        return GoodRate;
+        return this.GoodRate;
     }
 
     public void setGoodRate(String goodRate) {
-        GoodRate = goodRate;
+        this.GoodRate = goodRate;
     }
 
     public String getBadRate() {
-        return BadRate;
+        return this.BadRate;
     }
 
     public void setBadRate(String badRate) {
-        BadRate = badRate;
+        this.BadRate = badRate;
     }
 
     public String getHomeAddress() {
-        return HomeAddress;
+        return this.HomeAddress;
     }
     public void setHomeAddress(String homeAddress) {
-        HomeAddress = homeAddress;
+        this.HomeAddress = homeAddress;
     }
     public String getFirstName() {
-        return FirstName;
+        return this.FirstName;
     }
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        this.FirstName = firstName;
     }
     public String getLastName() {
-        return LastName;
+        return this.LastName;
     }
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.LastName = lastName;
     }
     public String getUsername(){
         return this.Username;
@@ -140,11 +140,11 @@ public class User implements Driver, Rider, Serializable {
     }
 
     public String getUserType() {
-        return UserType;
+        return this.UserType;
     }
 
     public void setUserType(String userType) {
-        UserType = userType;
+        this.UserType = userType;
     }
 
     public PayInfo getPayInfo(){
