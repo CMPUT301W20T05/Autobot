@@ -2,7 +2,6 @@ package com.example.autobot;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -15,31 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class EditProfilePage extends Fragment {
     private EditText firstName;
@@ -180,13 +174,13 @@ public class EditProfilePage extends Fragment {
         homeAddress.setText(user.getHomeAddress());
         eContact.setText(user.getEmergencyContact());
         Uri Load = user.getUri();
-        try {
-            InputStream imageLoadStream = getContext().getContentResolver().openInputStream(Load);
-            bitmap = BitmapFactory.decodeStream(imageLoadStream);
-            pPhoto.setImageBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            InputStream imageLoadStream = getContext().getContentResolver().openInputStream(Load);
+//            bitmap = BitmapFactory.decodeStream(imageLoadStream);
+//            pPhoto.setImageBitmap(bitmap);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
 
         btn = view.findViewById(R.id.button);
