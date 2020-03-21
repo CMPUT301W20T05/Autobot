@@ -199,6 +199,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void setProfile(String username, Database db){
         Database userBase = db;
+        User usertemp = LoginActivity.user;
 
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
@@ -206,6 +207,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
+        profilePhoto = header.findViewById(R.id.profile_photo);
 
         DocumentReference docRef = userBase.getRef(username);
 
