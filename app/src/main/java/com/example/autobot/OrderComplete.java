@@ -115,7 +115,9 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
+        if (!imageUri.toString().equals("http://www.google.com")) {
+            newUser.setUri(imageUri.toString());
+        }
         db.add_new_user(newUser);
 
     }
