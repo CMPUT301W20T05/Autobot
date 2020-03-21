@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -94,6 +95,7 @@ public class Database{
         user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
+        user_data.put("ImageUri",user.getUri().toString());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -152,6 +154,7 @@ public class Database{
                                     user.setStars(Double.valueOf((String) document.get("StarsRate")));
                                     user.setUserType((String) document.get("Type"));
                                     user.setUsername((String) document.get("Username"));
+                                    user.setUri(Uri.parse((String) document.get("ImageUri")));
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
