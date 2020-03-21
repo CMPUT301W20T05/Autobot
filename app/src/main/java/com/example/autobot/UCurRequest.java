@@ -110,9 +110,11 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(UCurRequest.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -124,6 +126,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != null) newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
     }

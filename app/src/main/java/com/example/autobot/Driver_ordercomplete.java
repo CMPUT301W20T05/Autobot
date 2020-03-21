@@ -91,9 +91,11 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(Driver_ordercomplete.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -105,6 +107,7 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != null) newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
     }

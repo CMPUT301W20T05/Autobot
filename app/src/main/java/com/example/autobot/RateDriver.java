@@ -140,9 +140,11 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(RateDriver.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -154,6 +156,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != null) newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
     }

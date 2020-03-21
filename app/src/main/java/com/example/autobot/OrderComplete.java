@@ -98,9 +98,11 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(OrderComplete.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -112,6 +114,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != null) newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
     }
