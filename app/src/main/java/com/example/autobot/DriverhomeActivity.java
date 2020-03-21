@@ -183,6 +183,15 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        }
                                        //requests_list.add(active_request);
                                    }
+                                   //testing
+                                   try{
+                                   User user3 = new User("jc");
+                                   Request request1 = new Request(user3);
+                                   request1.UpdateStatus(0);
+                                   requests_list.add(request1);}
+                                   catch (ParseException e) {
+                                       e.printStackTrace();
+                                   }
                                    //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                }
                            } else {
@@ -219,7 +228,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //db.add_new_request(request);
         Log.d("debug",request.getStatus());
 
-
         DriveIsGoing.request = request;
 
         //start new activity
@@ -246,7 +254,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     }
 
     //for edit profile info
-    @Override
+    
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
@@ -263,6 +271,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             Toast.makeText(DriverhomeActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
 
+        //db.add_new_user(newUser);
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
@@ -281,6 +290,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     public String getUsername() {
         return username;
     }
+
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
