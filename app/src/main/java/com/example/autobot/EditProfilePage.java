@@ -179,6 +179,15 @@ public class EditProfilePage extends Fragment {
         emailAddress.setText(user.getEmailAddress());
         homeAddress.setText(user.getHomeAddress());
         eContact.setText(user.getEmergencyContact());
+        Uri Load = user.getUri();
+        try {
+            InputStream imageLoadStream = getContext().getContentResolver().openInputStream(Load);
+            bitmap = BitmapFactory.decodeStream(imageLoadStream);
+            pPhoto.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {

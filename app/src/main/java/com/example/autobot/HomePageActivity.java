@@ -352,6 +352,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
     }
