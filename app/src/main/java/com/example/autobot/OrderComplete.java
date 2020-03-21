@@ -92,21 +92,13 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            if (imageUri != Uri.parse("http://www.google.com")) {
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                mybitmap = BitmapFactory.decodeStream(imageStream);
-                profilePhoto.setImageBitmap(mybitmap);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            //Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -114,7 +106,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
+
         db.add_new_user(newUser);
 
     }

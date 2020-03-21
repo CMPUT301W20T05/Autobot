@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +83,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -140,6 +144,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
     public Bitmap mybitmap;
+    public Uri myuri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -226,7 +231,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
                             name.setText(fullName);
                         }
-                        String myuri = document.getData().get("ImageUri").toString();
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
                         //TextView
