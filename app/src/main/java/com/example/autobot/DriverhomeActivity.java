@@ -253,9 +253,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(DriverhomeActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -267,6 +269,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != null) newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
     }

@@ -325,9 +325,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
