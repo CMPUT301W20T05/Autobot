@@ -23,7 +23,7 @@ public class TripComplete extends BaseActivity{
         TextView initialLoc = findViewById(R.id.setDestinationLocation);
         TextView destination = findViewById(R.id.setOriginLocation);
         TextView fare = findViewById(R.id.setFare);
-        EditText addTip = findViewById(R.id.textView3);
+        EditText addTip = findViewById(R.id.addTip);
         Button TCConfirm = findViewById(R.id.confirmFee);
 
         String tips = addTip.getText().toString();

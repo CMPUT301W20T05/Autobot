@@ -1,11 +1,7 @@
 package com.example.autobot;
 
 
-import android.graphics.Bitmap;
-import android.media.Image;
-
 import android.net.Uri;
-import android.provider.ContactsContract;
 
 import com.google.android.gms.maps.model.LatLng;
 

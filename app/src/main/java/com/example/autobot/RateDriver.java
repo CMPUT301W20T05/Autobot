@@ -1,21 +1,24 @@
 package com.example.autobot;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.ParseException;
 
 /**
  * This is a class for RateDriver activity
@@ -55,54 +58,65 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
 
         findViewById(R.id.myMap).setVisibility(View.GONE);
 
-        ImageView Selfie = findViewById(R.id.DriverAvatar);
-        TextView Driver = findViewById(R.id.Driver_name);
+        ImageView avatar = findViewById(R.id.DriverAvatar);
+        TextView DriverName = findViewById(R.id.Driver_name);
         Button Profile = findViewById(R.id.see_profile);
         EditText Comment = findViewById(R.id.comment);
         Button Skip = findViewById(R.id.skip);
         Button Confirm = findViewById(R.id.confirmFee);
-        ImageView goodButton = findViewById(R.id.good);
-        ImageView badButton = findViewById(R.id.bad);
+        LikeButton thumb = findViewById(R.id.thumb);
 
-        goodButton.setOnClickListener(new View.OnClickListener() {
+        User driver = request.getDriver();
+        User rider = request.getRider();
+        //set driver infor
+        //imageViewAvatar.setBackgroundResource();
+        DriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
+
+        thumb.setOnLikeListener(new OnLikeListener() {
             @Override
-            public void onClick(View v) {
+            public void liked(LikeButton likeButton) {
 
             }
-        });
 
-        badButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void unLiked(LikeButton likeButton) {
 
-            }
-        });
-
-        Selfie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //see profile
             }
         });
 
         Profile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 //see profile
+                view = LayoutInflater.from(RateDriver.this).inflate(R.layout.profile_viewer, null);
+
+                TextView fname = view.findViewById(R.id.FirstName);
+                TextView lname = view.findViewById(R.id.LastName);
+                TextView pnumber = view.findViewById(R.id.PhoneNumber);
+                TextView email = view.findViewById(R.id.EmailAddress);
+                //should be set as driver's infor
+                fname.setText(driver.getFirstName());
+                lname.setText(driver.getLastName());
+                pnumber.setText(driver.getPhoneNumber());
+                email.setText(driver.getEmailAddress());
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(RateDriver.this);
+                alert.setView(view)
+                        .setTitle("Details")
+                        .setNegativeButton("Close",null);
+                alert.show();
             }
         });
-
-        String comment = Comment.getText().toString();
-        Comment.setText(comment);
 
         Skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //go back to home page
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
-//                                finishRequest.putExtra("Username",user.getUsername());
-//                                finishRequest.putExtra("reid",request.getRequestID());
+                finish();
+                overridePendingTransition(0, 0);
                 startActivity(finishRequest);
+                overridePendingTransition(0, 0);
             }
         });
 
@@ -111,9 +125,10 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
             public void onClick(View v) {
                 //go back to home page
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
-//                                finishRequest.putExtra("Username",user.getUsername());
-//                                finishRequest.putExtra("reid",request.getRequestID());
+                finish();
+                overridePendingTransition(0, 0);
                 startActivity(finishRequest);
+                overridePendingTransition(0, 0);
             }
         });
     }

@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -20,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +38,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.grpc.okhttp.internal.framed.Header;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,6 +57,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -82,10 +81,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -195,6 +196,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
+
     public void setProfile(String username, Database db){
         Database userBase = db;
 
@@ -549,12 +551,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
+        Database db2 = MainActivity.db;
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        HashMap<String, String> CurrentLocation = new HashMap<>();
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+
+        db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                .set(CurrentLocation)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
@@ -688,14 +709,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
+        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
+
+        if (mMap != null) {
+            mMap.addMarker(place1);
+            mMap.addMarker(place2);
+        }
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         // Add your locations to bounds using builder.include, maybe in a loop
         builder.include(origin);
@@ -704,7 +730,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //Then construct a cameraUpdate
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
         //Then move the camera
-        mMap.animateCamera(cameraUpdate);
+        if (mMap != null) {
+            mMap.animateCamera(cameraUpdate);
+        }
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
