@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
@@ -28,9 +27,8 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -327,13 +325,18 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         mybitmap = bitmap;
         if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+
+        Uri imageuri = db.upload(thumb);
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-
+        newUser.setUri(imageuri.toString());
         db.add_new_user(newUser);
 
     }

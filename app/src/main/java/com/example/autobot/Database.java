@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,14 +40,19 @@ public class Database{
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
     public CollectionReference collectionReference_payment;
+    public StorageReference storageReference;
+    public FirebaseAuth firebaseAuth;
     User user = new User("");
     Request r = new Request();
-
+    String user_id;
+    Uri download_uri;
 
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user_id = firebaseAuth.getCurrentUser().getUid();
         db1 = FirebaseFirestore.getInstance();
-
+        storageReference = FirebaseStorage.getInstance().getReference();
         // to disable clean-up.
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -158,6 +168,31 @@ public class Database{
     public DocumentReference getRef(String username) {
         return this.collectionReference_user.document(username);
     }
+
+    public Uri upload(byte[] thumb){
+        UploadTask image_path = storageReference.child("Image").child(user_id+".jpg").putBytes(thumb);
+
+        image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task != null) {
+                        download_uri = task.getResult().getUploadSessionUri();
+                    } else {
+                        Log.d(TAG, "Image addition failed!!");
+                    }
+                } else {
+                    String error = task.getException().getMessage();
+                    Log.d(TAG, "Image addition failed" + error);
+                }
+            }
+        });
+
+        return download_uri;
+
+    }
+
+
 
     /**
      * This function is to get the all information by the username
