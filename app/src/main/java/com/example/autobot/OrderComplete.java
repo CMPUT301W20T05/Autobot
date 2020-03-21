@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationManagerCompat;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firestore.v1.StructuredQuery;
 
@@ -41,6 +43,11 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         db = MainActivity.db;
 
         Intent intent = getIntent();
+
+        //when driver arrived, show notification
+        notificationManager = NotificationManagerCompat.from(this);
+        sendOnChannel("Destination arrived. Please check your receipt.");
+
         user = HomePageActivity.user;
         username = user.getUsername();
 

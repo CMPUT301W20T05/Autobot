@@ -31,8 +31,6 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     private User user;
     private Request request;
     private String reID;
-    private String goodrate;
-    private String badrate;
     private Boolean Good;
 
     @Override
@@ -75,8 +73,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         //imageViewAvatar.setBackgroundResource();
         DriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
 
-        goodrate = driver.getGoodRate();
-        badrate = driver.getBadRate();
+        String goodrate = driver.getGoodRate();
+        String badrate = driver.getBadRate();
         thumb.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
