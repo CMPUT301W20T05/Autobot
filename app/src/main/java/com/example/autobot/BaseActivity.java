@@ -226,6 +226,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
                             name.setText(fullName);
                         }
+                        String myuri = document.getData().get("ImageUri").toString();
                         TextView username = header.findViewById(R.id.user_name);
                         username.setText(theUserName);
                         //TextView
