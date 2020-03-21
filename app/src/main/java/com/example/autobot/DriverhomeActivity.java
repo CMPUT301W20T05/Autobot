@@ -169,7 +169,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        String request_id = (String) document.get("RequestID");
                                        String user_id = (String) document.get("Rider");
                                        //rebuild request from db
-                                       Log.d("loc",request_id);
+                                       Log.d("rid",request_id);
+                                       Log.d("userid",user_id);
+                                       //Log.d("error",e.toString());
                                        try {
                                            Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
                                            //testing
@@ -180,6 +182,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
                                        } catch (ParseException e) {
                                            e.printStackTrace();
+                                           Log.d("rid",request_id);
+                                           Log.d("userid",user_id);
+                                           Log.d("error",e.toString());
                                        }
                                        //requests_list.add(active_request);
                                    }
