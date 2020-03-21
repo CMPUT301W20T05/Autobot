@@ -25,8 +25,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -192,7 +190,10 @@ public class Database{
                                     user.setStars(Double.valueOf((String) document.get("StarsRate")));
                                     user.setUserType((String) document.get("Type"));
                                     user.setUsername((String) document.get("Username"));
-                                    user.setUri(Uri.parse((String) document.get("ImageUri")));
+                                    String uri = ((String) document.get("ImageUri"));
+                                    if (uri != null) {
+                                        user.setUri(Uri.parse(uri));
+                                    }
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

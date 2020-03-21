@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +19,6 @@ import com.like.OnLikeListener;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.ParseException;
 
 /**
  * This is a class for RateDriver activity
