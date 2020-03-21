@@ -3,6 +3,6 @@ package com.example.autobot;
 import android.media.Image;
 
 public interface Driver {
-    void AcceptRequest(Request request);
-    void ScanQRcode(int QRcode);
+    public void AcceptRequest(Request request);
+    public void ScanQRcode(int QRcode);
 }

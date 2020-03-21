@@ -2,7 +2,9 @@ package com.example.autobot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +43,9 @@ public class Database{
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
         db1 = FirebaseFirestore.getInstance();
+
         // to disable clean-up.
+
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
@@ -53,6 +57,13 @@ public class Database{
         collectionReference_payment = db1.collection("PaymentInf");
     }
 
+    /**
+     *
+     * @param requestID
+     * @param requeststatus
+     * @param start
+     * @param intent
+     */
     public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -66,6 +77,33 @@ public class Database{
                     if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
                         Log.d(TAG,"Current status: "+ requeststatus);
                         start.startActivity(intent);
+                    }
+                }
+
+            }
+        });
+    }
+
+    /**
+     * This function is to change interface textview if database has specific change
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param textView which textView u want to change
+     * @param text the changed content of textView
+     */
+    public void NotifyStatusChangeEditText(String requestID, String requeststatus, TextView textView, String text){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        textView.setText(text);
                     }
                 }
 
@@ -93,6 +131,7 @@ public class Database{
         user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
+        user_data.put("ImageUri",user.getUri().toString());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -151,6 +190,10 @@ public class Database{
                                     user.setStars(Double.valueOf((String) document.get("StarsRate")));
                                     user.setUserType((String) document.get("Type"));
                                     user.setUsername((String) document.get("Username"));
+                                    String uri = ((String) document.get("ImageUri"));
+                                    if (uri != null) {
+                                        user.setUri(Uri.parse(uri));
+                                    }
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

@@ -20,7 +20,6 @@ public class RequestHistoryFragment extends Fragment {
     private ListView requestList;
     private ArrayAdapter<HistoryRequest> mAdapter;
     private ArrayList<HistoryRequest> mDataList;
-    private Database db;
 
     // use temp data first, later use database's data
 
@@ -48,6 +47,9 @@ public class RequestHistoryFragment extends Fragment {
     int[] imgs = {R.drawable.default_avatar, R.drawable.default_avatar,R.drawable.default_avatar};
     Integer[] request_numbers = {123,222,111};
     String[] status = {"Completed", "Accepted", "Canceled"};
+
+    User user = LoginActivity.user;
+
 
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
