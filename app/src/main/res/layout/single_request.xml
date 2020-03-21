@@ -1,22 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <TextView
-        android:id="@+id/active_request_example"
-        android:layout_width="385dp"
-        android:layout_height="178dp"
-        android:layout_marginTop="4dp"
+        android:id="@+id/request_rider"
+        android:layout_width="193dp"
+        android:layout_height="119dp"
         android:background="#B1ABAB"
+        android:gravity="center"
         android:text="TextView"
         android:textColor="@color/places_autocomplete_prediction_primary_text"
         android:textSize="24sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintHorizontal_bias="0.022"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/request_destination"
+        android:layout_width="394dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/red3"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/request_avenue" />
+
+    <TextView
+        android:id="@+id/request_tips"
+        android:layout_width="195dp"
+        android:layout_height="54dp"
+        android:background="#00BCD4"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/request_avenue"
+        android:layout_width="195dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/red1"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintStart_toEndOf="@+id/request_rider"
+        app:layout_constraintTop_toBottomOf="@+id/request_tips" />
 </androidx.constraintlayout.widget.ConstraintLayout>

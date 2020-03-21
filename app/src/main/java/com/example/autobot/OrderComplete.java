@@ -98,12 +98,14 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
+            if (imageUri != Uri.parse("http://www.google.com")) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            Toast.makeText(OrderComplete.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            //Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
 
         User newUser = user;
@@ -112,6 +114,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
         db.add_new_user(newUser);
 
     }
