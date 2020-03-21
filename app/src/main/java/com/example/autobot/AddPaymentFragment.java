@@ -95,7 +95,9 @@ public class AddPaymentFragment extends DialogFragment {
                         String temp = cardNumber.getText().toString();
                         long cardn = 0;
                         if (temp.replace(" ", "").length() != 0){
-                            cardn = Integer.parseInt(temp); // get card number
+                            cardn = Long.parseLong(temp); // get card number
+                        }else{
+                            Toast.makeText(getContext(), "Card number could not be empty", Toast.LENGTH_SHORT).show();
                         }
                         final String holdn = holdName.getText().toString();  // get hold name
                         temp = date.getText().toString();

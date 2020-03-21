@@ -18,8 +18,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url "https://jitpack.io" } //https://github.com/mancj/MaterialSearchBar
-
+        maven { url "https://jitpack.io" }
     }
 }
 

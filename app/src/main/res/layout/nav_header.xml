@@ -8,7 +8,7 @@
     android:background="@drawable/side_nav_bar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:id="@+id/hear_layout">
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_photo"
         android:layout_marginTop="94dp"
         android:layout_marginLeft="15dp"
@@ -16,7 +16,7 @@
         android:layout_height="60dp"
         android:src="@drawable/default_avatar">
 
-    </ImageView>
+    </de.hdodenhof.circleimageview.CircleImageView>
     <TextView
         android:id="@+id/driver_name"
         android:layout_width="match_parent"

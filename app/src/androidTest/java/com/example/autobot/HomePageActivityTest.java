@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -11,6 +12,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.TestCase.assertTrue;
 
 public class HomePageActivityTest {
     private Solo solo;
@@ -27,12 +34,13 @@ public class HomePageActivityTest {
         //This method used to create the solo object with instrumentation and activity as arguments
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         //LoginActivity steps
-        solo.enterText((EditText) solo.getView(R.id.editAccount), "111");
-        solo.enterText((EditText) solo.getView(R.id.editTextConfirmPassword), "1zZ.");
+        solo.enterText((EditText) solo.getView(R.id.editAccount), "1");
+        solo.enterText((EditText) solo.getView(R.id.editTextInputPassword), "1");
         solo.clickOnButton("Log in");
+//        onView(withId(R.id.autocomplete_destination))
+//                .perform(typeText("ualberta"), closeSoftKeyboard());
         //HomePageActivity steps
-        //seaechbar fill in
-        solo.clickOnButton("Direction");
+        //searchbar fill in
     }
     @Test
     public void checkActivityChange() {
@@ -40,9 +48,15 @@ public class HomePageActivityTest {
         solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
     }
 
-    @Test
+    //@Test
+    public void checkSearchDestination() {
+        solo.clickOnButton("DIRECTION");
+        assertTrue(solo.waitForText("Please select destination"));
+    }
+
+    //@Test
     public void ConfirmRequestButton(){
-        solo.clickOnButton("Confirm Request");
+        solo.clickOnButton("CONFIRM REQUEST");
         solo.assertCurrentActivity("Wrong Activity", UCurRequest.class);
     }
 

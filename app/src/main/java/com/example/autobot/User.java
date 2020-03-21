@@ -1,10 +1,6 @@
 package com.example.autobot;
 
 
-import android.media.Image;
-
-import android.provider.ContactsContract;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -25,6 +21,9 @@ public class User implements Driver, Rider, Serializable {
     private String LastName;
     private String EmergencyContact;
     private String HomeAddress;
+    private String uri;
+    private String GoodRate;
+    private String BadRate;
 
     public User(String username){
         this.Username = username;
@@ -37,6 +36,11 @@ public class User implements Driver, Rider, Serializable {
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
+        this.uri = null;
+        this.GoodRate = "0";
+        this.BadRate = "0";
+
+
     }
 
     public String getEmergencyContact() {
@@ -47,31 +51,47 @@ public class User implements Driver, Rider, Serializable {
         EmergencyContact = emergencyContact;
     }
 
+    // added by yiping
+
+    public String getUri(){return uri;}
+    public void setUri(String urii){uri = urii;}
+
+    //-----------------------------------
+
+    public String getGoodRate() {
+        return GoodRate;
+    }
+
+    public void setGoodRate(String goodRate) {
+        GoodRate = goodRate;
+    }
+
+    public String getBadRate() {
+        return BadRate;
+    }
+
+    public void setBadRate(String badRate) {
+        BadRate = badRate;
+    }
+
     public String getHomeAddress() {
         return HomeAddress;
     }
-
     public void setHomeAddress(String homeAddress) {
         HomeAddress = homeAddress;
     }
-
     public String getFirstName() {
         return FirstName;
     }
-
     public void setFirstName(String firstName) {
         FirstName = firstName;
     }
-
     public String getLastName() {
         return LastName;
     }
-
     public void setLastName(String lastName) {
         LastName = lastName;
     }
-
-
     public String getUsername(){
         return this.Username;
     }
@@ -92,7 +112,6 @@ public class User implements Driver, Rider, Serializable {
     }
     public LatLng getCurrentLocation(){
         return this.CurrentLocation;
-
     }
     public void updateCurrentLocation(LatLng Location){
         this.CurrentLocation = Location;
@@ -145,10 +164,6 @@ public class User implements Driver, Rider, Serializable {
     public void AcceptRequest(Request request) {
         request.setDriver(this);
     }
-
-
-
-
 
     @Override
     public void ScanQRcode(int QRcode) {

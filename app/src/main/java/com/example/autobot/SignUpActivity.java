@@ -21,12 +21,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+
 public class SignUpActivity extends AppCompatActivity {
 
     int Type_Rider = 0 ;
     boolean Checkbox = false;
     boolean UserValid = false;
     boolean PhoneValid = false;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +75,16 @@ public class SignUpActivity extends AppCompatActivity {
         ContinueButton.setOnClickListener(new OnClickListener() {
               @Override
               public void onClick(View v) {
-                  final Database db = new Database();
+
+                  db = MainActivity.db;
                   final EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
                   final EditText editTextUserName = findViewById(R.id.accountUserName);
                   final String Username = editTextUserName.getText().toString();
                   final String PhoneNumber = editTextPhoneNumber.getText().toString();
 
-
                   if (Username.length() != 0 && PhoneNumber.length() != 0) {
                       db.getRef(Username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                              @Override
+                          @Override
                           public void onSuccess(DocumentSnapshot documentSnapshot) {
                               if (documentSnapshot.exists()) {
                                   editTextUserName.setError("The User name is exist");
@@ -106,9 +109,9 @@ public class SignUpActivity extends AppCompatActivity {
                   else {
                       if(Username.length() == 0) editTextUserName.setError("Please input Username!");
                       if (PhoneNumber.length() == 0) editTextPhoneNumber.setError("Please input PhoneNumber!"); }
-                  if (Type_Rider == 0) radioButtonRider.setError("Please choose Driver or Rider！");
+                  if (Type_Rider == 0) radioButtonRider.setError("Please choose Driver or Rider!");
                   else radioButtonRider.setError(null,null);
-                  if (Checkbox == false) checkBoxPolicy.setError("Please agree policy！");
+                  if (Checkbox == false) checkBoxPolicy.setError("Please agree policy!");
                   else checkBoxPolicy.setError(null,null);
 
                   if (UserValid == true && PhoneValid == true && Type_Rider != 0 && Checkbox == true) {
@@ -125,6 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
                       intentSetPassword.putExtra("Type",user.getUserType());
                       startActivity(intentSetPassword);
                   }
+
 
               }
 

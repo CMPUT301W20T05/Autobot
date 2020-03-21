@@ -6,9 +6,12 @@
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera permission -->
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.hardware.camera" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +20,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OrderInfo"></activity>
-        <activity android:name=".TripComplete"
-            android:parentActivityName=".DriverIsOnTheWayActivity"/>
+        <activity android:name=".QRCode"></activity>
+        <activity android:name=".OrderInfo" />
+        <activity
+            android:name=".OrderComplete"
+            android:parentActivityName=".DriverIsOnTheWayActivity" />
         <activity android:name=".RateDriver" />
 
         <meta-data
@@ -60,8 +65,24 @@
             android:name=".DriverhomeActivity"
             android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
-        <activity android:name=".DriverIsOnTheWayActivity"
+        <activity android:name=".DriveIsGoing"
             android:parentActivityName=".DriverhomeActivity"/>
+        <activity android:name=".RiderWaitDriverAcceptRequest"
+            android:parentActivityName=".UCurRequest"/>
+        <activity android:name=".DriverIsOnTheWayActivity"
+            android:parentActivityName=".RiderWaitDriverAcceptRequest"/>
+        <activity android:name=".Driver_ordercomplete"
+            android:parentActivityName=".DriveIsGoing"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.autobot.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
+
 
 </manifest>

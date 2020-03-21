@@ -12,6 +12,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 public class SignUpActivityTest {
     private Solo solo;
 
@@ -27,10 +31,10 @@ public class SignUpActivityTest {
         //This method used to create the solo object with instrumentation and activity as arguments
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         //LoginActivity Step
-        solo.clickOnButton("No account?");
+        solo.clickOnText("No account?");
         //SignUpActivity Steps
         solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "1234567890");
-        solo.enterText((EditText) solo.getView(R.id.accountUserName), "WoZuiShuai");
+        solo.enterText((EditText) solo.getView(R.id.accountUserName), "TestSignUp");
         solo.clickOnRadioButton(1);
         solo.clickOnCheckBox(0);
     }
@@ -45,9 +49,10 @@ public class SignUpActivityTest {
      * Check to see if the back button works or not
      */
     @Test
-    public void checkContinueButton() {
-        solo.clickOnButton("Continue");
-        solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
+    public void checkContinueButton() throws InterruptedException {
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
+        solo.clickOnView(solo.getView(R.id.ContinueButton));
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
 
     /**

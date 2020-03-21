@@ -4,22 +4,10 @@ import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -29,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Request class is a information collection of request, we can set and get information of request through the method in this class.
@@ -44,6 +31,7 @@ public class Request implements Serializable {
     private Date SendTime;
     private Date AcceptTime;
     private double EstimateCost;
+    private double Cost;
     private String RequestStatus;
     private Date ArriveTime;
     private String RequestID;
@@ -53,6 +41,7 @@ public class Request implements Serializable {
 
     public Request(User user) throws ParseException {
         this.Rider = user;
+        this.Driver = null;
         this.Destination = null;
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
@@ -65,13 +54,35 @@ public class Request implements Serializable {
         String defaultTimeString = "00-0-0000 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
-        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
+        this.EstimateCost = 0.0;
+        this.Cost = 0.0;
         this.RequestID = generateRequestID();
+
+    }
+    public Request() throws ParseException {
+        this.Rider = null;
+        this.Driver = null;
+        this.Destination = null;
+        this.BeginningLocation = null;
+        this.requestStatusList = new ArrayList<>();
+        this.requestStatusList.add("Request Sending");
+        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Rider picked");
+        this.requestStatusList.add("Trip Completed");
+        this.RequestStatus = requestStatusList.get(0);
+        this.SendTime = new Date(System.currentTimeMillis());
+        String defaultTimeString = "00-0-0000 00:00:00";
+        this.AcceptTime = formatter.parse(defaultTimeString);
+        this.ArriveTime = formatter.parse(defaultTimeString);
+        this.EstimateCost = 0.0;
+        this.Cost = 0.0;
+        this.RequestID = null;
 
     }
 
     public Request(User user, LatLng origin, LatLng destination) throws ParseException {
         this.Rider = user;
+        this.Driver = null;
         this.Destination = destination;
         this.BeginningLocation = origin;
         this.requestStatusList = new ArrayList<>();
@@ -84,7 +95,8 @@ public class Request implements Serializable {
         String defaultTimeString = "00-0-0000 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
-        this.EstimateCost = EstimateCost(this.Destination, this.BeginningLocation);
+        this.EstimateCost = 0.0;
+        this.Cost = 0.0;
         this.RequestID = generateRequestID();
 
     }
@@ -130,17 +142,29 @@ public class Request implements Serializable {
     }
     public LatLng getBeginningLocation(){return this.BeginningLocation;}
 
-    public double EstimateCost(LatLng destination, LatLng beginningLocation){
+    public void setEstimateCost(LatLng destination, LatLng beginningLocation){
+        double estimateCost = 0.0;
         if (destination != null && beginningLocation != null) {
             double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
-            double estimateCost = 5 + distance * 0.05;
-            return estimateCost;
+            estimateCost = 5.0 + distance * 0.01;
         }
-        return 0.0;
+        this.EstimateCost = estimateCost;
     }
     public double getEstimateCost() {
         return this.EstimateCost;
     }
+    public void EstimateAddModelFee(double addPrice) {
+        this.EstimateCost += addPrice;
+    }
+
+    public void setCost(double cost) {
+        this.Cost = cost;
+    }
+
+    public double getCost() {
+        return this.Cost;
+    }
+
     public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){
 
     }
@@ -151,7 +175,7 @@ public class Request implements Serializable {
     //the active request string representation
     public String get_active_requset_tostring(){
         //this is the hard coding version, need to modify later
-        String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getLastName(),"sub",13.34,"587-234-1299");
+        String active_requst = String.format("Rider name: %s  Destination: %s\nEstimate cost: %.2f\nPhone: %s",Rider.getUsername(),"sub",13.34,"587-234-1299");
         return active_requst;
     }
     public Date getAcceptTime(){
@@ -181,12 +205,8 @@ public class Request implements Serializable {
         double lnt = location.longitude;
         List<Address> addresses;
         addresses = geocoder.getFromLocation(lat, lnt, 1);
-        return addresses.get(0).getAddressLine(0)
-                +addresses.get(0).getLocality()
-                +addresses.get(0).getLocality()
-                +addresses.get(0).getCountryName()
-                +addresses.get(0).getPostalCode()
-                +addresses.get(0).getFeatureName();
+        return addresses.get(0).getAddressLine(0);
+                //+addresses.get(0).getFeatureName();
     }
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();

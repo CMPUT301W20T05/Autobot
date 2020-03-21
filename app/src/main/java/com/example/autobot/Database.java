@@ -1,11 +1,12 @@
 package com.example.autobot;
 
-import android.text.format.DateFormat;
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,7 +16,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,31 +26,88 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import static com.android.volley.VolleyLog.TAG;
-import static java.text.SimpleDateFormat.*;
 
 public class Database{
-    protected FirebaseFirestore db;
+    protected FirebaseFirestore db1;
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
+    public CollectionReference collectionReference_payment;
     User user = new User("");
+    Request r = new Request();
 
 
-    public Database() {
+    public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
-        db = FirebaseFirestore.getInstance();
+        db1 = FirebaseFirestore.getInstance();
+
         // to disable clean-up.
+
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
                 .build();
 
-        db.setFirestoreSettings(settings);
-        collectionReference_user = db.collection("users");
-        collectionReference_request = db.collection("Request");
+        db1.setFirestoreSettings(settings);
+        collectionReference_user = db1.collection("users");
+        collectionReference_request = db1.collection("Request");
+        collectionReference_payment = db1.collection("PaymentInf");
+    }
+
+    /**
+     *
+     * @param requestID
+     * @param requeststatus
+     * @param start
+     * @param intent
+     */
+    public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        start.startActivity(intent);
+                    }
+                }
+
+            }
+        });
+    }
+
+    /**
+     * This function is to change interface textview if database has specific change
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param textView which textView u want to change
+     * @param text the changed content of textView
+     */
+    public void NotifyStatusChangeEditText(String requestID, String requeststatus, TextView textView, String text){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        textView.setText(text);
+                    }
+                }
+
+            }
+        });
     }
 
     /**
@@ -70,6 +130,9 @@ public class Database{
         user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
+        user_data.put("ImageUri",user.getUri());
+        user_data.put("GoodRate",user.getGoodRate());
+        user_data.put("BadRate",user.getBadRate());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -128,6 +191,13 @@ public class Database{
                                     user.setStars(Double.valueOf((String) document.get("StarsRate")));
                                     user.setUserType((String) document.get("Type"));
                                     user.setUsername((String) document.get("Username"));
+                                    String uri = ((String) document.get("ImageUri"));
+//                                    if (uri != null) {
+//                                        user.setUri(Uri.parse(uri));
+//                                    }
+                                    user.setUri(uri);
+                                    user.setGoodRate((String) document.get("GoodRate"));
+                                    user.setBadRate((String) document.get("BadRate"));
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -159,7 +229,7 @@ public class Database{
         request_data.put("ArriveTime",formatter.format(request.getArriveTime()));
         //request_data.put("CurrentLocation",)
         request_data.put("RequestStatus",request.getStatus());
-        request_data.put("EstimateCost","0");
+        request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
 
@@ -187,44 +257,39 @@ public class Database{
      * @return r is the all information of request that can be used from other class
      */
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
-        Request r = new Request(user);
-        Query query = collectionReference_request.whereEqualTo("ID", RequestID);
-        query.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        r.setRider(user);
+        collectionReference_request
+                .document(RequestID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
 
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().size() != 0) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    LatLng BeginningLocation = new LatLng(Double.valueOf((String) document.get("BeginningLocationLat")), Double.valueOf((String) document.get("BeginningLocationLnt")));
-                                    r.setBeginningLocation(BeginningLocation);
-                                    LatLng Destination = new LatLng(Double.valueOf((String) document.get("DestinationLat")), Double.valueOf((String) document.get("DestinationLnt")));
-                                    r.setDestination(Destination);
-                                    r.setDriver(rebuildUser((String) document.get("Driver")));
-                                    r.setRequestID((String) document.get("RequestID"));
-                                    r.setRider(rebuildUser((String) document.get("Rider")));
-                                    r.resetAcceptTime((Date) document.get("AcceptTime"));
-                                    r.resetArriveTime((Date) document.get("ArriveTime"));
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            LatLng BeginningLocation = new LatLng(Double.valueOf((String) documentSnapshot.getString("BeginningLocationLat")), Double.parseDouble((String) documentSnapshot.getString("BeginningLocationLnt")));
+                            r.setBeginningLocation(BeginningLocation);
+                            LatLng Destination = new LatLng(Double.valueOf((String) documentSnapshot.getString("DestinationLat")), Double.valueOf((String) documentSnapshot.getString("DestinationLnt")));
+                            r.setDestination(Destination);
+                            r.setDriver(rebuildUser((String) documentSnapshot.getString("Driver")));
+                            r.setRequestID((String) documentSnapshot.getString("RequestID"));
+                            r.setRider(rebuildUser((String) documentSnapshot.getString("Rider")));
 
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
-                                    try {
-                                        r.resetAcceptTime(formatter.parse((String) document.get("AcceptTime")));
-                                        r.resetArriveTime(formatter.parse((String) document.get("ArriveTime")));
-                                        r.resetSendTime(formatter.parse((String) document.get("SendTime")));
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    r.resetRequestStatus((String) document.get("RequestStatus"));
-                                    r.resetEstimateCost(Double.valueOf((String) document.get("EstimateCost")));
-                                    r.setRequestID((String) document.get("ID"));
-                                }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                            try {
+                                r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
+                                r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
+                                r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
+                            r.resetRequestStatus((String) documentSnapshot.getString("RequestStatus"));
+                            r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
+                            r.setRequestID((String) documentSnapshot.getString("ID"));
                         }
+
                     }
                 });
+
         return r;
     }
     public void CancelRequest(String requestID){
@@ -250,7 +315,35 @@ public class Database{
                 });
     }
 
+    /**
+     * Add information about payment card to firebase
+     * @param PayInfCard
+     */
+    public void add_new_Payment(PaymentCard PayInfCard) {
+        HashMap<String,String> payment_data = new HashMap<>();
+        payment_data.put("CardNumber",PayInfCard.getCardNumber().toString() );
+        payment_data.put("HoldName", PayInfCard.getHoldName());
+        payment_data.put("ExpireDate", PayInfCard.getExpireDate().toString());
+        payment_data.put("BillingAddress",PayInfCard.getBillingAddress());
+        payment_data.put("PostalCode", PayInfCard.getPostalCode());
+        collectionReference_payment
+                .document(payment_data.get("CardNumber"))
+                .set(payment_data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
 
+   //public String StatusChangeNotify
 
 
 

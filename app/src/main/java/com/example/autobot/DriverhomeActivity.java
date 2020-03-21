@@ -3,7 +3,9 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -34,14 +37,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.internal.$Gson$Preconditions;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.Inflater;
 
-
-public class DriverhomeActivity  extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener,ShowSelectedActiveRequestFragment.ButtonPress {
-    private User user;
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
+    public static User user;
     private String user_id;
     String phone_num;
     FragmentManager active_request_fm;
@@ -57,15 +61,18 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = LoginActivity.db;
         requests_list = new ArrayList<Request>();
+
         //load_user();
         setTitle("driver mode");
 
-        db = new Database();
-        Intent intent = getIntent();
-        username = intent.getStringExtra("User");
-        setProfile(username); // set profile
-        user = db.rebuildUser(username);
+        db = LoginActivity.db; // get database
+        user = LoginActivity.user; // get User
+        username = user.getUsername(); // get username
+
+        setProfile(username,db); // set profile
+
 
         //testing
         /*user = new User();
@@ -106,9 +113,13 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
                         //get all the satisfied active requests
                         load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
-                        active_request_fm = getSupportFragmentManager();
-                        int s = requests_list.size();
+                        /*requests_list = new ArrayList<Request>();
+                        try{
+                            User user3 = new User("jc");
+                            Request active_request = new Request(user3);
+                            requests_list.add(active_request);} catch (ParseException e){}*/
                         Fragment fragment = new ActiverequestsFragment(requests_list);
+                        active_request_fm = getSupportFragmentManager();
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
                     }
@@ -135,8 +146,13 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
     }
 
     //loading all the satisfied requests
-    public void load_requests(LatLng searchedLatLng){
-           requests_list.clear();
+    public void load_requests(LatLng searchedLatLng) {
+           requests_list = new ArrayList<Request>();
+           try{
+           User user3 = new User("jc");
+           Request active_request = new Request(user3);
+           active_request.setBeginningLocation(searchedLatLng);
+           requests_list.add(active_request);} catch (ParseException e){}
            db.collectionReference_request.get()
                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                        @Override
@@ -154,13 +170,18 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
                                        String user_id = (String) document.get("Rider");
                                        //rebuild request from db
                                        Log.d("loc",request_id);
-                                       Request active_request = null;
                                        try {
-                                           active_request = db.rebuildRequest((String)request_id, db.rebuildUser(request_id));
+                                           Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
+                                           //testing
+                                           User user3 = new User("jc");
+                                           //Request active_request = new Request(user3);
+                                           requests_list.add(active_request);
+
+
                                        } catch (ParseException e) {
                                            e.printStackTrace();
                                        }
-                                       requests_list.add(active_request);
+                                       //requests_list.add(active_request);
                                    }
                                    //testing
                                    try{
@@ -205,12 +226,13 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
         request.setDriver(user);
         //notify need to modify database
         //db.add_new_request(request);
-
+        Log.d("debug",request.getStatus());
 
         DriveIsGoing.request = request;
 
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
+        intent.putExtra("Username",username);
         startActivity(intent);
     }
 
@@ -221,20 +243,33 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
     //-----------------------------------------
     @Override
     public void hide() {
+              //hide the request list view
+              active_request_fm.popBackStack();
               rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
     }
     @Override
     //show the detail of the selected active request
     public void show_detail(ShowSelectedActiveRequestFragment fragment) {
-        active_request_fm.beginTransaction().add(R.id.myMap,fragment).addToBackStack(null).commit();
+        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
     }
 
     //for edit profile info
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) {
-        TextView name = findViewById(R.id.driver_name);
+    
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+        name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            if (imageUri != null) {
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                mybitmap = BitmapFactory.decodeStream(imageStream);
+                profilePhoto.setImageBitmap(mybitmap);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(DriverhomeActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         //db.add_new_user(newUser);
         User newUser = user;
@@ -243,12 +278,21 @@ public class DriverhomeActivity  extends BaseActivity implements ActiverequestsF
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        if (imageUri != null) newUser.setUri(imageUri);
         db.add_new_user(newUser);
 
+    }
+    @Override
+    public void update_adapter(ActiveRequestsAdapter adapter){
+        adapter.notifyDataSetChanged();
     }
     @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 }

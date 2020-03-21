@@ -7,13 +7,12 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,13 +35,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import io.grpc.okhttp.internal.framed.Header;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -60,6 +57,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -80,25 +78,17 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
-import com.example.autobot.TaskLoadedCallback;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static com.android.volley.VolleyLog.TAG;
 
 /**
  * this is a class of base activity, it contains google map api, side bar, notifications and so on
@@ -109,6 +99,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
+    public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
@@ -135,11 +126,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public NavigationView navigationView;
     public Fragment fragment;
 
-
-
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
     public TextView name;
+    public CircleImageView profilePhoto;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -149,8 +139,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
-
-    public static Database db;
+    public Bitmap mybitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -169,8 +158,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //set framelayout so the extended children of base activity can inflate its own layout
         frameLayout = (FrameLayout) findViewById(R.id.content);
 
-        db = new Database();
-
         //set up tool bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -180,6 +167,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // get navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0); // get header of the navigation view
+        profilePhoto = header.findViewById(R.id.profile_photo);
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment = new EditProfilePage();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                navigationView.getMenu().getItem(0).setChecked(true);
+                setTitle("Edit Profile");
+                if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -194,8 +196,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
-    public void setProfile(String username){
-        Database userBase = new Database();
+
+    public void setProfile(String username, Database db){
+        Database userBase = db;
+        User usertemp = LoginActivity.user;
 
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
@@ -203,6 +207,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
+        profilePhoto = header.findViewById(R.id.profile_photo);
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -347,6 +352,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
+            case R.id.my_notification:
+                fragment = new Notifications();
+                anInt = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                navigationView.getMenu().getItem(2).setChecked(true);
+                setTitle("My Notifications");
+                break;
             case R.id.log_out:
                 navigationView.getMenu().getItem(5).setChecked(true);
 
@@ -403,9 +415,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu(); // get the menu
         MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
         MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
-        //MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
         MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
         MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
 
         //  store the menu to var when creating options menu
 
@@ -414,8 +427,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (fragment == null){
             super.onBackPressed(); // back to the last activity
-        }
-        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
@@ -446,8 +459,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = null;
                 setTitle("Home Page");
             }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
         }
-
 
     }
 
@@ -534,12 +553,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
+        Database db2 = MainActivity.db;
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        HashMap<String, String> CurrentLocation = new HashMap<>();
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+
+        db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                .set(CurrentLocation)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
@@ -659,6 +697,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setContentTitle("New Notification")
                 .setContentText("Message...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true) //用户点按通知后自动移除通知
                 .build();
     }
 
@@ -672,14 +711,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
+        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
+
+        if (mMap != null) {
+            mMap.addMarker(place1);
+            mMap.addMarker(place2);
+        }
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         // Add your locations to bounds using builder.include, maybe in a loop
         builder.include(origin);
@@ -688,10 +732,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //Then construct a cameraUpdate
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
         //Then move the camera
-        mMap.animateCamera(cameraUpdate);
+        if (mMap != null) {
+            mMap.animateCamera(cameraUpdate);
+        }
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
-//        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+        new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
     }
 
     /**
