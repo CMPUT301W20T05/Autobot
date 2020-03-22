@@ -123,9 +123,10 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //delete current request
                                 //go back to home page
-                                Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                                Intent cancelRequest = new Intent(getApplicationContext(), DriverhomeActivity.class);
 //                                cancelRequest.putExtra("Username",user.getUsername());
 //                                cancelRequest.putExtra("reid",request.getRequestID());
+                                finish();
                                 startActivity(cancelRequest);
                             }
                         })

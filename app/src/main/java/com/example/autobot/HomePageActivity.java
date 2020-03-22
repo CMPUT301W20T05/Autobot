@@ -201,7 +201,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             tips = Double.valueOf(String.valueOf(temp));
                             totalFare += tips;
                         }
-                        request.setCost(totalFare);
+                        request.resetCost(totalFare, db);
 
                         //finish current activity
                         uCurRequestDialog.dismiss();
