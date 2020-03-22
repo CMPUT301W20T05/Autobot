@@ -156,6 +156,12 @@ public class Request implements Serializable {
         }
         this.EstimateCost = estimateCost;
     }
+
+    //add a function to directly set estcost
+    public void direct_setEstimateCost(double Estcost){
+        this.EstimateCost = Estcost;
+    }
+
     public double getEstimateCost() {
         return this.EstimateCost;
     }
@@ -217,4 +223,8 @@ public class Request implements Serializable {
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();
     //}
+
+    public String testing_rebuild_request(){
+        return String.format("ID: %s\nRider name: %s\n Begining: %s \nDestination: %s\nEstimate cost: %5.2f\nAccepttime %s\n send time %s",this.getRequestID(),Rider.getUsername(),String.valueOf(this.BeginningLocation),String.valueOf(this.Destination),this.EstimateCost,formatter.format(this.AcceptTime),formatter.format(this.SendTime));
+    }
 }
