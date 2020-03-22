@@ -259,6 +259,7 @@ public class Database{
         request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
+        request_data.put("Cost","0.0");
 
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
@@ -310,9 +311,10 @@ public class Database{
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            r.resetRequestStatus((String) documentSnapshot.getString("RequestStatus"));
+                            r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
                             r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
                             r.setRequestID((String) documentSnapshot.getString("ID"));
+                            r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
                         }
 
                     }
