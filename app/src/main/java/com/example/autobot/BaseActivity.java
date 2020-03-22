@@ -87,6 +87,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -137,6 +138,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     final float DEFAULT_ZOOM = 18;
     public TextView name;
     public CircleImageView profilePhoto;
+    public TextView goodrate;
+    public TextView badrate;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -213,6 +216,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
         profilePhoto = header.findViewById(R.id.profile_photo);
+        goodrate = header.findViewById(R.id.favorable_rate);
+        badrate = header.findViewById(R.id.poor_rate);
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -224,7 +229,25 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
-                        String gr = document.getData().get("StarsRate").toString();
+                        String gr = document.getData().get("GoodRate").toString();
+                        String br = document.getData().get("BadRate").toString();
+                        Integer ggr = 0;
+                        Integer bbr = 0;
+                        if (!gr.equals("")){
+                            ggr = Integer.parseInt(gr);
+                        }
+                        if (!br.equals("")){
+                            bbr = Integer.parseInt(br);
+                        }
+
+                        DecimalFormat decimalFormat= new DecimalFormat(".00");
+                        float f1 = (float) ggr/(ggr + bbr)*100;
+                        String temp1 = decimalFormat.format(f1) + "%";
+                        float f2 = (float) bbr/(ggr + bbr)*100;
+                        String temp2 = decimalFormat.format(f2) + "%";
+
+                        goodrate.setText(temp1);
+                        badrate.setText(temp2);
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
