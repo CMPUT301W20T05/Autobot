@@ -344,11 +344,11 @@ public class Database{
                 });
     }
     public void ChangeRequestStatus(Request request){
-        HashMap<String,String> requestChanged = new HashMap<>();
+        HashMap<String,Object> requestChanged = new HashMap<>();
         requestChanged.put("RequestStatus",request.getStatus());
         requestChanged.put("Driver",request.getDriver().getUsername());
         collectionReference_request.document(request.getRequestID())
-                .set(requestChanged)
+                .update(requestChanged)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
