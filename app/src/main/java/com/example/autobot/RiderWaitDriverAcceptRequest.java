@@ -86,7 +86,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
         });
 
         Intent intent1 = new Intent(this,DriverIsOnTheWayActivity.class);
-        db.NotifyStatusChange(reID,"Request Accepted by Driver",this, intent1);
+        db.NotifyStatusChange(reID,"Driver Accepted",this, intent1);
 
 
         Button continueButton = findViewById(R.id.ContinueButton);
@@ -94,7 +94,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
             @Override
             public void onClick(View v) {
                 //hardcode for now
-                request.resetRequestStatus("Request Accepted");
+                request.resetRequestStatus("Request Accepted",db);
                 //when request condition changes to "accept" go to next activity
                 String requestState = request.getStatus();
 
