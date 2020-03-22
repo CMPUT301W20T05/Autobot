@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,10 +79,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -122,12 +124,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public NavigationView navigationView;
     public Fragment fragment;
 
-
-
     //private final float DEFAULT_ZOOM = 18;
     final float DEFAULT_ZOOM = 18;
     public TextView name;
-    public ImageView profilePhoto;
+    public CircleImageView profilePhoto;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -137,6 +137,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
+    public Bitmap mybitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,6 +194,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         createNotificationChannels();
 
     }
+
     public void setProfile(String username, Database db){
         Database userBase = db;
 
@@ -346,6 +348,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
+            case R.id.my_notification:
+                fragment = new Notifications();
+                anInt = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                navigationView.getMenu().getItem(2).setChecked(true);
+                setTitle("My Notifications");
+                break;
             case R.id.log_out:
                 navigationView.getMenu().getItem(5).setChecked(true);
 
@@ -402,7 +411,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu(); // get the menu
         MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
         MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
-        //MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
         MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
         MenuItem sItem = menu.findItem(R.id.settings); // item settings
         MenuItem lItem = menu.findItem(R.id.log_out); // item log out
@@ -414,8 +423,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (fragment == null){
             super.onBackPressed(); // back to the last activity
-        }
-        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
@@ -440,6 +449,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             }
 
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
@@ -533,12 +549,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
+        Database db2 = MainActivity.db;
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        HashMap<String, String> CurrentLocation = new HashMap<>();
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+
+        db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                .set(CurrentLocation)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
@@ -672,14 +707,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
+        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
+
+        if (mMap != null) {
+            mMap.addMarker(place1);
+            mMap.addMarker(place2);
+        }
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         // Add your locations to bounds using builder.include, maybe in a loop
         builder.include(origin);
@@ -688,7 +728,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //Then construct a cameraUpdate
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
         //Then move the camera
-        mMap.animateCamera(cameraUpdate);
+        if (mMap != null) {
+            mMap.animateCamera(cameraUpdate);
+        }
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");

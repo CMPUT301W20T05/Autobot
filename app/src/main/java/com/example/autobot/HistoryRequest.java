@@ -22,7 +22,7 @@ public class HistoryRequest {
     void setDate(Date d) {this.date = d;}
     void setPhoto(int p) {this.photo = p;}
 
-    Integer getRequestNumber() { return this.requestNumber; }  // can get the value using these getter
+    int getRequestNumber() { return this.requestNumber; }  // can get the value using these getter
     String getStatus() { return this.status; }
     Date getDate() { return this.date; }
     int getPhoto() { return this.photo; }

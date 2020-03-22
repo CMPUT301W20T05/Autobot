@@ -10,10 +10,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
+
+import java.text.DecimalFormat;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -24,9 +25,9 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class QRCode extends BaseActivity {
 
     String TAG = "Generate QRCode";
-    TextView fare;
+    //TextView fare;
     ImageView qrimg;
-    Button generate, button3;
+    Button generate, confirm;
     String inputvalue;
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
@@ -41,7 +42,7 @@ public class QRCode extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        View rootView = getLayoutInflater().inflate(R.layout.qrcodd_scanner, frameLayout);
+        View rootView = getLayoutInflater().inflate(R.layout.qrcode_generator, frameLayout);
 
         db = LoginActivity.db;
 
@@ -61,18 +62,21 @@ public class QRCode extends BaseActivity {
         setProfile(username,db); // set profile
 
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
-        fare = (TextView)findViewById(R.id.textView4);
-        generate = (Button) findViewById(R.id.button2);
-        button3 = (Button) findViewById(R.id.button3);
+        generate = (Button) findViewById(R.id.generate);
+        confirm = (Button) findViewById(R.id.confirmButton);
         //ScannerView = findViewById(R.id.qrCodeScanner);
-        double estimateFare = request.getEstimateCost();
-        String textDiplay = "The cost of this trip is: " + String.valueOf(estimateFare);
-        fare.setText(textDiplay);//price of the trip
+
+        //double estimateFare = request.getEstimateCost();
+        //String textDiplay = "The cost of this trip is: " + String.valueOf(estimateFare);
+        //fare.setText(textDiplay);//price of the trip
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        double totalFare = request.getCost();
 
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inputvalue = fare.toString();
+                inputvalue = df.format(totalFare);
                 WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
                 Display display = manager.getDefaultDisplay();
                 Point point = new Point();
@@ -91,13 +95,11 @@ public class QRCode extends BaseActivity {
                 }
             }
         });
-        button3.setOnClickListener(new View.OnClickListener() {
+        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
-//                intentRateDriver.putExtra("Username",user.getUsername());
-//                intentRateDriver.putExtra("reid",request.getRequestID());
                 startActivity(intentRateDriver);
             }
         });

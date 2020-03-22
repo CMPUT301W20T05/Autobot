@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,10 +30,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -149,9 +155,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 Spinner modelTochoose = uCurRequestDialog.findViewById(R.id.spinnerCarModel);
 
                 //calculate estimated fare
+                DecimalFormat df = new DecimalFormat("0.00");
                 double estimateFare = request.getEstimateCost();
                 if (EstimatedFare != null) {
-                    EstimatedFare.setText(String.valueOf(estimateFare));
+                    EstimatedFare.setText(String.valueOf(df.format(estimateFare)));
                 }
 
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
@@ -195,35 +202,38 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                 }
                 //set distance and price for dialog
-                //approDistance.setText(String.valueOf());
-                approPrice.setText(String.valueOf(request.getEstimateCost()));
+                //distance between two locations
+                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                //DecimalFormat df = new DecimalFormat("0.00");
+                approDistance.setText(df.format(distance));
+                approPrice.setText(df.format(request.getEstimateCost()));
 
                 //change driver condition when needed
                 //driverCondition.setText("");
 
-                Button seeProfile = dialog.findViewById(R.id.see_profile);
-                seeProfile.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.profile_viewer, null);
-
-                        TextView fname = view.findViewById(R.id.FirstName);
-                        TextView lname = view.findViewById(R.id.LastName);
-                        TextView pnumber = view.findViewById(R.id.PhoneNumber);
-                        TextView email = view.findViewById(R.id.EmailAddress);
-                        //should be set as driver's infor
-                        fname.setText(user.getFirstName());
-                        lname.setText(user.getLastName());
-                        pnumber.setText(user.getPhoneNumber());
-                        email.setText(user.getEmailAddress());
-
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
-                        alert.setView(view)
-                                .setTitle("Details")
-                                .setNegativeButton("Close",null);
-                        alert.show();
-                    }
-                });
+//                Button seeProfile = dialog.findViewById(R.id.see_profile);
+//                seeProfile.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.profile_viewer, null);
+//
+//                        TextView fname = view.findViewById(R.id.FirstName);
+//                        TextView lname = view.findViewById(R.id.LastName);
+//                        TextView pnumber = view.findViewById(R.id.PhoneNumber);
+//                        TextView email = view.findViewById(R.id.EmailAddress);
+//                        //should be set as driver's infor
+//                        fname.setText(user.getFirstName());
+//                        lname.setText(user.getLastName());
+//                        pnumber.setText(user.getPhoneNumber());
+//                        email.setText(user.getEmailAddress());
+//
+//                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+//                        alert.setView(view)
+//                                .setTitle("Details")
+//                                .setNegativeButton("Close",null);
+//                        alert.show();
+//                    }
+//                });
 
                 Button cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
                 cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -256,20 +266,20 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                 });
 
-                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
-                phoneButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
-                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-                        } else {
-                            startActivity(callIntent);
-                        }
-                    }
-                });
+//                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
+//                phoneButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+//                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
+//                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+//                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
+//                        } else {
+//                            startActivity(callIntent);
+//                        }
+//                    }
+//                });
 
             }
         });
@@ -335,10 +345,19 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -364,30 +383,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         overridePendingTransition(0, 0);
     }
 
-    /*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
-            if (System.currentTimeMillis() - firstPressedTime < 2000){
-                this.finish();
-                System.exit(0);
-            }else {
-                Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT).show();
-                firstPressedTime = System.currentTimeMillis();
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
-    /*@Override
-    public void onBackPressed(){
-        if(System.currentTimeMillis() - firstPressedTime<2000){
-            System.exit(0);
-        }else{
-            Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT).show();
-            firstPressedTime = System.currentTimeMillis();
-        }
-    }*/
 
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
 
 }

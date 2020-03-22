@@ -6,20 +6,31 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-import java.text.ParseException;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -37,15 +48,16 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         setTitle("Rider Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
-        db = LoginActivity.db;
+        db = MainActivity.db;
 
         Intent intent = getIntent();
-        //username = intent.getStringExtra("Username");
-        //reID = intent.getStringExtra("reid");
+
+        //when driver arrived, show notification
+        sendOnChannel();
 
         //get user from firebase
         //user = db.rebuildUser(username);
-        user = HomePageActivity.user;
+        user = LoginActivity.user;
         username = user.getUsername();
         //get request from firebase
         //request = db.rebuildRequest(reID, user);
@@ -54,19 +66,44 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         setProfile(username,db); // set profile
 
-
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
-        Button buttonSeeProfile = findViewById(R.id.see_profile);
+        //Button buttonSeeProfile = findViewById(R.id.see_profile);
+        ImageView imageViewAvatar = findViewById(R.id.imageViewAvatar);
+        TextView textViewDriverRate = findViewById(R.id.driverRate);
+        TextView textViewDriverName = findViewById(R.id.Driver_name);
         ImageButton imageButtonPhone = findViewById(R.id.phoneButton);
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
+        TextView textViewEstimateTime = findViewById(R.id.EstimatedTime);
+        TextView textViewEstimateDist = findViewById(R.id.EstimatedDist);
         Button buttonCancelOrder = findViewById(R.id.cancel_order);
 
+        //get location
+        LatLng destination = request.getDestination();
+        LatLng origin = request.getBeginningLocation();
+        //distance between two locations
+        double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+        DecimalFormat df = new DecimalFormat("0.00");
+        textViewEstimateDist.setText(df.format(distance));
+        //calculate time
+        double time = distance / 1008.00;
+        textViewEstimateTime.setText(df.format(time));
+
         //use request to get infor
+        request.setDriver(user);
         User driver = request.getDriver();
         User rider = request.getRider();
+        //set driver infor
+        //imageViewAvatar.setBackgroundResource();
+        textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
+
+        //mark driver and rider location in map
+        LatLng driverCurrent = destination;
+        LatLng riderCurrent = origin;
+        drawRoute(driverCurrent, riderCurrent);
+
         //for rider to call driver
-        //String rphoneNumber = driver.getPhoneNumber();
-        String rphoneNumber = "5875576400";
+        String rphoneNumber = driver.getPhoneNumber();
+        //String rphoneNumber = "5875576400";
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
@@ -83,71 +120,49 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             }
         });
 
-        buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
+        textViewDriverName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //pop out dialog
+            public void onClick(View view) {
+                view = LayoutInflater.from(DriverIsOnTheWayActivity.this).inflate(R.layout.profile_viewer, null);
+
+                TextView fname = view.findViewById(R.id.FirstName);
+                TextView lname = view.findViewById(R.id.LastName);
+                TextView pnumber = view.findViewById(R.id.PhoneNumber);
+                TextView email = view.findViewById(R.id.EmailAddress);
+                //should be set as driver's infor
+                fname.setText(driver.getFirstName());
+                lname.setText(driver.getLastName());
+                pnumber.setText(driver.getPhoneNumber());
+                email.setText(driver.getEmailAddress());
+
                 final AlertDialog.Builder alert = new AlertDialog.Builder(DriverIsOnTheWayActivity.this);
-                alert.setTitle("Cancel Order");
-                alert.setMessage("Are you sure you wish to cancel current request?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //delete current request
-                                db.CancelRequest(reID);
-                                //go back to home page
-                                Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
-//                                cancelRequest.putExtra("Username",user.getUsername());
-//                                cancelRequest.putExtra("reid",request.getRequestID());
-                                startActivity(cancelRequest);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-
+                alert.setView(view)
+                        .setTitle("Details")
+                        .setNegativeButton("Close",null);
                 alert.show();
             }
         });
 
-        buttonSeeProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentOrderInfo = new Intent(DriverIsOnTheWayActivity.this, OrderInfo.class);
-                startActivity(intentOrderInfo);
-            }
-        });
-
-        //when driver arrived, show notification
-        sendOnChannel();
-
-        //hardcode for now
-        request.resetRequestStatus("Request picked");
-        //when request condition changes to "accept" go to next activity
-        String requestState = request.getStatus();
-
-        if (requestState.equals("Request picked")) {
-            //go to next page
-            Intent intentOrderComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-//            intentOrderComplete.putExtra("Username", username);
-//            intentOrderComplete.putExtra("reid", reID);
-            startActivity(intentOrderComplete);
-        }
-        else {
-            Toast.makeText(DriverIsOnTheWayActivity.this, "Please wait...", Toast.LENGTH_SHORT).show();
-        }
+        //wait driver to accept
+        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+        db.NotifyStatusChange(reID, "Request picked", DriverIsOnTheWayActivity.this, intentComplete);
 
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(DriverIsOnTheWayActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -161,5 +176,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     @Override
     public String getUsername() {
         return username;
+    }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 }

@@ -1,19 +1,19 @@
 package com.example.autobot;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firestore.v1.StructuredQuery;
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
+import java.io.InputStream;
 import java.util.Locale;
 
 
@@ -54,10 +54,9 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         TextView Destination = findViewById(R.id.setOriginLocation);
         TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);
-        EditText Tips = findViewById(R.id.textView3);
         Button Confirm = findViewById(R.id.confirmFee);
 
-        Price.setText("fee: "+String.valueOf(13.34));
+        Price.setText("fee: "+String.valueOf(0));
         Destination.setText("southgate");
         //get begining location name
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -80,23 +79,35 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(Driver_ordercomplete.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
-        User newUser = db.rebuildUser(username);
-        newUser.setFirstName(FirstName);
+        User newUser = user;
+        newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-
         db.add_new_user(newUser);
 
     }
     @Override
     public String getUsername() {
         return username;
+    }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 }

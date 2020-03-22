@@ -1,13 +1,20 @@
 package com.example.autobot;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 
 public class UCurRequest extends BaseActivity implements EditProfilePage.EditProfilePageListener{
@@ -18,6 +25,7 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     private Request request;
     private String reID;
     public String model;
+    double addPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -50,34 +58,35 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
 
         setProfile(username,db); // set profile
 
-        //calculate estimated fare
-        double estimateFare = request.getEstimateCost();
-        EstimatedFare.setText(String.valueOf(estimateFare));
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Models, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modelTochoose.setAdapter(adapter);
 
-        //modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            /*@Override
+        modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 model = parent.getItemAtPosition(position).toString();
                 adapter.notifyDataSetChanged();
+
                 if ("Normal".equals(model)){
-                    fare = 5 + 2 * 10;
+                    addPrice = 0;
                 }else if("Pleasure".equals(model)){
-                    fare = 8+ 2 * 10;
+                    addPrice = 5;
                 }else{
-                    fare = 10 + 2 * 10;
+                    addPrice = 10;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 model = "Normal";
-                fare = 5 + 2 * 10;
-            }*/
-        //});
+                addPrice = 0;
+            }
+        });
+
+        //calculate estimated fare
+        double estimateFare = request.EstimateAddModelFee(addPrice);
+        EstimatedFare.setText(String.valueOf(estimateFare));
 
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,10 +101,19 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        try {
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            mybitmap = BitmapFactory.decodeStream(imageStream);
+            profilePhoto.setImageBitmap(mybitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(UCurRequest.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -109,5 +127,9 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     @Override
     public String getUsername() {
         return username;
+    }
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 }
