@@ -60,6 +60,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -564,12 +565,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        HashMap<String, String> CurrentLocation = new HashMap<>();
+        HashMap<String, Object> CurrentLocation = new HashMap<>();
         CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
         CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
 
         db2.collectionReference_user.document(LoginActivity.user.getUsername())
-                .set(CurrentLocation)
+                .update(CurrentLocation)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -698,9 +699,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
-        place1 = new MarkerOptions().position(origin).title("Origin");
+        place1 = new MarkerOptions().position(origin).title("Origin"); //.icon(locIcon1)
         place2 = new MarkerOptions().position(destination).title("Destination");
-        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
+
+        //BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.drawable.location1);
+        //BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.drawable.location2);
+
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker

@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:gravity="center">
 
         <Spinner
@@ -24,30 +25,52 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/text_style"
         android:layout_marginTop="24dp">
 
         <TextView
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="Fare"
-            android:textSize="20sp"
-            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estimate Fare: "
+            android:textSize="18sp"
+            android:textColor="@color/blue2"
+            android:textStyle="bold"
             android:gravity="center"/>
 
         <TextView
             android:id="@+id/estimatedFare"
-            android:layout_width="190dp"
-            android:layout_height="40dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:text="@string/Estimated_Money"
-            android:textSize="20sp"
+            android:text="0.0"
+            android:textSize="22sp"
             android:textColor="@color/black" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="Tips:"
+            android:textColor="@color/blue2"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/addTip"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="2.0"
+            android:textColor="@color/blue"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <Button
