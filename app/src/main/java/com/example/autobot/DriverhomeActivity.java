@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -61,7 +62,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     private String username;
     public static Database db;
     private static final String TAG = "DriverhomeActivity";
-
+    Marker beginning_location;
 
 
 
@@ -116,6 +117,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         markerOptions.title("Current Location");
                         currentLocationMarker = mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+                        remove_beginning_location();
                         //get all the satisfied active requests
                         //load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
@@ -229,7 +231,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.setDriver(user);
 
         //notify need to modify database
-        db.ChangeRequestStatus(request);
+        //db.ChangeRequestStatus(request);
         Log.d("debug",request.getStatus());
 
         DriveIsGoing.request = request;
@@ -243,6 +245,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     @Override
     public void back_press(){
         active_request_fm.popBackStack();
+        //hide the beginning marker
+        remove_beginning_location();
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
     //-----------------------------------------
     @Override
@@ -252,10 +257,22 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
               adapter.notifyDataSetChanged();
               active_request_fm.popBackStack();
               rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
+              //hide the beginning marker
+              remove_beginning_location();
+              //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
     @Override
     //show the detail of the selected active request
-    public void show_detail(ShowSelectedActiveRequestFragment fragment) {
+    public void show_detail(ShowSelectedActiveRequestFragment fragment, int pos) {
+        //mark up the beginning location of the sletected reuqest
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(requests_list.get(pos).getBeginningLocation());
+        marker.title("Beginning Location");
+        //mark down the mark action, need to be removed if i click on the another request
+        beginning_location = mMap.addMarker(marker);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requests_list.get(pos).getBeginningLocation(), DEFAULT_ZOOM));
+
+        //inflate the fragment
         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
     }
 
@@ -321,5 +338,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.direct_setEstimateCost(EstCost);
         Log.d("testing",request.testing_rebuild_request());
         return request;
+    }
+
+    public void remove_beginning_location(){
+        if(beginning_location != null){
+            beginning_location.remove();
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
 }

@@ -84,7 +84,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
 
         // added by yiping, implementation of view profile of the rider
 
-        Button see_profile_button = rootView.findViewById(R.id.see_profile); // 需改button id
+        TextView see_profile_button = rootView.findViewById(R.id.Driver_name); // 需改button id
         see_profile_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
