@@ -25,7 +25,7 @@ public class ActiverequestsFragment extends Fragment{
     ActiveRequestsAdapter adapter;
     public interface OnBackPressed {
         void hide();
-        void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment);
+        void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment,int pos);
         void update_adapter(ActiveRequestsAdapter adapter);
     }
 
@@ -73,7 +73,7 @@ public class ActiverequestsFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(),requests_list.get(position).get_active_requset_tostring(),Toast.LENGTH_SHORT).show();
                 //show the detail of the clicked request
-                listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position)));
+                listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position)),position);
                 ;}
         });
         return rootView;

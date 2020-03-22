@@ -257,6 +257,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
 
 
+
         //rider confirm completion
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
