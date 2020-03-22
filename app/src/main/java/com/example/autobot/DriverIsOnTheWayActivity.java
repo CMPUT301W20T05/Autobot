@@ -154,7 +154,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             }
         });
         //picked up rider
-        db.NotifyStatusChangeEditText(reID, "Request picked", textViewDriverCondition, "Driving to destination...");
+        db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
 
         //arrive destination
         Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
