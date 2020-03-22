@@ -24,9 +24,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Status: Completed"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="15dp"
             android:textSize="20sp">
+
+        </TextView>
+        <TextView
+            android:id="@+id/usersname"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Driver: jc"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="15sp">
 
         </TextView>
         <TextView
@@ -35,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date: 2020-02-02"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginLeft="15dp"
             android:textSize="12sp">
 

@@ -38,6 +38,7 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
         //get each textView
         TextView status = view.findViewById(R.id.status);
         TextView dateTime = view.findViewById(R.id.date_time);
+        TextView userName = view.findViewById(R.id.usersname);
         ImageView  profilePhoto = view.findViewById(R.id.profile_photo);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // format for the date
@@ -46,11 +47,13 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
         //the strings to show in the lines
         String s = "Status: " + historyRequest.getStatus();
         String d = "Date: " + dateString;
+        String u = historyRequest.getUser();
         Bitmap b = historyRequest.getBitmap();
 
         //set the above information on the line(textView)
         status.setText(s);
         dateTime.setText(d);
+        userName.setText(u);
         if (b != null) {
             profilePhoto.setImageBitmap(b);
         }else{
