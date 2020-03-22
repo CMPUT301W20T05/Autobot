@@ -46,9 +46,11 @@ public class Request implements Serializable {
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
-        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Driver Accepted");
+        this.requestStatusList.add("Rider Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
+        this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         String defaultTimeString = "00-0-0000 00:00:00";
@@ -66,9 +68,11 @@ public class Request implements Serializable {
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
-        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Driver Accepted");
+        this.requestStatusList.add("Rider Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
+        this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         String defaultTimeString = "00-0-0000 00:00:00";
@@ -87,9 +91,11 @@ public class Request implements Serializable {
         this.BeginningLocation = origin;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
-        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Driver Accepted");
+        this.requestStatusList.add("Rider Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
+        this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         String defaultTimeString = "00-0-0000 00:00:00";
