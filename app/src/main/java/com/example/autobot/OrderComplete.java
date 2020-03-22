@@ -61,11 +61,10 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 //        TextView Destination = findViewById(R.id.setOriginLocation);
 //        TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView textViewFare = findViewById(R.id.setFare);
-        EditText editTextTip = findViewById(R.id.addTip);
         Button Confirm = findViewById(R.id.confirmFee);
 
         DecimalFormat df = new DecimalFormat("0.00");
-        double fare = request.getEstimateCost();
+        double fare = request.getCost();
         textViewFare.setText(df.format(fare));
 
 //        LatLng destination = request.getDestination();
@@ -85,13 +84,6 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Double tips = 0.0;
-                Editable temp = editTextTip.getText();
-                if (temp!=null) {
-                    tips = Double.valueOf(String.valueOf(temp));
-                    double totalFare = tips + fare;
-                    request.setCost(totalFare);
-                }
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
                 startActivity(intentQRCode);
             }

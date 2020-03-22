@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:srcCompat="@drawable/icon" />
+
+    <TextView
+        android:id="@+id/Driver_name"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:text="Driver Name"
+        android:textSize="20sp"
+        android:textColor="@color/blue"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="60dp"
+            app:srcCompat = "@drawable/star"/>
+
+        <TextView
+            android:id="@+id/driverRate"
+            android:layout_width="45dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="5.0"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="32dp">
+        <Button
+            android:id="@+id/acceptDriver"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_blue_style"
+            android:text="Accept"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/rejectDriver"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="24dp"
+            android:background="@drawable/button_blue_style"
+            android:text="Reject"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

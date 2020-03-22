@@ -10,10 +10,13 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +55,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private static final int REQUEST_PHONE_CALL = 101;
 
     private static final String TAG = "HomePageActivity";
+
+    private String model;
+    private double addPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -162,13 +168,50 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //choose model
 
+                        //choose model
+                        modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                model = parent.getItemAtPosition(position).toString();
+                                adapter.notifyDataSetChanged();
+
+                                if ("Normal".equals(model)){
+                                    addPrice = 0;
+                                }else if("Pleasure".equals(model)){
+                                    addPrice = 5;
+                                }else{
+                                    addPrice = 10;
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                model = "Normal";
+                                addPrice = 0;
+                            }
+                        });
+
+                        //add tips
+                        EditText editTextTip = uCurRequestDialog.findViewById(R.id.addTip);
+                        Double tips = 0.0;
+                        double totalFare = addPrice + estimateFare;
+                        Editable temp = editTextTip.getText();
+                        if (temp!=null) {
+                            tips = Double.valueOf(String.valueOf(temp));
+                            totalFare += tips;
+                        }
+                        request.setCost(totalFare);
+                        
                         //finish current activity
                         uCurRequestDialog.dismiss();
                         //wait driver to accept
                         Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
                         db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
+
+                        //set price have to go here to display
+                        TextView approPrice = dialog.findViewById(R.id.Appro_price);
+                        approPrice.setText(df.format(request.getCost()));
                         dialog.show();
                     }
                 });
@@ -179,7 +222,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 TextView startLocation = dialog.findViewById(R.id.origin_loc);
                 TextView endLocation = dialog.findViewById(R.id.Destination);
                 TextView approDistance = dialog.findViewById(R.id.Appro_distance);
-                TextView approPrice = dialog.findViewById(R.id.Appro_price);
 
                 //set location for dialog
                 LatLng destination = request.getDestination();
@@ -200,7 +242,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //DecimalFormat df = new DecimalFormat("0.00");
                 approDistance.setText(df.format(distance));
-                approPrice.setText(df.format(request.getEstimateCost()));
 
                 //change driver condition when needed
                 //driverCondition.setText("");
