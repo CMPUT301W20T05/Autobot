@@ -92,6 +92,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             @Override
             public void onClick(View v) {
                 request.resetRequestStatus("Rider Accepted",db);
+                db.ChangeRequestStatus(request);
                 riderAcceptedDialog.dismiss();
             }
         });
@@ -99,22 +100,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             @Override
             public void onClick(View v) {
                 request.resetRequestStatus("Cancel",db);
-                HashMap<String, Object> update = new HashMap<>();
-                update.put("RequestStatus", request.getStatus());
-                db.collectionReference_request.document(request.getRequestID())
-                        .update(update)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "Data addition successful");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "Data addition failed" + e.toString());
-                            }
-                        });
+                db.ChangeRequestStatus(request);
                 riderAcceptedDialog.dismiss();
                 //return to homepage
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
@@ -223,6 +209,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                                 //cancel current request
                                 //db.CancelRequest(reID);
                                 request.resetRequestStatus("Cancel",db);
+                                db.ChangeRequestStatus(request);
                                 //return to homepage
                                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                                 finish();
@@ -247,6 +234,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             public void onClick(View v) {
                 //arrive destination
                 request.resetRequestStatus("Trip Completed",db);
+                db.ChangeRequestStatus(request);
                 Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
                 finish();
                 startActivity(intentComplete);

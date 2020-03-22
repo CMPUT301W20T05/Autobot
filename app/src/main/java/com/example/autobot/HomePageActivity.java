@@ -202,7 +202,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             totalFare += tips;
                         }
                         request.setCost(totalFare);
-                        
+
                         //finish current activity
                         uCurRequestDialog.dismiss();
                         //wait driver to accept

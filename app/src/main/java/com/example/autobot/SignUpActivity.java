@@ -135,10 +135,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         });
 
-
-
-
-
         textViewBackToLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
