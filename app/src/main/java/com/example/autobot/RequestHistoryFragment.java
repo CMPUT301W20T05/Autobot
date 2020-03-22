@@ -39,17 +39,21 @@ public class RequestHistoryFragment extends Fragment {
     private ArrayList<HistoryRequest> mDataList;
     private Date dateTemp;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  //format for the date
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
 
+        requestList = view.findViewById(R.id.requests_list);
+
+        mDataList = new ArrayList<>();
+
+        mAdapter = new HistoryList(getContext(), mDataList);// set adapter
+
+        requestList.setAdapter(mAdapter);
+
         Database userBase = LoginActivity.db;
         User user = LoginActivity.user;
-
-        ArrayList<Date> newDates = new ArrayList<>();
-        ArrayList<String> newStatus = new ArrayList<>();
-        ArrayList<Bitmap> newBitmap = new ArrayList<>();
 
         userBase.collectionReference_request.whereEqualTo("Rider",user.getUsername())
                 .get()
@@ -59,18 +63,40 @@ public class RequestHistoryFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
-                                String str1 = document.getData().get("ArriveTime").toString();
-                                try {
-                                    dateTemp = formatter.parse(str1);
-                                } catch (ParseException e) {
-                                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                String time1 = document.getData().get("ArriveTime").toString();
+                                String userName = document.getData().get("Driver").toString();
+                                userName = "Driver: "+userName;
+                                if (!time1.equals("30-11-002 12:00:00")){
+                                    try {
+                                        dateTemp = formatter.parse(time1);
+                                    } catch (ParseException e) {
+                                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                    }
+                                }else{
+                                    String time2 = document.getData().get("AcceptTime").toString();
+                                    if (!time2.equals("30-11-002 12:00:00")){
+                                        try {
+                                            dateTemp = formatter.parse(time2);
+                                        } catch (ParseException e) {
+                                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        String time3 = document.getData().get("SendTime").toString();
+                                        try {
+                                            dateTemp = formatter.parse(time3);
+                                        } catch (ParseException e) {
+                                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
                                 }
+
+                                String str = document.getData().get("RequestStatus").toString();
+
                                 if (dateTemp != null) {
-                                    newDates.add(dateTemp);
+                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName));
+                                    mAdapter.notifyDataSetChanged();
                                 }
-                                String str2 = document.getData().get("RequestStatus").toString();
-                                newStatus.add(str2);
-                                newBitmap.add(null);
+
                             }
                         } else {
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -85,19 +111,40 @@ public class RequestHistoryFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                String str1 = document.getData().get("ArriveTime").toString();
-                                try {
-                                    dateTemp = formatter.parse(str1);
-                                } catch (ParseException e) {
-                                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                String time1 = document.getData().get("ArriveTime").toString();
+                                String userName = document.getData().get("Rider").toString();
+                                userName = "Rider: "+userName;
+                                if (!time1.equals("30-11-002 12:00:00")){
+                                    try {
+                                        dateTemp = formatter.parse(time1);
+                                    } catch (ParseException e) {
+                                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                    }
+                                }else{
+                                    String time2 = document.getData().get("AcceptTime").toString();
+                                    if (!time2.equals("30-11-002 12:00:00")){
+                                        try {
+                                            dateTemp = formatter.parse(time2);
+                                        } catch (ParseException e) {
+                                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        String time3 = document.getData().get("SendTime").toString();
+                                        try {
+                                            dateTemp = formatter.parse(time3);
+                                        } catch (ParseException e) {
+                                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
                                 }
+
+                                String str = document.getData().get("RequestStatus").toString();
+
                                 if (dateTemp != null) {
-                                    newDates.add(dateTemp);
+                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName));
+                                    mAdapter.notifyDataSetChanged();
                                 }
-                                String str2 = document.getData().get("RequestStatus").toString();
-                                newStatus.add(str2);
-                                newBitmap.add(null);
 
                             }
                         } else {
@@ -106,17 +153,6 @@ public class RequestHistoryFragment extends Fragment {
                         }
                     }
                 });
-
-        requestList = view.findViewById(R.id.requests_list);
-
-        mDataList = new ArrayList<>();
-
-        for (int i=0;i<newDates.size();i++){
-            mDataList.add(new HistoryRequest(newStatus.get(i),newDates.get(i),newBitmap.get(i)));
-        }
-        mAdapter = new HistoryList(getContext(), mDataList);// set adapter
-
-        requestList.setAdapter(mAdapter);
 
         return view;
     }
