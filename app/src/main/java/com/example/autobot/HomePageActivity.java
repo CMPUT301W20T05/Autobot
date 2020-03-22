@@ -25,9 +25,10 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -46,10 +47,13 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private String username;
     public static User user;
     public static Request request;
-
+    public StorageReference LOAD;
     private static final int REQUEST_PHONE_CALL = 101;
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
 
     private static final String TAG = "HomePageActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -325,18 +329,18 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         mybitmap = bitmap;
         if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        byte[] thumb = byteArrayOutputStream.toByteArray();
 
-        Uri imageuri = db.upload(thumb);
+
         User newUser = user;
+        String user_name = newUser.getUsername();
+        Uri uri = db.upload(mybitmap,user_name);
+
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        newUser.setUri(imageuri.toString());
+        newUser.setUri(uri.toString());
         db.add_new_user(newUser);
 
     }

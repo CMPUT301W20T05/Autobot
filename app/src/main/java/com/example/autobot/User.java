@@ -51,8 +51,8 @@ public class User implements Driver, Rider, Serializable {
 
     // added by yiping
 
-    public String getUri(){return uri;}
-    public void setUri(String urii){uri = urii;}
+    public String getUri(){return this.uri;}
+    public void setUri(String urii){this.uri = urii;}
 
     //-----------------------------------
 

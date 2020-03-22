@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.TextView;
@@ -14,7 +15,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -41,18 +42,18 @@ public class Database{
     public CollectionReference collectionReference_request;
     public CollectionReference collectionReference_payment;
     public StorageReference storageReference;
-    public FirebaseAuth firebaseAuth;
+    public FirebaseStorage storage;
     User user = new User("");
     Request r = new Request();
-    String user_id;
-    Uri download_uri;
+    Uri downloadUri;
+    String a = "0";
 
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
-        firebaseAuth = FirebaseAuth.getInstance();
-        user_id = firebaseAuth.getCurrentUser().getUid();
+     //   mAuth = FirebaseAuth.getInstance();
         db1 = FirebaseFirestore.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
         // to disable clean-up.
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -169,27 +170,47 @@ public class Database{
         return this.collectionReference_user.document(username);
     }
 
-    public Uri upload(byte[] thumb){
-        UploadTask image_path = storageReference.child("Image").child(user_id+".jpg").putBytes(thumb);
 
-        image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+    public Uri upload(Bitmap mybitmap,String username){
+        final StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+
+//        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                if(task.isSuccessful()){
+//                    LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                        @Override
+//                        public void onSuccess(Uri uri) {
+//                            downloadUri = uri;
+//                        }
+//                    });
+//                }
+//                else a = "1";
+//            }
+//        });
+        uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (task != null) {
-                        download_uri = task.getResult().getUploadSessionUri();
-                    } else {
-                        Log.d(TAG, "Image addition failed!!");
-                    }
-                } else {
-                    String error = task.getException().getMessage();
-                    Log.d(TAG, "Image addition failed" + error);
-                }
+            public void onFailure(@NonNull Exception exception) {
+                a = "1";
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                a = "2";
             }
         });
+        if (downloadUri == null){
+            downloadUri = Uri.parse(a);
+        }
 
-        return download_uri;
-
+        return downloadUri;
     }
 
 
