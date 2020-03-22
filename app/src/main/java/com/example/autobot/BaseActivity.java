@@ -564,12 +564,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        HashMap<String, String> CurrentLocation = new HashMap<>();
+        HashMap<String, Object> CurrentLocation = new HashMap<>();
         CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
         CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
 
         db2.collectionReference_user.document(LoginActivity.user.getUsername())
-                .set(CurrentLocation)
+                .update(CurrentLocation)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
