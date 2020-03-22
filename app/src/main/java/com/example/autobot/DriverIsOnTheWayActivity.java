@@ -22,11 +22,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
@@ -36,7 +39,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.android.volley.VolleyLog.TAG;
 import static com.example.autobot.App.CHANNEL_1_ID;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -85,14 +91,30 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request.resetRequestStatus("Rider Accepted");
+                request.resetRequestStatus("Rider Accepted",db);
                 riderAcceptedDialog.dismiss();
             }
         });
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request.resetRequestStatus("Cancel");
+                request.resetRequestStatus("Cancel",db);
+                HashMap<String, Object> update = new HashMap<>();
+                update.put("RequestStatus", request.getStatus());
+                db.collectionReference_request.document(request.getRequestID())
+                        .update(update)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Data addition successful");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Data addition failed" + e.toString());
+                            }
+                        });
                 riderAcceptedDialog.dismiss();
                 //return to homepage
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
@@ -200,7 +222,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //cancel current request
                                 //db.CancelRequest(reID);
-                                request.resetRequestStatus("Cancel");
+                                request.resetRequestStatus("Cancel",db);
                                 //return to homepage
                                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                                 finish();
@@ -224,7 +246,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             @Override
             public void onClick(View v) {
                 //arrive destination
-                request.resetRequestStatus("Trip Completed");
+                request.resetRequestStatus("Trip Completed",db);
                 Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
                 finish();
                 startActivity(intentComplete);
@@ -234,9 +256,12 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //picked up rider
         db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
 
+
+
         //rider confirm completion
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
+
 
 //        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
 //        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);

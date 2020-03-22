@@ -4,10 +4,15 @@ import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.util.Log;
 
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -16,7 +21,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Request class is a information collection of request, we can set and get information of request through the method in this class.
@@ -177,7 +185,24 @@ public class Request implements Serializable {
         return this.Cost;
     }
 
-    public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){
+    public void resetCost(double cost,Database db){
+        this.Cost = cost;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("Cost", this.Cost);
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
 
     }
     public void UpdateStatus(int item){
@@ -205,7 +230,26 @@ public class Request implements Serializable {
     public void resetArriveTime(Date d){
         this.ArriveTime = d;
     }
-    public void resetRequestStatus(String status){
+    public void resetRequestStatus(String status,Database db){
+        this.RequestStatus = status;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("RequestStatus", this.getStatus());
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+    public void reset_Request_Status(String status) {
         this.RequestStatus = status;
     }
     public void resetEstimateCost(double cost){
