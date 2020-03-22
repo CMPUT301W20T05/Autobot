@@ -196,8 +196,8 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
                 request.UpdateStatus(2);
-                //need to add
                 //update db
+                db.ChangeRequestStatus(request);
                 //change the text view of button after accept order
                 buttonCancelOrder.setText("Finish");
                 Log.d("check",request.getStatus());
@@ -213,9 +213,11 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
 
-                request.UpdateStatus(2);
+                request.UpdateStatus(3);
                 //need to add
                 //update db
+                db.ChangeRequestStatus(request);
+
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 //intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);

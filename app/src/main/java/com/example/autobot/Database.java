@@ -3,6 +3,8 @@ package com.example.autobot;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -103,6 +105,31 @@ public class Database{
                     if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
                         Log.d(TAG,"Current status: "+ requeststatus);
                         textView.setText(text);
+                    }
+                }
+
+            }
+        });
+    }
+
+    public void NotifyStatusChangeButton(String requestID, String requeststatus, Button button, boolean visible){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        if (visible) {
+                            button.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            button.setVisibility(View.GONE);
+                        }
                     }
                 }
 
@@ -343,12 +370,13 @@ public class Database{
                     }
                 });
     }
+
     public void ChangeRequestStatus(Request request){
-        HashMap<String,String> requestChanged = new HashMap<>();
+        HashMap<String,Object> requestChanged = new HashMap<>();
         requestChanged.put("RequestStatus",request.getStatus());
         requestChanged.put("Driver",request.getDriver().getUsername());
         collectionReference_request.document(request.getRequestID())
-                .set(requestChanged)
+                .update(requestChanged)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
