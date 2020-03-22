@@ -32,10 +32,8 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     private User user;
     private Request request;
     private String reID;
-    private String goodrate;
-    private String badrate;
-    private Boolean Good = true;
-    private Boolean Bad = false;
+    private Boolean Good;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +54,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         //request = db.rebuildRequest(reID, user);
         request = HomePageActivity.request;
         reID = request.getRequestID();
-        goodrate = user.getGoodRate();
-        badrate = user.getBadRate();
+
 
         setProfile(username,db); // set profile
 
@@ -77,17 +74,17 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         //imageViewAvatar.setBackgroundResource();
         DriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
 
+        String goodrate = driver.getGoodRate();
+        String badrate = driver.getBadRate();
         thumb.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
                 Good = true;
-                Bad = false;
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
                 Good = false;
-                Bad = true;
             }
         });
 
@@ -119,6 +116,10 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
             @Override
             public void onClick(View v) {
                 //go back to home page
+                int good = Integer.parseInt(goodrate);
+                good += 1;
+                driver.setGoodRate(String.valueOf(good));
+                db.add_new_user(driver);
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);
@@ -134,14 +135,14 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
                 if (Good == true){
                     int good = Integer.parseInt(goodrate);
                     good += 1;
-                    user.setGoodRate(String.valueOf(good));
+                    driver.setGoodRate(String.valueOf(good));
                 }
                 else {
                     int bad = Integer.parseInt(badrate);
                     bad += 1;
-                    user.setBadRate(String.valueOf(bad));
+                    driver.setBadRate(String.valueOf(bad));
                 }
-                db.add_new_user(user);
+                db.add_new_user(driver);
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);
@@ -152,21 +153,13 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            if (imageUri != Uri.parse("http://www.google.com")) {
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                mybitmap = BitmapFactory.decodeStream(imageStream);
-                profilePhoto.setImageBitmap(mybitmap);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            //Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -174,7 +167,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
+
         db.add_new_user(newUser);
 
     }

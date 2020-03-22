@@ -3,6 +3,8 @@ package com.example.autobot;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
@@ -32,6 +36,7 @@ import java.text.DecimalFormat;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.example.autobot.App.CHANNEL_1_ID;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -53,7 +58,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         Intent intent = getIntent();
 
         //when driver arrived, show notification
-        sendOnChannel();
+        notificationManager = NotificationManagerCompat.from(this);
+        sendOnChannel("Driver has accepted your request. Please wait for picking up.");
 
         //get user from firebase
         //user = db.rebuildUser(username);
@@ -95,6 +101,11 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //set driver infor
         //imageViewAvatar.setBackgroundResource();
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
+        //good rate infor
+        float goodRate = Float.parseFloat(driver.getGoodRate());
+        float badRate = Float.parseFloat(driver.getBadRate());
+        float rate = goodRate / (goodRate + badRate) * 10;
+        textViewDriverRate.setText(df.format(rate));
 
         //mark driver and rider location in map
         LatLng driverCurrent = destination;
@@ -152,21 +163,13 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            if (imageUri != Uri.parse("http://www.google.com")) {
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                mybitmap = BitmapFactory.decodeStream(imageStream);
-                profilePhoto.setImageBitmap(mybitmap);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            //Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -174,7 +177,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
+
         db.add_new_user(newUser);
 
     }

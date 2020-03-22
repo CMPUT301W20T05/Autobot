@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,8 +41,10 @@ import com.google.maps.android.SphericalUtil;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.zip.Inflater;
 
 public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
@@ -52,17 +55,20 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     Button confirm;
     LatLng origin;
     View header;
-    ArrayList<Request> requests_list;
+    static ArrayList<Request> requests_list = new ArrayList<Request>();;
     View rootView;
+    ActiveRequestsAdapter adapter;
     private String username;
     public static Database db;
     private static final String TAG = "DriverhomeActivity";
 
 
-    public void onCreate(Bundle savedInstanceState) {
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         db = LoginActivity.db;
-        requests_list = new ArrayList<Request>();
 
         //load_user();
         setTitle("driver mode");
@@ -73,7 +79,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
         setProfile(username,db); // set profile
 
-
+        //attach listener
         //testing
         /*user = new User();
         user.setFirstName("jc");
@@ -111,14 +117,16 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                         currentLocationMarker = mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
                         //get all the satisfied active requests
-                        load_requests(searchedLatLng);
+                        //load_requests(searchedLatLng);
                         //rise the show active requests fragment, manage the fragments activities----------------------
                         /*requests_list = new ArrayList<Request>();
                         try{
                             User user3 = new User("jc");
                             Request active_request = new Request(user3);
                             requests_list.add(active_request);} catch (ParseException e){}*/
-                        Fragment fragment = new ActiverequestsFragment(requests_list);
+                        adapter = new ActiveRequestsAdapter(DriverhomeActivity.this,0,requests_list);
+                        Fragment fragment = new ActiverequestsFragment(requests_list,adapter);
+                        load_requests(searchedLatLng);
                         active_request_fm = getSupportFragmentManager();
                         active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
@@ -147,12 +155,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     //loading all the satisfied requests
     public void load_requests(LatLng searchedLatLng) {
-           requests_list = new ArrayList<Request>();
-           try{
+           /*try{
            User user3 = new User("jc");
            Request active_request = new Request(user3);
            active_request.setBeginningLocation(searchedLatLng);
-           requests_list.add(active_request);} catch (ParseException e){}
+           requests_list.add(active_request);} catch (ParseException e){}*/
            db.collectionReference_request.get()
                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                        @Override
@@ -160,44 +167,34 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                            if (task.isSuccessful()){
                                for (DocumentSnapshot document: task.getResult()){
                                    //get the location of start
+                                   Log.d("abc",(String)document.get("BeginningLocationLat")+(String)document.get("BeginningLocationLnt"));
                                    LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
                                    //if the distance between beginning location and search place is within the range and the request is inactive, select that request
                                    long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
                                    String b = (String) document.get("RequestStatus");
                                    if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
-                                       //                                       //add satisfied request to the active requests list
+                                       //clone all the info of satisfied request
                                        String request_id = (String) document.get("RequestID");
-                                       String user_id = (String) document.get("Rider");
-                                       //rebuild request from db
-                                       Log.d("rid",request_id);
-                                       Log.d("userid",user_id);
-                                       //Log.d("error",e.toString());
+                                       String rider_id = (String) document.get("Rider");
+                                       double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
+                                       String Accepttime = (String) document.get("AcceptTime");
+                                       String send_time = (String) document.get("SendTime");
+                                       LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
+                                       //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
                                        try {
-                                           Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
+                                           Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
+                                           //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
                                            //testing
-                                           User user3 = new User("jc");
+                                           //User user3 = new User("jc");
                                            //Request active_request = new Request(user3);
+                                           Toast.makeText(DriverhomeActivity.this,"success", Toast.LENGTH_SHORT).show();
                                            requests_list.add(active_request);
-
-
+                                           adapter.notifyDataSetChanged();
                                        } catch (ParseException e) {
                                            e.printStackTrace();
-                                           Log.d("rid",request_id);
-                                           Log.d("userid",user_id);
-                                           Log.d("error",e.toString());
                                        }
                                        //requests_list.add(active_request);
                                    }
-                                   //testing
-                                   try{
-                                   User user3 = new User("jc");
-                                   Request request1 = new Request(user3);
-                                   request1.UpdateStatus(0);
-                                   requests_list.add(request1);}
-                                   catch (ParseException e) {
-                                       e.printStackTrace();
-                                   }
-                                   //LatLng DestinationLocation = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                }
                            } else {
                                Log.d("suck", "error getting documents: ", task.getException());
@@ -227,10 +224,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     public void confirm_request(Request request){
         //update request in the database
         request.UpdateStatus(1);
+
         //set up the drive
         request.setDriver(user);
+
         //notify need to modify database
-        //db.add_new_request(request);
+        db.ChangeRequestStatus(request);
         Log.d("debug",request.getStatus());
 
         DriveIsGoing.request = request;
@@ -249,6 +248,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     @Override
     public void hide() {
               //hide the request list view
+              requests_list.clear();
+              adapter.notifyDataSetChanged();
               active_request_fm.popBackStack();
               rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
     }
@@ -259,31 +260,22 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     }
 
     //for edit profile info
-    
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    @Override
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            if (imageUri != Uri.parse("http://www.google.com")) {
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                mybitmap = BitmapFactory.decodeStream(imageStream);
-                profilePhoto.setImageBitmap(mybitmap);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            //Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
-        //db.add_new_user(newUser);
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        if (imageUri != Uri.parse("http://www.google.com")) newUser.setUri(imageUri.toString());
+
         db.add_new_user(newUser);
 
     }
@@ -299,5 +291,35 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
+    }
+
+
+    //request attributes
+    public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time)throws ParseException{
+        Log.d("request_id",request_id);
+        Log.d("rider_id",rider_id);
+        Log.d("cost",String.valueOf(EstCost));
+        Log.d("time",Accepttime);
+        Log.d("stime",send_time);
+
+        User user = new User(rider_id);
+        Request request = new Request(user,BeginningLocation,Destination);
+        request.setRequestID(request_id);
+        //set up date format
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        //set up all time related attributes
+        try{
+            Date acceptedtime = formatter.parse(Accepttime);
+            Date Sendtime = formatter.parse(send_time);
+            request.resetAcceptTime(acceptedtime);
+            request.resetArriveTime(acceptedtime);
+            request.resetSendTime(Sendtime);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        request.direct_setEstimateCost(EstCost);
+        Log.d("testing",request.testing_rebuild_request());
+        return request;
     }
 }

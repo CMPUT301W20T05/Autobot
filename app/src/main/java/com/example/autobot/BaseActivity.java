@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -81,6 +84,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -89,6 +94,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.example.autobot.App.CHANNEL_1_ID;
 
 /**
  * this is a class of base activity, it contains google map api, side bar, notifications and so on
@@ -109,7 +115,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public String un;
     //pls dont private these part
     //private GoogleMap mMap;
-    GoogleMap mMap;
+    public static GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     //private static Location currentLocation;
     static Location currentLocation;
@@ -135,11 +141,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //private Object LatLng;
     private static final String TAG = "BaseActivity";
     //notification
-    public static final String CHANNEL_ID = "channel";
+    public NotificationManagerCompat notificationManager;
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
     public Bitmap mybitmap;
+    public Uri myuri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -192,9 +199,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //initialize the places
         Places.initialize(BaseActivity.this, apiKey);
         placesClient = Places.createClient(this);
-
-        createNotificationChannels();
-
     }
 
     public void setProfile(String username, Database db){
@@ -670,35 +674,20 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * create a notification channel
-     */
-    private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("This is Notification Channel");
-
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
-        }
-    }
-
-    /**
      * send notification to the channel
      */
-    public void sendOnChannel() {
-        Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.logo)
+    public void sendOnChannel(String message) {
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_drive)
                 .setContentTitle("New Notification")
-                .setContentText("Message...")
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setAutoCancel(true) //用户点按通知后自动移除通知
                 .build();
+
+        notificationManager.notify(1, notification);
     }
 
     /**

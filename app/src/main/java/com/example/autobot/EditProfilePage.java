@@ -58,9 +58,12 @@ public class EditProfilePage extends Fragment {
 
 
     public interface EditProfilePageListener {
-        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri);
+        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap);
+
         String getUsername();
+
         Bitmap getBitmap();
+
     }
 
     @Override
@@ -193,8 +196,7 @@ public class EditProfilePage extends Fragment {
                 String hAddress = homeAddress.getText().toString();
                 String econtact = eContact.getText().toString();
 
-                if (imageUri == null) { imageUri = Uri.parse("http://www.google.com"); }
-                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,imageUri);
+                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,bitmap);
                 getActivity().onBackPressed();
             }
         });
