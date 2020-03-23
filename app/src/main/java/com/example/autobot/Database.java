@@ -7,10 +7,12 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +28,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -52,8 +56,8 @@ public class Database{
         FirebaseFirestore.getInstance().clearPersistence();
      //   mAuth = FirebaseAuth.getInstance();
         db1 = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
+//        storage = FirebaseStorage.getInstance();
+//        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
         // to disable clean-up.
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -173,41 +177,35 @@ public class Database{
 
 
     public Uri upload(Bitmap mybitmap,String username){
-        final StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
         byte[] thumb = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = LOAD.putBytes(thumb);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
 
-//        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                if(task.isSuccessful()){
-//                    LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                        @Override
-//                        public void onSuccess(Uri uri) {
-//                            downloadUri = uri;
-//                        }
-//                    });
-//                }
-//                else a = "1";
-//            }
-//        });
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                a = "1";
+                // Continue with the task to get the download URL
+                return LOAD.getDownloadUrl();
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                a = "2";
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    downloadUri = task.getResult();
+                } else {
+                    // Handle failures
+                    // ...
+                }
             }
         });
+
         if (downloadUri == null){
-            downloadUri = Uri.parse(a);
+            downloadUri = Uri.parse("");
         }
 
         return downloadUri;

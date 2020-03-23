@@ -173,8 +173,6 @@ public class User implements Driver, Rider, Serializable {
 
     }
 
-
-
     @Override
     public int GanerateQRcode() {
         return 0;

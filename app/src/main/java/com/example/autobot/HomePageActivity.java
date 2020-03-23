@@ -21,14 +21,20 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -47,11 +53,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private String username;
     public static User user;
     public static Request request;
-    public StorageReference LOAD;
     private static final int REQUEST_PHONE_CALL = 101;
     public StorageReference storageReference;
     public FirebaseStorage storage;
-
+    Uri downloadUri;
     private static final String TAG = "HomePageActivity";
 
 
@@ -328,19 +333,31 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         profilePhoto = findViewById(R.id.profile_photo);
         mybitmap = bitmap;
         if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
 
 
         User newUser = user;
-        String user_name = newUser.getUsername();
-        Uri uri = db.upload(mybitmap,user_name);
+        String username = newUser.getUsername();
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Uri downloadUrl = uri;
+                newUser.setUri(downloadUrl.toString());
+                //Toast.makeText(HomePageActivity.this, "Upload success! URL - " + downloadUrl.toString() , Toast.LENGTH_SHORT).show();
+            }
+        });
 
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-        newUser.setUri(uri.toString());
         db.add_new_user(newUser);
 
     }
