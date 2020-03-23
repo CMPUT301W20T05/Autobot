@@ -221,6 +221,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
 
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 //intentOrderComplete.putExtra("Username",username);
+                finish();
                 startActivity(intentOrderComplete);
             }
         });

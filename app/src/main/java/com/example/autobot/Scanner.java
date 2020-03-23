@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,6 +17,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.zxing.Result;
+
+import java.text.DecimalFormat;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -71,6 +74,9 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         final BottomSheetDialog scanCompleteDialog = new BottomSheetDialog(Scanner.this);
         scanCompleteDialog.setContentView(R.layout.scan_complete);
         scanCompleteDialog.setCancelable(false);
+
+        TextView price = scanCompleteDialog.findViewById(R.id.price);
+        price.setText(String.valueOf(result));
 
         Button buttonReturn = scanCompleteDialog.findViewById(R.id.returnHomepage);
         buttonReturn.setOnClickListener(new View.OnClickListener() {
