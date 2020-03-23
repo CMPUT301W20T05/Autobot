@@ -4,13 +4,14 @@ offline issues, driver connecting to riders, requets list, unit test and so on.
 As a member:
 zonglun1: Write the status change notify function in database, shared preferences for offline,
 modify basic classes, update currentlocation.
-Weida:Write the rate and profile photo upload to firebase, modify come class.
 yiping1: Updating the functionality of the menu, write the change profile photo function, and
 update the request history list.
+xqiu1: adjust all rider activities and connected them with database, modify all of layout files,
+create notifications, change some activities to fragment or bottom sheet
 
 
 Comment:
 zonglun1: Our data structure is kind of dummy so that we can not make the database realtime.
-weida:Firebase really let me confused about its thread and work principle.
 yiping1: We did really good this week on remote work, but as we develop our app, we found that
 we need to store more data type into our database, which makes it so difficult for us.
+xqiu1: we need do more generalizations.
