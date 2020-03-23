@@ -4,7 +4,8 @@ offline issues, driver connecting to riders, requets list, unit test and so on.
 As a member:
 zonglun1: Write the status change notify function in database, shared preferences for offline,
 modify basic classes, update currentlocation.
-
+Weida:Write the rate and profile photo upload to firebase, modify come class.
 
 Comment:
 zonglun1: Our data structure is kind of dummy so that we can not make the database realtime.
+weida:Firebase really let me confused about its thread and work principle.
