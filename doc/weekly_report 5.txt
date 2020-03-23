@@ -10,6 +10,7 @@ update the request history list.
 xqiu1: adjust all rider activities and connected them with database, modify all of layout files,
 create notifications, change some activities to fragment or bottom sheet
 Wenzhuo2:fix some logic bugs of the app, beautify the ui of the app, write some unit tests
+jiaxilyu:fix up the bug of the rebuild request and add the license certificion into the process of the driver signup.
 
 
 Comment:
@@ -18,4 +19,5 @@ weida:Firebase really let me confused about its thread and work principle.
 yiping1: We did really good this week on remote work, but as we develop our app, we found that
 we need to store more data type into our database, which makes it so difficult for us.
 xqiu1: we need do more generalizations.
+jiaxilyu:need to think about the factory method.
 Wenzhuo:everything is doing good, we just need to keeo working on it
