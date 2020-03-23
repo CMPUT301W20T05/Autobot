@@ -22,11 +22,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
 import org.w3c.dom.Text;
@@ -35,7 +39,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.android.volley.VolleyLog.TAG;
 import static com.example.autobot.App.CHANNEL_1_ID;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -70,7 +77,54 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
+        //use request to get infor
+        request.setDriver(user);
+        User driver = request.getDriver();
+        User rider = request.getRider();
+
         setProfile(username,db); // set profile
+
+        //rider accepted
+        final BottomSheetDialog riderAcceptedDialog = new BottomSheetDialog(DriverIsOnTheWayActivity.this);
+        riderAcceptedDialog.setContentView(R.layout.rider_accept);
+        riderAcceptedDialog.setCancelable(false);
+        ImageView driverAvatar = riderAcceptedDialog.findViewById(R.id.imageViewAvatar);
+        TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
+        TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
+        
+        driverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
+
+        DecimalFormat df = new DecimalFormat("0.0");
+        float goodRate = Float.parseFloat(driver.getGoodRate());
+        float badRate = Float.parseFloat(driver.getBadRate());
+        float rate = goodRate / (goodRate + badRate) * 10;
+        driverRate.setText(df.format(rate));
+
+        Button accept = riderAcceptedDialog.findViewById(R.id.acceptDriver);
+        Button reject = riderAcceptedDialog.findViewById(R.id.rejectDriver);
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request.resetRequestStatus("Rider Accepted",db);
+                db.ChangeRequestStatus(request);
+                riderAcceptedDialog.dismiss();
+            }
+        });
+        reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request.resetRequestStatus("Cancel",db);
+                db.ChangeRequestStatus(request);
+                riderAcceptedDialog.dismiss();
+                //return to homepage
+                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(finishRequest);
+                overridePendingTransition(0, 0);
+            }
+        });
+        riderAcceptedDialog.show();
 
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         //Button buttonSeeProfile = findViewById(R.id.see_profile);
@@ -82,29 +136,22 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         TextView textViewEstimateTime = findViewById(R.id.EstimatedTime);
         TextView textViewEstimateDist = findViewById(R.id.EstimatedDist);
         Button buttonCancelOrder = findViewById(R.id.cancel_order);
+        Button buttonComplete = findViewById(R.id.complete);
 
         //get location
         LatLng destination = request.getDestination();
         LatLng origin = request.getBeginningLocation();
         //distance between two locations
         double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-        DecimalFormat df = new DecimalFormat("0.00");
-        textViewEstimateDist.setText(df.format(distance));
+        DecimalFormat df1 = new DecimalFormat("0.00");
+        textViewEstimateDist.setText(df1.format(distance));
         //calculate time
         double time = distance / 1008.00 + 5.00;
-        textViewEstimateTime.setText(df.format(time));
-
-        //use request to get infor
-        request.setDriver(user);
-        User driver = request.getDriver();
-        User rider = request.getRider();
+        textViewEstimateTime.setText(df1.format(time));
         //set driver infor
         //imageViewAvatar.setBackgroundResource();
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
         //good rate infor
-        float goodRate = Float.parseFloat(driver.getGoodRate());
-        float badRate = Float.parseFloat(driver.getBadRate());
-        float rate = goodRate / (goodRate + badRate) * 10;
         textViewDriverRate.setText(df.format(rate));
 
         //mark driver and rider location in map
@@ -153,12 +200,65 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 alert.show();
             }
         });
-        //picked up rider
-        db.NotifyStatusChangeEditText(reID, "Request picked", textViewDriverCondition, "Driving to destination...");
 
-        //arrive destination
-        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
+        buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pop out dialog
+                final AlertDialog.Builder alert = new AlertDialog.Builder(DriverIsOnTheWayActivity.this);
+                alert.setTitle("Cancel Order");
+                alert.setMessage("Are you sure you wish to cancel current request?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //cancel current request
+                                //db.CancelRequest(reID);
+                                request.resetRequestStatus("Cancel",db);
+                                db.ChangeRequestStatus(request);
+                                //return to homepage
+                                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                                finish();
+                                overridePendingTransition(0, 0);
+                                startActivity(finishRequest);
+                                overridePendingTransition(0, 0);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+
+                alert.show();
+            }
+        });
+
+        buttonComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //arrive destination
+                request.resetRequestStatus("Trip Completed",db);
+                db.ChangeRequestStatus(request);
+                Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                finish();
+                startActivity(intentComplete);
+            }
+        });
+
+        //picked up rider
+        db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
+
+
+
+        //rider confirm completion
+        db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
+        db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
+
+
+//        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+//        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
 
     }
 

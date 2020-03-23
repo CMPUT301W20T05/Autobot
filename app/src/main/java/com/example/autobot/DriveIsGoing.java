@@ -84,7 +84,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
 
         // added by yiping, implementation of view profile of the rider
 
-        Button see_profile_button = rootView.findViewById(R.id.see_profile); // 需改button id
+        TextView see_profile_button = rootView.findViewById(R.id.Driver_name); // 需改button id
         see_profile_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,37 +105,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 alert.setView(view)
                         .setTitle("Details")
                         .setNegativeButton("Close",null);
-                alert.show();
-            }
-        });
-
-
-        buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pop out dialog
-                final AlertDialog.Builder alert = new AlertDialog.Builder(DriveIsGoing.this);
-                alert.setTitle("Cancel Order");
-                alert.setMessage("Are you sure you wish to cancel current request?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //delete current request
-                                //go back to home page
-                                Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
-//                                cancelRequest.putExtra("Username",user.getUsername());
-//                                cancelRequest.putExtra("reid",request.getRequestID());
-                                startActivity(cancelRequest);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-
                 alert.show();
             }
         });
@@ -195,9 +164,9 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request.UpdateStatus(2);
-                //need to add
+                request.UpdateStatus(3);
                 //update db
+                db.ChangeRequestStatus(request);
                 //change the text view of button after accept order
                 buttonCancelOrder.setText("Finish");
                 Log.d("check",request.getStatus());
@@ -213,14 +182,19 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
 
-                request.UpdateStatus(2);
+                request.UpdateStatus(4);
                 //need to add
                 //update db
+                db.ChangeRequestStatus(request);
+
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 //intentOrderComplete.putExtra("Username",username);
+                finish();
+                intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }
         });
     }
+
 
 }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.ComponentActivity;
@@ -123,6 +125,45 @@ public class Database{
 
             }
         });
+    }
+
+    public void NotifyStatusChangeButton(String requestID, String requeststatus, Button button, boolean visible){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        if (visible) {
+                            button.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            button.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+    public LatLng getCurrentLocation(User user){
+        final LatLng[] currentLocation = new LatLng[1];
+        this.collectionReference_user.document(user.getUsername())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        double Lat = Double.valueOf((String)documentSnapshot.get("CurrentLocationLat"));
+                        double Lnt = Double.valueOf((String)documentSnapshot.get("CurrentLocationLnt"));
+                        currentLocation[0] = new LatLng(Lat,Lnt);
+                    }
+                });
+        return currentLocation[0];
     }
 
     /**
@@ -286,6 +327,7 @@ public class Database{
         request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
+        request_data.put("Cost","0.0");
 
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
@@ -337,9 +379,10 @@ public class Database{
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            r.resetRequestStatus((String) documentSnapshot.getString("RequestStatus"));
+                            r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
                             r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
                             r.setRequestID((String) documentSnapshot.getString("ID"));
+                            r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
                         }
 
                     }
@@ -397,12 +440,13 @@ public class Database{
                     }
                 });
     }
+
     public void ChangeRequestStatus(Request request){
-        HashMap<String,String> requestChanged = new HashMap<>();
+        HashMap<String,Object> requestChanged = new HashMap<>();
         requestChanged.put("RequestStatus",request.getStatus());
         requestChanged.put("Driver",request.getDriver().getUsername());
         collectionReference_request.document(request.getRequestID())
-                .set(requestChanged)
+                .update(requestChanged)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -418,15 +462,6 @@ public class Database{
     }
 
    //public String StatusChangeNotify
-
-
-
-
-
-
-
-
-
 
 }
 

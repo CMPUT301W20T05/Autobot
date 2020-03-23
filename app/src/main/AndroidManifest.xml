@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.autobot">
     <!-- location permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera permission -->
     <uses-permission android:name="android.hardware.camera" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
@@ -63,7 +65,7 @@
             android:parentActivityName=".HomePageActivity" />
         <activity
             android:name=".DriverhomeActivity"
-            android:parentActivityName=".LoginActivity" />
+            android:parentActivityName=".LoginActivity"/>
         <activity android:name=".BaseActivity" />
         <activity android:name=".DriveIsGoing"
             android:parentActivityName=".DriverhomeActivity"/>
@@ -73,6 +75,9 @@
             android:parentActivityName=".RiderWaitDriverAcceptRequest"/>
         <activity android:name=".Driver_ordercomplete"
             android:parentActivityName=".DriveIsGoing"/>
+        <activity android:name=".Scanner"
+            android:parentActivityName=".Driver_ordercomplete"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.autobot.fileprovider"

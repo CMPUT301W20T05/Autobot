@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,24 +35,30 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
 
         HistoryRequest historyRequest = historyRequests.get(position); //get the measurement by using its position
 
-        TextView requestNumber = view.findViewById(R.id.request_number); //get each textView
+        //get each textView
         TextView status = view.findViewById(R.id.status);
         TextView dateTime = view.findViewById(R.id.date_time);
+        TextView userName = view.findViewById(R.id.usersname);
         ImageView  profilePhoto = view.findViewById(R.id.profile_photo);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // format for the date
         String dateString = formatter.format(historyRequest.getDate());        //transform the date
 
-
-        String n = "Request Number: " + historyRequest.getRequestNumber();                       //the strings to show in the lines
+        //the strings to show in the lines
         String s = "Status: " + historyRequest.getStatus();
         String d = "Date: " + dateString;
-        int p = historyRequest.getPhoto();
+        String u = historyRequest.getUser();
+        Bitmap b = historyRequest.getBitmap();
 
-        requestNumber.setText(n);        //set the above information on the line(textView)
+        //set the above information on the line(textView)
         status.setText(s);
         dateTime.setText(d);
-        profilePhoto.setImageResource(p);
+        userName.setText(u);
+        if (b != null) {
+            profilePhoto.setImageBitmap(b);
+        }else{
+            profilePhoto.setImageResource(R.drawable.default_avatar);
+        }
 
         return view;
     }

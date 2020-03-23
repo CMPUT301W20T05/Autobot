@@ -60,6 +60,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -86,6 +87,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -136,6 +138,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     final float DEFAULT_ZOOM = 18;
     public TextView name;
     public CircleImageView profilePhoto;
+    public TextView goodrate;
+    public TextView badrate;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -212,6 +216,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
         profilePhoto = header.findViewById(R.id.profile_photo);
+        goodrate = header.findViewById(R.id.favorable_rate);
+        badrate = header.findViewById(R.id.poor_rate);
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -223,7 +229,25 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
-                        String gr = document.getData().get("StarsRate").toString();
+                        String gr = document.getData().get("GoodRate").toString();
+                        String br = document.getData().get("BadRate").toString();
+                        Integer ggr = 0;
+                        Integer bbr = 0;
+                        if (!gr.equals("")){
+                            ggr = Integer.parseInt(gr);
+                        }
+                        if (!br.equals("")){
+                            bbr = Integer.parseInt(br);
+                        }
+
+                        DecimalFormat decimalFormat= new DecimalFormat(".00");
+                        float f1 = (float) ggr/(ggr + bbr)*100;
+                        String temp1 = decimalFormat.format(f1) + "%";
+                        float f2 = (float) bbr/(ggr + bbr)*100;
+                        String temp2 = decimalFormat.format(f2) + "%";
+
+                        goodrate.setText(temp1);
+                        badrate.setText(temp2);
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
@@ -564,12 +588,20 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        HashMap<String, String> CurrentLocation = new HashMap<>();
-        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
-        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Location");
+        currentLocationMarker = mMap.addMarker(markerOptions);
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+
+        HashMap<String, Object> CurrentLocation = new HashMap<>();
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(currentLocation.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(currentLocation.getLongitude()));
 
         db2.collectionReference_user.document(LoginActivity.user.getUsername())
-                .set(CurrentLocation)
+                .update(CurrentLocation)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -582,13 +614,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         Log.d(TAG, "Data addition failed" + e.toString());
                     }
                 });
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location");
-        currentLocationMarker = mMap.addMarker(markerOptions);
-
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
     }
 
     // Create the Google API Client with access location
@@ -645,11 +670,32 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                             currentLocation = task.getResult();
                             if (currentLocation != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+                                //set current location to firebase
+                                Database db2 = MainActivity.db;
+                                HashMap<String, Object> CurrentLocation = new HashMap<>();
+                                CurrentLocation.put("CurrentLocationLat", String.valueOf(currentLocation.getLatitude()));
+                                CurrentLocation.put("CurrentLocationLnt", String.valueOf(currentLocation.getLongitude()));
+
+                                db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                                        .update(CurrentLocation)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Data addition successful");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Data addition failed" + e.toString());
+                                            }
+                                        });
+
                             } else {
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
                                 locationRequest.setFastestInterval(5000);
-                                locationRequest.setSmallestDisplacement(10);
+                                locationRequest.setSmallestDisplacement(1);
                                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                                 locationCallback = new LocationCallback() {
                                     @Override
@@ -698,9 +744,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
-        place1 = new MarkerOptions().position(origin).title("Origin");
+        place1 = new MarkerOptions().position(origin).title("Origin"); //.icon(locIcon1)
         place2 = new MarkerOptions().position(destination).title("Destination");
-        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
+
+        //BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.drawable.location1);
+        //BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.drawable.location2);
+
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker

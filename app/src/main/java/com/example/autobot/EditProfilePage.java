@@ -163,7 +163,6 @@ public class EditProfilePage extends Fragment {
                 bottomSheetDialog = new BottomSheetDialog(getContext());
                 bottomSheetDialog.setContentView(view1);
                 bottomSheetDialog.show();
-
             }
         });
 
@@ -190,14 +189,26 @@ public class EditProfilePage extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int tempo = 0;
                 String fName = firstName.getText().toString();
+                if(fName.replace(" " , "").length() == 0){
+                    tempo = 1;
+                    Toast.makeText(getContext(), "First Name could not be empty", Toast.LENGTH_SHORT).show();
+                }
                 String lName = lastName.getText().toString();
+                if(lName.replace(" " , "").length() == 0){
+                    tempo = 1;
+                    Toast.makeText(getContext(), "Last Name could not be empty", Toast.LENGTH_SHORT).show();
+                }
                 String eAddress = emailAddress.getText().toString();
                 String hAddress = homeAddress.getText().toString();
                 String econtact = eContact.getText().toString();
 
-                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,bitmap);
-                getActivity().onBackPressed();
+                if (tempo == 0){
+                    listener.updateInformation(fName,lName,eAddress,hAddress,econtact,bitmap);
+                    Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
+                }
             }
         });
 

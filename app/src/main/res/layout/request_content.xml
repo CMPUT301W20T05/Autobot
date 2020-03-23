@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="horizontal">
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -13,31 +13,31 @@
         android:layout_marginBottom="10dp"
         android:src="@drawable/default_avatar">
 
-    </ImageView>
+    </de.hdodenhof.circleimageview.CircleImageView>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/request_number"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Request Number: 1111"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="8dp"
-            android:textSize="18sp">
-
-        </TextView>
         <TextView
             android:id="@+id/status"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Status: Completed"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="6dp"
             android:layout_marginLeft="15dp"
-            android:textSize="12sp">
+            android:textSize="20sp">
+
+        </TextView>
+        <TextView
+            android:id="@+id/usersname"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Driver: jc"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="15sp">
 
         </TextView>
         <TextView
@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date: 2020-02-02"
+            android:layout_marginTop="3dp"
             android:layout_marginLeft="15dp"
             android:textSize="12sp">
 
