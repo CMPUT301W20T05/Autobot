@@ -588,9 +588,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Location");
+        currentLocationMarker = mMap.addMarker(markerOptions);
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+
         HashMap<String, Object> CurrentLocation = new HashMap<>();
-        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
-        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(currentLocation.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(currentLocation.getLongitude()));
 
         db2.collectionReference_user.document(LoginActivity.user.getUsername())
                 .update(CurrentLocation)
@@ -606,13 +614,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         Log.d(TAG, "Data addition failed" + e.toString());
                     }
                 });
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location");
-        currentLocationMarker = mMap.addMarker(markerOptions);
-
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
     }
 
     // Create the Google API Client with access location
@@ -669,11 +670,32 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                             currentLocation = task.getResult();
                             if (currentLocation != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+                                //set current location to firebase
+                                Database db2 = MainActivity.db;
+                                HashMap<String, Object> CurrentLocation = new HashMap<>();
+                                CurrentLocation.put("CurrentLocationLat", String.valueOf(currentLocation.getLatitude()));
+                                CurrentLocation.put("CurrentLocationLnt", String.valueOf(currentLocation.getLongitude()));
+
+                                db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                                        .update(CurrentLocation)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Data addition successful");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Data addition failed" + e.toString());
+                                            }
+                                        });
+
                             } else {
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
                                 locationRequest.setFastestInterval(5000);
-                                locationRequest.setSmallestDisplacement(10);
+                                locationRequest.setSmallestDisplacement(1);
                                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                                 locationCallback = new LocationCallback() {
                                     @Override

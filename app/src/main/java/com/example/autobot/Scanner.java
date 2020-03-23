@@ -1,28 +1,45 @@
 package com.example.autobot;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.zxing.Result;
+
+import java.text.DecimalFormat;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
+    private Database db;
+    private Request request;
+    private User user;
+    private String username;
+    private String reID;
     ZXingScannerView scannerView;
     public Result result;
-    final int MY_PERMISSION_REQUEST_CAMERA = 10;
+    final int MY_PERMISSION_REQUEST_CAMERA = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
+
     }
 
     @Override
@@ -33,6 +50,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         //Toast.makeText(ScanActivity.this,"The rider done.",Toast.LENGTH_SHORT ).show();
         //startActivity(new Intent(getApplicationContext(), MainActivity.class));
         //onBackPressed();
+        openDialog();
     }
 
     @Override
@@ -49,6 +67,31 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
         scannerView.setResultHandler(this);
         scannerView.startCamera();
+    }
+
+    protected void openDialog(){
+        //pop out dialog
+        final BottomSheetDialog scanCompleteDialog = new BottomSheetDialog(Scanner.this);
+        scanCompleteDialog.setContentView(R.layout.scan_complete);
+        scanCompleteDialog.setCancelable(false);
+
+        TextView price = scanCompleteDialog.findViewById(R.id.price);
+        price.setText(String.valueOf(result));
+
+        Button buttonReturn = scanCompleteDialog.findViewById(R.id.returnHomepage);
+        buttonReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //go back to home page
+                Intent intenthome = new Intent(getApplicationContext(), DriverhomeActivity.class);
+                //finish current thread
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(intenthome);
+                overridePendingTransition(0, 0);
+            }
+        });
+        scanCompleteDialog.show();
     }
 
 }

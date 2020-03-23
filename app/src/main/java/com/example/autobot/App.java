@@ -3,15 +3,18 @@ package com.example.autobot;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 public class App extends Application {
     public static final String CHANNEL_1_ID = "channel1";
     public static final String CHANNEL_2_ID = "channel2";
+    SharedPreferences preferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        preferences = getSharedPreferences("User",MODE_PRIVATE);
 
         createNotificationChannels();
     }

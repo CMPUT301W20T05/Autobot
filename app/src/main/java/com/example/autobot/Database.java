@@ -136,6 +136,20 @@ public class Database{
             }
         });
     }
+    public LatLng getCurrentLocation(User user){
+        final LatLng[] currentLocation = new LatLng[1];
+        this.collectionReference_user.document(user.getUsername())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        double Lat = Double.valueOf((String)documentSnapshot.get("CurrentLocationLat"));
+                        double Lnt = Double.valueOf((String)documentSnapshot.get("CurrentLocationLnt"));
+                        currentLocation[0] = new LatLng(Lat,Lnt);
+                    }
+                });
+        return currentLocation[0];
+    }
 
     /**
      * This function is to add and edit user information and store them to firestone.
@@ -394,15 +408,6 @@ public class Database{
     }
 
    //public String StatusChangeNotify
-
-
-
-
-
-
-
-
-
 
 }
 

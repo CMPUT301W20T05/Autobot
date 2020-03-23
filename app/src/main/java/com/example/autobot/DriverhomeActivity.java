@@ -89,9 +89,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //--------------------------------
         rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
         //hide that useless bar
-        rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.buttonConfirmRequest).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.buttonShowDirection).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.GONE);
+        rootView.findViewById(R.id.buttonConfirmRequest).setVisibility(View.GONE);
+        rootView.findViewById(R.id.buttonShowDirection).setVisibility(View.GONE);
         //initial the search bar
         AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
@@ -319,7 +319,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Log.d("time",Accepttime);
         Log.d("stime",send_time);
 
-        User user = new User(rider_id);
+        User user = db.rebuildUser(rider_id);
         Request request = new Request(user,BeginningLocation,Destination);
         request.setRequestID(request_id);
         //set up date format
