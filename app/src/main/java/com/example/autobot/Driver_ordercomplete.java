@@ -54,18 +54,22 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
 
         setProfile(username,db); // set profile
 
-
         TextView Price = findViewById(R.id.setFare);
-        Button Confirm = findViewById(R.id.confirmFee);
+        //driver scan qrcode
+        Button buttonScan = findViewById(R.id.scan);
+        buttonScan.setVisibility(View.VISIBLE);
+        Button ConfirmButton = findViewById(R.id.confirmFee);
+        ConfirmButton.setVisibility(View.GONE);
 
         Price.setText(String.valueOf(request.getCost()));
 
-
-        Confirm.setOnClickListener(new View.OnClickListener() {
+        buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intenthome = new Intent(Driver_ordercomplete.this, DriverhomeActivity.class);
-                startActivity(intenthome);
+                //scan qrcode
+                Intent intentScanner = new Intent(getApplicationContext(), Scanner.class);
+                finish();
+                startActivity(intentScanner);
             }
         });
 

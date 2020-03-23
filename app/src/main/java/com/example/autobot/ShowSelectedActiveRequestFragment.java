@@ -70,13 +70,13 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
                 listener.confirm_request(request);
             }
         });
-        ImageButton back_button = rootView.findViewById(R.id.button_back);
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.back_press();
-            }
-        });
+//        ImageButton back_button = rootView.findViewById(R.id.button_back);
+//        back_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                listener.back_press();
+//            }
+//        });
 
 
         //view profilo

@@ -109,8 +109,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             }
         });
 
-
-
         //set the onclick function for button
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
@@ -190,6 +188,8 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 db.ChangeRequestStatus(request);
 
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
+                //intentOrderComplete.putExtra("Username",username);
+                finish();
                 intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }

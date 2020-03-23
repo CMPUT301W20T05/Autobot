@@ -58,6 +58,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
     private String model;
     private double addPrice;
+    private boolean clicked = false;
+
+    DecimalFormat df = new DecimalFormat("0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -124,182 +127,158 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request = null;
-                try {
-                    request = new Request(user, origin, destination);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                request.setEstimateCost(origin, destination);
-                db.add_new_request(request);
-                String reID = request.getRequestID();
-                //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
-
                 //for model choosing
                 final BottomSheetDialog uCurRequestDialog = new BottomSheetDialog(HomePageActivity.this);
                 uCurRequestDialog.setContentView(R.layout.current_request_of_user);
                 uCurRequestDialog.setCancelable(false);
-
-                //for wait for driver accept
-                //RiderBottomSheetFragment bottomSheetFragment = new RiderBottomSheetFragment();
-                //bottomSheetFragment.show(getSupportFragmentManager(), "RiderBottomSheet");
-                final BottomSheetDialog dialog = new BottomSheetDialog(HomePageActivity.this);
-                dialog.setContentView(R.layout.rider_bottom_sheet);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.setCancelable(false);
-
 
                 //1: for uCurRequestDialog
                 Button CurRequestConfirm = uCurRequestDialog.findViewById(R.id.Cur_Request_confirm);
                 TextView EstimatedFare = uCurRequestDialog.findViewById(R.id.estimatedFare);
                 Spinner modelTochoose = uCurRequestDialog.findViewById(R.id.spinnerCarModel);
 
-                //calculate estimated fare
-                DecimalFormat df = new DecimalFormat("0.00");
-                double estimateFare = request.getEstimateCost();
-                if (EstimatedFare != null) {
-                    EstimatedFare.setText(String.valueOf(df.format(estimateFare)));
-                }
+                //for wait for driver accept
+                //RiderBottomSheetFragment bottomSheetFragment = new RiderBottomSheetFragment();
+                //bottomSheetFragment.show(getSupportFragmentManager(), "RiderBottomSheet");
+                final BottomSheetDialog dialog = new BottomSheetDialog(HomePageActivity.this);
+                dialog.setContentView(R.layout.rider_bottom_sheet);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setCancelable(true);
 
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                modelTochoose.setAdapter(adapter);
-
-                CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        //choose model
-                        modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                model = parent.getItemAtPosition(position).toString();
-                                adapter.notifyDataSetChanged();
-
-                                if ("Normal".equals(model)){
-                                    addPrice = 0;
-                                }else if("Pleasure".equals(model)){
-                                    addPrice = 5;
-                                }else{
-                                    addPrice = 10;
-                                }
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                model = "Normal";
-                                addPrice = 0;
-                            }
-                        });
-
-                        //add tips
-                        EditText editTextTip = uCurRequestDialog.findViewById(R.id.addTip);
-                        Double tips = 0.0;
-                        double totalFare = addPrice + estimateFare;
-                        Editable temp = editTextTip.getText();
-                        if (temp!=null) {
-                            tips = Double.valueOf(String.valueOf(temp));
-                            totalFare += tips;
-                        }
-                        request.setCost(totalFare);
-                        
-                        //finish current activity
-                        uCurRequestDialog.dismiss();
-                        //wait driver to accept
-                        Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-                        db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
-
-                        //set price have to go here to display
-                        TextView approPrice = dialog.findViewById(R.id.Appro_price);
-                        approPrice.setText(df.format(request.getCost()));
-                        dialog.show();
-                    }
-                });
-                uCurRequestDialog.show();
-
-                //2: bottom sheet for waiting driver to accept
-                TextView driverCondition = dialog.findViewById(R.id.driver_condition);
                 TextView startLocation = dialog.findViewById(R.id.origin_loc);
                 TextView endLocation = dialog.findViewById(R.id.Destination);
                 TextView approDistance = dialog.findViewById(R.id.Appro_distance);
+                TextView approPrice = dialog.findViewById(R.id.Appro_price);
+                Button cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
 
-                //set location for dialog
-                LatLng destination = request.getDestination();
-                LatLng origin = request.getBeginningLocation();
-                if (destination != null && origin != null) {
-                    Geocoder geocoder = new Geocoder(HomePageActivity.this, Locale.getDefault());
+                if (!clicked) {
+                    clicked = true;
+                    HPConfirmButton.setText("View request");
+                    request = null;
                     try {
-                        String oaddress = request.ReadableAddress(origin, geocoder);
-                        String daddress = request.ReadableAddress(destination, geocoder);
-                        startLocation.setText(oaddress);
-                        endLocation.setText(daddress);
-                    } catch (IOException e) {
+                        request = new Request(user, origin, destination);
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                }
-                //set distance and price for dialog
-                //distance between two locations
-                double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                //DecimalFormat df = new DecimalFormat("0.00");
-                approDistance.setText(df.format(distance));
+                    request.setEstimateCost(origin, destination);
+                    db.add_new_request(request);
+                    String reID = request.getRequestID();
+                    //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
-                //change driver condition when needed
-                //driverCondition.setText("");
-
-//                Button seeProfile = dialog.findViewById(R.id.see_profile);
-//                seeProfile.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.profile_viewer, null);
-//
-//                        TextView fname = view.findViewById(R.id.FirstName);
-//                        TextView lname = view.findViewById(R.id.LastName);
-//                        TextView pnumber = view.findViewById(R.id.PhoneNumber);
-//                        TextView email = view.findViewById(R.id.EmailAddress);
-//                        //should be set as driver's infor
-//                        fname.setText(user.getFirstName());
-//                        lname.setText(user.getLastName());
-//                        pnumber.setText(user.getPhoneNumber());
-//                        email.setText(user.getEmailAddress());
-//
-//                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
-//                        alert.setView(view)
-//                                .setTitle("Details")
-//                                .setNegativeButton("Close",null);
-//                        alert.show();
-//                    }
-//                });
-
-                Button cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //pop out dialog
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
-                        alert.setTitle("Cancel Order");
-                        alert.setMessage("Are you sure you wish to cancel current request?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        //delete current request
-                                        db.CancelRequest(reID);
-                                        //close dialog
-                                        dialog.dismiss();
-                                        //set homepage to initial state
-                                        recreateActivity();
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        return;
-                                    }
-                                });
-
-                        alert.show();
+                    //calculate estimated fare
+                    double estimateFare = request.getEstimateCost();
+                    if (EstimatedFare != null) {
+                        EstimatedFare.setText(String.valueOf(df.format(estimateFare)));
                     }
-                });
+
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    modelTochoose.setAdapter(adapter);
+                    //choose model
+                    modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            model = parent.getItemAtPosition(position).toString();
+                            adapter.notifyDataSetChanged();
+
+                            if ("Normal".equals(model)){
+                                addPrice = 0;
+                            }else if("Pleasure".equals(model)){
+                                addPrice = 5;
+                            }else{
+                                addPrice = 10;
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                            model = "Normal";
+                            addPrice = 0;
+                        }
+                    });
+
+                    CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //add tips
+                            EditText editTextTip = uCurRequestDialog.findViewById(R.id.addTip);
+                            Double tips = 0.0;
+                            double totalFare = addPrice + estimateFare;
+                            Editable temp = editTextTip.getText();
+                            if (temp!=null) {
+                                tips = Double.valueOf(String.valueOf(temp));
+                                totalFare += tips;
+                            }
+                            request.resetCost(totalFare, db);
+
+                            //finish current activity
+                            uCurRequestDialog.dismiss();
+                            //wait driver to accept
+                            Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
+                            db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
+
+                            //set price have to go here to display
+                            approPrice.setText(df.format(request.getCost()));
+                            dialog.show();
+                        }
+                    });
+                    uCurRequestDialog.show();
+
+                    //2: bottom sheet for waiting driver to accept
+                    startLocation = dialog.findViewById(R.id.origin_loc);
+                    endLocation = dialog.findViewById(R.id.Destination);
+                    approDistance = dialog.findViewById(R.id.Appro_distance);
+
+                    //set location for dialog
+                    LatLng destination = request.getDestination();
+                    LatLng origin = request.getBeginningLocation();
+                    if (destination != null && origin != null) {
+                        Geocoder geocoder = new Geocoder(HomePageActivity.this, Locale.getDefault());
+                        try {
+                            String oaddress = request.ReadableAddress(origin, geocoder);
+                            String daddress = request.ReadableAddress(destination, geocoder);
+                            startLocation.setText(oaddress);
+                            endLocation.setText(daddress);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //set distance and price for dialog
+                    //distance between two locations
+                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                    //DecimalFormat df = new DecimalFormat("0.00");
+                    approDistance.setText(df.format(distance));
+
+                    cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
+                    cancelButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //pop out dialog
+                            final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+                            alert.setTitle("Cancel Order");
+                            alert.setMessage("Are you sure you wish to cancel current request?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //delete current request
+                                            db.CancelRequest(reID);
+                                            //close dialog
+                                            dialog.dismiss();
+                                            //set homepage to initial state
+                                            recreateActivity();
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            return;
+                                        }
+                                    });
+
+                            alert.show();
+                        }
+                    });
 
 //                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
 //                phoneButton.setOnClickListener(new View.OnClickListener() {
@@ -315,6 +294,65 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 //                        }
 //                    }
 //                });
+
+                }
+                else {
+                    //2: bottom sheet for waiting driver to accept
+                    String reID = request.getRequestID();
+
+                    //set location for dialog
+                    LatLng destination = request.getDestination();
+                    LatLng origin = request.getBeginningLocation();
+                    if (destination != null && origin != null) {
+                        Geocoder geocoder = new Geocoder(HomePageActivity.this, Locale.getDefault());
+                        try {
+                            String oaddress = request.ReadableAddress(origin, geocoder);
+                            String daddress = request.ReadableAddress(destination, geocoder);
+                            startLocation.setText(oaddress);
+                            endLocation.setText(daddress);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //set distance and price for dialog
+                    //distance between two locations
+                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+                    //DecimalFormat df = new DecimalFormat("0.00");
+                    approDistance.setText(df.format(distance));
+                    approPrice.setText(df.format(request.getCost()));
+
+                    cancelButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //pop out dialog
+                            final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+                            alert.setTitle("Cancel Order");
+                            alert.setMessage("Are you sure you wish to cancel current request?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //delete current request
+                                            db.CancelRequest(reID);
+                                            //close dialog
+                                            dialog.dismiss();
+                                            //set homepage to initial state
+                                            recreateActivity();
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            return;
+                                        }
+                                    });
+
+                            alert.show();
+                        }
+                    });
+
+                    dialog.show();
+                }
 
             }
         });

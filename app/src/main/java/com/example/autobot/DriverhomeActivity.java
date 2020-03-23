@@ -89,9 +89,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //--------------------------------
         rootView = getLayoutInflater().inflate(R.layout.home_page, frameLayout);
         //hide that useless bar
-        rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.buttonConfirmRequest).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.buttonShowDirection).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.autocomplete_destination).setVisibility(View.GONE);
+        rootView.findViewById(R.id.buttonConfirmRequest).setVisibility(View.GONE);
+        rootView.findViewById(R.id.buttonShowDirection).setVisibility(View.GONE);
         //initial the search bar
         AutocompleteSupportFragment autocompleteFragmentOrigin = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_origin);
