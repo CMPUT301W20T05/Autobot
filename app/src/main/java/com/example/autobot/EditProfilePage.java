@@ -163,7 +163,6 @@ public class EditProfilePage extends Fragment {
                 bottomSheetDialog = new BottomSheetDialog(getContext());
                 bottomSheetDialog.setContentView(view1);
                 bottomSheetDialog.show();
-
             }
         });
 
