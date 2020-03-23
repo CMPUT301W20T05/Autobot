@@ -36,11 +36,9 @@ public class User implements Driver, Rider, Serializable {
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
-        this.uri = null;
+        this.uri = "";
         this.GoodRate = "0";
         this.BadRate = "0";
-
-
     }
 
     public String getEmergencyContact() {
@@ -53,8 +51,8 @@ public class User implements Driver, Rider, Serializable {
 
     // added by yiping
 
-    public String getUri(){return uri;}
-    public void setUri(String urii){uri = urii;}
+    public String getUri(){return this.uri;}
+    public void setUri(String urii){this.uri = urii;}
 
     //-----------------------------------
 
@@ -174,8 +172,6 @@ public class User implements Driver, Rider, Serializable {
     public void SendRequest(Request request) {
 
     }
-
-
 
     @Override
     public int GanerateQRcode() {

@@ -1,5 +1,7 @@
 package com.example.autobot;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,6 +41,9 @@ public class RequestHistoryFragment extends Fragment {
     private ArrayAdapter<HistoryRequest> mAdapter;
     private ArrayList<HistoryRequest> mDataList;
     private Date dateTemp;
+    private String requestId;
+    Database userBase = LoginActivity.db;
+    User user = LoginActivity.user;
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
 
@@ -52,9 +58,6 @@ public class RequestHistoryFragment extends Fragment {
 
         requestList.setAdapter(mAdapter);
 
-        Database userBase = LoginActivity.db;
-        User user = LoginActivity.user;
-
         userBase.collectionReference_request.whereEqualTo("Rider",user.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -65,6 +68,7 @@ public class RequestHistoryFragment extends Fragment {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 String time1 = document.getData().get("ArriveTime").toString();
                                 String userName = document.getData().get("Driver").toString();
+                                requestId =  document.getData().get("ID").toString();
                                 userName = "Driver: "+userName;
                                 if (!time1.equals("30-11-002 12:00:00")){
                                     try {
@@ -93,7 +97,7 @@ public class RequestHistoryFragment extends Fragment {
                                 String str = document.getData().get("RequestStatus").toString();
 
                                 if (dateTemp != null) {
-                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName));
+                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName,requestId));
                                     mAdapter.notifyDataSetChanged();
                                 }
 
@@ -142,7 +146,7 @@ public class RequestHistoryFragment extends Fragment {
                                 String str = document.getData().get("RequestStatus").toString();
 
                                 if (dateTemp != null) {
-                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName));
+                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName,requestId));
                                     mAdapter.notifyDataSetChanged();
                                 }
 
@@ -153,7 +157,71 @@ public class RequestHistoryFragment extends Fragment {
                         }
                     }
                 });
+        requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                HistoryRequest tempo = mDataList.get(i);
+                showDetail(tempo);
+            }
+        });
 
         return view;
+    }
+
+    private void showDetail(HistoryRequest historyRequest) {
+        String rid = historyRequest.getRequestId();
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.history_detail, null);
+        TextView driverName = view.findViewById(R.id.detail_name);
+        TextView riderName = view.findViewById(R.id.detail_name2);
+        TextView sendTime = view.findViewById(R.id.detail_send_time);
+        TextView acceptTime = view.findViewById(R.id.detail_accept_time);
+        TextView arriveTime = view.findViewById(R.id.detail_arrive_time);
+        TextView status = view.findViewById(R.id.status);
+
+        userBase.collectionReference_request
+                .document(rid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String driver = "Driver:  " + document.getData().get("Driver").toString();
+                                String rider = "Rider:  " + document.getData().get("Rider").toString();
+
+                                String tempTime1 = document.getData().get("AcceptTime").toString();
+                                String facceptTime = "Accept Time: ";
+                                if (!tempTime1.equals("30-11-002 12:00:00")) {
+                                    facceptTime = "Accept Time:  " + tempTime1;
+                                }
+
+                                String farriveTime = "Arrive Time: ";
+                                String tempTime2 = document.getData().get("ArriveTime").toString();
+                                if (!tempTime2.equals("30-11-002 12:00:00")) {
+                                    farriveTime = "Arrive Time:  " + tempTime2;
+                                }
+
+                                String fsendTime = "Send Time:  " + document.getData().get("SendTime").toString();
+                                String Status = "Status:  " + document.getData().get("RequestStatus").toString();;
+
+                                driverName.setText(driver);
+                                riderName.setText(rider);
+                                sendTime.setText(fsendTime);
+                                acceptTime.setText(facceptTime);
+                                arriveTime.setText(farriveTime);
+                                status.setText(Status);
+
+                            }
+                        }
+                    }
+                });
+        final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setView(view)
+                .setTitle("Details")
+                .setNegativeButton("Close",null);
+        alert.show();
+
     }
 }

@@ -2,6 +2,8 @@ package com.example.autobot;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.content.Intent;
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
     int DELAY = 3*1000;
     public static Database db ;
+    SharedPreferences preferences_user;
+    SharedPreferences preferences_request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setContentView(R.layout.activity_main);
-        log_in_page();
+        if((Offline.ExtractUser(preferences_user)==null)&&Offline.ExtractRequest(preferences_request)==null){
+            log_in_page();
+        }else{
+            jump_to_homepage();
+        }
 
     }
     /*change activity*/
@@ -55,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.schedule(task,DELAY);
-
-
+    }
+    public void jump_to_homepage(){
+        final Intent intenthomepage = new Intent(this, HomePageActivity.class);
+        startActivity(intenthomepage);
     }
 }
 

@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
@@ -25,15 +25,21 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -51,16 +57,19 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private String username;
     public static User user;
     public static Request request;
-
     private static final int REQUEST_PHONE_CALL = 101;
-
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
+    Uri downloadUri;
     private static final String TAG = "HomePageActivity";
+
 
     private String model;
     private double addPrice;
     private boolean clicked = false;
 
     DecimalFormat df = new DecimalFormat("0.00");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -405,14 +414,31 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         profilePhoto = findViewById(R.id.profile_photo);
         mybitmap = bitmap;
         if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
+
 
         User newUser = user;
+        String username = newUser.getUsername();
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Uri downloadUrl = uri;
+                newUser.setUri(downloadUrl.toString());
+                //Toast.makeText(HomePageActivity.this, "Upload success! URL - " + downloadUrl.toString() , Toast.LENGTH_SHORT).show();
+            }
+        });
+
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-
         db.add_new_user(newUser);
 
     }
