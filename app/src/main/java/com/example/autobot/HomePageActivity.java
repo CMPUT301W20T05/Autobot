@@ -408,6 +408,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
+        User newUser = user;
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
@@ -417,12 +418,13 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
 
-
-        User newUser = user;
         String username = newUser.getUsername();
         StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        if (mybitmap != null) {
+            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        }
+
         byte[] thumb = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = LOAD.putBytes(thumb);
         LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
