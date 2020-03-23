@@ -18,9 +18,10 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/driver_license"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="License number"/>
+            android:hint="License number" />
 
     </LinearLayout>
 
@@ -37,9 +38,10 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/car_license"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="Vehicle registration plate"/>
+            android:hint="Vehicle registration plate" />
 
     </LinearLayout>
 

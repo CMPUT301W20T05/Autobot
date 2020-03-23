@@ -80,7 +80,7 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
 
 
         //view profilo
-        Button see_profile_button = rootView.findViewById(R.id.View_Detail); // 需改button id
+        Button see_profile_button = rootView.findViewById(R.id.imageViewAvatar); // 需改button id
         see_profile_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
