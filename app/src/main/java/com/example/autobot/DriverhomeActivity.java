@@ -319,7 +319,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Log.d("time",Accepttime);
         Log.d("stime",send_time);
 
-        User user = new User(rider_id);
+        User user = db.rebuildUser(rider_id);
         Request request = new Request(user,BeginningLocation,Destination);
         request.setRequestID(request_id);
         //set up date format
