@@ -54,6 +54,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     private User user;
     private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
+    private User rider;
+    private User driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +82,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         //use request to get infor
         request.setDriver(user);
-        User driver = request.getDriver();
-        User rider = request.getRider();
+        driver = request.getDriver();
+        rider = request.getRider();
 
         setProfile(username,db); // set profile
 
@@ -157,7 +159,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         //mark driver and rider location in map
         LatLng driverCurrent = driver.getCurrentLocation();
-        LatLng riderCurrent = driver.getCurrentLocation();
+        LatLng riderCurrent = rider.getCurrentLocation();
         drawRoute(driverCurrent, riderCurrent);
 
         //for rider to call driver
@@ -282,6 +284,16 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         db.add_new_user(newUser);
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //mark driver and rider location in map
+        LatLng driverCurrent = driver.getCurrentLocation();
+        LatLng riderCurrent = rider.getCurrentLocation();
+        drawRoute(driverCurrent, riderCurrent);
+    }
+
     @Override
     public String getUsername() {
         return username;
