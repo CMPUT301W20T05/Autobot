@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -91,7 +92,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         ImageView driverAvatar = riderAcceptedDialog.findViewById(R.id.imageViewAvatar);
         TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
         TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
-        
+
         driverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
 
         DecimalFormat df = new DecimalFormat("0.0");
@@ -155,8 +156,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         textViewDriverRate.setText(df.format(rate));
 
         //mark driver and rider location in map
-        LatLng driverCurrent = destination;
-        LatLng riderCurrent = origin;
+        LatLng driverCurrent = driver.getCurrentLocation();
+        LatLng riderCurrent = driver.getCurrentLocation();
         drawRoute(driverCurrent, riderCurrent);
 
         //for rider to call driver

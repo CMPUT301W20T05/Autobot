@@ -80,8 +80,7 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
 
 
         //view profilo
-        Button see_profile_button = rootView.findViewById(R.id.View_Detail); // 需改button id
-        see_profile_button.setOnClickListener(new View.OnClickListener() {
+        drive_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.profile_viewer, null);
