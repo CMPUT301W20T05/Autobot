@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/detail_photo"
+        android:layout_width="99dp"
+        android:layout_height="99dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/default_avatar">
+    </de.hdodenhof.circleimageview.CircleImageView>
+    <TextView
+        android:id="@+id/detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Driver: "
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+    <TextView
+        android:id="@+id/detail_name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rider: "
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: "
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+    <TextView
+        android:id="@+id/detail_send_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Time: "
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+    <TextView
+        android:id="@+id/detail_accept_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accept Time: "
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+    <TextView
+        android:id="@+id/detail_arrive_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Arrive Time: "
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
+
+
+</LinearLayout>

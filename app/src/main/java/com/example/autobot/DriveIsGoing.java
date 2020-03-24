@@ -17,7 +17,25 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -37,6 +55,8 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         db = DriverhomeActivity.db;
         user = DriverhomeActivity.user; // get User
         username = user.getUsername(); // get username
+
+        detect_cancel_order();//detect whether user cancel order
 
         setProfile(username,db); // set profile
 
@@ -98,37 +118,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             }
         });
 
-
-        buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pop out dialog
-                final AlertDialog.Builder alert = new AlertDialog.Builder(DriveIsGoing.this);
-                alert.setTitle("Cancel Order");
-                alert.setMessage("Are you sure you wish to cancel current request?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //delete current request
-                                //go back to home page
-                                Intent cancelRequest = new Intent(getApplicationContext(), HomePageActivity.class);
-//                                cancelRequest.putExtra("Username",user.getUsername());
-//                                cancelRequest.putExtra("reid",request.getRequestID());
-                                startActivity(cancelRequest);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-
-                alert.show();
-            }
-        });
-
         //set the onclick function for button
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
@@ -184,9 +173,9 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request.UpdateStatus(2);
+                request.UpdateStatus(3);
                 //update db
-                db.ChangeRequestStatus(request);
+                //db.ChangeRequestStatus(request);
                 //change the text view of button after accept order
                 buttonCancelOrder.setText("Finish");
                 Log.d("check",request.getStatus());
@@ -202,16 +191,59 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
 
-                request.UpdateStatus(3);
+                request.UpdateStatus(4);
                 //need to add
                 //update db
-                db.ChangeRequestStatus(request);
+                //db.ChangeRequestStatus(request);
 
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 //intentOrderComplete.putExtra("Username",username);
+                finish();
+                intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);
             }
         });
     }
+
+    //manage the situation if the rider cancel the order
+    public void detect_cancel_order(){
+        //create listener for the selected request
+        DocumentReference request_ref = db.collectionReference_request.document(request.getRequestID());
+        request_ref.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                //error exist, cant find that ref
+                if(e != null){}
+                else{
+                    //check whether the request is on cancel state
+                    if((documentSnapshot.get("RequestStatus").toString()).equals("Cancel")){
+                        Toast.makeText(DriveIsGoing.this,"Cancel",Toast.LENGTH_LONG).show();
+                        //if order cancel return to the home page
+                        Intent intent = new Intent(DriveIsGoing.this, DriverhomeActivity.class);
+                        int pause_time = 3000;
+                        FragmentManager fm = getSupportFragmentManager();
+                        Fragment notification = new CancelNotifiFragment();
+                        fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
+                        delay(pause_time,intent);
+                    }
+                }
+            }
+        });
+    }
+
+    //this function is for managing the process of swapping 2 activities
+    public void delay(int pause_time,Intent intent){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask()
+        {
+            @Override
+            public void run(){
+                finish();startActivity(intent);
+            }
+        };
+        timer.schedule(task,pause_time);
+
+    }
+
 
 }

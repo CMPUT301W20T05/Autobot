@@ -64,6 +64,11 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         request = HomePageActivity.request;
         reID = request.getRequestID();
 
+        //use request to get infor
+        request.setDriver(user);
+        User driver = request.getDriver();
+        User rider = request.getRider();
+
         setProfile(username,db); // set profile
 
         //rider accepted
@@ -73,12 +78,22 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         ImageView driverAvatar = riderAcceptedDialog.findViewById(R.id.imageViewAvatar);
         TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
         TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
+        
+        driverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
+
+        DecimalFormat df = new DecimalFormat("0.0");
+        float goodRate = Float.parseFloat(driver.getGoodRate());
+        float badRate = Float.parseFloat(driver.getBadRate());
+        float rate = goodRate / (goodRate + badRate) * 10;
+        driverRate.setText(df.format(rate));
+
         Button accept = riderAcceptedDialog.findViewById(R.id.acceptDriver);
         Button reject = riderAcceptedDialog.findViewById(R.id.rejectDriver);
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 request.resetRequestStatus("Rider Accepted",db);
+                db.ChangeRequestStatus(request);
                 riderAcceptedDialog.dismiss();
             }
         });
@@ -86,22 +101,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             @Override
             public void onClick(View v) {
                 request.resetRequestStatus("Cancel",db);
-                HashMap<String, Object> update = new HashMap<>();
-                update.put("RequestStatus", request.getStatus());
-                db.collectionReference_request.document(request.getRequestID())
-                        .update(update)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "Data addition successful");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "Data addition failed" + e.toString());
-                            }
-                        });
+                db.ChangeRequestStatus(request);
                 riderAcceptedDialog.dismiss();
                 //return to homepage
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
@@ -130,23 +130,15 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         LatLng origin = request.getBeginningLocation();
         //distance between two locations
         double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-        DecimalFormat df = new DecimalFormat("0.00");
-        textViewEstimateDist.setText(df.format(distance));
+        DecimalFormat df1 = new DecimalFormat("0.00");
+        textViewEstimateDist.setText(df1.format(distance));
         //calculate time
         double time = distance / 1008.00 + 5.00;
-        textViewEstimateTime.setText(df.format(time));
-
-        //use request to get infor
-        request.setDriver(user);
-        User driver = request.getDriver();
-        User rider = request.getRider();
+        textViewEstimateTime.setText(df1.format(time));
         //set driver infor
         //imageViewAvatar.setBackgroundResource();
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
         //good rate infor
-        float goodRate = Float.parseFloat(driver.getGoodRate());
-        float badRate = Float.parseFloat(driver.getBadRate());
-        float rate = goodRate / (goodRate + badRate) * 10;
         textViewDriverRate.setText(df.format(rate));
 
         //mark driver and rider location in map
@@ -210,6 +202,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                                 //cancel current request
                                 //db.CancelRequest(reID);
                                 request.resetRequestStatus("Cancel",db);
+                                db.ChangeRequestStatus(request);
                                 //return to homepage
                                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                                 finish();
@@ -234,6 +227,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             public void onClick(View v) {
                 //arrive destination
                 request.resetRequestStatus("Trip Completed",db);
+                db.ChangeRequestStatus(request);
                 Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
                 finish();
                 startActivity(intentComplete);

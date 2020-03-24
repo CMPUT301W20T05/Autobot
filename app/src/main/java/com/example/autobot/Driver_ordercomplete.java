@@ -30,15 +30,12 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         db = LoginActivity.db;
 
         Intent intent = getIntent();
-        //username = intent.getStringExtra("Username");
+        username = intent.getStringExtra("Username");
         //reID = intent.getStringExtra("reid");
 
         //get user from firebase
         //user = db.rebuildUser(username);
         request = DriveIsGoing.request;
-        user = request.getDriver();
-        username = user.getUsername();
-        request.setRequestID("818922938922");
         //get request from firebase
         //request = db.rebuildRequest(reID, user);
         //request = HomePageActivity.request;
@@ -46,27 +43,22 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
 
         setProfile(username,db); // set profile
 
-        TextView Destination = findViewById(R.id.setOriginLocation);
-        TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView Price = findViewById(R.id.setFare);
-        Button Confirm = findViewById(R.id.confirmFee);
+        //driver scan qrcode
+        Button buttonScan = findViewById(R.id.scan);
+        buttonScan.setVisibility(View.VISIBLE);
+        Button ConfirmButton = findViewById(R.id.confirmFee);
+        ConfirmButton.setVisibility(View.GONE);
 
-        Price.setText("fee: "+String.valueOf(0));
-        Destination.setText("southgate");
-        //get begining location name
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try{
-        String oaddress = request.ReadableAddress(request.getBeginningLocation(),geocoder);
-        OriginalLoc.setText(oaddress);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        Price.setText(String.valueOf(request.getCost()));
 
-        Confirm.setOnClickListener(new View.OnClickListener() {
+        buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intenthome = new Intent(Driver_ordercomplete.this, DriverhomeActivity.class);
-                startActivity(intenthome);
+                //scan qrcode
+                Intent intentScanner = new Intent(getApplicationContext(), Scanner.class);
+                finish();
+                startActivity(intentScanner);
             }
         });
 

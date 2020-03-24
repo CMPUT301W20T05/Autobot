@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,30 +24,34 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements AddLicenseFragment.OnFragmentInteractionListener{
 
     int Type_Rider = 0 ;
     boolean Checkbox = false;
     boolean UserValid = false;
     boolean PhoneValid = false;
     Database db;
+    String driving_license = "";
+    String car_license = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
         TextView textViewBackToLogin = findViewById(R.id.textViewGoToSignUp);
-
         Button ContinueButton = findViewById(R.id.ContinueButton);
         final CheckBox checkBoxPolicy = findViewById(R.id.checkBoxPolicy);
         final RadioButton radioButtonDriver = findViewById(R.id.radioButtonDriver);
         final RadioButton radioButtonRider = findViewById(R.id.radioButtonRider);
+
         radioButtonDriver.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //if driver is selected, rider cant be choose.
                 if(buttonView.isChecked()){
                     Type_Rider = 1;
+                    //jump out of loop until input correctly
+                    new AddLicenseFragment().show(getSupportFragmentManager(),"Input_license");
                     radioButtonRider.setChecked(false);
                 }
             }
@@ -75,7 +80,6 @@ public class SignUpActivity extends AppCompatActivity {
         ContinueButton.setOnClickListener(new OnClickListener() {
               @Override
               public void onClick(View v) {
-
                   db = MainActivity.db;
                   final EditText editTextPhoneNumber = findViewById(R.id.accountPhoneNumber);
                   final EditText editTextUserName = findViewById(R.id.accountUserName);
@@ -135,10 +139,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         });
 
-
-
-
-
         textViewBackToLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,5 +147,14 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    public void get_license_input(String driving_license, String car_license) {
+        this.driving_license = driving_license;
+        this.car_license = car_license;
+        if(driving_license.length() != 9 && car_license.length() != 7){
+            new AddLicenseFragment().show(getSupportFragmentManager(),"Input_license");
+            Toast.makeText(SignUpActivity.this,"input again",Toast.LENGTH_LONG).show();
+        }
     }
 }

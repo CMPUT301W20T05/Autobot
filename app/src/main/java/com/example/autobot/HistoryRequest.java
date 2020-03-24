@@ -10,12 +10,14 @@ public class HistoryRequest {
     private Date date;
     private Bitmap bitmap;
     private String user;
+    private String requestId;
 
-    HistoryRequest(String status, Date date, Bitmap bitmap, String user) { // constructor
+    HistoryRequest(String status, Date date, Bitmap bitmap, String user, String requestId) { // constructor
         this.status = status;
         this.date = date;
         this.bitmap = bitmap;
         this.user = user;
+        this.requestId = requestId;
     }
 
     // setter that let set value
@@ -23,6 +25,7 @@ public class HistoryRequest {
     void setDate(Date d) {this.date = d;}
     void setBitmap(Bitmap b, Bitmap bitmap) {this.bitmap = bitmap;}
     void setUser(String user) {this.user = user;}
+    void setRequestId(String requestId) {this.requestId = requestId;}
 
 
     // can get the value using these getter
@@ -30,5 +33,6 @@ public class HistoryRequest {
     Date getDate() { return this.date; }
     Bitmap getBitmap() { return this.bitmap; }
     String getUser(){return this.user;}
+    String getRequestId(){return this.requestId;}
 
 }

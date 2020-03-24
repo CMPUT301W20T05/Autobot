@@ -35,6 +35,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.firebase:firebase-database:16.0.4'
     testImplementation 'junit:junit:4.12'
 
     //test
@@ -52,6 +53,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation 'com.google.firebase:firebase-firestore:21.4.1'
+    implementation 'com.google.firebase:firebase-storage:17.0.0'
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -88,5 +90,7 @@ dependencies {
     //thumb up
 
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
 
 }
