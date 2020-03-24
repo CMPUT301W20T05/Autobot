@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,7 +33,7 @@ public class QRCode extends BaseActivity {
     String inputvalue;
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
-    //ZXingScannerView ScannerView;
+
     private Database db;
     private String username;
     private User user;
@@ -69,6 +69,10 @@ public class QRCode extends BaseActivity {
         confirm = (Button) findViewById(R.id.confirmButton);
         //ScannerView = findViewById(R.id.qrCodeScanner);
 
+        //double estimateFare = request.getEstimateCost();
+        //String textDiplay = "The cost of this trip is: " + String.valueOf(estimateFare);
+        //fare.setText(textDiplay);//price of the trip
+
         DecimalFormat df = new DecimalFormat("0.00");
         double totalFare = request.getCost();
 
@@ -97,29 +101,12 @@ public class QRCode extends BaseActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
                 startActivity(intentRateDriver);
             }
         });
     }
 
-    /*@Override
-    public void handleResult(Result result) {
-        Toast.makeText(getApplicationContext(),"Pay Successful", Toast.LENGTH_SHORT).show();
-        onBackPressed();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        ScannerView.stopCamera();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        ScannerView.setResultHandler(this);
-        ScannerView.startCamera();
-    }*/
 
 }

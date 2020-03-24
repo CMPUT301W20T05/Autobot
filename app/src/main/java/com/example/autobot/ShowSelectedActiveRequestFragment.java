@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -80,7 +81,7 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
 
 
         //view profilo
-        Button see_profile_button = rootView.findViewById(R.id.imageViewAvatar); // 需改button id
+        ImageView see_profile_button = rootView.findViewById(R.id.imageViewAvatar); // 需改button id
         see_profile_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
