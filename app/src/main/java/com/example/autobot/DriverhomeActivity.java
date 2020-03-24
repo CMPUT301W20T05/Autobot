@@ -56,7 +56,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     Button confirm;
     LatLng origin;
     View header;
-    static ArrayList<Request> requests_list = new ArrayList<Request>();;
+    static ArrayList<Request> requests_list;
     View rootView;
     ActiveRequestsAdapter adapter;
     private String username;
@@ -77,6 +77,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         db = LoginActivity.db; // get database
         user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
+        requests_list = new ArrayList<Request>();
 
         setProfile(username,db); // set profile
 
@@ -239,6 +240,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         intent.putExtra("Username",username);
+        finish();
         startActivity(intent);
     }
 
