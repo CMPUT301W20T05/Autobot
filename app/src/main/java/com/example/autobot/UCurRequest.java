@@ -2,18 +2,14 @@ package com.example.autobot;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.ParseException;
 
 public class UCurRequest extends BaseActivity implements EditProfilePage.EditProfilePageListener{
@@ -23,9 +19,8 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
     private User user;
     private Request request;
     private String reID;
-    static double distance;
-    public double fare;
     public String model;
+    double addPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -58,38 +53,35 @@ public class UCurRequest extends BaseActivity implements EditProfilePage.EditPro
 
         setProfile(username,db); // set profile
 
-        //calculate estimated fare
-        double estimateFare = request.getEstimateCost();
-        EstimatedFare.setText(String.valueOf(estimateFare));
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Models, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modelTochoose.setAdapter(adapter);
 
-        //modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            /*@Override
+        modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 model = parent.getItemAtPosition(position).toString();
                 adapter.notifyDataSetChanged();
+
                 if ("Normal".equals(model)){
-                    fare = 5 + 2 * 10;
+                    addPrice = 0;
                 }else if("Pleasure".equals(model)){
-                    fare = 8+ 2 * 10;
+                    addPrice = 5;
                 }else{
-                    fare = 10 + 2 * 10;
+                    addPrice = 10;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 model = "Normal";
-                fare = 5 + 2 * 10;
-            }*/
-        //});
+                addPrice = 0;
+            }
+        });
 
-        //Toast.makeText(UCurRequest,String.valueOf(distance),Toast.LENGTH_SHORT).show();
-
-        //EstimatedFare.setText(String.valueOf(fare));
+        //calculate estimated fare
+        double estimateFare = request.EstimateAddModelFee(addPrice);
+        EstimatedFare.setText(String.valueOf(estimateFare));
 
         CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
             @Override

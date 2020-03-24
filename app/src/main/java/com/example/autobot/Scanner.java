@@ -1,19 +1,23 @@
 package com.example.autobot;
 
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.zxing.Result;
@@ -30,8 +34,10 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     private String username;
     private String reID;
     ZXingScannerView scannerView;
+
     public Result result;
     final int MY_PERMISSION_REQUEST_CAMERA = 1;
+
 
 
     @Override
@@ -43,12 +49,13 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     }
 
     @Override
-    public void handleResult(Result rawResult) {
+    public void handleResult(Result result) {
         //textUsername.setText(rawResult.getText());
-        result = rawResult;
+        //result = rawResult;
 
         //Toast.makeText(ScanActivity.this,"The rider done.",Toast.LENGTH_SHORT ).show();
         //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
         //onBackPressed();
         openDialog();
     }
@@ -60,11 +67,14 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     }
 
     @Override
-    protected void onPostResume(){
-        super.onPostResume();
+    protected void onResume(){
+        /*super.onPostResume();
         if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
         }
+        scannerView.setResultHandler(this);
+        scannerView.startCamera();*/
+        super.onResume();
         scannerView.setResultHandler(this);
         scannerView.startCamera();
     }
