@@ -14,6 +14,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -37,6 +44,8 @@ import com.google.maps.android.SphericalUtil;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -156,11 +165,6 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
         //good rate infor
         textViewDriverRate.setText(df.format(rate));
-
-        //mark driver and rider location in map
-        LatLng driverCurrent = driver.getCurrentLocation();
-        LatLng riderCurrent = rider.getCurrentLocation();
-        drawRoute(driverCurrent, riderCurrent);
 
         //for rider to call driver
         String rphoneNumber = driver.getPhoneNumber();
@@ -291,6 +295,29 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //mark driver and rider location in map
         LatLng driverCurrent = driver.getCurrentLocation();
         LatLng riderCurrent = rider.getCurrentLocation();
+        //user photo as marker
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        try {
+            Bitmap locIcon1 = BitmapFactory.decodeStream((InputStream)new URL(driver.getUri()).getContent());
+            Bitmap locIcon2 = BitmapFactory.decodeStream((InputStream)new URL(rider.getUri()).getContent());
+
+            MarkerOptions place1, place2;
+            place1 = new MarkerOptions().position(driverCurrent).title("Origin").icon(BitmapDescriptorFactory.fromBitmap(locIcon1));
+            place2 = new MarkerOptions().position(riderCurrent).title("Destination").icon(BitmapDescriptorFactory.fromBitmap(locIcon2));
+            //add marker
+            Log.d("mylog", "Added Markers");
+
+            if (mMap != null) {
+                mMap.addMarker(place1);
+                mMap.addMarker(place2);
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         drawRoute(driverCurrent, riderCurrent);
     }
 
@@ -302,4 +329,5 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     public Bitmap getBitmap(){
         return mybitmap;
     }
+
 }
