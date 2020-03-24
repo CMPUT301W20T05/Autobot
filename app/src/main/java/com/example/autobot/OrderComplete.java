@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationManagerCompat;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firestore.v1.StructuredQuery;
 
@@ -41,6 +43,11 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         db = MainActivity.db;
 
         Intent intent = getIntent();
+
+        //when driver arrived, show notification
+        notificationManager = NotificationManagerCompat.from(this);
+        sendOnChannel("Destination arrived. Please check your receipt.");
+
         user = HomePageActivity.user;
         username = user.getUsername();
 
@@ -54,11 +61,10 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 //        TextView Destination = findViewById(R.id.setOriginLocation);
 //        TextView OriginalLoc = findViewById(R.id.setDestinationLocation);
         TextView textViewFare = findViewById(R.id.setFare);
-        EditText editTextTip = findViewById(R.id.addTip);
         Button Confirm = findViewById(R.id.confirmFee);
 
         DecimalFormat df = new DecimalFormat("0.00");
-        double fare = request.getEstimateCost();
+        double fare = request.getCost();
         textViewFare.setText(df.format(fare));
 
 //        LatLng destination = request.getDestination();
@@ -78,13 +84,6 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Double tips = 0.0;
-                Editable temp = editTextTip.getText();
-                if (temp!=null) {
-                    tips = Double.valueOf(String.valueOf(temp));
-                    double totalFare = tips + fare;
-                    request.setCost(totalFare);
-                }
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
                 startActivity(intentQRCode);
             }
@@ -92,19 +91,13 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(OrderComplete.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -112,6 +105,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+
         db.add_new_user(newUser);
 
     }

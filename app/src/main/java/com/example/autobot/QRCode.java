@@ -43,6 +43,7 @@ public class QRCode extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         View rootView = getLayoutInflater().inflate(R.layout.qrcode_generator, frameLayout);
+        findViewById(R.id.myMap).setVisibility(View.GONE);
 
         db = LoginActivity.db;
 

@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -56,6 +59,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -79,6 +84,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,6 +95,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.example.autobot.App.CHANNEL_1_ID;
 
 /**
  * this is a class of base activity, it contains google map api, side bar, notifications and so on
@@ -107,7 +116,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public String un;
     //pls dont private these part
     //private GoogleMap mMap;
-    GoogleMap mMap;
+    public static GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     //private static Location currentLocation;
     static Location currentLocation;
@@ -128,16 +137,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     final float DEFAULT_ZOOM = 18;
     public TextView name;
     public CircleImageView profilePhoto;
+    public TextView goodrate;
+    public TextView badrate;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
     private static final String TAG = "BaseActivity";
     //notification
-    public static final String CHANNEL_ID = "channel";
+    public NotificationManagerCompat notificationManager;
     //api key
     protected final String apiKey = "AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA";
     public int anInt = 0;
     public Bitmap mybitmap;
+    public Uri myuri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -190,13 +202,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //initialize the places
         Places.initialize(BaseActivity.this, apiKey);
         placesClient = Places.createClient(this);
-
-        createNotificationChannels();
-
     }
 
     public void setProfile(String username, Database db){
         Database userBase = db;
+        User usertemp = LoginActivity.user;
 
         drawer = findViewById(R.id.drawer_layout);
         // get navigation view
@@ -204,6 +214,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
+        profilePhoto = header.findViewById(R.id.profile_photo);
+        goodrate = header.findViewById(R.id.favorable_rate);
+        badrate = header.findViewById(R.id.poor_rate);
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -215,7 +228,25 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
-                        String gr = document.getData().get("StarsRate").toString();
+                        String gr = document.getData().get("GoodRate").toString();
+                        String br = document.getData().get("BadRate").toString();
+                        Integer ggr = 0;
+                        Integer bbr = 0;
+                        if (!gr.equals("")){
+                            ggr = Integer.parseInt(gr);
+                        }
+                        if (!br.equals("")){
+                            bbr = Integer.parseInt(br);
+                        }
+
+                        DecimalFormat decimalFormat= new DecimalFormat(".00");
+                        float f1 = (float) ggr/(ggr + bbr)*100;
+                        String temp1 = decimalFormat.format(f1) + "%";
+                        float f2 = (float) bbr/(ggr + bbr)*100;
+                        String temp2 = decimalFormat.format(f2) + "%";
+
+                        goodrate.setText(temp1);
+                        badrate.setText(temp2);
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
@@ -556,12 +587,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        HashMap<String, String> CurrentLocation = new HashMap<>();
+        HashMap<String, Object> CurrentLocation = new HashMap<>();
         CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
         CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
 
         db2.collectionReference_user.document(LoginActivity.user.getUsername())
-                .set(CurrentLocation)
+                .update(CurrentLocation)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -666,35 +697,20 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * create a notification channel
-     */
-    private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("This is Notification Channel");
-
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
-        }
-    }
-
-    /**
      * send notification to the channel
      */
-    public void sendOnChannel() {
-        Notification builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.logo)
+    public void sendOnChannel(String message) {
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_drive)
                 .setContentTitle("New Notification")
-                .setContentText("Message...")
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setAutoCancel(true) //用户点按通知后自动移除通知
                 .build();
+
+        notificationManager.notify(1, notification);
     }
 
     /**
@@ -705,9 +721,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
-        place1 = new MarkerOptions().position(origin).title("Origin");
+        place1 = new MarkerOptions().position(origin).title("Origin"); //.icon(locIcon1)
         place2 = new MarkerOptions().position(destination).title("Destination");
-        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.arrow)));
+
+        //BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.drawable.location1);
+        //BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.drawable.location2);
+
         //add marker
         Log.d("mylog", "Added Markers");
         //remove old marker and add new marker

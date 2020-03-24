@@ -48,9 +48,6 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
 
         setProfile(username,db); // set profile
 
-        //when driver arrived, show notification
-        sendOnChannel();
-
         //check if database changed
 
 
@@ -89,7 +86,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
         });
 
         Intent intent1 = new Intent(this,DriverIsOnTheWayActivity.class);
-        db.NotifyStatusChange(reID,"Request Accepted",this, intent1);
+        db.NotifyStatusChange(reID,"Driver Accepted",this, intent1);
 
 
         Button continueButton = findViewById(R.id.ContinueButton);
@@ -97,7 +94,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
             @Override
             public void onClick(View v) {
                 //hardcode for now
-                request.resetRequestStatus("Request Accepted");
+                request.resetRequestStatus("Request Accepted",db);
                 //when request condition changes to "accept" go to next activity
                 String requestState = request.getStatus();
 
@@ -117,19 +114,13 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(RiderWaitDriverAcceptRequest.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -137,6 +128,7 @@ public class RiderWaitDriverAcceptRequest extends BaseActivity implements EditPr
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+
         db.add_new_user(newUser);
 
     }

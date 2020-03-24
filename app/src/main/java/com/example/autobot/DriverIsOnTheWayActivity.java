@@ -1,16 +1,13 @@
 package com.example.autobot;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +17,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import java.util.HashMap;
+
+import static com.android.volley.VolleyLog.TAG;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -53,7 +52,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         Intent intent = getIntent();
 
         //when driver arrived, show notification
-        sendOnChannel();
+        notificationManager = NotificationManagerCompat.from(this);
+        sendOnChannel("Driver has accepted your request. Please wait for picking up.");
 
         //get user from firebase
         //user = db.rebuildUser(username);
@@ -66,6 +66,53 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         setProfile(username,db); // set profile
 
+        //rider accepted
+        final BottomSheetDialog riderAcceptedDialog = new BottomSheetDialog(DriverIsOnTheWayActivity.this);
+        riderAcceptedDialog.setContentView(R.layout.rider_accept);
+        riderAcceptedDialog.setCancelable(false);
+        ImageView driverAvatar = riderAcceptedDialog.findViewById(R.id.imageViewAvatar);
+        TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
+        TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
+        Button accept = riderAcceptedDialog.findViewById(R.id.acceptDriver);
+        Button reject = riderAcceptedDialog.findViewById(R.id.rejectDriver);
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request.resetRequestStatus("Rider Accepted",db);
+                riderAcceptedDialog.dismiss();
+            }
+        });
+        reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request.resetRequestStatus("Cancel",db);
+                HashMap<String, Object> update = new HashMap<>();
+                update.put("RequestStatus", request.getStatus());
+                db.collectionReference_request.document(request.getRequestID())
+                        .update(update)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Data addition successful");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Data addition failed" + e.toString());
+                            }
+                        });
+                riderAcceptedDialog.dismiss();
+                //return to homepage
+                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(finishRequest);
+                overridePendingTransition(0, 0);
+            }
+        });
+        riderAcceptedDialog.show();
+
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
         //Button buttonSeeProfile = findViewById(R.id.see_profile);
         ImageView imageViewAvatar = findViewById(R.id.imageViewAvatar);
@@ -76,6 +123,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         TextView textViewEstimateTime = findViewById(R.id.EstimatedTime);
         TextView textViewEstimateDist = findViewById(R.id.EstimatedDist);
         Button buttonCancelOrder = findViewById(R.id.cancel_order);
+        Button buttonComplete = findViewById(R.id.complete);
 
         //get location
         LatLng destination = request.getDestination();
@@ -85,7 +133,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         DecimalFormat df = new DecimalFormat("0.00");
         textViewEstimateDist.setText(df.format(distance));
         //calculate time
-        double time = distance / 1008.00;
+        double time = distance / 1008.00 + 5.00;
         textViewEstimateTime.setText(df.format(time));
 
         //use request to get infor
@@ -95,6 +143,11 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //set driver infor
         //imageViewAvatar.setBackgroundResource();
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
+        //good rate infor
+        float goodRate = Float.parseFloat(driver.getGoodRate());
+        float badRate = Float.parseFloat(driver.getBadRate());
+        float rate = goodRate / (goodRate + badRate) * 10;
+        textViewDriverRate.setText(df.format(rate));
 
         //mark driver and rider location in map
         LatLng driverCurrent = destination;
@@ -143,26 +196,73 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             }
         });
 
-        //wait driver to accept
-        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-        db.NotifyStatusChange(reID, "Request picked", DriverIsOnTheWayActivity.this, intentComplete);
+        buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pop out dialog
+                final AlertDialog.Builder alert = new AlertDialog.Builder(DriverIsOnTheWayActivity.this);
+                alert.setTitle("Cancel Order");
+                alert.setMessage("Are you sure you wish to cancel current request?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //cancel current request
+                                //db.CancelRequest(reID);
+                                request.resetRequestStatus("Cancel",db);
+                                //return to homepage
+                                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                                finish();
+                                overridePendingTransition(0, 0);
+                                startActivity(finishRequest);
+                                overridePendingTransition(0, 0);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+
+                alert.show();
+            }
+        });
+
+        buttonComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //arrive destination
+                request.resetRequestStatus("Trip Completed",db);
+                Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                finish();
+                startActivity(intentComplete);
+            }
+        });
+
+        //picked up rider
+        db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
+
+
+
+        //rider confirm completion
+        db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
+        db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
+
+
+//        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+//        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
 
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(DriverIsOnTheWayActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -170,6 +270,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+
         db.add_new_user(newUser);
 
     }

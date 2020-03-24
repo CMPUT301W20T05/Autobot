@@ -3,6 +3,9 @@ package com.example.autobot;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,6 +57,14 @@ public class Database{
         collectionReference_request = db1.collection("Request");
         collectionReference_payment = db1.collection("PaymentInf");
     }
+
+    /**
+     *
+     * @param requestID
+     * @param requeststatus
+     * @param start
+     * @param intent
+     */
     public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -72,6 +83,72 @@ public class Database{
 
             }
         });
+    }
+
+    /**
+     * This function is to change interface textview if database has specific change
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param textView which textView u want to change
+     * @param text the changed content of textView
+     */
+    public void NotifyStatusChangeEditText(String requestID, String requeststatus, TextView textView, String text){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        textView.setText(text);
+                    }
+                }
+
+            }
+        });
+    }
+
+    public void NotifyStatusChangeButton(String requestID, String requeststatus, Button button, boolean visible){
+        DocumentReference ref = collectionReference_request.document(requestID);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w(TAG, "listen:error",e);
+                    return;
+                }
+                if(documentSnapshot != null&&documentSnapshot.exists()){
+                    if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
+                        Log.d(TAG,"Current status: "+ requeststatus);
+                        if (visible) {
+                            button.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            button.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+    public LatLng getCurrentLocation(User user){
+        final LatLng[] currentLocation = new LatLng[1];
+        this.collectionReference_user.document(user.getUsername())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        double Lat = Double.valueOf((String)documentSnapshot.get("CurrentLocationLat"));
+                        double Lnt = Double.valueOf((String)documentSnapshot.get("CurrentLocationLnt"));
+                        currentLocation[0] = new LatLng(Lat,Lnt);
+                    }
+                });
+        return currentLocation[0];
     }
 
     /**
@@ -94,6 +171,9 @@ public class Database{
         user_data.put("HomeAddress",user.getHomeAddress());
         user_data.put("CurrentLocationLat",String.valueOf(user.getCurrentLocation().latitude));
         user_data.put("CurrentLocationLnt",String.valueOf(user.getCurrentLocation().longitude));
+        user_data.put("ImageUri",user.getUri());
+        user_data.put("GoodRate",user.getGoodRate());
+        user_data.put("BadRate",user.getBadRate());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -152,6 +232,13 @@ public class Database{
                                     user.setStars(Double.valueOf((String) document.get("StarsRate")));
                                     user.setUserType((String) document.get("Type"));
                                     user.setUsername((String) document.get("Username"));
+                                    String uri = ((String) document.get("ImageUri"));
+//                                    if (uri != null) {
+//                                        user.setUri(Uri.parse(uri));
+//                                    }
+                                    user.setUri(uri);
+                                    user.setGoodRate((String) document.get("GoodRate"));
+                                    user.setBadRate((String) document.get("BadRate"));
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -186,6 +273,7 @@ public class Database{
         request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
+        request_data.put("Cost","0.0");
 
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
@@ -205,11 +293,12 @@ public class Database{
     }
 
     /**
-     * This function is to get all information from the RequsetionID and user
-     * @param RequestID
-     * @param user
-     * @return r is the all information of request that can be used from other class
+     *  This function is to get all information from the RequsetionID and user
+     *      * @param RequestID
+     *      * @param user
+     *      * @return r is the all information of request that can be used from other class
      */
+
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
         r.setRider(user);
         collectionReference_request
@@ -236,9 +325,10 @@ public class Database{
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            r.resetRequestStatus((String) documentSnapshot.getString("RequestStatus"));
+                            r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
                             r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
                             r.setRequestID((String) documentSnapshot.getString("ID"));
+                            r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
                         }
 
                     }
@@ -283,6 +373,26 @@ public class Database{
         collectionReference_payment
                 .document(payment_data.get("CardNumber"))
                 .set(payment_data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+
+    public void ChangeRequestStatus(Request request){
+        HashMap<String,Object> requestChanged = new HashMap<>();
+        requestChanged.put("RequestStatus",request.getStatus());
+        requestChanged.put("Driver",request.getDriver().getUsername());
+        collectionReference_request.document(request.getRequestID())
+                .update(requestChanged)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

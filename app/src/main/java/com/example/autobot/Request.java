@@ -3,11 +3,13 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
-
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -16,7 +18,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Request class is a information collection of request, we can set and get information of request through the method in this class.
@@ -46,9 +51,11 @@ public class Request implements Serializable {
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
-        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Driver Accepted");
+        this.requestStatusList.add("Rider Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
+        this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         String defaultTimeString = "00-0-0000 00:00:00";
@@ -66,9 +73,11 @@ public class Request implements Serializable {
         this.BeginningLocation = null;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
-        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Driver Accepted");
+        this.requestStatusList.add("Rider Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
+        this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         String defaultTimeString = "00-0-0000 00:00:00";
@@ -87,9 +96,11 @@ public class Request implements Serializable {
         this.BeginningLocation = origin;
         this.requestStatusList = new ArrayList<>();
         this.requestStatusList.add("Request Sending");
-        this.requestStatusList.add("Request Accepted");
+        this.requestStatusList.add("Driver Accepted");
+        this.requestStatusList.add("Rider Accepted");
         this.requestStatusList.add("Rider picked");
         this.requestStatusList.add("Trip Completed");
+        this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
         String defaultTimeString = "00-0-0000 00:00:00";
@@ -150,6 +161,12 @@ public class Request implements Serializable {
         }
         this.EstimateCost = estimateCost;
     }
+
+    //add a function to directly set estcost
+    public void direct_setEstimateCost(double Estcost){
+        this.EstimateCost = Estcost;
+    }
+
     public double getEstimateCost() {
         return this.EstimateCost;
     }
@@ -166,7 +183,24 @@ public class Request implements Serializable {
         return this.Cost;
     }
 
-    public void UpdateCurrentCost(Location CurrentLocation, Location beginningLocation){
+    public void resetCost(double cost,Database db){
+        this.Cost = cost;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("Cost", this.Cost);
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
 
     }
     public void UpdateStatus(int item){
@@ -194,7 +228,26 @@ public class Request implements Serializable {
     public void resetArriveTime(Date d){
         this.ArriveTime = d;
     }
-    public void resetRequestStatus(String status){
+    public void resetRequestStatus(String status,Database db){
+        this.RequestStatus = status;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("RequestStatus", this.getStatus());
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+    public void reset_Request_Status(String status) {
         this.RequestStatus = status;
     }
     public void resetEstimateCost(double cost){
@@ -212,4 +265,8 @@ public class Request implements Serializable {
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();
     //}
+
+    public String testing_rebuild_request(){
+        return String.format("ID: %s\nRider name: %s\n Begining: %s \nDestination: %s\nEstimate cost: %5.2f\nAccepttime %s\n send time %s",this.getRequestID(),Rider.getUsername(),String.valueOf(this.BeginningLocation),String.valueOf(this.Destination),this.EstimateCost,formatter.format(this.AcceptTime),formatter.format(this.SendTime));
+    }
 }

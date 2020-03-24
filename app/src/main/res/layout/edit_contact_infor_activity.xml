@@ -17,17 +17,6 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-<!--    <ImageView&ndash;&gt;-->
-<!--    &lt;!&ndash;        android:id="@+id/imageView2"&ndash;&gt;-->
-<!--    &lt;!&ndash;        android:layout_width="99dp"&ndash;&gt;-->
-<!--    &lt;!&ndash;        android:layout_height="99dp"&ndash;&gt;-->
-<!--    &lt;!&ndash;        android:layout_marginTop="28dp"&ndash;&gt;-->
-<!--    &lt;!&ndash;        android:background="@drawable/default_avatar"&ndash;&gt;-->
-<!--    &lt;!&ndash;        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-<!--    &lt;!&ndash;        app:layout_constraintHorizontal_bias="0.503"&ndash;&gt;-->
-<!--    &lt;!&ndash;        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--    &lt;!&ndash;        app:layout_constraintTop_toTopOf="parent" />-->
-<!--    &lt;!&ndash;    &ndash;&gt;-->
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -143,7 +132,6 @@
             android:inputType="textPersonName"
             android:textColor="@color/blue"
             android:singleLine="true"/>
-
 
 
     </LinearLayout>

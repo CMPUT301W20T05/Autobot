@@ -1,43 +1,43 @@
 package com.example.autobot;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+
+import android.text.Editable;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -58,6 +58,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private static final int REQUEST_PHONE_CALL = 101;
 
     private static final String TAG = "HomePageActivity";
+
+    private String model;
+    private double addPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -168,13 +171,50 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //choose model
 
+                        //choose model
+                        modelTochoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                model = parent.getItemAtPosition(position).toString();
+                                adapter.notifyDataSetChanged();
+
+                                if ("Normal".equals(model)){
+                                    addPrice = 0;
+                                }else if("Pleasure".equals(model)){
+                                    addPrice = 5;
+                                }else{
+                                    addPrice = 10;
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                model = "Normal";
+                                addPrice = 0;
+                            }
+                        });
+
+                        //add tips
+                        EditText editTextTip = uCurRequestDialog.findViewById(R.id.addTip);
+                        Double tips = 0.0;
+                        double totalFare = addPrice + estimateFare;
+                        Editable temp = editTextTip.getText();
+                        if (temp!=null) {
+                            tips = Double.valueOf(String.valueOf(temp));
+                            totalFare += tips;
+                        }
+                        request.setCost(totalFare);
+                        
                         //finish current activity
                         uCurRequestDialog.dismiss();
                         //wait driver to accept
                         Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
                         db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
+
+                        //set price have to go here to display
+                        TextView approPrice = dialog.findViewById(R.id.Appro_price);
+                        approPrice.setText(df.format(request.getCost()));
                         dialog.show();
                     }
                 });
@@ -185,7 +225,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 TextView startLocation = dialog.findViewById(R.id.origin_loc);
                 TextView endLocation = dialog.findViewById(R.id.Destination);
                 TextView approDistance = dialog.findViewById(R.id.Appro_distance);
-                TextView approPrice = dialog.findViewById(R.id.Appro_price);
 
                 //set location for dialog
                 LatLng destination = request.getDestination();
@@ -206,7 +245,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                 double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                 //DecimalFormat df = new DecimalFormat("0.00");
                 approDistance.setText(df.format(distance));
-                approPrice.setText(df.format(request.getEstimateCost()));
 
                 //change driver condition when needed
                 //driverCondition.setText("");
@@ -345,19 +383,13 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(HomePageActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -365,6 +397,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+
         db.add_new_user(newUser);
 
     }

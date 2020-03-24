@@ -1,8 +1,6 @@
 package com.example.autobot;
 
 
-import android.net.Uri;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -23,7 +21,9 @@ public class User implements Driver, Rider, Serializable {
     private String LastName;
     private String EmergencyContact;
     private String HomeAddress;
-    private Uri uri;
+    private String uri;
+    private String GoodRate;
+    private String BadRate;
 
     public User(String username){
         this.Username = username;
@@ -37,6 +37,10 @@ public class User implements Driver, Rider, Serializable {
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
         this.uri = null;
+        this.GoodRate = "0";
+        this.BadRate = "0";
+
+
     }
 
     public String getEmergencyContact() {
@@ -49,28 +53,44 @@ public class User implements Driver, Rider, Serializable {
 
     // added by yiping
 
-    public Uri getUri(){return uri;}
-    public void setUri(Uri urii){uri = urii;}
+    public String getUri(){return uri;}
+    public void setUri(String urii){uri = urii;}
 
     //-----------------------------------
 
+    public String getGoodRate() {
+        return this.GoodRate;
+    }
+
+    public void setGoodRate(String goodRate) {
+        this.GoodRate = goodRate;
+    }
+
+    public String getBadRate() {
+        return this.BadRate;
+    }
+
+    public void setBadRate(String badRate) {
+        this.BadRate = badRate;
+    }
+
     public String getHomeAddress() {
-        return HomeAddress;
+        return this.HomeAddress;
     }
     public void setHomeAddress(String homeAddress) {
-        HomeAddress = homeAddress;
+        this.HomeAddress = homeAddress;
     }
     public String getFirstName() {
-        return FirstName;
+        return this.FirstName;
     }
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        this.FirstName = firstName;
     }
     public String getLastName() {
-        return LastName;
+        return this.LastName;
     }
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.LastName = lastName;
     }
     public String getUsername(){
         return this.Username;
@@ -120,11 +140,11 @@ public class User implements Driver, Rider, Serializable {
     }
 
     public String getUserType() {
-        return UserType;
+        return this.UserType;
     }
 
     public void setUserType(String userType) {
-        UserType = userType;
+        this.UserType = userType;
     }
 
     public PayInfo getPayInfo(){

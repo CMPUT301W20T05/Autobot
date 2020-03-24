@@ -58,9 +58,12 @@ public class EditProfilePage extends Fragment {
 
 
     public interface EditProfilePageListener {
-        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri);
+        void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap);
+
         String getUsername();
+
         Bitmap getBitmap();
+
     }
 
     @Override
@@ -173,19 +176,40 @@ public class EditProfilePage extends Fragment {
         emailAddress.setText(user.getEmailAddress());
         homeAddress.setText(user.getHomeAddress());
         eContact.setText(user.getEmergencyContact());
+//        Uri Load = user.getUri();
+//        try {
+//            InputStream imageLoadStream = getContext().getContentResolver().openInputStream(Load);
+//            bitmap = BitmapFactory.decodeStream(imageLoadStream);
+//            pPhoto.setImageBitmap(bitmap);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
 
         btn = view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int tempo = 0;
                 String fName = firstName.getText().toString();
+                if(fName.replace(" " , "").length() == 0){
+                    tempo = 1;
+                    Toast.makeText(getContext(), "First Name could not be empty", Toast.LENGTH_SHORT).show();
+                }
                 String lName = lastName.getText().toString();
+                if(lName.replace(" " , "").length() == 0){
+                    tempo = 1;
+                    Toast.makeText(getContext(), "Last Name could not be empty", Toast.LENGTH_SHORT).show();
+                }
                 String eAddress = emailAddress.getText().toString();
                 String hAddress = homeAddress.getText().toString();
                 String econtact = eContact.getText().toString();
 
-                listener.updateInformation(fName,lName,eAddress,hAddress,econtact,imageUri);
-                getActivity().onBackPressed();
+                if (tempo == 0){
+                    listener.updateInformation(fName,lName,eAddress,hAddress,econtact,bitmap);
+                    Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
+                }
             }
         });
 
@@ -207,7 +231,7 @@ public class EditProfilePage extends Fragment {
                     pPhoto.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
                 }
 
             }

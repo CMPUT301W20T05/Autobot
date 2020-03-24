@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -77,7 +73,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
 
         // added by yiping, implementation of view profile of the rider
 
-        Button see_profile_button = rootView.findViewById(R.id.see_profile); // 需改button id
+        TextView see_profile_button = rootView.findViewById(R.id.Driver_name); // 需改button id
         see_profile_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,19 +135,13 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Uri imageUri) { // change the name on the profile page to the new input name
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
-        try {
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            mybitmap = BitmapFactory.decodeStream(imageStream);
-            profilePhoto.setImageBitmap(mybitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(DriveIsGoing.this, "Something went wrong", Toast.LENGTH_LONG).show();
-        }
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
 
         User newUser = user;
         newUser.setFirstName(FirstName); // save the changes that made by user
@@ -159,6 +149,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+
         db.add_new_user(newUser);
 
     }
@@ -194,8 +185,8 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
                 request.UpdateStatus(2);
-                //need to add
                 //update db
+                db.ChangeRequestStatus(request);
                 //change the text view of button after accept order
                 buttonCancelOrder.setText("Finish");
                 Log.d("check",request.getStatus());
@@ -211,9 +202,11 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
 
-                request.UpdateStatus(2);
+                request.UpdateStatus(3);
                 //need to add
                 //update db
+                db.ChangeRequestStatus(request);
+
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 //intentOrderComplete.putExtra("Username",username);
                 startActivity(intentOrderComplete);

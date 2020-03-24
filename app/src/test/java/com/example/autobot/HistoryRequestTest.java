@@ -1,5 +1,7 @@
 package com.example.autobot;
 
+import android.graphics.Bitmap;
+
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -12,7 +14,8 @@ public class HistoryRequestTest {
     private HistoryRequest mockHistoryRequest() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse("2020-03-22");
-        return new HistoryRequest(10,"ready", date, 10);
+        Bitmap bitmap = null;
+        return new HistoryRequest("ready", date, bitmap, "user");
     }
 
     @Test
@@ -20,28 +23,28 @@ public class HistoryRequestTest {
         HistoryRequest historyRequest = mockHistoryRequest();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse("2020-03-22");
-        assertEquals(10, (int)historyRequest.getRequestNumber());
+        Bitmap bitmap = null;
         assertEquals("ready",(String)historyRequest.getStatus());
         assertEquals(date, historyRequest.getDate());
-        assertEquals(10,historyRequest.getPhoto());
+        assertEquals(bitmap, historyRequest.getBitmap());
+        assertEquals("user",historyRequest.getUser());
     }
 
     @Test
     public void testSetter() throws ParseException {
         HistoryRequest historyRequest = mockHistoryRequest();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = format.parse("2020-03-22");
+        Date date = format.parse("2020-03-23");
         historyRequest.setDate(date);
         assertEquals(date,historyRequest.getDate());
 
-        historyRequest.setPhoto(20);
-        assertEquals(20,historyRequest.getPhoto());
-
-        int request = 30;
-        historyRequest.setRequestNumber(request);
-        assertEquals(request, historyRequest.getRequestNumber());
-
         historyRequest.setStatus("processing");
         assertEquals("processing", historyRequest.getStatus());
+
+        Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        historyRequest.setBitmap(b, historyRequest.getBitmap());
+
+        historyRequest.setUser("Brian");
+        assertEquals("Brian",historyRequest.getUser());
     }
 }
