@@ -13,6 +13,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -85,6 +86,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -759,6 +761,49 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         notificationManager.notify(1, notification);
     }
 
+    public void addMapMarkers(LatLng location, User user, String title, String snippet){
+
+        if(mMap != null){
+            if (currentLocationMarker != null) {
+                currentLocationMarker.remove();
+            }
+            //user photo as marker
+            BitmapDescriptor locIcon = BitmapDescriptorFactory.fromResource(R.id.icon);
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            try {
+                Bitmap temp = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
+                locIcon = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp, 100, 100));
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                Log.d(TAG, "addMapMarkers: no avatar, setting default.");
+            }
+            MarkerOptions marker = new MarkerOptions().position(location).title(title).snippet(snippet).icon(locIcon);
+            mMap.addMarker(marker);
+        }
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
+    }
+
     /**
      * draw route between two locations
      * @param origin origin of user's request
@@ -767,7 +812,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
-        place1 = new MarkerOptions().position(origin).title("Origin"); //.icon(locIcon1)
+        place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
 
         //add marker
@@ -777,10 +822,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             currentLocationMarker.remove();
         }
 
-//        if (mMap != null) {
-//            mMap.addMarker(place1);
-//            mMap.addMarker(place2);
-//        }
+        if (mMap != null) {
+            mMap.addMarker(place1);
+            mMap.addMarker(place2);
+        }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         // Add your locations to bounds using builder.include, maybe in a loop
@@ -788,7 +833,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         builder.include(destination);
         LatLngBounds bounds = builder.build();
         //Then construct a cameraUpdate
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 500);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
         //Then move the camera
         if (mMap != null) {
             mMap.animateCamera(cameraUpdate);
@@ -796,6 +841,58 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+    }
+
+    public void drawRouteWithAvatar(LatLng origin, LatLng destination, User startUser, User endUser) {
+
+        //add marker
+        Log.d("mylog", "Added Markers");
+        //remove old marker and add new marker
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
+
+        if(mMap != null){
+            //user photo as marker
+            BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.id.icon);
+            BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.id.icon);
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            MarkerOptions marker1 = new MarkerOptions().position(origin).title("Origin");
+            MarkerOptions marker2 = new MarkerOptions().position(destination).title("Destination");;
+            try {
+                Bitmap temp1 = BitmapFactory.decodeStream((InputStream)new URL(startUser.getUri()).getContent());
+                locIcon1 = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp1, 100, 100));
+                Bitmap temp2 = BitmapFactory.decodeStream((InputStream)new URL(endUser.getUri()).getContent());
+                locIcon2 = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp2, 100, 100));
+                marker1 = new MarkerOptions().position(origin).title("Driver").snippet("This is driver").icon(locIcon1);
+                marker2 = new MarkerOptions().position(destination).title("Rider").snippet("This is me").icon(locIcon2);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                Log.d(TAG, "addMapMarkers: no avatar, setting default.");
+            }
+            mMap.addMarker(marker1);
+            mMap.addMarker(marker2);
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            // Add your locations to bounds using builder.include, maybe in a loop
+            builder.include(origin);
+            builder.include(destination);
+            LatLngBounds bounds = builder.build();
+            //Then construct a cameraUpdate
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 500);
+            //Then move the camera
+            mMap.animateCamera(cameraUpdate);
+
+            String url = getUrl(marker1.getPosition(), marker2.getPosition(), "driving");
+            new FetchURL(BaseActivity.this).execute(getUrl(marker1.getPosition(), marker2.getPosition(), "driving"), "driving");
+        }
     }
 
     /**

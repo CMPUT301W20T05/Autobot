@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="Start"
             android:textColor="@color/blue2"
@@ -101,7 +101,6 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Origin location"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -111,7 +110,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="End"
             android:textColor="@color/blue2"
@@ -123,7 +122,6 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="@string/Destination"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -148,7 +146,6 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Approximated distance"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -173,7 +170,6 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Approximated price"
             android:textSize="18sp" />
     </LinearLayout>

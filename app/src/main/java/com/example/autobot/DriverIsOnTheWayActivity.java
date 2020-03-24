@@ -90,7 +90,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         reID = request.getRequestID();
 
         //use request to get infor
-        request.setDriver(user);
+        driver = db.rebuildUser("jc");
+        request.setDriver(driver);
         driver = request.getDriver();
         rider = request.getRider();
 
@@ -119,6 +120,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             public void onClick(View v) {
                 request.resetRequestStatus("Rider Accepted",db);
                 db.ChangeRequestStatus(request);
+                //mark driver and rider location in map
+                LatLng driverCurrent = driver.getCurrentLocation();
+                LatLng riderCurrent = rider.getCurrentLocation();
+                drawRouteWithAvatar(driverCurrent, riderCurrent, driver, rider);
                 riderAcceptedDialog.dismiss();
             }
         });
@@ -287,38 +292,6 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         db.add_new_user(newUser);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //mark driver and rider location in map
-        LatLng driverCurrent = driver.getCurrentLocation();
-        LatLng riderCurrent = rider.getCurrentLocation();
-        //user photo as marker
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        try {
-            Bitmap locIcon1 = BitmapFactory.decodeStream((InputStream)new URL(driver.getUri()).getContent());
-            Bitmap locIcon2 = BitmapFactory.decodeStream((InputStream)new URL(rider.getUri()).getContent());
-
-            MarkerOptions place1, place2;
-            place1 = new MarkerOptions().position(driverCurrent).title("Origin").icon(BitmapDescriptorFactory.fromBitmap(locIcon1));
-            place2 = new MarkerOptions().position(riderCurrent).title("Destination").icon(BitmapDescriptorFactory.fromBitmap(locIcon2));
-            //add marker
-            Log.d("mylog", "Added Markers");
-
-            if (mMap != null) {
-                mMap.addMarker(place1);
-                mMap.addMarker(place2);
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        drawRoute(driverCurrent, riderCurrent);
     }
 
     @Override
