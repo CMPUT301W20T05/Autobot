@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +39,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -44,6 +52,9 @@ public class RequestHistoryFragment extends Fragment {
     private String requestId;
     Database userBase = LoginActivity.db;
     User user = LoginActivity.user;
+    private Bitmap bitmap = null;
+    private String temp;
+    private String userName;
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
 
@@ -67,9 +78,9 @@ public class RequestHistoryFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 String time1 = document.getData().get("ArriveTime").toString();
-                                String userName = document.getData().get("Driver").toString();
+                                userName = document.getData().get("Driver").toString();
                                 requestId =  document.getData().get("ID").toString();
-                                userName = "Driver: "+userName;
+                                String userName1 = "Driver: "+userName;
                                 if (!time1.equals("30-11-002 12:00:00")){
                                     try {
                                         dateTemp = formatter.parse(time1);
@@ -95,9 +106,10 @@ public class RequestHistoryFragment extends Fragment {
                                 }
 
                                 String str = document.getData().get("RequestStatus").toString();
+                                Double cost = Double.parseDouble(document.getData().get("Cost").toString());
 
                                 if (dateTemp != null) {
-                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName,requestId));
+                                    mDataList.add(new HistoryRequest(str,dateTemp,userName1,requestId,cost));
                                     mAdapter.notifyDataSetChanged();
                                 }
 
@@ -117,8 +129,8 @@ public class RequestHistoryFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 String time1 = document.getData().get("ArriveTime").toString();
-                                String userName = document.getData().get("Rider").toString();
-                                userName = "Rider: "+userName;
+                                userName = document.getData().get("Rider").toString();
+                                String userName1 = "Rider: "+userName;
                                 if (!time1.equals("30-11-002 12:00:00")){
                                     try {
                                         dateTemp = formatter.parse(time1);
@@ -144,9 +156,10 @@ public class RequestHistoryFragment extends Fragment {
                                 }
 
                                 String str = document.getData().get("RequestStatus").toString();
+                                Double cost =  Double.parseDouble(document.getData().get("Cost").toString());
 
                                 if (dateTemp != null) {
-                                    mDataList.add(new HistoryRequest(str,dateTemp,null,userName,requestId));
+                                    mDataList.add(new HistoryRequest(str,dateTemp,userName1,requestId,cost));
                                     mAdapter.notifyDataSetChanged();
                                 }
 
@@ -162,13 +175,14 @@ public class RequestHistoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HistoryRequest tempo = mDataList.get(i);
                 showDetail(tempo);
+                bitmap = null;
             }
         });
 
         return view;
     }
 
-    private void showDetail(HistoryRequest historyRequest) {
+    private void showDetail(@NonNull HistoryRequest historyRequest) {
         String rid = historyRequest.getRequestId();
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.history_detail, null);
@@ -178,50 +192,74 @@ public class RequestHistoryFragment extends Fragment {
         TextView acceptTime = view.findViewById(R.id.detail_accept_time);
         TextView arriveTime = view.findViewById(R.id.detail_arrive_time);
         TextView status = view.findViewById(R.id.status);
+        CircleImageView photo = view.findViewById(R.id.detail_photo);
 
-        userBase.collectionReference_request
-                .document(rid)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String driver = "Driver:  " + document.getData().get("Driver").toString();
-                                String rider = "Rider:  " + document.getData().get("Rider").toString();
+        if (rid != null){
+            userBase.collectionReference_request
+                    .document(rid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String driver = "Driver:  " + document.getData().get("Driver").toString();
+                                    String rider = "Rider:  " + document.getData().get("Rider").toString();
 
-                                String tempTime1 = document.getData().get("AcceptTime").toString();
-                                String facceptTime = "Accept Time: ";
-                                if (!tempTime1.equals("30-11-002 12:00:00")) {
-                                    facceptTime = "Accept Time:  " + tempTime1;
+                                    String tempTime1 = document.getData().get("AcceptTime").toString();
+                                    String facceptTime = "Accept Time: ";
+                                    if (!tempTime1.equals("30-11-002 12:00:00")) {
+                                        facceptTime = "Accept Time:  " + tempTime1;
+                                    }
+
+                                    String farriveTime = "Arrive Time: ";
+                                    String tempTime2 = document.getData().get("ArriveTime").toString();
+                                    if (!tempTime2.equals("30-11-002 12:00:00")) {
+                                        farriveTime = "Arrive Time:  " + tempTime2;
+                                    }
+
+                                    String fsendTime = "Send Time:  " + document.getData().get("SendTime").toString();
+                                    String Status = "Status:  " + document.getData().get("RequestStatus").toString();
+
+                                    String test = document.getData().get("Driver").toString();
+
+                                    User finaltest = userBase.rebuildUser(test);
+                                    Toast.makeText(getContext(), finaltest.getUsername(), Toast.LENGTH_SHORT).show();
+
+                                    temp = finaltest.getUri();
+
+                                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                                    StrictMode.setThreadPolicy(policy);
+                                    try {
+                                        if (temp != null){
+                                            bitmap = BitmapFactory.decodeStream((InputStream)new URL(temp).getContent());
+                                            photo.setImageBitmap(bitmap);
+                                        }
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    driverName.setText(driver);
+                                    riderName.setText(rider);
+                                    sendTime.setText(fsendTime);
+                                    acceptTime.setText(facceptTime);
+                                    arriveTime.setText(farriveTime);
+                                    status.setText(Status);
+
                                 }
-
-                                String farriveTime = "Arrive Time: ";
-                                String tempTime2 = document.getData().get("ArriveTime").toString();
-                                if (!tempTime2.equals("30-11-002 12:00:00")) {
-                                    farriveTime = "Arrive Time:  " + tempTime2;
-                                }
-
-                                String fsendTime = "Send Time:  " + document.getData().get("SendTime").toString();
-                                String Status = "Status:  " + document.getData().get("RequestStatus").toString();;
-
-                                driverName.setText(driver);
-                                riderName.setText(rider);
-                                sendTime.setText(fsendTime);
-                                acceptTime.setText(facceptTime);
-                                arriveTime.setText(farriveTime);
-                                status.setText(Status);
-
                             }
                         }
-                    }
-                });
-        final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setView(view)
-                .setTitle("Details")
-                .setNegativeButton("Close",null);
-        alert.show();
+                    });
+            final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setView(view)
+                    .setTitle("Details")
+                    .setNegativeButton("Close",null);
+            alert.show();
+        }
+
 
     }
 }

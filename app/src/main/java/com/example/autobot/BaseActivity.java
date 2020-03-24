@@ -270,8 +270,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
                         try {
-                            mybitmap = BitmapFactory.decodeStream((InputStream)new URL(document.getData().get("ImageUri").toString()).getContent());
-                            profilePhoto.setImageBitmap(mybitmap);
+                            if (document.getData().get("ImageUri") != null){
+                                mybitmap = BitmapFactory.decodeStream((InputStream)new URL(document.getData().get("ImageUri").toString()).getContent());
+                                profilePhoto.setImageBitmap(mybitmap);
+                            }
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
