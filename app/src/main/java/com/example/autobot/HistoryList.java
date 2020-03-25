@@ -9,11 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class HistoryList extends ArrayAdapter<HistoryRequest> {
 
@@ -39,7 +39,7 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
         TextView status = view.findViewById(R.id.status);
         TextView dateTime = view.findViewById(R.id.date_time);
         TextView userName = view.findViewById(R.id.usersname);
-        ImageView  profilePhoto = view.findViewById(R.id.profile_photo);
+        TextView cost = view.findViewById(R.id.cost);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // format for the date
         String dateString = formatter.format(historyRequest.getDate());        //transform the date
@@ -48,17 +48,13 @@ public class HistoryList extends ArrayAdapter<HistoryRequest> {
         String s = "Status: " + historyRequest.getStatus();
         String d = "Date: " + dateString;
         String u = historyRequest.getUser();
-        Bitmap b = historyRequest.getBitmap();
+        String c = "Cost " + historyRequest.getCost();
 
         //set the above information on the line(textView)
         status.setText(s);
         dateTime.setText(d);
         userName.setText(u);
-        if (b != null) {
-            profilePhoto.setImageBitmap(b);
-        }else{
-            profilePhoto.setImageResource(R.drawable.default_avatar);
-        }
+        cost.setText(c);
 
         return view;
     }

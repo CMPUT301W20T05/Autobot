@@ -3,14 +3,11 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.util.Log;
-
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.SphericalUtil;
@@ -173,8 +170,9 @@ public class Request implements Serializable {
     public double getEstimateCost() {
         return this.EstimateCost;
     }
-    public void EstimateAddModelFee(double addPrice) {
+    public double EstimateAddModelFee(double addPrice) {
         this.EstimateCost += addPrice;
+        return this.EstimateCost;
     }
 
     public void setCost(double cost) {

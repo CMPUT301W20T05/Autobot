@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -17,11 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -369,6 +372,26 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     }
 
     /**
+     * two time back pressed will return to home window
+     */
+    private long firstPressedTime;
+    private Toast backToast;
+    @Override
+    public void onBackPressed(){
+        if(System.currentTimeMillis() - firstPressedTime<2000){
+            backToast.cancel();
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        }else{
+            backToast = Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
+            backToast.show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
      * this function gets the origin location of user request
      * the default location is the current location, but user can use search bar to choose another location
      * @param autocompleteFragmentOrigin this is the Google location search bar
@@ -459,8 +482,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         overridePendingTransition(0, 0);
     }
 
+
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
     }
+
 }

@@ -95,7 +95,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="45dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="Start"
                 android:textColor="@color/blue2"
@@ -118,7 +118,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="45dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="End"
                 android:textColor="@color/blue2"
