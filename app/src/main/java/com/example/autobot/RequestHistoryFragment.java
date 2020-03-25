@@ -45,9 +45,9 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class RequestHistoryFragment extends Fragment {
 
-    private ListView requestList;
-    private ArrayAdapter<HistoryRequest> mAdapter;
-    private ArrayList<HistoryRequest> mDataList;
+    private ListView requestList1;
+    private ArrayAdapter<HistoryRequest> mAdapter1;
+    private ArrayList<HistoryRequest> mDataList1;
     private Date dateTemp;
     private String requestId;
     Database userBase = LoginActivity.db;
@@ -61,15 +61,17 @@ public class RequestHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
 
-        requestList = view.findViewById(R.id.requests_list);
+        requestList1 = view.findViewById(R.id.requests_list1);
 
-        mDataList = new ArrayList<>();
+        mDataList1 = new ArrayList<>();
 
-        mAdapter = new HistoryList(getContext(), mDataList);// set adapter
+        mAdapter1 = new HistoryList(getContext(), mDataList1);// set adapter
 
-        requestList.setAdapter(mAdapter);
+        requestList1.setAdapter(mAdapter1);
 
-        userBase.collectionReference_request.whereEqualTo("Rider",user.getUsername())
+        userBase.collectionReference_request
+                .whereEqualTo(user.getUserType(),user.getUsername())
+                .whereEqualTo("RequestStatus","Request Sending")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -109,8 +111,8 @@ public class RequestHistoryFragment extends Fragment {
                                 Double cost = Double.parseDouble(document.getData().get("Cost").toString());
 
                                 if (dateTemp != null) {
-                                    mDataList.add(new HistoryRequest(str,dateTemp,userName1,requestId,cost));
-                                    mAdapter.notifyDataSetChanged();
+                                    mDataList1.add(new HistoryRequest(str,dateTemp,userName1,requestId,cost));
+                                    mAdapter1.notifyDataSetChanged();
                                 }
 
                             }
@@ -120,61 +122,13 @@ public class RequestHistoryFragment extends Fragment {
                         }
                     }
                 });
-        userBase.collectionReference_request.whereEqualTo("Driver",user.getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                                String time1 = document.getData().get("ArriveTime").toString();
-                                userName = document.getData().get("Rider").toString();
-                                String userName1 = "Rider: "+userName;
-                                if (!time1.equals("30-11-002 12:00:00")){
-                                    try {
-                                        dateTemp = formatter.parse(time1);
-                                    } catch (ParseException e) {
-                                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                                    }
-                                }else{
-                                    String time2 = document.getData().get("AcceptTime").toString();
-                                    if (!time2.equals("30-11-002 12:00:00")){
-                                        try {
-                                            dateTemp = formatter.parse(time2);
-                                        } catch (ParseException e) {
-                                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }else{
-                                        String time3 = document.getData().get("SendTime").toString();
-                                        try {
-                                            dateTemp = formatter.parse(time3);
-                                        } catch (ParseException e) {
-                                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
 
-                                String str = document.getData().get("RequestStatus").toString();
-                                Double cost =  Double.parseDouble(document.getData().get("Cost").toString());
-
-                                if (dateTemp != null) {
-                                    mDataList.add(new HistoryRequest(str,dateTemp,userName1,requestId,cost));
-                                    mAdapter.notifyDataSetChanged();
-                                }
-
-                            }
-                        } else {
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
-
-                        }
-                    }
-                });
-        requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        requestList1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HistoryRequest tempo = mDataList.get(i);
+                HistoryRequest tempo = mDataList1.get(i);
                 showDetail(tempo);
+                temp = null;
                 bitmap = null;
             }
         });
@@ -223,11 +177,11 @@ public class RequestHistoryFragment extends Fragment {
                                     String Status = "Status:  " + document.getData().get("RequestStatus").toString();
 
                                     String test = document.getData().get("Driver").toString();
-
-                                    User finaltest = userBase.rebuildUser(test);
-                                    Toast.makeText(getContext(), finaltest.getUsername(), Toast.LENGTH_SHORT).show();
-
-                                    temp = finaltest.getUri();
+                                    if (test.equals("")){
+                                        temp = null;
+                                    } else{
+                                        temp = userBase.rebuildUser(test).getUri();
+                                    }
 
                                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                                     StrictMode.setThreadPolicy(policy);
