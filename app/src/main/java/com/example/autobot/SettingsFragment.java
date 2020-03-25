@@ -18,14 +18,6 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settings_page, container, false);
 
-        String[] settingItems = {"Account and Security","Notification","Privacy","General","Help and Feedback","About Autobot","Switch Account","Log Out"};
-
-        listView = view.findViewById(R.id.settings_page);
-
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,settingItems);
-
-        listView.setAdapter(listViewAdapter);
-
         return view;
     }
 }

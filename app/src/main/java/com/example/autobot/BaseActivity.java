@@ -404,7 +404,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new SettingsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
-                setTitle("Settings");
+                setTitle("About Us");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();

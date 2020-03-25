@@ -41,6 +41,7 @@ public class Request implements Serializable {
     private Date ArriveTime;
     private String RequestID;
     private ArrayList<String> requestStatusList;
+    private double tips;
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
 
@@ -64,6 +65,7 @@ public class Request implements Serializable {
         this.EstimateCost = 0.0;
         this.Cost = 0.0;
         this.RequestID = generateRequestID();
+        this.tips = 0.0;
 
     }
     public Request() throws ParseException {
@@ -86,6 +88,7 @@ public class Request implements Serializable {
         this.EstimateCost = 0.0;
         this.Cost = 0.0;
         this.RequestID = null;
+        this.tips = 0.0;
 
     }
 
@@ -109,6 +112,33 @@ public class Request implements Serializable {
         this.EstimateCost = 0.0;
         this.Cost = 0.0;
         this.RequestID = generateRequestID();
+        this.tips = 0.0;
+
+    }
+    public double getTips(){
+        return this.tips;
+    }
+    public void setTips(double tips){
+        this.tips = tips;
+    }
+    public void resetTips(double tips,Database db){
+        this.tips = tips;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("Tips", this.tips);
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
 
     }
 
