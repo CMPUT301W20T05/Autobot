@@ -1,38 +1,27 @@
 package com.example.autobot;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -85,13 +74,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
         TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
 
-        driverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
-
-        DecimalFormat df = new DecimalFormat("0.0");
-        float goodRate = Float.parseFloat(driver.getGoodRate());
-        float badRate = Float.parseFloat(driver.getBadRate());
-        float rate = goodRate / (goodRate + badRate) * 10;
-        driverRate.setText(df.format(rate));
+        setAvatar(driver, driverAvatar);
+        driverName.setText(String.format("%s %s", driver.getLastName(), driver.getFirstName()));
+        driverRate.setText(calculateRate(driver));
 
         Button accept = riderAcceptedDialog.findViewById(R.id.acceptDriver);
         Button reject = riderAcceptedDialog.findViewById(R.id.rejectDriver);
@@ -123,8 +108,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         });
         riderAcceptedDialog.show();
 
+        //new page components
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
-        //Button buttonSeeProfile = findViewById(R.id.see_profile);
         ImageView imageViewAvatar = findViewById(R.id.imageViewAvatar);
         TextView textViewDriverRate = findViewById(R.id.driverRate);
         TextView textViewDriverName = findViewById(R.id.Driver_name);
@@ -146,27 +131,23 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         double time = distance / 1008.00 + 5.00;
         textViewEstimateTime.setText(df1.format(time));
         //set driver infor
-        //imageViewAvatar.setBackgroundResource();
+        setAvatar(driver, imageViewAvatar);
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
         //good rate infor
-        textViewDriverRate.setText(df.format(rate));
-
-        //for rider to call driver
-        String rphoneNumber = driver.getPhoneNumber();
-        //String rphoneNumber = "5875576400";
+        textViewDriverRate.setText(calculateRate(driver));
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + rphoneNumber));//change the number.
-                if (ActivityCompat.checkSelfPermission(DriverIsOnTheWayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(DriverIsOnTheWayActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-                    ActivityCompat.requestPermissions(DriverIsOnTheWayActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-                } else {
-                    startActivity(callIntent);
-                }
+                makePhoneCall(driver.getPhoneNumber());
+            }
+        });
+        //write a email to driver
+        imageButtonEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail(driver.getEmailAddress());
             }
         });
 
@@ -242,16 +223,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //picked up rider
         db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
 
-
-
         //rider confirm completion
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
-
-
-//        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-//        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
-
     }
 
     @Override

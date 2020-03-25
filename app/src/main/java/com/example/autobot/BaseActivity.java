@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -127,10 +129,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //pls dont private these part
     //private GoogleMap mMap;
     public static GoogleMap mMap;
-    private GoogleApiClient googleApiClient;
-    //private static Location currentLocation;
-    static Location currentLocation;
-    static LatLng searchedLatLng;
+    private static Location currentLocation;
+    LatLng searchedLatLng;
     //----------------------------------
     LocationCallback locationCallback; //for updating users request if last known location is null
     FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
@@ -160,6 +160,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public int anInt = 0;
     public Bitmap mybitmap;
     public Uri myuri;
+
+    private static final int REQUEST_PHONE_CALL = 101;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -215,6 +217,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         placesClient = Places.createClient(this);
     }
 
+    /**
+     * set profile that display in sidebar
+     * @param username
+     * @param db
+     */
     public void setProfile(String username, Database db){
         Database userBase = db;
         User usertemp = LoginActivity.user;
@@ -642,41 +649,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 });
     }
 
-    // Create the Google API Client with access location
-//    public void buildGoogleApiClient(){
-//        googleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(LocationServices.API)
-//                .build();
-//        googleApiClient.connect();
-//    }
-//
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-//        LocationRequest locationRequest = new LocationRequest();
-//        locationRequest.setInterval(10000);
-//        locationRequest.setFastestInterval(5000);
-//        locationRequest.setSmallestDisplacement(10);
-//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        if (ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-//        }
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//        Log.d(TAG, "Connection failed: " + connectionResult.toString());
-//    }
-
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 51) {
@@ -788,6 +760,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * resize the bitmap to custom width and height
+     * @param bm the bitmap to resize
+     * @param newWidth
+     * @param newHeight
+     * @return return the resized bitmap
+     */
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -844,6 +823,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
     }
 
+    /**
+     * draw route and user the user's avatar as marker
+     * @param origin start location
+     * @param destination end location
+     * @param startUser the user at the start location
+     * @param endUser the user at the end location
+     */
     public void drawRouteWithAvatar(LatLng origin, LatLng destination, User startUser, User endUser) {
 
         //add marker
@@ -926,4 +912,54 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 
+    public void sendEmail(String email) {
+        if (!email.equals("")) {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(this, "No email address provided", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void makePhoneCall(String phoneNumber) {
+        if (!phoneNumber.equals("")) {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "No permission for calling", Toast.LENGTH_LONG).show();
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+            } else {
+                startActivity(callIntent);
+            }
+        }
+        else {
+            Toast.makeText(this, "No phone number provided", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void setAvatar(User user, ImageView imageViewAvatar) {
+        try {
+            Bitmap avatar = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
+            imageViewAvatar.setImageBitmap(avatar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String calculateRate(User user) {
+        DecimalFormat df = new DecimalFormat("0.0");
+        float goodRate = Float.parseFloat(user.getGoodRate());
+        float badRate = Float.parseFloat(user.getBadRate());
+        float rate = goodRate / (goodRate + badRate) * 100;
+        return String.format("%s%%", df.format(rate));
+    }
 }

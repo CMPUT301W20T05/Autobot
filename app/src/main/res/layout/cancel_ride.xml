@@ -38,14 +38,14 @@
                 android:layout_width="30dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="4dp"
-                app:srcCompat = "@drawable/star"/>
+                app:srcCompat = "@drawable/gg1"/>
 
             <TextView
                 android:id="@+id/driverRate"
-                android:layout_width="45dp"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:gravity="center"
-                android:text="5.0"
+                android:text = "0.0%"
                 android:textSize="18sp" />
 
             <!--            <Button-->

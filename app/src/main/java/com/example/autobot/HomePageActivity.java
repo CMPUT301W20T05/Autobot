@@ -139,6 +139,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HPDirectionButton.setVisibility(View.GONE); //make sure only generate one current request
+
                 //for model choosing
                 final BottomSheetDialog uCurRequestDialog = new BottomSheetDialog(HomePageActivity.this);
                 uCurRequestDialog.setContentView(R.layout.current_request_of_user);
@@ -180,7 +182,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     //calculate estimated fare
                     double estimateFare = request.getEstimateCost();
                     if (EstimatedFare != null) {
-                        EstimatedFare.setText(String.valueOf(df.format(estimateFare)));
+                        EstimatedFare.setText(df.format(estimateFare));
                     }
 
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
@@ -200,6 +202,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             }else{
                                 addPrice = 10;
                             }
+                            EstimatedFare.setText((df.format(estimateFare + addPrice)));
                         }
 
                         @Override
@@ -227,7 +230,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             uCurRequestDialog.dismiss();
                             //wait driver to accept
                             Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-                            db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
+                            db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
 
                             //set price have to go here to display
                             approPrice.setText(df.format(request.getCost()));
