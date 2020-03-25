@@ -21,16 +21,19 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-
-import static com.android.volley.VolleyLog.TAG;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -40,6 +43,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     private User user;
     private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
+    private User rider;
+    private User driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +70,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         reID = request.getRequestID();
 
         //use request to get infor
-        request.setDriver(user);
-        User driver = request.getDriver();
-        User rider = request.getRider();
+        driver = db.rebuildUser("jc");
+        request.setDriver(driver);
+        driver = request.getDriver();
+        rider = request.getRider();
 
         setProfile(username,db); // set profile
 
@@ -78,7 +84,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         ImageView driverAvatar = riderAcceptedDialog.findViewById(R.id.imageViewAvatar);
         TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
         TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
-        
+
         driverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
 
         DecimalFormat df = new DecimalFormat("0.0");
@@ -94,6 +100,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             public void onClick(View v) {
                 request.resetRequestStatus("Rider Accepted",db);
                 db.ChangeRequestStatus(request);
+                //mark driver and rider location in map
+                LatLng driverCurrent = driver.getCurrentLocation();
+                LatLng riderCurrent = rider.getCurrentLocation();
+                drawRouteWithAvatar(driverCurrent, riderCurrent, driver, rider);
                 riderAcceptedDialog.dismiss();
             }
         });
@@ -140,11 +150,6 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
         //good rate infor
         textViewDriverRate.setText(df.format(rate));
-
-        //mark driver and rider location in map
-        LatLng driverCurrent = destination;
-        LatLng riderCurrent = origin;
-        drawRoute(driverCurrent, riderCurrent);
 
         //for rider to call driver
         String rphoneNumber = driver.getPhoneNumber();
@@ -268,6 +273,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         db.add_new_user(newUser);
 
     }
+
     @Override
     public String getUsername() {
         return username;
@@ -276,4 +282,5 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     public Bitmap getBitmap(){
         return mybitmap;
     }
+
 }
