@@ -2,6 +2,8 @@ package com.example.autobot;
 import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
+import java.util.Map;
+
 public class Offline {
     public static void UploadUser(SharedPreferences u_references,User user){
         Gson gson = new Gson();
@@ -26,11 +28,12 @@ public class Offline {
         String request_string = u_references.getString("Request","");
         return gson.fromJson(request_string, Request.class);
     }
-    public void clear(SharedPreferences u_references,SharedPreferences r_references){
+    public static void clear(SharedPreferences u_references,SharedPreferences r_references){
         u_references.edit().clear();
         u_references.edit().commit();
         r_references.edit().clear();
         r_references.edit().commit();
     }
+
 
 }
