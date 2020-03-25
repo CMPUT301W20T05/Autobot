@@ -128,7 +128,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         //set the onclick function for button
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
-        update_map();
     }
     @Override
     public void onResume() {
