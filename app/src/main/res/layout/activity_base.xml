@@ -30,14 +30,14 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:shape="oval"
             android:orientation="vertical">
 
             <fragment
                 android:id="@+id/myMap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
+                mapbox:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
                 android:id="@+id/content"

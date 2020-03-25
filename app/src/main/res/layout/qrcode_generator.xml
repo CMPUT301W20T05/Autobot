@@ -20,12 +20,12 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-    android:text="Press 'Generate' to get ur QR Code and Show it to driver"
-        android:textSize="22sp"
+        android:layout_marginTop="24dp"
         android:background="@null"
         android:ems="11"
+        android:text="Press 'Generate' to get QR Code and show it to your driver"
         android:textColor="@color/black"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -35,9 +35,9 @@
 
     <Button
         android:id="@+id/generate"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/button_blue_style"
         android:text="Generate"
         android:textColor="@color/white"
@@ -45,21 +45,21 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qrcodeScanner" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
         android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="confirm"
+        android:layout_marginTop="16dp"
         android:background="@drawable/button_blue_style"
+        android:text="confirm"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

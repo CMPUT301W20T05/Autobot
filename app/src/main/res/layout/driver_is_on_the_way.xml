@@ -29,15 +29,15 @@
             android:layout_width="30dp"
             android:layout_height="60dp"
             android:layout_marginLeft="4dp"
-            android:src = "@drawable/star"
+            android:src = "@drawable/gg1"
             android:layout_marginStart="4dp" />
 
         <TextView
             android:id="@+id/driverRate"
-            android:layout_width="45dp"
+            android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="5.0"
+            android:text="0.0%"
             android:textSize="18sp" />
 
         <!--            <Button-->
