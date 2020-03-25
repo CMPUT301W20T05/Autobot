@@ -25,6 +25,11 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -57,7 +62,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         username = user.getUsername(); // get username
 
         detect_cancel_order();//detect whether user cancel order
-
         setProfile(username,db); // set profile
 
         //Log.d("debug",username);
@@ -122,7 +126,11 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        update_map();
+    }
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
@@ -179,6 +187,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 //change the text view of button after accept order
                 buttonCancelOrder.setText("Finish");
                 Log.d("check",request.getStatus());
+                update_map();
                 //override onlick
                 finish_order();
             }
@@ -243,6 +252,12 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         };
         timer.schedule(task,pause_time);
 
+    }
+
+    public void update_map(){
+        LatLng start = request.getBeginningLocation();
+        LatLng destination = request.getDestination();
+        drawRoute(start,destination);
     }
 
 

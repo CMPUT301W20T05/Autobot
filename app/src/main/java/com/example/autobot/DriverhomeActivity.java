@@ -235,7 +235,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         intent.putExtra("Username",username);
-        finish();
         startActivity(intent);
     }
 
