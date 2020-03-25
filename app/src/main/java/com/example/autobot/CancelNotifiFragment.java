@@ -25,6 +25,7 @@ public class CancelNotifiFragment extends Fragment {
         //downtimer for returning to homepage
         CountDownTimer CountDownTimer = new CountDownTimer(TimeLeftInMillis,1000){
             @Override
+            //while still on counting time, update the remaining time data of the view 
             public void onTick(long millisUntilFinished) {
                 TimeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
