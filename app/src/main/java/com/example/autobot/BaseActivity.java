@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.textclassifier.TextClassifierEvent;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -87,6 +88,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.BufferedInputStream;
@@ -961,5 +963,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         float badRate = Float.parseFloat(user.getBadRate());
         float rate = goodRate / (goodRate + badRate) * 100;
         return String.format("%s%%", df.format(rate));
+    }
+
+    public String calculateDistance(LatLng origin, LatLng destination) {
+        double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(distance);
     }
 }

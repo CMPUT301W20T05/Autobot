@@ -222,6 +222,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             Editable temp = editTextTip.getText();
                             if (temp!=null) {
                                 tips = Double.valueOf(String.valueOf(temp));
+                                request.resetTips(tips, db);
                                 totalFare += tips;
                             }
                             request.resetCost(totalFare, db);
@@ -258,11 +259,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             e.printStackTrace();
                         }
                     }
-                    //set distance and price for dialog
-                    //distance between two locations
-                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                    //DecimalFormat df = new DecimalFormat("0.00");
-                    approDistance.setText(df.format(distance));
+                    //set distance for dialog
+                    approDistance.setText(calculateDistance(origin, destination));
 
                     cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
                     cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -329,11 +327,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             e.printStackTrace();
                         }
                     }
-                    //set distance and price for dialog
-                    //distance between two locations
-                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                    //DecimalFormat df = new DecimalFormat("0.00");
-                    approDistance.setText(df.format(distance));
+                    //set distance for dialog
+                    approDistance.setText(calculateDistance(origin, destination));
                     approPrice.setText(df.format(request.getCost()));
 
                     cancelButton.setOnClickListener(new View.OnClickListener() {
