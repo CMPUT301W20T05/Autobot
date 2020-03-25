@@ -4,13 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -18,20 +16,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -200,6 +193,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             }else{
                                 addPrice = 10;
                             }
+
                         }
 
                         @Override
@@ -208,6 +202,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             addPrice = 0;
                         }
                     });
+
+                    double estimateAddModelFee = request.EstimateAddModelFee(addPrice);
+                    if (EstimatedFare != null) {
+                        EstimatedFare.setText(String.valueOf(df.format(estimateAddModelFee)));
+                    }
 
                     CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -374,7 +373,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     /**
      * two time back pressed will return to home window
      */
-    private long firstPressedTime;
+    /*private long firstPressedTime;
     private Toast backToast;
     @Override
     public void onBackPressed(){
@@ -389,7 +388,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             backToast.show();
             firstPressedTime = System.currentTimeMillis();
         }
-    }
+    }*/
 
     /**
      * this function gets the origin location of user request
