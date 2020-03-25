@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setContentView(R.layout.activity_main);
+
 //        if((Offline.ExtractUser(preferences_user)==null)&&Offline.ExtractRequest(preferences_request)==null){
             log_in_page();
 //        }else{
