@@ -45,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setContentView(R.layout.activity_main);
+
         //if(Offline.preference_is_empty(preferences_request)&&Offline.preference_is_empty(preferences_user)){
          //   log_in_page();
         //}else{
           //  jump_to_homepage();
         //}
         log_in_page();
+
 
     }
     /*change activity*/

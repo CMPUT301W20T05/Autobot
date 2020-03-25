@@ -2,7 +2,6 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,10 +12,12 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,9 +85,18 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.maps.android.clustering.ClusterManager;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -137,6 +147,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     final float DEFAULT_ZOOM = 18;
     public TextView name;
     public CircleImageView profilePhoto;
+    public TextView goodrate;
+    public TextView badrate;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -178,6 +190,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         profilePhoto = header.findViewById(R.id.profile_photo);
+
         profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,6 +226,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         name = header.findViewById(R.id.driver_name);
         profilePhoto = header.findViewById(R.id.profile_photo);
+        goodrate = header.findViewById(R.id.favorable_rate);
+        badrate = header.findViewById(R.id.poor_rate);
 
         DocumentReference docRef = userBase.getRef(username);
 
@@ -224,7 +239,26 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     if (document.exists()) {
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String theUserName = document.getData().get("Username").toString();
-                        String gr = document.getData().get("StarsRate").toString();
+                        String gr = document.getData().get("GoodRate").toString();
+                        String br = document.getData().get("BadRate").toString();
+
+                        Integer ggr = 0;
+                        Integer bbr = 0;
+                        if (!gr.equals("")){
+                            ggr = Integer.parseInt(gr);
+                        }
+                        if (!br.equals("")){
+                            bbr = Integer.parseInt(br);
+                        }
+
+                        DecimalFormat decimalFormat= new DecimalFormat(".00");
+                        float f1 = (float) ggr/(ggr + bbr)*100;
+                        String temp1 = decimalFormat.format(f1) + "%";
+                        float f2 = (float) bbr/(ggr + bbr)*100;
+                        String temp2 = decimalFormat.format(f2) + "%";
+
+                        goodrate.setText(temp1);
+                        badrate.setText(temp2);
                         Object temp = document.getData().get("FirstName");
                         if (temp != null) {
                             String fullName = temp.toString() + " " + document.getData().get("LastName").toString();
@@ -232,6 +266,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                             name.setText(fullName);
                         }
                         TextView username = header.findViewById(R.id.user_name);
+
+                        //get profile photo
+                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                        StrictMode.setThreadPolicy(policy);
+                        try {
+                            if (document.getData().get("ImageUri") != null){
+                                mybitmap = BitmapFactory.decodeStream((InputStream)new URL(document.getData().get("ImageUri").toString()).getContent());
+                                profilePhoto.setImageBitmap(mybitmap);
+                            }
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         username.setText(theUserName);
                         //TextView
                     }
@@ -348,7 +397,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new SettingsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
-                setTitle("Settings");
+                setTitle("About Us");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
@@ -565,9 +614,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //place a new marker for current location
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Location");
+        currentLocationMarker = mMap.addMarker(markerOptions);
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+
         HashMap<String, Object> CurrentLocation = new HashMap<>();
-        CurrentLocation.put("CurrentLocationLat", String.valueOf(location.getLatitude()));
-        CurrentLocation.put("CurrentLocationLnt", String.valueOf(location.getLongitude()));
+        CurrentLocation.put("CurrentLocationLat", String.valueOf(currentLocation.getLatitude()));
+        CurrentLocation.put("CurrentLocationLnt", String.valueOf(currentLocation.getLongitude()));
 
         db2.collectionReference_user.document(LoginActivity.user.getUsername())
                 .update(CurrentLocation)
@@ -583,13 +640,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         Log.d(TAG, "Data addition failed" + e.toString());
                     }
                 });
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location");
-        currentLocationMarker = mMap.addMarker(markerOptions);
-
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
     }
 
     // Create the Google API Client with access location
@@ -646,11 +696,32 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                             currentLocation = task.getResult();
                             if (currentLocation != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+                                //set current location to firebase
+                                Database db2 = MainActivity.db;
+                                HashMap<String, Object> CurrentLocation = new HashMap<>();
+                                CurrentLocation.put("CurrentLocationLat", String.valueOf(currentLocation.getLatitude()));
+                                CurrentLocation.put("CurrentLocationLnt", String.valueOf(currentLocation.getLongitude()));
+
+                                db2.collectionReference_user.document(LoginActivity.user.getUsername())
+                                        .update(CurrentLocation)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Data addition successful");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Data addition failed" + e.toString());
+                                            }
+                                        });
+
                             } else {
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
                                 locationRequest.setFastestInterval(5000);
-                                locationRequest.setSmallestDisplacement(10);
+                                locationRequest.setSmallestDisplacement(1);
                                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                                 locationCallback = new LocationCallback() {
                                     @Override
@@ -691,6 +762,49 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         notificationManager.notify(1, notification);
     }
 
+    public void addMapMarkers(LatLng location, User user, String title, String snippet){
+
+        if(mMap != null){
+            if (currentLocationMarker != null) {
+                currentLocationMarker.remove();
+            }
+            //user photo as marker
+            BitmapDescriptor locIcon = BitmapDescriptorFactory.fromResource(R.id.icon);
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            try {
+                Bitmap temp = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
+                locIcon = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp, 100, 100));
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                Log.d(TAG, "addMapMarkers: no avatar, setting default.");
+            }
+            MarkerOptions marker = new MarkerOptions().position(location).title(title).snippet(snippet).icon(locIcon);
+            mMap.addMarker(marker);
+        }
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
+    }
+
     /**
      * draw route between two locations
      * @param origin origin of user's request
@@ -699,11 +813,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
-        place1 = new MarkerOptions().position(origin).title("Origin"); //.icon(locIcon1)
+        place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
-
-        //BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.drawable.location1);
-        //BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.drawable.location2);
 
         //add marker
         Log.d("mylog", "Added Markers");
@@ -723,7 +834,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         builder.include(destination);
         LatLngBounds bounds = builder.build();
         //Then construct a cameraUpdate
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
         //Then move the camera
         if (mMap != null) {
             mMap.animateCamera(cameraUpdate);
@@ -731,6 +842,58 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+    }
+
+    public void drawRouteWithAvatar(LatLng origin, LatLng destination, User startUser, User endUser) {
+
+        //add marker
+        Log.d("mylog", "Added Markers");
+        //remove old marker and add new marker
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
+
+        if(mMap != null){
+            //user photo as marker
+            BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.id.icon);
+            BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.id.icon);
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            MarkerOptions marker1 = new MarkerOptions().position(origin).title("Origin");
+            MarkerOptions marker2 = new MarkerOptions().position(destination).title("Destination");;
+            try {
+                Bitmap temp1 = BitmapFactory.decodeStream((InputStream)new URL(startUser.getUri()).getContent());
+                locIcon1 = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp1, 100, 100));
+                Bitmap temp2 = BitmapFactory.decodeStream((InputStream)new URL(endUser.getUri()).getContent());
+                locIcon2 = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp2, 100, 100));
+                marker1 = new MarkerOptions().position(origin).title("Driver").snippet("This is driver").icon(locIcon1);
+                marker2 = new MarkerOptions().position(destination).title("Rider").snippet("This is me").icon(locIcon2);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                Log.d(TAG, "addMapMarkers: no avatar, setting default.");
+            }
+            mMap.addMarker(marker1);
+            mMap.addMarker(marker2);
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            // Add your locations to bounds using builder.include, maybe in a loop
+            builder.include(origin);
+            builder.include(destination);
+            LatLngBounds bounds = builder.build();
+            //Then construct a cameraUpdate
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 500);
+            //Then move the camera
+            mMap.animateCamera(cameraUpdate);
+
+            String url = getUrl(marker1.getPosition(), marker2.getPosition(), "driving");
+            new FetchURL(BaseActivity.this).execute(getUrl(marker1.getPosition(), marker2.getPosition(), "driving"), "driving");
+        }
     }
 
     /**

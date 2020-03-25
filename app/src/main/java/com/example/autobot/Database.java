@@ -2,15 +2,19 @@ package com.example.autobot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +29,13 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -37,14 +47,19 @@ public class Database{
     public CollectionReference collectionReference_user;
     public CollectionReference collectionReference_request;
     public CollectionReference collectionReference_payment;
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
     User user = new User("");
     Request r = new Request();
-
+    Uri downloadUri;
+    String a = "0";
 
     public Database() throws ParseException {
         FirebaseFirestore.getInstance().clearPersistence();
+     //   mAuth = FirebaseAuth.getInstance();
         db1 = FirebaseFirestore.getInstance();
-
+//        storage = FirebaseStorage.getInstance();
+//        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
         // to disable clean-up.
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -200,6 +215,45 @@ public class Database{
         return this.collectionReference_user.document(username);
     }
 
+
+
+    public Uri upload(Bitmap mybitmap,String username){
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return LOAD.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    downloadUri = task.getResult();
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+
+        if (downloadUri == null){
+            downloadUri = Uri.parse("");
+        }
+
+        return downloadUri;
+    }
+
+
+
     /**
      * This function is to get the all information by the username
      * @param username
@@ -273,7 +327,8 @@ public class Database{
         request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
-        request_data.put("Cost","0.0");
+        request_data.put("Cost",String.valueOf(request.getCost()));
+        request_data.put("Tips",String.valueOf(request.getTips()));
 
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
@@ -329,6 +384,7 @@ public class Database{
                             r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
                             r.setRequestID((String) documentSnapshot.getString("ID"));
                             r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
+                            r.setTips(Double.valueOf(documentSnapshot.getString("Tips")));
                         }
 
                     }
@@ -408,15 +464,6 @@ public class Database{
     }
 
    //public String StatusChangeNotify
-
-
-
-
-
-
-
-
-
 
 }
 

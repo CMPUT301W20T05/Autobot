@@ -6,18 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/button_back"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_revert" />
-
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_sheet_background"
@@ -34,20 +24,20 @@
                 android:id="@+id/imageViewAvatar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:srcCompat="@drawable/icon" />
+                android:src="@drawable/icon" />
 
             <TextView
                 android:id="@+id/Driver_name"
-                android:layout_width="120dp"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:ems="10"
                 android:gravity="center"
                 android:text="Driver Name"
-                android:textSize="20sp" />
+                android:textSize="18sp"/>
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="60dp"
+                android:layout_marginLeft="4dp"
                 app:srcCompat = "@drawable/star"/>
 
             <TextView
@@ -56,17 +46,17 @@
                 android:layout_height="60dp"
                 android:gravity="center"
                 android:text="5.0"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
-<!--            <Button-->
-<!--                android:id="@+id/see_profile"-->
-<!--                style="@style/Widget.AppCompat.Button.Borderless.Colored"-->
-<!--                android:layout_width="80dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="See profile"-->
-<!--                android:textColor="@color/blue2"-->
-<!--                android:textSize="11sp"-->
-<!--                android:textStyle="bold|italic" />-->
+            <!--            <Button-->
+            <!--                android:id="@+id/see_profile"-->
+            <!--                style="@style/Widget.AppCompat.Button.Borderless.Colored"-->
+            <!--                android:layout_width="80dp"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:text="See profile"-->
+            <!--                android:textColor="@color/blue2"-->
+            <!--                android:textSize="11sp"-->
+            <!--                android:textStyle="bold|italic" />-->
 
             <ImageButton
                 android:id="@+id/phoneButton"
@@ -81,40 +71,49 @@
                 app:srcCompat="@android:drawable/ic_dialog_email" />
 
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
 
         <TextView
             android:id="@+id/driver_condition"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_marginTop="16dp"
-            android:gravity="center"
             android:ems="10"
+            android:gravity="center"
             android:text="Driver is on the way to pick you up..."
             android:textColor="@color/black"
             android:textSize="22sp"
             android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center">
+
             <TextView
                 android:id="@+id/EstimatedTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textSize="24sp"
                 android:textColor="@color/blue"
-                android:textStyle="bold"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="min"
-                android:textSize="24sp"
                 android:textColor="@color/blue"
-                android:textStyle="bold"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -122,21 +121,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center">
+
             <TextView
                 android:id="@+id/EstimatedDist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textSize="24sp"
                 android:textColor="@color/blue"
-                android:textStyle="bold"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="m"
-                android:textSize="24sp"
                 android:textColor="@color/blue"
-                android:textStyle="bold"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <Button
@@ -162,8 +163,18 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/cancel_notification_fragment"
+        android:layout_width="283dp"
+        android:layout_height="181dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.581" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

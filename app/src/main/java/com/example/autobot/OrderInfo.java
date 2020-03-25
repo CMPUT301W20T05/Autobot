@@ -53,10 +53,10 @@ public class OrderInfo extends BaseActivity {
 
         setProfile(username,db); // set profile
 
-        Button viewDetail = findViewById(R.id.View_Detail);
+        //Button viewDetail = findViewById(R.id.View_Detail);
         ImageButton emailButton = findViewById(R.id.emailButton);
         ImageButton phoneButton = findViewById(R.id.phoneButton);
-        ImageButton backButton = findViewById(R.id.button_back);
+        //ImageButton backButton = findViewById(R.id.button_back);
         Button cancel = findViewById(R.id.cancel_order);
         TextView originLoc = findViewById(R.id.origin_loc);
         TextView Destination = findViewById(R.id.Destination);
@@ -81,13 +81,13 @@ public class OrderInfo extends BaseActivity {
         //ApproDist
         //ApproPrice = EstimateCost()
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentDriverIsOnTheWay = new Intent(OrderInfo.this, DriverIsOnTheWayActivity.class);
-                startActivity(intentDriverIsOnTheWay);
-            }
-        });
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intentDriverIsOnTheWay = new Intent(OrderInfo.this, DriverIsOnTheWayActivity.class);
+//                startActivity(intentDriverIsOnTheWay);
+//            }
+//        });
 
     }
 }

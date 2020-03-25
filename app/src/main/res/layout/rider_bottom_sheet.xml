@@ -14,13 +14,14 @@
         android:gravity="center"
         android:padding="15dp"
         android:text="Request Detail"
-        android:textSize="20sp"
         android:textColor="@color/black"
-        android:textStyle="bold"/>
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="@color/black"
         android:layout_marginBottom="10dp"/>
 
 <!--    <LinearLayout-->
@@ -78,13 +79,17 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="Start"
             android:textColor="@color/blue2"
@@ -96,7 +101,6 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Origin location"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -106,7 +110,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="End"
             android:textColor="@color/blue2"
@@ -118,10 +122,13 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="@string/Destination"
             android:textSize="18sp"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -139,10 +146,13 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Approximated distance"
             android:textSize="18sp"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -160,7 +170,6 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Approximated price"
             android:textSize="18sp" />
     </LinearLayout>

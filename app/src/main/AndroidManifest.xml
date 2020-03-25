@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.autobot">
     <!-- location permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera permission -->
     <uses-permission android:name="android.hardware.camera" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
@@ -21,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".QRCode"></activity>
+        <activity android:name=".QRCode"/>
         <activity android:name=".OrderInfo" />
         <activity
             android:name=".OrderComplete"
@@ -31,6 +33,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/api_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".SignUpActivity"
@@ -63,7 +68,7 @@
             android:parentActivityName=".HomePageActivity" />
         <activity
             android:name=".DriverhomeActivity"
-            android:parentActivityName=".LoginActivity" />
+            android:parentActivityName=".LoginActivity"/>
         <activity android:name=".BaseActivity" />
         <activity android:name=".DriveIsGoing"
             android:parentActivityName=".DriverhomeActivity"/>
@@ -73,6 +78,9 @@
             android:parentActivityName=".RiderWaitDriverAcceptRequest"/>
         <activity android:name=".Driver_ordercomplete"
             android:parentActivityName=".DriveIsGoing"/>
+        <activity android:name=".Scanner"
+            android:parentActivityName=".Driver_ordercomplete"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.autobot.fileprovider"

@@ -41,7 +41,7 @@ public class ActiveRequestsAdapter extends ArrayAdapter<Request> {
         //update info here
         rider_name.setText("Passenager: "+request.getRider().getUsername());
         destination.setText("Destinatiob: "+ convert_lat_to_addaress(request));
-        fee.setText("Avenue: "+13.34);
+        fee.setText("Avenue: "+String.valueOf(request.getEstimateCost()));
         tips.setText("Tips: "+String.format("%d%%",10));
         return view;
     }
