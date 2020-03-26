@@ -328,6 +328,7 @@ public class Database{
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
         request_data.put("Cost","0.0");
+        request_data.put("Tips","0.0");
 
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
@@ -383,6 +384,7 @@ public class Database{
                             r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
                             r.setRequestID((String) documentSnapshot.getString("ID"));
                             r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
+                            r.setTips(Double.valueOf(documentSnapshot.getString("Tips")));
                         }
 
                     }

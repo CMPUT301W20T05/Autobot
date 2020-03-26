@@ -12,7 +12,9 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +23,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.textclassifier.TextClassifierEvent;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,6 +88,8 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.maps.android.SphericalUtil;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -125,10 +131,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     //pls dont private these part
     //private GoogleMap mMap;
     public static GoogleMap mMap;
-    private GoogleApiClient googleApiClient;
-    //private static Location currentLocation;
-    static Location currentLocation;
-    static LatLng searchedLatLng;
+    private static Location currentLocation;
+    LatLng searchedLatLng;
     //----------------------------------
     LocationCallback locationCallback; //for updating users request if last known location is null
     FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
@@ -158,6 +162,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public int anInt = 0;
     public Bitmap mybitmap;
     public Uri myuri;
+
+    private static final int REQUEST_PHONE_CALL = 101;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -213,6 +219,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         placesClient = Places.createClient(this);
     }
 
+    /**
+     * set profile that display in sidebar
+     * @param username
+     * @param db
+     */
     public void setProfile(String username, Database db){
         Database userBase = db;
         User usertemp = LoginActivity.user;
@@ -269,8 +280,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
                         try {
-                            mybitmap = BitmapFactory.decodeStream((InputStream)new URL(document.getData().get("ImageUri").toString()).getContent());
-                            profilePhoto.setImageBitmap(mybitmap);
+                            if (document.getData().get("ImageUri") != null){
+                                mybitmap = BitmapFactory.decodeStream((InputStream)new URL(document.getData().get("ImageUri").toString()).getContent());
+                                profilePhoto.setImageBitmap(mybitmap);
+                            }
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
@@ -393,7 +406,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new SettingsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
-                setTitle("Settings");
+                setTitle("About Us");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
@@ -638,41 +651,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 });
     }
 
-    // Create the Google API Client with access location
-//    public void buildGoogleApiClient(){
-//        googleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(LocationServices.API)
-//                .build();
-//        googleApiClient.connect();
-//    }
-//
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-//        LocationRequest locationRequest = new LocationRequest();
-//        locationRequest.setInterval(10000);
-//        locationRequest.setFastestInterval(5000);
-//        locationRequest.setSmallestDisplacement(10);
-//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        if (ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-//        }
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//        Log.d(TAG, "Connection failed: " + connectionResult.toString());
-//    }
-
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 51) {
@@ -758,6 +736,56 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         notificationManager.notify(1, notification);
     }
 
+    public void addMapMarkers(LatLng location, User user, String title, String snippet){
+
+        if(mMap != null){
+            if (currentLocationMarker != null) {
+                currentLocationMarker.remove();
+            }
+            //user photo as marker
+            BitmapDescriptor locIcon = BitmapDescriptorFactory.fromResource(R.id.icon);
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            try {
+                Bitmap temp = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
+                locIcon = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp, 100, 100));
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                Log.d(TAG, "addMapMarkers: no avatar, setting default.");
+            }
+            MarkerOptions marker = new MarkerOptions().position(location).title(title).snippet(snippet).icon(locIcon);
+            mMap.addMarker(marker);
+        }
+    }
+
+    /**
+     * resize the bitmap to custom width and height
+     * @param bm the bitmap to resize
+     * @param newWidth
+     * @param newHeight
+     * @return return the resized bitmap
+     */
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
+    }
+
     /**
      * draw route between two locations
      * @param origin origin of user's request
@@ -766,11 +794,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void drawRoute(LatLng origin, LatLng destination) {
         MarkerOptions place1, place2;
 
-        place1 = new MarkerOptions().position(origin).title("Origin"); //.icon(locIcon1)
+        place1 = new MarkerOptions().position(origin).title("Origin");
         place2 = new MarkerOptions().position(destination).title("Destination");
-
-        //BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.drawable.location1);
-        //BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.drawable.location2);
 
         //add marker
         Log.d("mylog", "Added Markers");
@@ -790,7 +815,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         builder.include(destination);
         LatLngBounds bounds = builder.build();
         //Then construct a cameraUpdate
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 300);
         //Then move the camera
         if (mMap != null) {
             mMap.animateCamera(cameraUpdate);
@@ -798,6 +823,65 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
         new FetchURL(BaseActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+    }
+
+    /**
+     * draw route and user the user's avatar as marker
+     * @param origin start location
+     * @param destination end location
+     * @param startUser the user at the start location
+     * @param endUser the user at the end location
+     */
+    public void drawRouteWithAvatar(LatLng origin, LatLng destination, User startUser, User endUser) {
+
+        //add marker
+        Log.d("mylog", "Added Markers");
+        //remove old marker and add new marker
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
+
+        if(mMap != null){
+            //user photo as marker
+            BitmapDescriptor locIcon1 = BitmapDescriptorFactory.fromResource(R.id.icon);
+            BitmapDescriptor locIcon2 = BitmapDescriptorFactory.fromResource(R.id.icon);
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            MarkerOptions marker1 = new MarkerOptions().position(origin).title("Origin");
+            MarkerOptions marker2 = new MarkerOptions().position(destination).title("Destination");;
+            try {
+                Bitmap temp1 = BitmapFactory.decodeStream((InputStream)new URL(startUser.getUri()).getContent());
+                locIcon1 = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp1, 100, 100));
+                Bitmap temp2 = BitmapFactory.decodeStream((InputStream)new URL(endUser.getUri()).getContent());
+                locIcon2 = BitmapDescriptorFactory.fromBitmap(getResizedBitmap(temp2, 100, 100));
+                marker1 = new MarkerOptions().position(origin).title("Driver").snippet("This is driver").icon(locIcon1);
+                marker2 = new MarkerOptions().position(destination).title("Rider").snippet("This is me").icon(locIcon2);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e){
+                Log.d(TAG, "addMapMarkers: no avatar, setting default.");
+            }
+            mMap.addMarker(marker1);
+            mMap.addMarker(marker2);
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            // Add your locations to bounds using builder.include, maybe in a loop
+            builder.include(origin);
+            builder.include(destination);
+            LatLngBounds bounds = builder.build();
+            //Then construct a cameraUpdate
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 500);
+            //Then move the camera
+            mMap.animateCamera(cameraUpdate);
+
+            String url = getUrl(marker1.getPosition(), marker2.getPosition(), "driving");
+            new FetchURL(BaseActivity.this).execute(getUrl(marker1.getPosition(), marker2.getPosition(), "driving"), "driving");
+        }
     }
 
     /**
@@ -830,4 +914,60 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 
+    public void sendEmail(String email) {
+        if (!email.equals("")) {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(this, "No email address provided", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void makePhoneCall(String phoneNumber) {
+        if (!phoneNumber.equals("")) {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "No permission for calling", Toast.LENGTH_LONG).show();
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+            } else {
+                startActivity(callIntent);
+            }
+        }
+        else {
+            Toast.makeText(this, "No phone number provided", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void setAvatar(User user, ImageView imageViewAvatar) {
+        try {
+            Bitmap avatar = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
+            imageViewAvatar.setImageBitmap(avatar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String calculateRate(User user) {
+        DecimalFormat df = new DecimalFormat("0.0");
+        float goodRate = Float.parseFloat(user.getGoodRate());
+        float badRate = Float.parseFloat(user.getBadRate());
+        float rate = goodRate / (goodRate + badRate) * 100;
+        return String.format("%s%%", df.format(rate));
+    }
+
+    public String calculateDistance(LatLng origin, LatLng destination) {
+        double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(distance);
+    }
 }

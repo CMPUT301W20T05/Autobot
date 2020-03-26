@@ -5,10 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light">
-    <ListView
-        android:id="@+id/settings_page"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About us"
+        android:layout_gravity="center_horizontal"
+        android:textSize="28sp"
+        android:layout_marginTop="148dp">
+
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is an App made by CMPUT301W20T05.
+        Group members are: xqiu1, zonglun1, weida, jlyu3, wenzhuo2, yiping1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="50dp"
+        android:textSize="15sp">
+
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Us:   5879371403"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:textSize="15sp">
+
+    </TextView>
+
 
 </LinearLayout>

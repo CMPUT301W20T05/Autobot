@@ -36,7 +36,7 @@ public class User implements Driver, Rider, Serializable {
         this.CurrentLocation = new LatLng(0.0,0.0);
         this.Stars = 0.0;
         this.PaymentInfo = new PayInfo();
-        this.uri = "";
+        this.uri = String.valueOf(R.id.icon);
         this.GoodRate = "0";
         this.BadRate = "0";
     }

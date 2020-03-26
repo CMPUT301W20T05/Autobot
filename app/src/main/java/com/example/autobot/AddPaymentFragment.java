@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -57,6 +59,13 @@ public class AddPaymentFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_payment_frg, null);
 
+        TextView title = new TextView(getContext()); // set title
+        title.setText("Add Payment Information");
+        title.setPadding(10, 80, 10, 10);
+        title.setGravity(Gravity.CENTER); // set gravity to center
+        title.setTextSize(23);  // set title text size
+        title.setTextColor(getResources().getColor(R.color.black));
+
         cardType = view.findViewById(R.id.cardTypeSpinner);
         cardNumber = view.findViewById(R.id.add_cardNumber_editText);
         holdName = view.findViewById(R.id.add_holdName);
@@ -85,7 +94,7 @@ public class AddPaymentFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext()); // build a AlertDialog
 
         return builder.setView(view)
-                .setTitle("Add Payment Information")
+                .setCustomTitle(title)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override

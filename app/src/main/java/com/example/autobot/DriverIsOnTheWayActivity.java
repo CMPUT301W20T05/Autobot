@@ -1,36 +1,28 @@
 package com.example.autobot;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-
-import static com.android.volley.VolleyLog.TAG;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -40,6 +32,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     private User user;
     private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
+    private User rider;
+    private User driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +59,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         reID = request.getRequestID();
 
         //use request to get infor
-        request.setDriver(user);
-        User driver = request.getDriver();
-        User rider = request.getRider();
+        driver = db.rebuildUser("jc");
+        request.setDriver(driver);
+        driver = request.getDriver();
+        rider = request.getRider();
 
         setProfile(username,db); // set profile
 
@@ -78,14 +73,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         ImageView driverAvatar = riderAcceptedDialog.findViewById(R.id.imageViewAvatar);
         TextView driverName = riderAcceptedDialog.findViewById(R.id.Driver_name);
         TextView driverRate = riderAcceptedDialog.findViewById(R.id.driverRate);
-        
-        driverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
 
-        DecimalFormat df = new DecimalFormat("0.0");
-        float goodRate = Float.parseFloat(driver.getGoodRate());
-        float badRate = Float.parseFloat(driver.getBadRate());
-        float rate = goodRate / (goodRate + badRate) * 10;
-        driverRate.setText(df.format(rate));
+        setAvatar(driver, driverAvatar);
+        driverName.setText(String.format("%s %s", driver.getLastName(), driver.getFirstName()));
+        driverRate.setText(calculateRate(driver));
 
         Button accept = riderAcceptedDialog.findViewById(R.id.acceptDriver);
         Button reject = riderAcceptedDialog.findViewById(R.id.rejectDriver);
@@ -94,6 +85,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
             public void onClick(View v) {
                 request.resetRequestStatus("Rider Accepted",db);
                 db.ChangeRequestStatus(request);
+                //mark driver and rider location in map
+                LatLng driverCurrent = driver.getCurrentLocation();
+                LatLng riderCurrent = rider.getCurrentLocation();
+                drawRouteWithAvatar(driverCurrent, riderCurrent, driver, rider);
                 riderAcceptedDialog.dismiss();
             }
         });
@@ -113,8 +108,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         });
         riderAcceptedDialog.show();
 
+        //new page components
         TextView textViewDriverCondition = findViewById(R.id.driver_condition);
-        //Button buttonSeeProfile = findViewById(R.id.see_profile);
         ImageView imageViewAvatar = findViewById(R.id.imageViewAvatar);
         TextView textViewDriverRate = findViewById(R.id.driverRate);
         TextView textViewDriverName = findViewById(R.id.Driver_name);
@@ -136,32 +131,23 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         double time = distance / 1008.00 + 5.00;
         textViewEstimateTime.setText(df1.format(time));
         //set driver infor
-        //imageViewAvatar.setBackgroundResource();
+        setAvatar(driver, imageViewAvatar);
         textViewDriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
         //good rate infor
-        textViewDriverRate.setText(df.format(rate));
-
-        //mark driver and rider location in map
-        LatLng driverCurrent = destination;
-        LatLng riderCurrent = origin;
-        drawRoute(driverCurrent, riderCurrent);
-
-        //for rider to call driver
-        String rphoneNumber = driver.getPhoneNumber();
-        //String rphoneNumber = "5875576400";
+        textViewDriverRate.setText(calculateRate(driver));
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + rphoneNumber));//change the number.
-                if (ActivityCompat.checkSelfPermission(DriverIsOnTheWayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(DriverIsOnTheWayActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-                    ActivityCompat.requestPermissions(DriverIsOnTheWayActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-                } else {
-                    startActivity(callIntent);
-                }
+                makePhoneCall(driver.getPhoneNumber());
+            }
+        });
+        //write a email to driver
+        imageButtonEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail(driver.getEmailAddress());
             }
         });
 
@@ -237,16 +223,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //picked up rider
         db.NotifyStatusChangeEditText(reID, "Rider picked", textViewDriverCondition, "Driving to destination...");
 
-
-
         //rider confirm completion
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
         db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
-
-
-//        Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
-//        db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
-
     }
 
     @Override
@@ -268,6 +247,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         db.add_new_user(newUser);
 
     }
+
     @Override
     public String getUsername() {
         return username;
@@ -276,4 +256,5 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     public Bitmap getBitmap(){
         return mybitmap;
     }
+
 }

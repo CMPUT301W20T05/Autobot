@@ -12,6 +12,7 @@
         android:layout_marginTop="64dp"
         android:background="@drawable/text_style"
         android:orientation="vertical"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +30,7 @@
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="360dp"
             android:layout_height="36dp"
+            android:layout_marginTop="16dp"
             android:layout_gravity="right" />
 
     </LinearLayout>
