@@ -175,12 +175,13 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                        String request_id = (String) document.get("RequestID");
                                        String rider_id = (String) document.get("Rider");
                                        double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
+                                       double tips =  (double) document.get("Tips");
                                        String Accepttime = (String) document.get("AcceptTime");
                                        String send_time = (String) document.get("SendTime");
                                        LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
                                        //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
                                        try {
-                                           Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
+                                           Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
                                            //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
                                            //testing
                                            //User user3 = new User("jc");
@@ -225,7 +226,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
         //set up the drive
         request.setDriver(user);
-
+        db.ChangeRequestStatus(request);
         //notify need to modify database
         //db.ChangeRequestStatus(request);
         Log.d("debug",request.getStatus());
@@ -235,6 +236,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         intent.putExtra("Username",username);
+        finish();
         startActivity(intent);
     }
 
@@ -308,7 +310,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
 
     //request attributes
-    public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time)throws ParseException{
+    public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException{
         Log.d("request_id",request_id);
         Log.d("rider_id",rider_id);
         Log.d("cost",String.valueOf(EstCost));
@@ -318,6 +320,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         User user = db.rebuildUser(rider_id);
         Request request = new Request(user,BeginningLocation,Destination);
         request.setRequestID(request_id);
+        request.setTips(tips);
         //set up date format
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
         //set up all time related attributes
