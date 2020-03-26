@@ -4,13 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -18,20 +16,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -139,6 +132,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         HPConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HPDirectionButton.setVisibility(View.GONE); //make sure only generate one current request
+
                 //for model choosing
                 final BottomSheetDialog uCurRequestDialog = new BottomSheetDialog(HomePageActivity.this);
                 uCurRequestDialog.setContentView(R.layout.current_request_of_user);
@@ -180,7 +175,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     //calculate estimated fare
                     double estimateFare = request.getEstimateCost();
                     if (EstimatedFare != null) {
-                        EstimatedFare.setText(String.valueOf(df.format(estimateFare)));
+                        EstimatedFare.setText(df.format(estimateFare));
                     }
 
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomePageActivity.this, R.array.Models, android.R.layout.simple_spinner_item);
@@ -200,6 +195,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             }else{
                                 addPrice = 10;
                             }
+
+                            EstimatedFare.setText((df.format(estimateFare + addPrice)));
                         }
 
                         @Override
@@ -208,6 +205,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             addPrice = 0;
                         }
                     });
+
+                    double estimateAddModelFee = request.EstimateAddModelFee(addPrice);
+                    if (EstimatedFare != null) {
+                        EstimatedFare.setText(String.valueOf(df.format(estimateAddModelFee)));
+                    }
 
                     CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -219,6 +221,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             Editable temp = editTextTip.getText();
                             if (temp!=null) {
                                 tips = Double.valueOf(String.valueOf(temp));
+                                request.resetTips(tips, db);
                                 totalFare += tips;
                             }
                             request.resetCost(totalFare, db);
@@ -227,7 +230,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             uCurRequestDialog.dismiss();
                             //wait driver to accept
                             Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-                            db.NotifyStatusChange(reID, "Request Accepted", HomePageActivity.this, intent);
+                            db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
 
                             //set price have to go here to display
                             approPrice.setText(df.format(request.getCost()));
@@ -255,11 +258,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             e.printStackTrace();
                         }
                     }
-                    //set distance and price for dialog
-                    //distance between two locations
-                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                    //DecimalFormat df = new DecimalFormat("0.00");
-                    approDistance.setText(df.format(distance));
+                    //set distance for dialog
+                    approDistance.setText(calculateDistance(origin, destination));
 
                     cancelButton = (Button) dialog.findViewById(R.id.cancel_order);
                     cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -326,11 +326,8 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             e.printStackTrace();
                         }
                     }
-                    //set distance and price for dialog
-                    //distance between two locations
-                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
-                    //DecimalFormat df = new DecimalFormat("0.00");
-                    approDistance.setText(df.format(distance));
+                    //set distance for dialog
+                    approDistance.setText(calculateDistance(origin, destination));
                     approPrice.setText(df.format(request.getCost()));
 
                     cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -371,25 +368,25 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
     }
 
-//    /**
-//     * two time back pressed will return to home window
-//     */
-//    private long firstPressedTime;
-//    private Toast backToast;
-//    @Override
-//    public void onBackPressed(){
-//        if(System.currentTimeMillis() - firstPressedTime<2000){
-//            backToast.cancel();
-//            Intent a = new Intent(Intent.ACTION_MAIN);
-//            a.addCategory(Intent.CATEGORY_HOME);
-//            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(a);
-//        }else{
-//            backToast = Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
-//            backToast.show();
-//            firstPressedTime = System.currentTimeMillis();
-//        }
-//    }
+    /**
+     * two time back pressed will return to home window
+     */
+    /*private long firstPressedTime;
+    private Toast backToast;
+    @Override
+    public void onBackPressed(){
+        if(System.currentTimeMillis() - firstPressedTime<2000){
+            backToast.cancel();
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        }else{
+            backToast = Toast.makeText(HomePageActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
+            backToast.show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }*/
 
     /**
      * this function gets the origin location of user request

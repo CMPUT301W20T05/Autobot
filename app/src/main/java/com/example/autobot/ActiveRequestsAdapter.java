@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.type.LatLng;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,20 +36,22 @@ public class ActiveRequestsAdapter extends ArrayAdapter<Request> {
         //set up info
         TextView rider_name = view.findViewById(R.id.request_rider);
         TextView destination = view.findViewById(R.id.request_destination);
+        TextView start = view.findViewById(R.id.request_start);
         TextView fee = view.findViewById(R.id.request_avenue);
         TextView tips = view.findViewById(R.id.request_tips);
         //update info here
-        rider_name.setText("Passenager: "+request.getRider().getUsername());
-        destination.setText("Destinatiob: "+ convert_lat_to_addaress(request));
-        fee.setText("Avenue: "+String.valueOf(request.getEstimateCost()));
-        tips.setText("Tips: "+String.format("%d%%",10));
+        rider_name.setText("Passenger: "+request.getRider().getUsername());
+        destination.setText("Destination: "+convert_lat_to_addaress(request,request.getDestination()));
+        start.setText("Start: "+convert_lat_to_addaress(request,request.getBeginningLocation()));
+        fee.setText(String.valueOf(request.getEstimateCost()));
+        tips.setText(String.format("%3.2f%%",request.getTips()));
         return view;
     }
 
-    public String convert_lat_to_addaress(Request request){
+    public String convert_lat_to_addaress(Request request, LatLng latLng){
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try{
-            String oaddress = request.ReadableAddress(request.getBeginningLocation(),geocoder);
+            String oaddress = request.ReadableAddress(latLng,geocoder);
             return oaddress;
         }catch(IOException e){
             e.printStackTrace();

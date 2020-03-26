@@ -7,17 +7,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
 import androidx.core.app.NotificationCompat;
@@ -25,13 +29,22 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,6 +59,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     private Button buttonCancelOrder;
     private static final int REQUEST_PHONE_CALL = 101;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +71,8 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         username = user.getUsername(); // get username
 
         detect_cancel_order();//detect whether user cancel order
-
         setProfile(username,db); // set profile
-
+        set_profile_picture(rootView);//set profile picture
         //Log.d("debug",username);
 
         User rider = request.getRider();
@@ -122,7 +135,11 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        update_map();
+    }
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
@@ -174,11 +191,13 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View v) {
                 request.UpdateStatus(3);
+                db.ChangeRequestStatus(request);
                 //update db
                 //db.ChangeRequestStatus(request);
                 //change the text view of button after accept order
                 buttonCancelOrder.setText("Finish");
                 Log.d("check",request.getStatus());
+                update_map();
                 //override onlick
                 finish_order();
             }
@@ -194,12 +213,13 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 request.UpdateStatus(4);
                 //need to add
                 //update db
-                //db.ChangeRequestStatus(request);
+                db.ChangeRequestStatus(request);
 
                 Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
                 //intentOrderComplete.putExtra("Username",username);
                 finish();
                 intentOrderComplete.putExtra("Username",username);
+                finish();
                 startActivity(intentOrderComplete);
             }
         });
@@ -224,7 +244,14 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         FragmentManager fm = getSupportFragmentManager();
                         Fragment notification = new CancelNotifiFragment();
                         fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
-                        delay(pause_time,intent);
+                        delay(pause_time,intent);}
+                    else if ((documentSnapshot.get("RequestStatus").toString()).equals("Rider Accepted")){
+                        int pause_time = 3000;
+                        FragmentManager fm = getSupportFragmentManager();
+                        Fragment notification = new SuccessfulNotification();
+                        update_map();
+                        fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
+                        delay(pause_time,fm);
                     }
                 }
             }
@@ -243,6 +270,44 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         };
         timer.schedule(task,pause_time);
 
+    }
+
+
+    //successful notification
+    public void delay(int pause_time,FragmentManager fm){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask()
+        {
+            @Override
+            public void run(){
+                fm.popBackStack();
+            }
+        };
+        timer.schedule(task,pause_time);
+
+    }
+
+    public void update_map(){
+        LatLng start = request.getBeginningLocation();
+        LatLng destination = request.getDestination();
+        drawRoute(start,destination);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void set_profile_picture(View view){
+        ImageView profile = view.findViewById(R.id.imageViewAvatar);
+        //if user dose have profile,get the url of pic resource
+        String url = request.getRider().getUri();
+        try {
+            Bitmap profile_pic= BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+            profile.setAdjustViewBounds(true);
+            profile.setImageBitmap(profile_pic);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e){
+        }
     }
 
 
