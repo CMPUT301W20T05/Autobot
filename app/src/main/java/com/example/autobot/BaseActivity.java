@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -16,7 +14,6 @@ import android.graphics.Matrix;
 import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -88,14 +85,11 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -163,7 +157,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public Bitmap mybitmap;
     public Uri myuri;
 
+
+    private long firstPressedTime;
+    private Toast backToast;
+
     private static final int REQUEST_PHONE_CALL = 101;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -489,7 +488,18 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment == null){
-            super.onBackPressed(); // back to the last activity
+            //super.onBackPressed(); // back to the last activity
+            if(System.currentTimeMillis() - firstPressedTime<2000){
+                backToast.cancel();
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+            }else{
+                backToast = Toast.makeText(BaseActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
+                backToast.show();
+                firstPressedTime = System.currentTimeMillis();
+            }
 
         } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
