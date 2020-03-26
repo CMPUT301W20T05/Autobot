@@ -18,6 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     List<HistoryRequest> requestList;
+
+    public HistoryRequestAdapter(Context context, List<HistoryRequest> requestList) {
+        this.context = context;
+        this.requestList = requestList;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
