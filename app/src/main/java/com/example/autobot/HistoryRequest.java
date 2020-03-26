@@ -11,13 +11,15 @@ public class HistoryRequest {
     private String user;
     private String requestId;
     private Double cost;
+    private int viewType;
 
-    HistoryRequest(String status, Date date, String user, String requestId, Double cost) { // constructor
+    public HistoryRequest(String status, Date date, String user, String requestId, Double cost, int viewType) { // constructor
         this.status = status;
         this.date = date;
         this.user = user;
         this.requestId = requestId;
         this.cost = cost;
+        this.viewType = viewType;
     }
 
     // setter that let set value
@@ -28,13 +30,15 @@ public class HistoryRequest {
     void setUser(String user) {this.user = user;}
     void setRequestId(String requestId) {this.requestId = requestId;}
     void setCost(Double cost) {this.cost = cost;}
+    void setViewType(int viewType) {this.viewType = viewType;}
 
 
     // can get the value using these getter
-    String getStatus() { return this.status; }
-    Date getDate() { return this.date; }
-    String getUser(){return this.user;}
-    String getRequestId(){return this.requestId;}
-    Double getCost(){return this.cost;}
+    public String getStatus() { return this.status; }
+    public Date getDate() { return this.date; }
+    public String getUser(){return this.user;}
+    public String getRequestId(){return this.requestId;}
+    public Double getCost(){return this.cost;}
+    public int getViewType(){return this.viewType;}
 
 }
