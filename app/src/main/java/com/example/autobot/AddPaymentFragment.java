@@ -94,10 +94,12 @@ public class AddPaymentFragment extends DialogFragment {
 
                         String temp = cardNumber.getText().toString();
                         long cardn = 0;
+                        boolean check;
                         if (temp.replace(" ", "").length() != 0){
                             cardn = Long.parseLong(temp); // get card number
+                            check = true;
                         }else{
-                            Toast.makeText(getContext(), "Card number could not be empty", Toast.LENGTH_SHORT).show();
+                            check = false;
                         }
                         final String holdn = holdName.getText().toString();  // get hold name
                         temp = date.getText().toString();
@@ -112,7 +114,9 @@ public class AddPaymentFragment extends DialogFragment {
 
                         final String baddress = billingAddress.getText().toString();
                         final String pcode = postalCode.getText().toString();
-                        listener.onOkPressed(new PaymentCard(cardn,holdn,finalEdate,icon,baddress,pcode));
+                        if (check == true) listener.onOkPressed(new PaymentCard(cardn,holdn,finalEdate,icon,baddress,pcode));
+                        else Toast.makeText(getContext(), "Card number could not be empty", Toast.LENGTH_SHORT).show();
+
                     }
                 }).create();
     }
