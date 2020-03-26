@@ -50,9 +50,6 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
 
         user = HomePageActivity.user;
         username = user.getUsername();
-
-        //get request from firebase
-        //request = db.rebuildRequest(reID, user);
         request = HomePageActivity.request;
         reID = request.getRequestID();
 

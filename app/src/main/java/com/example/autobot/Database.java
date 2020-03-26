@@ -327,8 +327,8 @@ public class Database{
         request_data.put("EstimateCost",String.valueOf(request.getEstimateCost()));
         request_data.put("Driver","");
         request_data.put("ID",request.getRequestID());
-        request_data.put("Cost",String.valueOf(request.getCost()));
-        request_data.put("Tips",String.valueOf(request.getTips()));
+        request_data.put("Cost","0.0");
+        request_data.put("Tips","0.0");
 
         collectionReference_request.document(request.getRequestID())
                 .set(request_data)
