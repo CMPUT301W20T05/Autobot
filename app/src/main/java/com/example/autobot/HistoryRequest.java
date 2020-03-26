@@ -10,10 +10,10 @@ public class HistoryRequest {
     private Date date;
     private String user;
     private String requestId;
-    private Double cost;
+    private float cost;
     private int viewType;
 
-    public HistoryRequest(String status, Date date, String user, String requestId, Double cost, int viewType) { // constructor
+    public HistoryRequest(String status, Date date, String user, String requestId, float cost, int viewType) { // constructor
         this.status = status;
         this.date = date;
         this.user = user;
@@ -23,14 +23,14 @@ public class HistoryRequest {
     }
 
     // setter that let set value
-    void setStatus(String s) {this.status = s;}
-    void setDate(Date d) {this.date = d;}
+    public void setStatus(String s) {this.status = s;}
+    public void setDate(Date d) {this.date = d;}
 //    void setBitmap(Bitmap b, Bitmap bitmap) {this.bitmap = bitmap;}
 
-    void setUser(String user) {this.user = user;}
-    void setRequestId(String requestId) {this.requestId = requestId;}
-    void setCost(Double cost) {this.cost = cost;}
-    void setViewType(int viewType) {this.viewType = viewType;}
+    public void setUser(String user) {this.user = user;}
+    public void setRequestId(String requestId) {this.requestId = requestId;}
+    public void setCost(float cost) {this.cost = cost;}
+    public void setViewType(int viewType) {this.viewType = viewType;}
 
 
     // can get the value using these getter
@@ -38,7 +38,7 @@ public class HistoryRequest {
     public Date getDate() { return this.date; }
     public String getUser(){return this.user;}
     public String getRequestId(){return this.requestId;}
-    public Double getCost(){return this.cost;}
+    public float getCost(){return this.cost;}
     public int getViewType(){return this.viewType;}
 
 }

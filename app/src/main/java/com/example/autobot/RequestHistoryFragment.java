@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.autobot.Adapter.HistoryRequestAdapter;
 import com.example.autobot.Common.Common;
+import com.example.autobot.Common.LinearLayoutManagerWithSmoothScroller;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -42,6 +43,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,23 +58,28 @@ public class RequestHistoryFragment extends Fragment {
     private Bitmap bitmap = null;
     private String temp;
     private String userName;
-    RecyclerView recyclerView_request;
-    ArrayList<HistoryRequest> requestArrayList = new ArrayList<>();
+
+    private ArrayList<HistoryRequest> requestArrayList;
+    private HistoryRequestAdapter adapter;
+    LinearLayoutManager layoutManager;
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
 
-        recyclerView_request = (RecyclerView) view.findViewById(R.id.recycler_request);
-        HistoryRequestAdapter adapter = new HistoryRequestAdapter();
-        recyclerView_request.setAdapter(adapter);
+        RecyclerView recyclerView_request = (RecyclerView) view.findViewById(R.id.recycler_request);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
+        layoutManager = new LinearLayoutManagerWithSmoothScroller(getContext());
+        recyclerView_request.setLayoutManager(layoutManager);
+
+        requestArrayList = new ArrayList<>();
+
+        adapter = new HistoryRequestAdapter(getContext(),requestArrayList);
+        recyclerView_request.setAdapter(adapter);
 
         userBase.collectionReference_request
                 .whereEqualTo(user.getUserType(),user.getUsername())
-                //.whereEqualTo("RequestStatus","Request Sending")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -109,16 +116,24 @@ public class RequestHistoryFragment extends Fragment {
                                 }
 
                                 String str = document.getData().get("RequestStatus").toString();
-                                Double cost = Double.parseDouble(document.getData().get("Cost").toString());
+                                float cost = Float.parseFloat(document.getData().get("Cost").toString());
 
-                                if (dateTemp != null) {
-                                    requestArrayList.add(new HistoryRequest(str, dateTemp, userName1, requestId, cost, -1));
-                                    adapter.notifyDataSetChanged();
-                                }
+                                requestArrayList.add(new HistoryRequest(str, dateTemp, userName1, requestId, cost, 1));
+                                adapter.notifyDataSetChanged();
+
                             }
+                            requestArrayList = Common.sortList(requestArrayList); // sort
+                            requestArrayList = Common.addAlphabeta(requestArrayList); // add header
+                            adapter.notifyDataSetChanged();
+
+                            Toast.makeText(getContext(), String.valueOf(requestArrayList.size()), Toast.LENGTH_SHORT).show();
+                        } else {
+                            //Log.d(TAG, "Error getting documents: ", task.getException());
+
                         }
                     }
                 });
+
         return view;
     }
 }

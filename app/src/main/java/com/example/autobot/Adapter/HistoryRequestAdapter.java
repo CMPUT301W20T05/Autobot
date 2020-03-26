@@ -10,24 +10,27 @@ import com.example.autobot.Common.Common;
 import com.example.autobot.HistoryRequest;
 import com.example.autobot.R;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    Context context;
-    List<HistoryRequest> requestList;
+    private LayoutInflater layoutInflater;
+    private ArrayList<HistoryRequest> requestList;
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // format for the date
 
-    public HistoryRequestAdapter(Context context, List<HistoryRequest> requestList) {
-        this.context = context;
+    public HistoryRequestAdapter(Context context, ArrayList<HistoryRequest> requestList) {
+        this.layoutInflater = LayoutInflater.from(context);
         this.requestList = requestList;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = layoutInflater;
         if (viewType == Common.VIEWTYPE_GROUP){
             ViewGroup group = (ViewGroup) inflater.inflate(R.layout.group_layout,parent,false);
             GroupViewHolder groupViewHolder = new GroupViewHolder(group);
@@ -36,7 +39,8 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ViewGroup group = (ViewGroup) inflater.inflate(R.layout.request_content,parent,false);
             RequestViewHolder requestViewHolder = new RequestViewHolder(group);
             return requestViewHolder;
-        } else { ViewGroup group = (ViewGroup) inflater.inflate(R.layout.group_layout,parent,false);
+        } else {
+            ViewGroup group = (ViewGroup) inflater.inflate(R.layout.group_layout,parent,false);
             GroupViewHolder groupViewHolder = new GroupViewHolder(group);
             return groupViewHolder;
         }
@@ -57,7 +61,8 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             requestViewHolder.usersname.setText(requestList.get(position).getUser());
             requestViewHolder.status.setText("Status: " + requestList.get(position).getStatus());
             requestViewHolder.cost.setText("Cost " + requestList.get(position).getCost());
-            requestViewHolder.date_time.setText("Date: " + requestList.get(position).getDate());
+            requestViewHolder.date_time.setText("Date: " + formatter.format(requestList.get(position).getDate()));
+            ;
         }
     }
 
@@ -66,24 +71,68 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return requestList.size();
     }
 
-    private class GroupViewHolder extends RecyclerView.ViewHolder{
+    private static class GroupViewHolder extends RecyclerView.ViewHolder{
         TextView txt_group_title;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
-            txt_group_title = (TextView) itemView.findViewById(R.id.txt_group_title);
+            txt_group_title = itemView.findViewById(R.id.txt_group_title);
         }
     }
 
-    private class RequestViewHolder extends RecyclerView.ViewHolder{
+    private static class RequestViewHolder extends RecyclerView.ViewHolder {
         TextView usersname, status, date_time, cost;
 
         public RequestViewHolder(@NonNull View itemView) {
             super(itemView);
-            usersname = (TextView) itemView.findViewById(R.id.usersname);
-            status = (TextView) itemView.findViewById(R.id.status);
-            date_time = (TextView) itemView.findViewById(R.id.date_time);
-            cost = (TextView) itemView.findViewById(R.id.cost);
+            usersname = itemView.findViewById(R.id.usersname);
+            status = itemView.findViewById(R.id.status);
+            date_time = itemView.findViewById(R.id.date_time);
+            cost = itemView.findViewById(R.id.cost);
         }
     }
 }
+//public class HistoryRequestAdapter extends RecyclerView.Adapter<HistoryRequestAdapter.RequestViewHolder> {
+//
+//    private ArrayList<HistoryRequest> mRequestList;
+//
+//    public static class RequestViewHolder extends RecyclerView.ViewHolder {
+//        TextView usersname, status, date_time, cost;
+//
+//        public RequestViewHolder(View itemView) {
+//            super(itemView);
+//            usersname = itemView.findViewById(R.id.usersname);
+//            status = itemView.findViewById(R.id.status);
+//            date_time = itemView.findViewById(R.id.date_time);
+//            cost = itemView.findViewById(R.id.cost);
+//
+//        }
+//    }
+//
+//    public HistoryRequestAdapter(ArrayList<HistoryRequest> requestList) {
+//        mRequestList = requestList;
+//    }
+//
+//    @Override
+//    public RequestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_content, parent, false);
+//        RequestViewHolder evh = new RequestViewHolder(v);
+//        return evh;
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(@NonNull RequestViewHolder holder, int position) {
+//
+//        HistoryRequest currentItem = mRequestList.get(position);
+//
+//        holder.usersname.setText(currentItem.getUser());
+//        holder.status.setText("Status: " + currentItem.getStatus());
+//        holder.cost.setText("Cost " + currentItem.getCost());
+//        holder.date_time.setText("Date: " + currentItem.getDate());
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return mRequestList.size();
+//    }
+//}

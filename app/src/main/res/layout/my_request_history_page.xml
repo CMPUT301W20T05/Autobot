@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:background="@color/quantum_grey300"
-    android:padding="16dp">
+    android:padding="8dp">
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="60dp"
         android:id="@+id/recycler_request"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
