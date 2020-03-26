@@ -65,7 +65,7 @@ public class RequestHistoryFragment extends Fragment {
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
 
-    public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
 
         RecyclerView recyclerView_request = (RecyclerView) view.findViewById(R.id.recycler_request);
@@ -75,11 +75,8 @@ public class RequestHistoryFragment extends Fragment {
 
         requestArrayList = new ArrayList<>();
 
-        adapter = new HistoryRequestAdapter(getContext(),requestArrayList);
-        recyclerView_request.setAdapter(adapter);
-
         userBase.collectionReference_request
-                .whereEqualTo(user.getUserType(),user.getUsername())
+                .whereEqualTo(user.getUserType(), user.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -119,14 +116,13 @@ public class RequestHistoryFragment extends Fragment {
                                 float cost = Float.parseFloat(document.getData().get("Cost").toString());
 
                                 requestArrayList.add(new HistoryRequest(str, dateTemp, userName1, requestId, cost, 1));
-                                adapter.notifyDataSetChanged();
 
                             }
-                            requestArrayList = Common.sortList(requestArrayList); // sort
-                            requestArrayList = Common.addAlphabeta(requestArrayList); // add header
-                            adapter.notifyDataSetChanged();
-
-                            Toast.makeText(getContext(), String.valueOf(requestArrayList.size()), Toast.LENGTH_SHORT).show();
+                            requestArrayList = Common.sortListByDate(requestArrayList); // sort
+                            requestArrayList = Common.sortListByStatus(requestArrayList); // same
+                            requestArrayList = Common.addHeader(requestArrayList); // add header
+                            adapter = new HistoryRequestAdapter(getContext(), requestArrayList);
+                            recyclerView_request.setAdapter(adapter);
                         } else {
                             //Log.d(TAG, "Error getting documents: ", task.getException());
 

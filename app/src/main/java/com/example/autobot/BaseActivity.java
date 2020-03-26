@@ -43,6 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.autobot.Adapter.HistoryRequestAdapter;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -115,7 +116,7 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener {
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
@@ -930,5 +931,4 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             currentPolyline.remove();
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
-
 }
