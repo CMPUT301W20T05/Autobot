@@ -55,6 +55,7 @@ public class EditProfilePage extends Fragment {
     private BottomSheetDialog bottomSheetDialog;
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int RESULT_LOAD_IMAGE = 2;
+    private static final int CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE = 101;
     private String currentPhotoPath;
     public Bitmap bitmap;
     public Uri imageUri;
@@ -241,26 +242,31 @@ public class EditProfilePage extends Fragment {
     }
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                imageUri = FileProvider.getUriForFile(getContext(),
-                        "com.example.autobot.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+        } else {
+            Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    imageUri = FileProvider.getUriForFile(getContext(),
+                            "com.example.autobot.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
             }
         }
+
     }
 
     private File createImageFile() throws IOException {
