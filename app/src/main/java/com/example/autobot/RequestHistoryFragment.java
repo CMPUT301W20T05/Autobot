@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.autobot.Adapter.HistoryRequestAdapter;
+import com.example.autobot.Common.Common;
+import com.example.autobot.Common.LinearLayoutManagerWithSmoothScroller;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,21 +36,22 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.android.volley.VolleyLog.TAG;
 
 public class RequestHistoryFragment extends Fragment {
 
-    private ListView requestList1;
-    private ArrayAdapter<HistoryRequest> mAdapter1;
-    private ArrayList<HistoryRequest> mDataList1;
     private Date dateTemp;
     private String requestId;
     Database userBase = LoginActivity.db;
@@ -56,22 +60,24 @@ public class RequestHistoryFragment extends Fragment {
     private String temp;
     private String userName;
 
+    private ArrayList<HistoryRequest> requestArrayList;
+    private HistoryRequestAdapter adapter;
+    LinearLayoutManager layoutManager;
+
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
 
-    public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
 
-        requestList1 = view.findViewById(R.id.requests_list1);
+        RecyclerView recyclerView_request = (RecyclerView) view.findViewById(R.id.recycler_request);
 
-        mDataList1 = new ArrayList<>();
+        layoutManager = new LinearLayoutManagerWithSmoothScroller(getContext());
+        recyclerView_request.setLayoutManager(layoutManager);
 
-        mAdapter1 = new HistoryList(getContext(), mDataList1);// set adapter
-
-        requestList1.setAdapter(mAdapter1);
+        requestArrayList = new ArrayList<>();
 
         userBase.collectionReference_request
-                .whereEqualTo(user.getUserType(),user.getUsername())
-                .whereEqualTo("RequestStatus","Request Sending")
+                .whereEqualTo(user.getUserType(), user.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -81,23 +87,23 @@ public class RequestHistoryFragment extends Fragment {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 String time1 = document.getData().get("ArriveTime").toString();
                                 userName = document.getData().get("Driver").toString();
-                                requestId =  document.getData().get("ID").toString();
-                                String userName1 = "Driver: "+userName;
-                                if (!time1.equals("30-11-002 12:00:00")){
+                                requestId = document.getData().get("ID").toString();
+                                String userName1 = "Driver: " + userName;
+                                if (!time1.equals("30-11-002 12:00:00")) {
                                     try {
                                         dateTemp = formatter.parse(time1);
                                     } catch (ParseException e) {
                                         Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                                     }
-                                }else{
+                                } else {
                                     String time2 = document.getData().get("AcceptTime").toString();
-                                    if (!time2.equals("30-11-002 12:00:00")){
+                                    if (!time2.equals("30-11-002 12:00:00")) {
                                         try {
                                             dateTemp = formatter.parse(time2);
                                         } catch (ParseException e) {
                                             Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                                         }
-                                    }else{
+                                    } else {
                                         String time3 = document.getData().get("SendTime").toString();
                                         try {
                                             dateTemp = formatter.parse(time3);
@@ -108,14 +114,16 @@ public class RequestHistoryFragment extends Fragment {
                                 }
 
                                 String str = document.getData().get("RequestStatus").toString();
-                                Double cost = Double.parseDouble(document.getData().get("Cost").toString());
+                                float cost = Float.parseFloat(document.getData().get("Cost").toString());
 
-                                if (dateTemp != null) {
-                                    mDataList1.add(new HistoryRequest(str,dateTemp,userName1,requestId,cost));
-                                    mAdapter1.notifyDataSetChanged();
-                                }
+                                requestArrayList.add(new HistoryRequest(str, dateTemp, userName1, requestId, cost, 1));
 
                             }
+                            requestArrayList = Common.sortListByDate(requestArrayList); // sort
+                            requestArrayList = Common.sortListByStatus(requestArrayList); // same
+                            requestArrayList = Common.addHeader(requestArrayList); // add header
+                            adapter = new HistoryRequestAdapter(getContext(), requestArrayList);
+                            recyclerView_request.setAdapter(adapter);
                         } else {
                             //Log.d(TAG, "Error getting documents: ", task.getException());
 
@@ -123,97 +131,6 @@ public class RequestHistoryFragment extends Fragment {
                     }
                 });
 
-        requestList1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HistoryRequest tempo = mDataList1.get(i);
-                showDetail(tempo);
-                temp = null;
-                bitmap = null;
-            }
-        });
-
         return view;
-    }
-
-    private void showDetail(@NonNull HistoryRequest historyRequest) {
-        String rid = historyRequest.getRequestId();
-
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.history_detail, null);
-        TextView driverName = view.findViewById(R.id.detail_name);
-        TextView riderName = view.findViewById(R.id.detail_name2);
-        TextView sendTime = view.findViewById(R.id.detail_send_time);
-        TextView acceptTime = view.findViewById(R.id.detail_accept_time);
-        TextView arriveTime = view.findViewById(R.id.detail_arrive_time);
-        TextView status = view.findViewById(R.id.status);
-        CircleImageView photo = view.findViewById(R.id.detail_photo);
-
-        if (rid != null){
-            userBase.collectionReference_request
-                    .document(rid)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    String driver = "Driver:  " + document.getData().get("Driver").toString();
-                                    String rider = "Rider:  " + document.getData().get("Rider").toString();
-
-                                    String tempTime1 = document.getData().get("AcceptTime").toString();
-                                    String facceptTime = "Accept Time: ";
-                                    if (!tempTime1.equals("30-11-002 12:00:00")) {
-                                        facceptTime = "Accept Time:  " + tempTime1;
-                                    }
-
-                                    String farriveTime = "Arrive Time: ";
-                                    String tempTime2 = document.getData().get("ArriveTime").toString();
-                                    if (!tempTime2.equals("30-11-002 12:00:00")) {
-                                        farriveTime = "Arrive Time:  " + tempTime2;
-                                    }
-
-                                    String fsendTime = "Send Time:  " + document.getData().get("SendTime").toString();
-                                    String Status = "Status:  " + document.getData().get("RequestStatus").toString();
-
-                                    String test = document.getData().get("Driver").toString();
-                                    if (test.equals("")){
-                                        temp = null;
-                                    } else{
-                                        temp = userBase.rebuildUser(test).getUri();
-                                    }
-
-                                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                                    StrictMode.setThreadPolicy(policy);
-                                    try {
-                                        if (temp != null){
-                                            bitmap = BitmapFactory.decodeStream((InputStream)new URL(temp).getContent());
-                                            photo.setImageBitmap(bitmap);
-                                        }
-                                    } catch (MalformedURLException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    driverName.setText(driver);
-                                    riderName.setText(rider);
-                                    sendTime.setText(fsendTime);
-                                    acceptTime.setText(facceptTime);
-                                    arriveTime.setText(farriveTime);
-                                    status.setText(Status);
-
-                                }
-                            }
-                        }
-                    });
-            final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-            alert.setView(view)
-                    .setTitle("Details")
-                    .setNegativeButton("Close",null);
-            alert.show();
-        }
-
-
     }
 }

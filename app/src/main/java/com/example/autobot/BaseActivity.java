@@ -43,6 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.autobot.Adapter.HistoryRequestAdapter;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -113,7 +114,7 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener {
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
@@ -156,6 +157,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public int anInt = 0;
     public Bitmap mybitmap;
     public Uri myuri;
+    private String temp1, temp2;
 
 
     private long firstPressedTime;
@@ -260,11 +262,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         }
 
                         DecimalFormat decimalFormat= new DecimalFormat(".00");
-                        float f1 = (float) ggr/(ggr + bbr)*100;
-                        String temp1 = decimalFormat.format(f1) + "%";
-                        float f2 = (float) bbr/(ggr + bbr)*100;
-                        String temp2 = decimalFormat.format(f2) + "%";
-
+                        if (ggr == 0 && bbr == 0) {
+                            temp1 = "0%";
+                            temp2 = "0%";
+                        } else{
+                            float f1 = (float) ggr/(ggr + bbr)*100;
+                            temp1 = decimalFormat.format(f1) + "%";
+                            float f2 = (float) bbr/(ggr + bbr)*100;
+                            temp2 = decimalFormat.format(f2) + "%";
+                        }
                         goodrate.setText(temp1);
                         badrate.setText(temp2);
                         Object temp = document.getData().get("FirstName");
