@@ -550,8 +550,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onOkPressed(PaymentCard newPayment) {
-        ((PaymentInformationFragment) fragment).updateList(newPayment);
+    public void onOkPressed(PaymentCard newPayment,int i) {
+        if (i == 1) Toast.makeText(this, "You have added this card.", Toast.LENGTH_SHORT).show();
+        else ((PaymentInformationFragment) fragment).updateList(newPayment);
     }
 
     @Override

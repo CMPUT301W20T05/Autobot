@@ -420,12 +420,15 @@ public class Database{
      * @param PayInfCard
      */
     public void add_new_Payment(PaymentCard PayInfCard) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         HashMap<String,String> payment_data = new HashMap<>();
         payment_data.put("CardNumber",PayInfCard.getCardNumber().toString() );
         payment_data.put("HoldName", PayInfCard.getHoldName());
-        payment_data.put("ExpireDate", PayInfCard.getExpireDate().toString());
+        payment_data.put("ExpireDate", formatter.format(PayInfCard.getExpireDate()));
         payment_data.put("BillingAddress",PayInfCard.getBillingAddress());
         payment_data.put("PostalCode", PayInfCard.getPostalCode());
+        payment_data.put("CardType", PayInfCard.getCardLogo()+"");
+        payment_data.put("UserName", PayInfCard.getUserName());
         collectionReference_payment
                 .document(payment_data.get("CardNumber"))
                 .set(payment_data)

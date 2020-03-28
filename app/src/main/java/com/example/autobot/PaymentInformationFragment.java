@@ -1,20 +1,33 @@
 package com.example.autobot;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.autobot.Adapter.HistoryRequestAdapter;
+import com.example.autobot.Common.Common;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.Inflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,33 +38,16 @@ public class PaymentInformationFragment extends Fragment {
     ListView paymentList;
     ArrayAdapter<PaymentCard> mAdapter;
     ArrayList<PaymentCard> mDataList;
-
+    Database userBase = LoginActivity.db;
+    User user = LoginActivity.user;
+    String holdName;
+    long cardNumber;
+    Date dateTemp;
+    String time1;
+    String billingAddress;
+    String postalCode;
+    int cardLogo;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  //format for the date
-
-    Date date1, date2, date3;
-    {try {
-        date1 = formatter.parse("2020-02-02");
-    } catch (ParseException e) {
-        int a = 1;
-    }}
-    {try {
-        date2 = formatter.parse("2020-02-22");
-    } catch (ParseException e) {
-        int b = 1;
-    }}
-    {try {
-        date3 = formatter.parse("2020-01-06");
-    } catch (ParseException e) {
-        int c = 1;
-    }}
-
-
-    Date[] expire_dates ={date1,date2,date3};
-    int[] logos = {R.drawable.master, R.drawable.master,R.drawable.master};
-    Long[] card_numbers = {2222111133334444L,2222111133335555L,1111666644443333L};
-    String[] hold_names = {"Tim James", "Allen Jones", "James Lord"};
-    String[] billing_address = {"8510 111St", "8888 201St", "8231 102St"};
-    String[] postal_code = {"T6G 1H7", "T3B 2U8", "E2G 0I1"};
 
     public void updateList(PaymentCard paymentCard){
         mDataList.add(paymentCard);
@@ -65,25 +61,88 @@ public class PaymentInformationFragment extends Fragment {
 
         mDataList = new ArrayList<>();
 
-        for (int i=0;i<expire_dates.length;i++){
-            mDataList.add(new PaymentCard(card_numbers[i],hold_names[i],expire_dates[i],logos[i],billing_address[i],postal_code[i]));
-        }
+        userBase.collectionReference_payment
+                .whereEqualTo("UserName", user.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
 
-        mAdapter = new PaymentCardList(getContext(), mDataList);// set adapter
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                time1 = document.getData().get("ExpireDate").toString();
+                                holdName = document.getData().get("HoldName").toString();
+                                cardNumber = Long.parseLong(document.getData().get("CardNumber").toString());
+                                billingAddress = document.getData().get("BillingAddress").toString();
+                                postalCode = document.getData().get("PostalCode").toString();
+                                cardLogo = Integer.parseInt(document.getData().get("CardType").toString());
+                                try {
+                                    dateTemp = formatter.parse(time1);
+                                    mDataList.add(new PaymentCard(cardNumber,user.getUsername(),holdName,dateTemp,cardLogo,billingAddress,postalCode));
+                                } catch (ParseException e) {
+                                    Toast.makeText(getContext(), "Error loading", Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
-        paymentList.setAdapter(mAdapter);
+                            mAdapter = new PaymentCardList(getContext(), mDataList);// set adapter
 
+                            paymentList.setAdapter(mAdapter);
+
+                        } else {
+                            //Log.d(TAG, "Error getting documents: ", task.getException());
+
+                        }
+                    }
+                });
 
         FloatingActionButton btn = view.findViewById(R.id.add_payment_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new AddPaymentFragment().show(getParentFragmentManager(), "ADD_CITY");
-
                 //Toast.makeText(getContext(), "jump", Toast.LENGTH_SHORT).show();
             }
         });
 
+        paymentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                PaymentCard paymentCard = mDataList.get(i);
+                showDetail(paymentCard,i);
+            }
+        });
+
         return view;
+    }
+
+    private void showDetail(@NonNull PaymentCard paymentCard,int position) {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.payment_detail,null);
+
+        TextView cnumber = view.findViewById(R.id.card_number);
+        TextView cname = view.findViewById(R.id.card_name);
+        TextView cdate = view.findViewById(R.id.card_date);
+        TextView caddress = view.findViewById(R.id.card_address);
+        TextView cpcode = view.findViewById(R.id.card_postal_code);
+
+        cnumber.setText("Card number:   "+paymentCard.getCardNumber());
+        cname.setText("Holder name:   "+paymentCard.getHoldName());
+        cdate.setText("Expire date:   "+formatter.format(paymentCard.getExpireDate()));
+        caddress.setText("Billing address:   "+paymentCard.getBillingAddress());
+        cpcode.setText("Postal code:   "+paymentCard.getPostalCode());
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setView(view)
+                .setTitle("Card Detail")
+                .setNegativeButton("Close", null)
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mDataList.remove(position);
+                        mAdapter.notifyDataSetChanged();
+                        userBase.collectionReference_payment.document(paymentCard.getCardNumber().toString()).delete();
+                    }
+                }).create();
+        alert.show();
     }
 }
