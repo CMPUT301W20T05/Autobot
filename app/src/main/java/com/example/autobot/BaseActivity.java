@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.DialogInterface;
@@ -96,6 +97,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -416,7 +418,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("Payment").commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
@@ -506,7 +508,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 backToast.show();
                 firstPressedTime = System.currentTimeMillis();
             }
-
         } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
@@ -525,10 +526,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
             if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("Home Page");
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStack();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                }
             }
 
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,6 +111,18 @@ public class PaymentInformationFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PaymentCard paymentCard = mDataList.get(i);
                 showDetail(paymentCard,i);
+            }
+        });
+
+        // Wallet
+        LinearLayout wallet = view.findViewById(R.id.wallet);
+        wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Wallet_fragment wallet_fragment = new Wallet_fragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container,wallet_fragment,"WALLET_FRAGMENT");
+                fragmentTransaction.commit();
             }
         });
 
