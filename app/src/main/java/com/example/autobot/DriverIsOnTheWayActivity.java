@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,16 +14,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -59,8 +70,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         reID = request.getRequestID();
 
         //use request to get infor
-        driver = db.rebuildUser("jc");
-        request.setDriver(driver);
+//        driver = db.rebuildUser("jc");
+//        request.setDriver(driver);
         driver = request.getDriver();
         rider = request.getRider();
 
@@ -255,6 +266,52 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     @Override
     public Bitmap getBitmap(){
         return mybitmap;
+    }
+
+    //request attributes
+    public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException {
+        Log.d("request_id",request_id);
+        Log.d("rider_id",rider_id);
+        Log.d("cost",String.valueOf(EstCost));
+        Log.d("time",Accepttime);
+        Log.d("stime",send_time);
+
+        User user = db.rebuildUser(rider_id);
+        Request request = new Request(user,BeginningLocation,Destination);
+        request.setRequestID(request_id);
+        request.setTips(tips);
+        //set up date format
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        //set up all time related attributes
+        try{
+            Date acceptedtime = formatter.parse(Accepttime);
+            Date Sendtime = formatter.parse(send_time);
+            request.resetAcceptTime(acceptedtime);
+            request.resetArriveTime(acceptedtime);
+            request.resetSendTime(Sendtime);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        request.direct_setEstimateCost(EstCost);
+        Log.d("testing",request.testing_rebuild_request());
+        return request;
+    }
+
+    private void UpdateRequest(){
+        //create listener for the selected request
+        DocumentReference request_ref = FirebaseFirestore.getInstance().collection("Request").document(request.getRequestID());
+        request_ref.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            String driver_id = (String) documentSnapshot.get("Driver");
+                            User driver = db.rebuildUser(driver_id);
+                            request.setDriver(driver);
+                        }
+                    }
+                });
     }
 
 }

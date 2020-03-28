@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import io.paperdb.Paper;
+
 public class App extends Application {
     public static final String CHANNEL_1_ID = "channel1";
     public static final String CHANNEL_2_ID = "channel2";

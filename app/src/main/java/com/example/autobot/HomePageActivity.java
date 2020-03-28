@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +34,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.firestore.v1.StructuredQuery;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +43,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
+
+import io.paperdb.Paper;
 
 /**
  * this class is the homepage activity
@@ -81,6 +86,29 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         username = user.getUsername(); // get username
 
         setProfile(username,db); // set profile
+
+//        Paper.init(this);
+//        String RequestID = Paper.book().read(Prevalent.RequestIDKey);
+//        if (RequestID != "")
+//        {
+//            if (!TextUtils.isEmpty(RequestID))
+//            {
+//                try {
+//                    request = db.rebuildRequest(RequestID, user);
+//                    String requestStatus = request.getStatus();
+//                    if (requestStatus == "Driver Accepted") {
+//                        Intent intentDriverAccepted = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
+//                        startActivity(intentDriverAccepted);
+//                    }
+//                    else if (requestStatus == "Trip Completed"){
+//                        Intent intentComplete = new Intent(HomePageActivity.this, OrderComplete.class);
+//                        startActivity(intentComplete);
+//                    }
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
@@ -164,12 +192,15 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     request = null;
                     try {
                         request = new Request(user, origin, destination);
+//                        SharedPreferences requestPref = getApplicationContext().getSharedPreferences("Request", 0); // 0 - for private mode
+//                        Offline.UploadRequest(requestPref, request);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     request.setEstimateCost(origin, destination);
                     db.add_new_request(request);
                     String reID = request.getRequestID();
+                    Paper.book().write(Prevalent.RequestIDKey, request);
                     //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
                     //calculate estimated fare

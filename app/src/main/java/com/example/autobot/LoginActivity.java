@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -29,6 +31,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.ParseException;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 /**
  * this is class for login activity
  * user can login our system using their phone number/user name/email account
@@ -48,108 +52,134 @@ public class LoginActivity extends AppCompatActivity {
         Spinner spinner = findViewById(R.id.spinnerPhoneNumberCountry);
         EditText editAccount = findViewById(R.id.editAccount);
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
+        CheckBox checkBoxRememberMe = findViewById(R.id.rememberMe);
 
-        TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
-        textViewNoAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intentSignUp);
-            }
-        });
+        Paper.init(this);
+        String UserPhoneKey = Paper.book().read(Prevalent.UserPhoneKey);
+        String UserPasswordKey = Paper.book().read(Prevalent.UserPasswordKey);
 
-        Button buttonLogin = findViewById(R.id.buttonLogin);
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    db = new Database();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        if (UserPhoneKey != null && UserPasswordKey != null)
+        {
+            if (!TextUtils.isEmpty(UserPhoneKey)  &&  !TextUtils.isEmpty(UserPasswordKey))
+            {
+                if (user.getUserType() == "Rider") {
+                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                    startActivity(intentHomePage);
                 }
-                String Status = spinner.getSelectedItem().toString();
-                String Account = editAccount.getText().toString();
-                String Password = editTextInputPassword.getText().toString();
-                if (Status.equals("Phone Number")){
-                    if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
-                    else {
-                
-                        Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
-                        query.get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            if (task.getResult().size() != 0) {
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    String TruePassword = document.get("Password").toString();
-                                                    String Type = document.get("Type").toString();
-                                                    String username = document.get("Username").toString();
-                                                    //get user infor from database
-                                                    user = db.rebuildUser(username);
-                                                    if (TruePassword.equals(Password)){
-                                                        // determine to go rider mode or driver mode
-                                                        if (Type.equals("Rider")) {
-                                                            Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                            //intentHomePage.putExtra("User",username);
-                                                            startActivity(intentHomePage);
+                else {
+                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                    startActivity(intentHomePage);
+                }
+            }
+        }
+        else {
+            TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
+            textViewNoAccount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
+                    startActivity(intentSignUp);
+                }
+            });
+
+            Button buttonLogin = findViewById(R.id.buttonLogin);
+            buttonLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        db = new Database();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String Status = spinner.getSelectedItem().toString();
+                    String Account = editAccount.getText().toString();
+                    String Password = editTextInputPassword.getText().toString();
+
+                    if (checkBoxRememberMe.isChecked()){
+//                        Paper.book().write(Prevalent.UserPhoneKey, Account);
+//                        Paper.book().write(Prevalent.UserPasswordKey, Password);
+                    }
+
+                    if (Status.equals("Phone Number")){
+                        if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
+                        else {
+
+                            Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
+                            query.get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                if (task.getResult().size() != 0) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        String TruePassword = document.get("Password").toString();
+                                                        String Type = document.get("Type").toString();
+                                                        String username = document.get("Username").toString();
+                                                        //get user infor from database
+                                                        user = db.rebuildUser(username);
+                                                        if (TruePassword.equals(Password)){
+                                                            // determine to go rider mode or driver mode
+                                                            if (Type.equals("Rider")) {
+                                                                Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                                startActivity(intentHomePage);
+                                                            }
+                                                            else {
+                                                                Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                                startActivity(intentHomePage);
+                                                            }
                                                         }
                                                         else {
-                                                            Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                            //intentHomePage.putExtra("User",username);
-                                                            startActivity(intentHomePage);
+                                                            editTextInputPassword.setError("The Wrong password!");
                                                         }
                                                     }
+
+                                                } else editAccount.setError("PhoneNumber is not exist");
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                    else if (Status.equals("User Name"))
+                    {
+                        if (Account.length() == 0) editAccount.setError("Please input Username");
+                        else {
+                            db.getRef(Account).get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists()){
+                                                String userName = Account; // set username to username
+                                                String RightPassword = documentSnapshot.getString("Password");
+                                                String Type = documentSnapshot.getString("Type");
+                                                if (RightPassword.equals(Password)) {
+                                                    if (Type.equals("Rider")) {
+                                                        Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                        intentHomePage.putExtra("User",Account);
+
+                                                        startActivity(intentHomePage);
+                                                    }
                                                     else {
-                                                        editTextInputPassword.setError("The Wrong password!");
+                                                        Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                        intentHomePage.putExtra("User",Account);
+
+                                                        startActivity(intentHomePage);
                                                     }
                                                 }
-
-                                            } else editAccount.setError("PhoneNumber is not exist");
+                                                else editTextInputPassword.setError("The Wrong password!");
+                                            }
+                                            else {
+                                                editAccount.setError("User name is not exist!");
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }
                     }
                 }
-                else if (Status.equals("User Name"))
-                {
-                    if (Account.length() == 0) editAccount.setError("Please input Username");
-                    else {
-                        db.getRef(Account).get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()){
-                                            String userName = Account; // set username to username
-                                            String RightPassword = documentSnapshot.getString("Password");
-                                            String Type = documentSnapshot.getString("Type");
-                                            if (RightPassword.equals(Password)) {
-                                                if (Type.equals("Rider")) {
-                                                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                    intentHomePage.putExtra("User",Account);
-
-                                                    startActivity(intentHomePage);
-                                                }
-                                                else {
-                                                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                    intentHomePage.putExtra("User",Account);
-
-                                                    startActivity(intentHomePage);
-                                                }
-                                            }
-                                            else editTextInputPassword.setError("The Wrong password!");
-                                        }
-                                        else {
-                                            editAccount.setError("User name is not exist!");
-                                        }
-                                    }
-                                });
-                     }
-                }
-            }
 
 
-        });
+            });
+        }
+
     }
 
 

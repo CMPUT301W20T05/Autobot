@@ -46,7 +46,7 @@ public class User implements Driver, Rider, Serializable {
     }
 
     public void setEmergencyContact(String emergencyContact) {
-        EmergencyContact = emergencyContact;
+        this.EmergencyContact = emergencyContact;
     }
 
     // added by yiping

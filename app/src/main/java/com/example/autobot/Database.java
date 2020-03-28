@@ -392,6 +392,7 @@ public class Database{
 
         return r;
     }
+
     public void CancelRequest(String requestID){
         collectionReference_request.document(requestID)
                 .delete()
