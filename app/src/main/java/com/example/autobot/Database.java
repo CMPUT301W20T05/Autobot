@@ -261,8 +261,22 @@ public class Database{
      */
 
     public User rebuildUser(String username){
+        FirebaseFirestore.getInstance().clearPersistence();
+        //   mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+//        storage = FirebaseStorage.getInstance();
+//        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
+        // to disable clean-up.
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .build();
+
+        db2.setFirestoreSettings(settings);
+        collectionReference_user = db2.collection("users");
         user.setUsername(username);
-        Query query = collectionReference_user.whereEqualTo("Username", username);
+        Query query = db1.collection("users").whereEqualTo("Username", username);
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -355,8 +369,22 @@ public class Database{
      */
 
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
+        FirebaseFirestore.getInstance().clearPersistence();
+        //   mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db3 = FirebaseFirestore.getInstance();
+//        storage = FirebaseStorage.getInstance();
+//        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
+        // to disable clean-up.
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .build();
+
+        db3.setFirestoreSettings(settings);
+        collectionReference_request = db3.collection("Request");
         r.setRider(user);
-        collectionReference_request
+        db1.collection("Request")
                 .document(RequestID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
