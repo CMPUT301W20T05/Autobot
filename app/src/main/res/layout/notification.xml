@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/grey">
+    android:background="#F2F2F2">
 
     <TextView
         android:layout_marginTop="64dp"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:text="     Push Notification"
+        android:layout_height="wrap_content"
+        android:text="    Push Notification"
         android:gravity="center_vertical"
-        android:checked="true">
+        android:padding="5dp">
     </TextView>
     <Switch
         android:id="@+id/switch1"
@@ -21,12 +21,14 @@
         android:text="  Notification"
         android:textSize="20sp"
         android:padding="10dp"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:checked="true"/>
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:text="     In-App Notifications"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"
+        android:text="    In-App Notifications"
+        android:gravity="center_vertical"
+        android:padding="5dp">
     </TextView>
     <Switch
         android:id="@+id/switch2"
