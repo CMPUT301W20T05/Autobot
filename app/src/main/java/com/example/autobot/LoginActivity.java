@@ -3,6 +3,7 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
     public static Database db;
     public static User user;
+    public static Request loaded_request;
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,18 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intentSignUp);
             }
         });
-
+        load_request();
+        load_user();
+        if(user != null){
+            if(((String)user.getUserType()).equals("Driver")){
+            Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+            //intentHomePage.putExtra("User",username);
+            startActivity(intentHomePage);}
+            if (user.getUserType().equals("Rider")){
+                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+            //intentHomePage.putExtra("User",username);
+            startActivity(intentHomePage);}
+        }
         Button buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
                                                     String username = document.get("Username").toString();
                                                     //get user infor from database
                                                     user = db.rebuildUser(username);
+                                                    Log.d("usertype",user.getUserType());
+                                                    save_user_login();
                                                     if (TruePassword.equals(Password)){
                                                         // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
@@ -151,6 +168,37 @@ public class LoginActivity extends AppCompatActivity {
 
         });
     }
+
+    public void load_user(){
+        try{
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+        //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
+            user = Offline.ExtractUser(sharedPreferences);
+        Log.d("loaduser",user.toString());
+        }
+        catch (Exception e){
+            Log.d("loaduser","no saved user"+e.toString());
+        }
+    }
+
+    public void load_request(){
+        try{
+            //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+            loaded_request = Offline.ExtractRequest(sharedPreferences);
+            Log.d("loadrequest",loaded_request.get_active_requset_tostring());
+        }
+        catch (Exception e){
+            Log.d("loadrequest","no saved request"+e.toString());
+        }
+    }
+
+    public void save_user_login(){
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        Offline.UploadUser(sharedPreferences,user);
+        Log.d("userusertype",user.getUserType());
+    }
+
 
 
 }
