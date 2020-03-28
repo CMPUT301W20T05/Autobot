@@ -317,8 +317,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Log.d("time",Accepttime);
         Log.d("stime",send_time);
 
-        User user = db.rebuildUser(rider_id);
-        Request request = new Request(user,BeginningLocation,Destination);
+        User rider = db.rebuildUser(rider_id);
+        Request request = new Request(rider,BeginningLocation,Destination);
         request.setRequestID(request_id);
         request.setTips(tips);
         //set up date format

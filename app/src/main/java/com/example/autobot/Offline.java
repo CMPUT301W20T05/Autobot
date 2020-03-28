@@ -1,27 +1,41 @@
 package com.example.autobot;
 import android.content.SharedPreferences;
-import com.google.gson.Gson;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.Map;
 
 public class Offline {
     public static void UploadUser(SharedPreferences u_references,User user){
         Gson gson = new Gson();
         String json = gson.toJson(user);
-        u_references.edit().putString("User",json);
-        u_references.edit().commit();
+        Log.d("saveuser",user.getUserType()+"hi");
+        SharedPreferences.Editor editor = u_references.edit();
+        editor.putString("User",json);
+        editor.commit();
 
     }
     public static void UploadRequest(SharedPreferences r_references,Request request){
         Gson gson = new Gson();
         String json = gson.toJson(request);
-        r_references.edit().putString("Request",json);
-        r_references.edit().commit();
+        SharedPreferences.Editor editor = r_references.edit();
+        editor.putString("Request",json);
+        editor.commit();
     }
-    public static User ExtractUser(SharedPreferences u_references){
+    public static User ExtractUser(SharedPreferences u_references) {
         Gson gson = new Gson();
-        String user_string = u_references.getString("User","");
-        return gson.fromJson(user_string,User.class);
+        Log.d("loaduser", "hi");
+        String user_string = u_references.getString("User", null);
+        if (user_string == null) {
+            user_string = "null";
+        }
+        Log.d("loaduserdata", user_string);
+        Type type = new TypeToken<User>() {
+        }.getType();
+        return gson.fromJson(user_string, type);
     }
     public static Request ExtractRequest(SharedPreferences u_references){
         Gson gson = new Gson();
