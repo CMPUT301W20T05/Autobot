@@ -167,7 +167,7 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     String Status = "Status:  " + document.getData().get("RequestStatus").toString();
 
                                     String test = document.getData().get("Driver").toString();
-                                    Toast.makeText(context, test, Toast.LENGTH_SHORT).show(); // print driver's name
+//                                    Toast.makeText(context, test, Toast.LENGTH_SHORT).show(); // print driver's name
                                     if (test.equals("")) {
                                         temp = null;
                                     } else {
@@ -180,7 +180,6 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         if (temp != null) {
                                             bitmap = BitmapFactory.decodeStream((InputStream) new URL(temp).getContent());
                                             photo.setImageBitmap(bitmap);
-//                                            Toast.makeText(context, temp, Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (MalformedURLException e) {
                                         e.printStackTrace();

@@ -5,14 +5,17 @@
     <!-- location permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-<!--    <uses-permission android:name="android.permission.CAMERA" />-->
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera permission -->
     <uses-permission android:name="android.hardware.camera" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
     <application
@@ -23,7 +26,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".QRCode"/>
+        <activity android:name=".Wallet"></activity>
+        <activity android:name=".QRCode" />
         <activity android:name=".OrderInfo" />
         <activity
             android:name=".OrderComplete"
@@ -68,18 +72,23 @@
             android:parentActivityName=".HomePageActivity" />
         <activity
             android:name=".DriverhomeActivity"
-            android:parentActivityName=".LoginActivity"/>
+            android:parentActivityName=".LoginActivity" />
         <activity android:name=".BaseActivity" />
-        <activity android:name=".DriveIsGoing"
-            android:parentActivityName=".DriverhomeActivity"/>
-        <activity android:name=".RiderWaitDriverAcceptRequest"
-            android:parentActivityName=".UCurRequest"/>
-        <activity android:name=".DriverIsOnTheWayActivity"
-            android:parentActivityName=".RiderWaitDriverAcceptRequest"/>
-        <activity android:name=".Driver_ordercomplete"
-            android:parentActivityName=".DriveIsGoing"/>
-        <activity android:name=".Scanner"
-            android:parentActivityName=".Driver_ordercomplete"/>
+        <activity
+            android:name=".DriveIsGoing"
+            android:parentActivityName=".DriverhomeActivity" />
+        <activity
+            android:name=".RiderWaitDriverAcceptRequest"
+            android:parentActivityName=".UCurRequest" />
+        <activity
+            android:name=".DriverIsOnTheWayActivity"
+            android:parentActivityName=".RiderWaitDriverAcceptRequest" />
+        <activity
+            android:name=".Driver_ordercomplete"
+            android:parentActivityName=".DriveIsGoing" />
+        <activity
+            android:name=".Scanner"
+            android:parentActivityName=".Driver_ordercomplete" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -91,6 +100,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-
 
 </manifest>
