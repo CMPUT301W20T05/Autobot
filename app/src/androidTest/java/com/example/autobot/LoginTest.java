@@ -1,6 +1,5 @@
 package com.example.autobot;
 
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -23,8 +22,8 @@ public class  LoginTest {
     public void setup() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
-        solo.enterText((EditText) solo.getView(R.id.editAccount), "1");
-        solo.enterText((EditText) solo.getView(R.id.editTextInputPassword), "1");
+        solo.enterText((EditText) solo.getView(R.id.editAccount), "12345");
+        solo.enterText((EditText) solo.getView(R.id.editTextInputPassword), "1zZ.");
     }
 
     @Test
