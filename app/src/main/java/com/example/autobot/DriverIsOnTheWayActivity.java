@@ -49,7 +49,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
     private User rider;
-    private User driver = new User("");
+    public static User driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
 
         //get user from firebase
         //user = db.rebuildUser(username);
-        user = LoginActivity.user;
+        user = HomePageActivity.user;
         username = user.getUsername();
         //get request from firebase
         //request = db.rebuildRequest(reID, user);
