@@ -10,6 +10,13 @@
         <item>Phone Number</item>
         <item>User Name</item>
     </string-array>
+    <string-array name="Money_amount">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+
     <string-array name="Models">
         <item>Normal</item>
         <item>Pleasure</item>
