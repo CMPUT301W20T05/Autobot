@@ -200,10 +200,9 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                     }
                 }
-
-
-            });
-        }
+            }
+        });
+    }
 
 
     public void load_user(){
