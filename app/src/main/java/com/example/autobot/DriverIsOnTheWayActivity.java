@@ -85,7 +85,6 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     request.reset_Request_Status((String) document.getString("RequestStatus"));
-                    request.setDriver(driver);
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
                     try {
                         request.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
@@ -121,7 +120,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                                 driver.setGoodRate((String) document.get("GoodRate"));
                                 driver.setBadRate((String) document.get("BadRate"));
 
-                                //driver = request.getDriver();
+                                request.setDriver(driver);
                                 rider = request.getRider();
 
                                 setProfile(username,db); // set profile
