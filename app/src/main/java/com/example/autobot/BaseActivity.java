@@ -166,8 +166,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private String temp1, temp2;
 
 
-    private long firstPressedTime;
-    private Toast backToast;
+    public long firstPressedTime;
+    public Toast backToast;
 
     private static final int REQUEST_PHONE_CALL = 101;
 
@@ -422,7 +422,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("Payment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
@@ -500,18 +500,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (fragment == null){
-            //super.onBackPressed(); // back to the last activity
-            if(System.currentTimeMillis() - firstPressedTime<2000){
-                backToast.cancel();
-                Intent a = new Intent(Intent.ACTION_MAIN);
-                a.addCategory(Intent.CATEGORY_HOME);
-                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(a);
-            }else{
-                backToast = Toast.makeText(BaseActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
-                backToast.show();
-                firstPressedTime = System.currentTimeMillis();
-            }
+            super.onBackPressed(); // back to the last activity
         } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
@@ -555,7 +544,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = null;
                 setTitle("Home Page");
             }
-        } else if
+        }
 
     }
 
