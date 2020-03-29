@@ -93,6 +93,7 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
             @Override
             public void onClick(View v) {
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
+                finish();
                 startActivity(intentQRCode);
             }
         });

@@ -22,28 +22,27 @@ public class RebuildTool {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot document = task.getResult();
-                rider.setEmailAddress((String) document.get("EmailAddress"));
-                rider.setFirstName((String) document.get("FirstName"));
-                rider.setLastName((String) document.get("LastName"));
+                user.setEmailAddress((String) document.get("EmailAddress"));
+                user.setFirstName((String) document.get("FirstName"));
+                user.setLastName((String) document.get("LastName"));
                 double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
                 Log.d("Testing",(String) document.get("CurrentLocationLat"));
                 double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
                 LatLng CurrentLocation = new LatLng(Lat, Lnt);
-                rider.updateCurrentLocation(CurrentLocation);
-                rider.setEmergencyContact((String) document.get("EmergencyContact"));
-                rider.setHomeAddress((String) document.get("HomeAddress"));
-                rider.setPassword((String) document.get("Password"));
-                rider.setPhoneNumber((String) document.get("PhoneNumber"));
-                rider.setStars(Double.valueOf((String) document.get("StarsRate")));
-                rider.setUserType((String) document.get("Type"));
-                rider.setUsername((String) document.get("Username"));
+                user.updateCurrentLocation(CurrentLocation);
+                user.setEmergencyContact((String) document.get("EmergencyContact"));
+                user.setHomeAddress((String) document.get("HomeAddress"));
+                user.setPassword((String) document.get("Password"));
+                user.setPhoneNumber((String) document.get("PhoneNumber"));
+                user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                user.setUserType((String) document.get("Type"));
+                user.setUsername((String) document.get("Username"));
                 String uri = ((String) document.get("ImageUri"));
 
-                    user.setUri(uri);
-                    user.setGoodRate((String) document.get("GoodRate"));
-                    user.setBadRate((String) document.get("BadRate"));
 
-
+                user.setUri(uri);
+                user.setGoodRate((String) document.get("GoodRate"));
+                user.setBadRate((String) document.get("BadRate"));
             }
         });
     }

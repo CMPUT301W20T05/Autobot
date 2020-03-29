@@ -61,73 +61,57 @@ public class LoginActivity extends AppCompatActivity {
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
         CheckBox checkBoxRememberMe = findViewById(R.id.rememberMe);
 
-        Paper.init(this);
-        String UserPhoneKey = Paper.book().read(Prevalent.UserPhoneKey);
-        String UserPasswordKey = Paper.book().read(Prevalent.UserPasswordKey);
 
-        if (UserPhoneKey != null && UserPasswordKey != null)
-        {
-            if (!TextUtils.isEmpty(UserPhoneKey)  &&  !TextUtils.isEmpty(UserPasswordKey))
-            {
-                if (user.getUserType() == "Rider") {
-                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                    startActivity(intentHomePage);
-                }
-                else {
-                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                    startActivity(intentHomePage);
-                }
-            }
-        }
-        else {
-            TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
-            textViewNoAccount.setOnClickListener(new View.OnClickListener() {
+
+        TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
+        textViewNoAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
                     startActivity(intentSignUp);
-                }});
+                }
 
+        });
 
-            Button buttonLogin = findViewById(R.id.buttonLogin);
-            buttonLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        db = new Database();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    String Status = spinner.getSelectedItem().toString();
-                    String Account = editAccount.getText().toString();
-                    String Password = editTextInputPassword.getText().toString();
+        Button buttonLogin = findViewById(R.id.buttonLogin);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    db = new Database();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
-                    if (checkBoxRememberMe.isChecked()){
-//                        Paper.book().write(Prevalent.UserPhoneKey, Account);
-//                        Paper.book().write(Prevalent.UserPasswordKey, Password);
-                    }
+                String Status = spinner.getSelectedItem().toString();
+                String Account = editAccount.getText().toString();
+                String Password = editTextInputPassword.getText().toString();
 
-                    if (Status.equals("Phone Number")){
-                        if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
-                        else {
+                if (checkBoxRememberMe.isChecked()){
 
-                            Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
-                            query.get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                if (task.getResult().size() != 0) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        String TruePassword = document.get("Password").toString();
-                                                        String Type = document.get("Type").toString();
-                                                        String username = document.get("Username").toString();
-                                                        //get user infor from database
-                                                         user = new User(username);
-                                                         DocumentReference documentReference = db.collectionReference_user.document(username);
-                                                         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                         @Override
-                                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                }
+
+                if (Status.equals("Phone Number")){
+                    if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
+                    else {
+
+                        Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
+                        query.get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            if (task.getResult().size() != 0) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    String TruePassword = document.get("Password").toString();
+                                                    String Type = document.get("Type").toString();
+                                                    String username = document.get("Username").toString();
+                                                    //get user infor from database
+                                                    user = new User(username);
+                                                    DocumentReference documentReference = db.collectionReference_user.document(username);
+                                                    documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                             DocumentSnapshot document = task.getResult();
                                                             user.setEmailAddress((String) document.get("EmailAddress"));
                                                             user.setFirstName((String) document.get("FirstName"));
@@ -156,70 +140,67 @@ public class LoginActivity extends AppCompatActivity {
                                                             save_user_login();
                                                         }
                                                     });
-                                                        if (TruePassword.equals(Password)){
-                                                            // determine to go rider mode or driver mode
-                                                            if (Type.equals("Rider")) {
-                                                                Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                                startActivity(intentHomePage);
-                                                            }
-                                                            else {
-                                                                Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                                startActivity(intentHomePage);
-                                                            }
+
+                                                    if (TruePassword.equals(Password)){
+                                                        // determine to go rider mode or driver mode
+                                                        if (Type.equals("Rider")) {
+                                                            Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                            startActivity(intentHomePage);
 
                                                         }
                                                         else {
-                                                            editTextInputPassword.setError("The Wrong password!");
+                                                            Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                            startActivity(intentHomePage);
                                                         }
                                                     }
-
-                                                } else editAccount.setError("PhoneNumber is not exist");
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                    else if (Status.equals("User Name"))
-                    {
-                        if (Account.length() == 0) editAccount.setError("Please input Username");
-                        else {
-                            db.getRef(Account).get()
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()){
-                                                String userName = Account; // set username to username
-                                                String RightPassword = documentSnapshot.getString("Password");
-                                                String Type = documentSnapshot.getString("Type");
-                                                if (RightPassword.equals(Password)) {
-                                                    if (Type.equals("Rider")) {
-                                                        Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                        intentHomePage.putExtra("User",Account);
-
-                                                        startActivity(intentHomePage);
-                                                    }
                                                     else {
-                                                        Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                        intentHomePage.putExtra("User",Account);
-
-                                                        startActivity(intentHomePage);
+                                                        editTextInputPassword.setError("The Wrong password!");
                                                     }
                                                 }
-                                                else editTextInputPassword.setError("The Wrong password!");
-                                            }
-                                            else {
-                                                editAccount.setError("User name is not exist!");
-                                            }
+
+                                            } else editAccount.setError("PhoneNumber is not exist");
                                         }
-                                    });
-                        }
+                                    }
+                                });
                     }
                 }
+                else if (Status.equals("User Name"))
+                {
+                    if (Account.length() == 0) editAccount.setError("Please input Username");
+                    else {
+                        db.getRef(Account).get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()){
+                                            String userName = Account; // set username to username
+                                            String RightPassword = documentSnapshot.getString("Password");
+                                            String Type = documentSnapshot.getString("Type");
+                                            if (RightPassword.equals(Password)) {
+                                                if (Type.equals("Rider")) {
+                                                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                    intentHomePage.putExtra("User",Account);
 
+                                                    startActivity(intentHomePage);
+                                                }
+                                                else {
+                                                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                    intentHomePage.putExtra("User",Account);
 
-            });
-        }
-
+                                                    startActivity(intentHomePage);
+                                                }
+                                            }
+                                            else editTextInputPassword.setError("The Wrong password!");
+                                        }
+                                        else {
+                                            editAccount.setError("User name is not exist!");
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
+        });
     }
 
     public void load_user(){
