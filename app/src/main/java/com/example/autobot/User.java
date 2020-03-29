@@ -1,10 +1,18 @@
 package com.example.autobot;
 
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
+import static com.android.volley.VolleyLog.TAG;
 
 
 public class User implements Driver, Rider, Serializable {
@@ -52,6 +60,44 @@ public class User implements Driver, Rider, Serializable {
     }
 
     // added by yiping
+    public void resetGoodrate(String goodrate,Database db) {
+        this.GoodRate = goodrate;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("RequestStatus", goodrate);
+        db.collectionReference_user.document(Username)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+    public void resetBadrate(String badrate,Database db) {
+        this.BadRate = badrate;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("RequestStatus", badrate);
+        db.collectionReference_user.document(Username)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
 
     public String getUri(){return this.uri;}
     public void setUri(String urii){this.uri = urii;}

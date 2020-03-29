@@ -237,6 +237,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         //if order cancel return to the home page
                         Intent intent = new Intent(DriveIsGoing.this, DriverhomeActivity.class);
                         int pause_time = 3000;
+
                         FragmentManager fm = getSupportFragmentManager();
                         Fragment notification = new CancelNotifiFragment();
                         fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();

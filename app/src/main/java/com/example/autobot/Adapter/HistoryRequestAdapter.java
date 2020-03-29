@@ -130,6 +130,7 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         String rid = historyRequest.getRequestId();
 
         View view = inflater.inflate(R.layout.history_detail, null);
+
         TextView driverName = view.findViewById(R.id.detail_name);
         TextView riderName = view.findViewById(R.id.detail_name2);
         TextView sendTime = view.findViewById(R.id.detail_send_time);

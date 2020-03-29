@@ -49,7 +49,7 @@ public class Database{
     public CollectionReference collectionReference_payment;
     public StorageReference storageReference;
     public FirebaseStorage storage;
-    User user;
+    User user = new User("");
     Request r = new Request();
     Uri downloadUri;
     String a = "0";
@@ -253,7 +253,7 @@ public class Database{
     public User rebuildUser(String username){
         FirebaseFirestore db2 = FirebaseFirestore.getInstance();
         collectionReference_user = db2.collection("users");
-        user = new User(username);
+        user.setUsername(username);
         Query query = db2.collection("users").whereEqualTo("Username", username);
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

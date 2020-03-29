@@ -3,6 +3,7 @@ package com.example.autobot;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -37,8 +38,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import static com.android.volley.VolleyLog.TAG;
+
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
@@ -62,8 +63,13 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         Intent intent = getIntent();
 
         //when driver arrived, show notification
-        notificationManager = NotificationManagerCompat.from(this);
-        sendOnChannel("Driver has accepted your request. Please wait for picking up.");
+        boolean value1 = true; // default value if no value was found
+        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
+        value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key
+        if (value1){
+            notificationManager = NotificationManagerCompat.from(this);
+            sendOnChannel("Driver has accepted your request. Please wait for picking up.");
+        }
 
         //get user from firebase
         //user = db.rebuildUser(username);

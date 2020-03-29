@@ -1,6 +1,7 @@
 package com.example.autobot;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
@@ -50,8 +51,13 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         Intent intent = getIntent();
 
         //when driver arrived, show notification
-        notificationManager = NotificationManagerCompat.from(this);
-        sendOnChannel("Destination arrived. Please check your receipt.");
+        boolean value1 = true; // default value if no value was found
+        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
+        value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key
+        if (value1){
+            notificationManager = NotificationManagerCompat.from(this);
+            sendOnChannel("Destination arrived. Please check your receipt.");
+        }
 
         user = HomePageActivity.user;
         username = user.getUsername();
