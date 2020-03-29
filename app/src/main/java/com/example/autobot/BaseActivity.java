@@ -987,9 +987,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onOkPressedC(String money) {
-        String Oldmoney = user.getBalance();
-        Oldmoney = Oldmoney + money;
-        user.setBalance(Oldmoney);
-        userbase.add_new_user(user);
+        Database userBaseC = LoginActivity.db;
+        User userC = LoginActivity.user;
+        String Oldmoney = userC.getBalance();
+        Float O = Float.parseFloat(Oldmoney);
+        Float N = Float.parseFloat(money);
+        Float Final = O + N;
+        String newbalance = String.valueOf(Final);
+        userC.setBalance(newbalance);
+        userBaseC.add_new_user(userC);
+        TextView balance = findViewById(R.id.balance);
+        balance.setText(newbalance);
+        Toast.makeText(BaseActivity.this, "Add Credit Success!" , Toast.LENGTH_SHORT).show();
     }
 }
