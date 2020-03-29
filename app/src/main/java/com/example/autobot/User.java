@@ -59,11 +59,10 @@ public class User implements Driver, Rider, Serializable {
         this.EmergencyContact = emergencyContact;
     }
 
-    // added by yiping
     public void resetGoodrate(String goodrate,Database db) {
         this.GoodRate = goodrate;
         HashMap<String, Object> update = new HashMap<>();
-        update.put("RequestStatus", goodrate);
+        update.put("GoodRate", goodrate);
         db.collectionReference_user.document(Username)
                 .update(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -82,7 +81,7 @@ public class User implements Driver, Rider, Serializable {
     public void resetBadrate(String badrate,Database db) {
         this.BadRate = badrate;
         HashMap<String, Object> update = new HashMap<>();
-        update.put("RequestStatus", badrate);
+        update.put("BadRate", badrate);
         db.collectionReference_user.document(Username)
                 .update(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

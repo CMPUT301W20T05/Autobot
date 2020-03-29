@@ -87,7 +87,6 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
             public void onClick(View view) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.profile_viewer, null);
 
-
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);

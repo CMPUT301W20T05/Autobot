@@ -71,10 +71,10 @@ public class ActiverequestsFragment extends Fragment{
         requests_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),requests_list.get(position).get_active_requset_tostring(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), requests_list.get(position).get_active_requset_tostring(), Toast.LENGTH_SHORT).show();
                 //show the detail of the clicked request
-                listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position)),position);
-                ;}
+                listener.show_detail(new ShowSelectedActiveRequestFragment(requests_list.get(position)), position);
+            }
         });
         return rootView;
     }
