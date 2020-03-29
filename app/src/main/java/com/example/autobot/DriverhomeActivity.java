@@ -278,6 +278,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //inflate the fragment
         fragment1 = showSelectedActiveRequestFragment;
         active_request_fm.beginTransaction().replace(R.id.myMap,fragment1).addToBackStack(null).commit();
+
     }
 
     //for edit profile info

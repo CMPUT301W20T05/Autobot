@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@android:color/background_light">
+    android:background="@android:color/background_light"
+    android:padding="16dp">
     <LinearLayout
         android:layout_marginTop="64dp"
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
         android:layout_height="50dp"
         android:clickable="true"
         android:focusable="true"
+        android:layout_marginTop="16dp"
         android:id="@+id/wallet">
         <ImageView
             android:src="@drawable/wallet2"
@@ -29,11 +31,22 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:text="Wallet"
+            android:textSize="24sp"
+            android:textColor="@color/blue"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
             android:textStyle="bold">
         </TextView>
+        <TextView
+            android:id="@+id/addCredit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="64dp"
+            android:text="Add credit"
+            android:textColor="@color/blue2"
+            android:textStyle="bold" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User name"
+            android:textColor="@color/blue"
             android:layout_weight="1"
             android:textSize="17dp"></TextView>
         <TextView
@@ -51,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
+            android:textStyle="bold"
             android:layout_weight="1"
             android:textSize="17dp"></TextView>
     </LinearLayout>
@@ -63,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Balance"
+            android:textColor="@color/blue"
             android:layout_weight="1"
             android:textSize="17dp"></TextView>
         <TextView
@@ -70,6 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="100"
+            android:textStyle="bold"
             android:layout_weight="1"
             android:textSize="17dp"></TextView>
     </LinearLayout>

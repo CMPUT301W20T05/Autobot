@@ -103,6 +103,7 @@ public class QRCode extends BaseActivity {
             public void onClick(View v) {
                 Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
+                finish();
                 startActivity(intentRateDriver);
             }
         });

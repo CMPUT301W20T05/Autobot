@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -83,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
                     startActivity(intentSignUp);
-                }
-            });
+                }});
+
 
             Button buttonLogin = findViewById(R.id.buttonLogin);
             buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +121,39 @@ public class LoginActivity extends AppCompatActivity {
                                                         String Type = document.get("Type").toString();
                                                         String username = document.get("Username").toString();
                                                         //get user infor from database
-                                                        user = db.rebuildUser(username);
+                                                         user = new User(username);
+                                                         DocumentReference documentReference = db.collectionReference_user.document(username);
+                                                         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                         @Override
+                                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            user.setEmailAddress((String) document.get("EmailAddress"));
+                                                            user.setFirstName((String) document.get("FirstName"));
+                                                            user.setLastName((String) document.get("LastName"));
+                                                            double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                                            Log.d("Testing",(String) document.get("CurrentLocationLat"));
+                                                            double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                                            LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                                            user.updateCurrentLocation(CurrentLocation);
+                                                            user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                                            user.setHomeAddress((String) document.get("HomeAddress"));
+                                                            user.setPassword((String) document.get("Password"));
+                                                            user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                                            user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                                            user.setUserType((String) document.get("Type"));
+                                                            user.setUsername((String) document.get("Username"));
+                                                            String uri = ((String) document.get("ImageUri"));
+//                                    if (uri != null) {
+//                                        user.setUri(Uri.parse(uri));
+//                                    }
+                                                            user.setUri(uri);
+                                                            user.setGoodRate((String) document.get("GoodRate"));
+                                                            user.setBadRate((String) document.get("BadRate"));
+                                                            Log.d("Testing",user.getUserType()+"hihih");
+                                                            //save user in shareprefence, don't need to login when you reopen the app
+                                                            save_user_login();
+                                                        }
+                                                    });
                                                         if (TruePassword.equals(Password)){
                                                             // determine to go rider mode or driver mode
                                                             if (Type.equals("Rider")) {
@@ -131,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                 Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                                 startActivity(intentHomePage);
                                                             }
+
                                                         }
                                                         else {
                                                             editTextInputPassword.setError("The Wrong password!");
@@ -211,9 +245,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void save_user_login(){
-        sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         Offline.UploadUser(sharedPreferences,user);
-        Log.d("userusertype",user.getUserType());
     }
 
 

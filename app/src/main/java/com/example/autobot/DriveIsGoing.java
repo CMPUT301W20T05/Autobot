@@ -5,9 +5,11 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,22 +74,28 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         username = request.getDriver().getUsername();
         detect_cancel_order();//detect whether user cancel order
         setProfile(username,db); // set profile
-        set_profile_picture(rootView);//set profile picture
+        //set_profile_picture(rootView);//set profile picture
         //Log.d("debug",username);
 
         User rider = request.getRider();
+        ImageView avatar = findViewById(R.id.imageViewAvatar);
+        setAvatar(rider, avatar);
         TextView reminder = findViewById(R.id.driver_condition);
         reminder.setText("drive safe");
         TextView rider_name = findViewById(R.id.Driver_name);
-        rider_name.setText("passenger: "+rider.getUsername());
-        Button buttonSeeProfile = findViewById(R.id.see_profile);
+        rider_name.setText(rider.getUsername());
         ImageButton imageButtonPhone = findViewById(R.id.phoneButton);
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
         buttonCancelOrder = findViewById(R.id.cancel_order);
 
+        ImageView thumbup = findViewById(R.id.thumbup);
+        thumbup.setVisibility(View.GONE);
+        TextView driverRate = findViewById(R.id.driverRate);
+        driverRate.setVisibility(View.GONE);
+
         //for driver to call rider
-        //String dphoneNumber = rider.getPhoneNumber();
-        String rphoneNumber = "5875576400";
+        String rphoneNumber = rider.getPhoneNumber();
+        String remail = rider.getEmailAddress();
 
         //make a phone call to driver
         imageButtonPhone.setOnClickListener(new View.OnClickListener() {
@@ -104,14 +112,18 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             }
         });
 
-        // added by yiping, implementation of view profile of the rider
+        imageButtonEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail(remail);
+            }
+        });
 
-        TextView see_profile_button = rootView.findViewById(R.id.Driver_name); // 需改button id
-        see_profile_button.setOnClickListener(new View.OnClickListener() {
+        // added by yiping, implementation of view profile of the rider
+        rider_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view = LayoutInflater.from(DriveIsGoing.this).inflate(R.layout.profile_viewer, null);
-
 
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
@@ -243,6 +255,14 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
                         delay(pause_time,intent);}
                     else if ((documentSnapshot.get("RequestStatus").toString()).equals("Rider Accepted")){
+                        //notification
+                        boolean value1 = true; // default value if no value was found
+                        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
+                        value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key
+                        if (value1){
+                            notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                            sendOnChannel("Rider has accepted. Please pick up your rider.");
+                        }
                         int pause_time = 3000;
                         FragmentManager fm = getSupportFragmentManager();
                         Fragment notification = new SuccessfulNotification();
