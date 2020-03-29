@@ -17,7 +17,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class RebuildTool {
     static User user_new;
     //documentReference is db.collectionReference_user.document(rider_id)
-    public static void rebuild_user(DocumentReference documentReference, User rider){
+    public static void rebuild_user(DocumentReference documentReference, User user){
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -39,9 +39,9 @@ public class RebuildTool {
                 user.setUsername((String) document.get("Username"));
                 String uri = ((String) document.get("ImageUri"));
 
-                    rider.setUri(uri);
-                    rider.setGoodRate((String) document.get("GoodRate"));
-                    rider.setBadRate((String) document.get("BadRate"));
+                    user.setUri(uri);
+                    user.setGoodRate((String) document.get("GoodRate"));
+                    user.setBadRate((String) document.get("BadRate"));
                 }
 
             });

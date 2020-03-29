@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.autobot.Common.Common;
+import com.example.autobot.Database;
 import com.example.autobot.HistoryRequest;
 import com.example.autobot.LoginActivity;
 import com.example.autobot.R;
@@ -34,11 +35,11 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private LayoutInflater layoutInflater;
     private ArrayList<HistoryRequest> requestList;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // format for the date
-    public Database userBase = LoginActivity.db;
     public User user = LoginActivity.user;
     private Bitmap bitmap = null;
     private String temp;
     private String userName;
+    public Database userBase = LoginActivity.db;
     private Context context;
 
     public HistoryRequestAdapter(Context context, ArrayList<HistoryRequest> requestList) {

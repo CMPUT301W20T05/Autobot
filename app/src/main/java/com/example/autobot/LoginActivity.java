@@ -61,24 +61,24 @@ public class LoginActivity extends AppCompatActivity {
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
         CheckBox checkBoxRememberMe = findViewById(R.id.rememberMe);
         load_user();
-        if(user != null){
-            if(user.getUserType().equals("Driver")){
+        if (user != null) {
+            if (user.getUserType().equals("Driver")) {
                 Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                 startActivity(intentHomePage);
-            }else{
+            } else {
                 Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                 startActivity(intentHomePage);
             }
         }
-   
+
 
         TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
         textViewNoAccount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
-                    startActivity(intentSignUp);
-                }
+            @Override
+            public void onClick(View v) {
+                Intent intentSignUp = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intentSignUp);
+            }
 
         });
 
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();
 
-                if (Status.equals("Phone Number")){
+                if (Status.equals("Phone Number")) {
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
 
@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setFirstName((String) document.get("FirstName"));
                                                             user.setLastName((String) document.get("LastName"));
                                                             double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
-                                                            Log.d("Testing",(String) document.get("CurrentLocationLat"));
+                                                            Log.d("Testing", (String) document.get("CurrentLocationLat"));
                                                             double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
                                                             LatLng CurrentLocation = new LatLng(Lat, Lnt);
                                                             user.updateCurrentLocation(CurrentLocation);
@@ -137,25 +137,23 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setUri(uri);
                                                             user.setGoodRate((String) document.get("GoodRate"));
                                                             user.setBadRate((String) document.get("BadRate"));
-                                                            Log.d("Testing",user.getUserType()+"hihih");
+                                                            Log.d("Testing", user.getUserType() + "hihih");
                                                             //save user in shareprefence, don't need to login when you reopen the app
                                                             save_user_login();
                                                         }
                                                     });
 
-                                                    if (TruePassword.equals(Password)){
+                                                    if (TruePassword.equals(Password)) {
                                                         // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             startActivity(intentHomePage);
 
-                                                        }
-                                                        else {
+                                                        } else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                             startActivity(intentHomePage);
                                                         }
-                                                    }
-                                                    else {
+                                                    } else {
                                                         editTextInputPassword.setError("The Wrong password!");
                                                     }
                                                 }
@@ -165,36 +163,32 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                     }
-                }
-                else if (Status.equals("User Name"))
-                {
+                } else if (Status.equals("User Name")) {
                     if (Account.length() == 0) editAccount.setError("Please input Username");
                     else {
                         db.getRef(Account).get()
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()){
+                                        if (documentSnapshot.exists()) {
                                             String userName = Account; // set username to username
                                             String RightPassword = documentSnapshot.getString("Password");
                                             String Type = documentSnapshot.getString("Type");
                                             if (RightPassword.equals(Password)) {
                                                 if (Type.equals("Rider")) {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                    intentHomePage.putExtra("User",Account);
+                                                    intentHomePage.putExtra("User", Account);
                                                     //finish();
                                                     startActivity(intentHomePage);
-                                                }
-                                                else {
+                                                } else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                    intentHomePage.putExtra("User",Account);
+                                                    intentHomePage.putExtra("User", Account);
                                                     //finish();
                                                     startActivity(intentHomePage);
                                                 }
-                                            }
-                                            else editTextInputPassword.setError("The Wrong password!");
-                                        }
-                                        else {
+                                            } else
+                                                editTextInputPassword.setError("The Wrong password!");
+                                        } else {
                                             editAccount.setError("User name is not exist!");
                                         }
                                     }
@@ -202,9 +196,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
+            }
+        });
+    }
 
-            });
-        }
 
 
     public void load_user(){
