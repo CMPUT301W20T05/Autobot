@@ -61,6 +61,7 @@ public class QRCode extends BaseActivity {
         //request = db.rebuildRequest(reID, user);
         request = HomePageActivity.request;
         reID = request.getRequestID();
+        User driver = DriverIsOnTheWayActivity.driver;
 
         setProfile(username,db); // set profile
 

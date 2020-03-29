@@ -208,8 +208,10 @@ public class LoginActivity extends AppCompatActivity {
                                                     user.setGoodRate((String) document.get("GoodRate"));
                                                     user.setBadRate((String) document.get("BadRate"));
                                                     Log.d("Testing", user.getUserType() + "hihih");
-                                                    //save user in shareprefence, don't need to login when you reopen the app
-                                                    save_user_login();
+                                                    if (checkBoxRememberMe.isChecked()) {
+                                                        //save user in shareprefence, don't need to login when you reopen the app
+                                                        save_user_login();
+                                                    }
                                                     if (RightPassword.equals(Password)) {
                                                         if (Type.equals("Rider")) {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
