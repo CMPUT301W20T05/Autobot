@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -198,7 +199,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // get navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View header = navigationView.getHeaderView(0); // get header of the navigation view
         profilePhoto = header.findViewById(R.id.profile_photo);
 
@@ -443,6 +443,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+                                Offline.clear(sharedPreferences,sharedPreferences);
                                 Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(logout);
                                 //need to actual logout
@@ -532,7 +534,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             if (fragment != null){
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
-                    fragmentManager.popBackStack();
+                    fragmentManager.popBackStackImmediate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
@@ -994,4 +996,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(distance);
     }
+
+
 }

@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
                 String Status = spinner.getSelectedItem().toString();
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();
@@ -135,11 +136,13 @@ public class LoginActivity extends AppCompatActivity {
                                                             save_user_login();
                                                         }
                                                     });
+
                                                     if (TruePassword.equals(Password)){
                                                         // determine to go rider mode or driver mode
                                                         if (Type.equals("Rider")) {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                             startActivity(intentHomePage);
+
                                                         }
                                                         else {
                                                             Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
@@ -221,10 +224,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void save_user_login(){
-        sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         Offline.UploadUser(sharedPreferences,user);
-        Log.d("userusertype",user.getUserType());
     }
+
+
 
 
 

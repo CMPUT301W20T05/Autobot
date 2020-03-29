@@ -12,8 +12,8 @@ public class HistoryRequestTest {
     private HistoryRequest mockHistoryRequest() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse("2020-03-22");
-        Double cost = 50.0;
-        return new HistoryRequest("ready", date, "David", "A123", cost);
+        Float cost = (float)50.0;
+        return new HistoryRequest("ready", date, "David", "A123", cost, 1);
     }
 
     @Test
@@ -21,10 +21,10 @@ public class HistoryRequestTest {
         HistoryRequest historyRequest = mockHistoryRequest();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse("2020-03-22");
-        Double cost = 50.0;
+        Float cost = (float)50.0;
         assertEquals("ready",(String)historyRequest.getStatus());
         assertEquals(date, historyRequest.getDate());
-        assertEquals(cost, historyRequest.getCost());
+        assertEquals(java.util.Optional.of(cost), java.util.Optional.of(historyRequest.getCost()));
         assertEquals("David",historyRequest.getUser());
         assertEquals("A123", historyRequest.getRequestId());
     }
@@ -40,9 +40,9 @@ public class HistoryRequestTest {
         historyRequest.setStatus("processing");
         assertEquals("processing", historyRequest.getStatus());
 
-        Double cost = 60.0;
+        Float cost = (float)60.0;
         historyRequest.setCost(cost);
-        assertEquals(cost, historyRequest.getCost());
+        assertEquals(java.util.Optional.of(cost), java.util.Optional.of(historyRequest.getCost()));
 
         historyRequest.setUser("Brian");
         assertEquals("Brian",historyRequest.getUser());
