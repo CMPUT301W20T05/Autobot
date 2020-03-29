@@ -33,7 +33,6 @@ public class Wallet_fragment extends Fragment {
     Database userBase = LoginActivity.db;
     User user = LoginActivity.user;
 
-
     ListView informationList;
     WalletAdapter informationAdapter;
     ArrayList<WalletInformation> informationDataList;
