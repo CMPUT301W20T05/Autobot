@@ -23,6 +23,7 @@ public class RebuildTool {
                 rider.setFirstName((String) document.get("FirstName"));
                 rider.setLastName((String) document.get("LastName"));
                 double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                Log.d("Testing",(String) document.get("CurrentLocationLat"));
                 double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
                 LatLng CurrentLocation = new LatLng(Lat, Lnt);
                 rider.updateCurrentLocation(CurrentLocation);
