@@ -247,16 +247,25 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                                 request.resetTips(tips, db);
                                 totalFare += tips;
                             }
-                            request.resetCost(totalFare, db);
-                            //finish current activity
-                            uCurRequestDialog.dismiss();
-                            //wait driver to accept
-                            Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-                            db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
+                            //check if affordable
+                            if (Double.parseDouble(user.getBalance()) >= totalFare){
+                                request.resetCost(totalFare, db);
 
-                            //set price have to go here to display
-                            approPrice.setText(df.format(request.getCost()));
-                            dialog.show();
+                                //finish current activity
+                                uCurRequestDialog.dismiss();
+                                //wait driver to accept
+                                Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
+                                db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
+
+                                //set price have to go here to display
+                                approPrice.setText(df.format(request.getCost()));
+                                dialog.show();
+                            }
+                            else{
+                                Toast.makeText(HomePageActivity.this,"Sorry the balance in wallet bot enough.Please add credit!",Toast.LENGTH_SHORT).show();
+                                db.CancelRequest(reID);
+                                recreateActivity();
+                            }
                         }
                     });
                     uCurRequestDialog.show();
