@@ -12,7 +12,7 @@ public class CardTypeItemTest {
     @Test
     public void testGetter(){
         CardTypeItem cardTypeItem = mockCardType();
-        assertEquals("visa", cardTypeItem.getCardType());
+        assertEquals("Visa", cardTypeItem.getCardType());
         assertEquals(10,cardTypeItem.getCardTypelogo());
     }
 }
