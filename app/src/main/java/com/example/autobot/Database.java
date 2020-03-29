@@ -49,13 +49,13 @@ public class Database{
     public CollectionReference collectionReference_payment;
     public StorageReference storageReference;
     public FirebaseStorage storage;
-    User user = new User("");
-    Request r = new Request();
-    Uri downloadUri;
+    private User user = new User("");
+    private Request r = new Request();
+    private Uri downloadUri;
     String a = "0";
 
     public Database() throws ParseException {
-     //   mAuth = FirebaseAuth.getInstance();
+        //   mAuth = FirebaseAuth.getInstance();
         db1 = FirebaseFirestore.getInstance();
         collectionReference_user = db1.collection("users");
         collectionReference_request = db1.collection("Request");
@@ -288,7 +288,7 @@ public class Database{
                                     user.setBalance((String) document.get("Balance"));
                                 }
                             } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     }
@@ -302,7 +302,7 @@ public class Database{
      * All information will auto get such as location, time
      * @param request
      */
-    
+
     public void add_new_request(Request request){
         HashMap<String,String> request_data = new HashMap<>();
         request_data.put("Rider",request.getRider().getUsername());
@@ -470,10 +470,6 @@ public class Database{
                 });
     }
 
-   //public String StatusChangeNotify
+    //public String StatusChangeNotify
 
 }
-
-
-
-
