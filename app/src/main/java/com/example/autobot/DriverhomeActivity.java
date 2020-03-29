@@ -10,13 +10,17 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,6 +63,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     public static Database db;
     private static final String TAG = "DriverhomeActivity";
     Marker beginning_location;
+    Fragment fragment1;
 
 
 
@@ -119,10 +124,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                             Request active_request = new Request(user3);
                             requests_list.add(active_request);} catch (ParseException e){}*/
                         adapter = new ActiveRequestsAdapter(DriverhomeActivity.this,0,requests_list);
-                        Fragment fragment = new ActiverequestsFragment(requests_list,adapter);
+                        fragment1 = new ActiverequestsFragment(requests_list,adapter);
                         load_requests(searchedLatLng);
                         active_request_fm = getSupportFragmentManager();
-                        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                        active_request_fm.beginTransaction().replace(R.id.myMap,fragment1).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
                     }
                 }
@@ -266,7 +271,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requests_list.get(pos).getBeginningLocation(), DEFAULT_ZOOM));
 
         //inflate the fragment
-        active_request_fm.beginTransaction().replace(R.id.myMap, showSelectedActiveRequestFragment).addToBackStack(null).commit();
+        fragment1 = showSelectedActiveRequestFragment;
+        active_request_fm.beginTransaction().replace(R.id.myMap,fragment1).addToBackStack(null).commit();
+
     }
 
     //for edit profile info
@@ -343,5 +350,89 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             beginning_location.remove();
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+    }
+    @Override
+    public void onBackPressed(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if (fragment == null){
+            int i = fragmentManager.getFragments().size()-1;
+            if (fragmentManager.getFragments().get(i) == fragment1){
+                ft.remove(fragment1);
+                super.onBackPressed(); // back to the last activity
+            } else {
+                if(System.currentTimeMillis() - firstPressedTime<2000){
+                    backToast.cancel();
+                    Intent a = new Intent(Intent.ACTION_MAIN);
+                    a.addCategory(Intent.CATEGORY_HOME);
+                    a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(a);
+                }else{
+                    backToast = Toast.makeText(DriverhomeActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
+                    backToast.show();
+                    firstPressedTime = System.currentTimeMillis();
+                }
+            }
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
+            if (fragment != null){
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStackImmediate();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                }
+            }
+
+        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        }
+
     }
 }

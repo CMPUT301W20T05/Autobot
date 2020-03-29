@@ -121,7 +121,7 @@ public class PaymentInformationFragment extends Fragment {
             public void onClick(View view) {
                 Wallet_fragment wallet_fragment = new Wallet_fragment();
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container,wallet_fragment,"WALLET_FRAGMENT");
+                fragmentTransaction.replace(R.id.fragment_container,wallet_fragment,"WALLET_FRAGMENT").addToBackStack(null);
                 fragmentTransaction.commit();
                 getActivity().setTitle("Wallet");
             }
