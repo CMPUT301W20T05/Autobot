@@ -84,8 +84,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
         android:layout_marginTop="24dp"
         android:text="Forget password?"
         app:layout_constraintStart_toEndOf="@+id/rememberMe"
