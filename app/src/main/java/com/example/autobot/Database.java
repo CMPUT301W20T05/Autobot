@@ -49,7 +49,7 @@ public class Database{
     public CollectionReference collectionReference_payment;
     public StorageReference storageReference;
     public FirebaseStorage storage;
-    User user = new User("");
+    User user;
     Request r = new Request();
     Uri downloadUri;
     String a = "0";
@@ -66,6 +66,7 @@ public class Database{
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
                 .build();
+        user = new User("");
 
         db1.setFirestoreSettings(settings);
         collectionReference_user = db1.collection("users");
@@ -268,15 +269,15 @@ public class Database{
 //        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
         // to disable clean-up.
 
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-                .build();
+//        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+//                .setPersistenceEnabled(true)
+//                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+//                .build();
 
-        db2.setFirestoreSettings(settings);
-        collectionReference_user = db2.collection("users");
+        //db2.setFirestoreSettings(settings);
+        CollectionReference collectionReference = db2.collection("users");
         user.setUsername(username);
-        Query query = db1.collection("users").whereEqualTo("Username", username);
+        Query query = collectionReference.whereEqualTo("Username", username);
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -384,7 +385,7 @@ public class Database{
         db3.setFirestoreSettings(settings);
         collectionReference_request = db3.collection("Request");
         r.setRider(user);
-        db1.collection("Request")
+        db3.collection("Request")
                 .document(RequestID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
