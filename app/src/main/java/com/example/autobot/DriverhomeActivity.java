@@ -259,9 +259,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
               remove_beginning_location();
               //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
+
     @Override
-    //show the detail of the selected active request
-    public void show_detail(ShowSelectedActiveRequestFragment fragment, int pos) {
+    public void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment, int pos) {
         //mark up the beginning location of the sletected reuqest
         MarkerOptions marker = new MarkerOptions();
         marker.position(requests_list.get(pos).getBeginningLocation());
