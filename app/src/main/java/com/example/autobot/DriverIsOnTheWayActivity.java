@@ -38,8 +38,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import static com.android.volley.VolleyLog.TAG;
+
 
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
