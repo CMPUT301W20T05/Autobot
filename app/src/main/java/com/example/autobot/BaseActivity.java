@@ -532,7 +532,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             if (fragment != null){
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
-                    fragmentManager.popBackStack();
+                    fragmentManager.popBackStackImmediate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
