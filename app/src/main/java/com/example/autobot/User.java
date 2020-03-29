@@ -24,6 +24,7 @@ public class User implements Driver, Rider, Serializable {
     private String uri;
     private String GoodRate;
     private String BadRate;
+    private String Balance;
 
     public User(String username){
         this.Username = username;
@@ -39,6 +40,7 @@ public class User implements Driver, Rider, Serializable {
         this.uri = String.valueOf(R.id.icon);
         this.GoodRate = "0";
         this.BadRate = "0";
+        this.Balance = "100";
     }
 
     public String getEmergencyContact() {
@@ -55,6 +57,14 @@ public class User implements Driver, Rider, Serializable {
     public void setUri(String urii){this.uri = urii;}
 
     //-----------------------------------
+
+    public String getBalance() {
+        return Balance;
+    }
+
+    public void setBalance(String balance) {
+        Balance = balance;
+    }
 
     public String getGoodRate() {
         return this.GoodRate;
