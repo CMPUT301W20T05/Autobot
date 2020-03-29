@@ -86,7 +86,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                     request.reset_Request_Status((String) document.getString("RequestStatus"));
                     String drivername = (String) document.getString("Driver");
                     driver.setUsername(drivername);
-                    RebuildTool.rebuild_user(db.db1.collection("users").document(), driver);
+                    RebuildTool.rebuild_user(db.db1.collection("users").document(drivername), driver);
                     request.setDriver(driver);
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
                     try {
