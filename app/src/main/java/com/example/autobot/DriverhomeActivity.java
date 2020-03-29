@@ -65,9 +65,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        db = LoginActivity.db;
-
-        //load_user();
         setTitle("driver mode");
         user = LoginActivity.user;
         db = LoginActivity.db; // get database
@@ -132,8 +129,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
                 @Override
                 public void onError(@NonNull Status status) {
-                               // TODO: Handle the error.
-                        Log.i(TAG, "An error occurred: " + status);
+                    // TODO: Handle the error.
+                    Log.i(TAG, "An error occurred: " + status);
                 }
             });
         }
@@ -157,59 +154,57 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
            Request active_request = new Request(user3);
            active_request.setBeginningLocation(searchedLatLng);
            requests_list.add(active_request);} catch (ParseException e){}*/
-           db.collectionReference_request.get()
-                   .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                       @Override
-                       public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                           if (task.isSuccessful()){
-                               for (DocumentSnapshot document: task.getResult()){
-                                   //get the location of start
-                                   Log.d("abc",(String)document.get("BeginningLocationLat")+(String)document.get("BeginningLocationLnt"));
-                                   LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
-                                   //if the distance between beginning location and search place is within the range and the request is inactive, select that request
-                                   long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
-                                   String b = (String) document.get("RequestStatus");
-                                   if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
-                                       //clone all the info of satisfied request
-                                       String request_id = (String) document.get("RequestID");
-                                       String rider_id = (String) document.get("Rider");
-                                       double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                       double tips =  (double) document.get("Tips");
-                                       String Accepttime = (String) document.get("AcceptTime");
-                                       String send_time = (String) document.get("SendTime");
-                                       LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
-                                       //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
-                                       try {
-                                           Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
-                                           //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
-                                           //testing
-                                           //User user3 = new User("jc");
-                                           //Request active_request = new Request(user3);
-                                           Toast.makeText(DriverhomeActivity.this,"success", Toast.LENGTH_SHORT).show();
-                                           requests_list.add(active_request);
-                                           adapter.notifyDataSetChanged();
-                                       } catch (ParseException e) {
-                                           e.printStackTrace();
-                                       }
-                                       //requests_list.add(active_request);
-                                   }
-                               }
-                           } else {
-                               Log.d("suck", "error getting documents: ", task.getException());
-                           }
-                       }
-                   });
+        db.collectionReference_request.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (DocumentSnapshot document: task.getResult()){
+                                //get the location of start
+                                Log.d("abc",(String)document.get("BeginningLocationLat")+(String)document.get("BeginningLocationLnt"));
+                                LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
+                                //if the distance between beginning location and search place is within the range and the request is inactive, select that request
+                                long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
+                                String b = (String) document.get("RequestStatus");
+                                if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                    //clone all the info of satisfied request
+                                    String request_id = (String) document.get("RequestID");
+                                    String rider_id = (String) document.get("Rider");
+                                    double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
+                                    double tips =  (double) document.get("Tips");
+                                    String Accepttime = (String) document.get("AcceptTime");
+                                    String send_time = (String) document.get("SendTime");
+                                    LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
+                                    //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
+                                    try {
+                                        Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
+                                        //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
+                                        //testing
+                                        //User user3 = new User("jc");
+                                        //Request active_request = new Request(user3);
+                                        Toast.makeText(DriverhomeActivity.this,"success", Toast.LENGTH_SHORT).show();
+                                        requests_list.add(active_request);
+                                        adapter.notifyDataSetChanged();
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //requests_list.add(active_request);
+                                }
+                            }
+                        } else {
+                            Log.d("suck", "error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     /*public void update_navigation_view(User user){
         NavigationView navigationView = getWindow().getDecorView().getRootView().findViewById(R.id.nav_view);
         //find the layout of header layout
         header = navigationView.getHeaderView(0);
-
         //find the text view of user name
         TextView user_name = header.findViewById(R.id.driver_name);
         ImageView profile = header.findViewById(R.id.profile_photo);
-
         //edit
         user_name.setText(user.getFirstName()+user.getLastName());
         Bitmap pic = Bitmap.createBitmap(200,200,Bitmap.Config.RGB_565);
@@ -250,14 +245,14 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //-----------------------------------------
     @Override
     public void hide() {
-              //hide the request list view
-              requests_list.clear();
-              adapter.notifyDataSetChanged();
-              active_request_fm.popBackStack();
-              rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
-              //hide the beginning marker
-              remove_beginning_location();
-              //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+        //hide the request list view
+        requests_list.clear();
+        adapter.notifyDataSetChanged();
+        active_request_fm.popBackStack();
+        rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
+        //hide the beginning marker
+        remove_beginning_location();
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
 
     @Override

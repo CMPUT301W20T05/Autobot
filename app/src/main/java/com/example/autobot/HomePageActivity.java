@@ -97,29 +97,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         setProfile(username,db); // set profile
 
-//        Paper.init(this);
-//        String RequestID = Paper.book().read(Prevalent.RequestIDKey);
-//        if (RequestID != "")
-//        {
-//            if (!TextUtils.isEmpty(RequestID))
-//            {
-//                try {
-//                    request = db.rebuildRequest(RequestID, user);
-//                    String requestStatus = request.getStatus();
-//                    if (requestStatus == "Driver Accepted") {
-//                        Intent intentDriverAccepted = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-//                        startActivity(intentDriverAccepted);
-//                    }
-//                    else if (requestStatus == "Trip Completed"){
-//                        Intent intentComplete = new Intent(HomePageActivity.this, OrderComplete.class);
-//                        startActivity(intentComplete);
-//                    }
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
         //origin
@@ -210,7 +187,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     request.setEstimateCost(origin, destination);
                     db.add_new_request(request);
                     reID = request.getRequestID();
-                    Paper.book().write(Prevalent.RequestIDKey, request);
                     //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
                     //calculate estimated fare
