@@ -117,8 +117,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
                 //go back to home page
                 int good = Integer.parseInt(goodrate);
                 good += 1;
-                driver.setGoodRate(String.valueOf(good));
-                db.add_new_user(driver);
+                driver.resetGoodrate(String.valueOf(good),db);
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);
@@ -134,14 +133,13 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
                 if (Good == true){
                     int good = Integer.parseInt(goodrate);
                     good += 1;
-                    driver.setGoodRate(String.valueOf(good));
+                    driver.resetGoodrate(String.valueOf(good),db);
                 }
                 else {
                     int bad = Integer.parseInt(badrate);
                     bad += 1;
-                    driver.setBadRate(String.valueOf(bad));
+                    driver.resetBadrate(String.valueOf(bad), db);
                 }
-                db.add_new_user(driver);
                 Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);

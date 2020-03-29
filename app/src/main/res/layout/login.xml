@@ -71,6 +71,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editAccount" />
 
+    <CheckBox
+        android:id="@+id/rememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Remember me"
+        android:textColor="@android:color/holo_blue_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextInputPassword" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="24dp"
+        android:text="Forget password?"
+        app:layout_constraintStart_toEndOf="@+id/rememberMe"
+        app:layout_constraintTop_toBottomOf="@+id/editTextInputPassword" />
+
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"

@@ -12,9 +12,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.UploadTask;
 
+import static com.android.volley.VolleyLog.TAG;
+
 public class RebuildTool {
     static User user_new;
-    public static void rebuild_user(DocumentReference documentReference,User rider){
+    //documentReference is db.collectionReference_user.document(rider_id)
+    public static void rebuild_user(DocumentReference documentReference, User user){
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -35,13 +38,12 @@ public class RebuildTool {
                 rider.setUserType((String) document.get("Type"));
                 rider.setUsername((String) document.get("Username"));
                 String uri = ((String) document.get("ImageUri"));
-//                                    if (uri != null) {
-//                                        user.setUri(Uri.parse(uri));
-//                                    }
-                rider.setUri(uri);
-                rider.setGoodRate((String) document.get("GoodRate"));
-                rider.setBadRate((String) document.get("BadRate"));
-                Log.d("Testing",rider.getUserType()+"hihih");
+
+                    user.setUri(uri);
+                    user.setGoodRate((String) document.get("GoodRate"));
+                    user.setBadRate((String) document.get("BadRate"));
+                }
+
             }
         });
     }
