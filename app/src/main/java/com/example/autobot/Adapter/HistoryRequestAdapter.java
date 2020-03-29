@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.autobot.Common.Common;
+import com.example.autobot.Database;
 import com.example.autobot.HistoryRequest;
 import com.example.autobot.LoginActivity;
 import com.example.autobot.R;

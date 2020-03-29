@@ -447,7 +447,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                                 Offline.clear(sharedPreferences,sharedPreferences);
                                 Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(logout);
-                                //need to actual logout
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -99,6 +99,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         db = MainActivity.db; // get database
         user = LoginActivity.user; // get User
+        if (user == null) {
+
+        }
         username = user.getUsername(); // get username
 
         setProfile(username,db); // set profile

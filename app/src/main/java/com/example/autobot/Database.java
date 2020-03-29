@@ -450,10 +450,10 @@ public class Database{
                 });
     }
 
-    public void ChangeRequestStatus(Request request){
-        HashMap<String,Object> requestChanged = new HashMap<>();
-        requestChanged.put("RequestStatus",request.getStatus());
-        requestChanged.put("Driver",request.getDriver().getUsername());
+    public void ChangeRequestStatus(Request request) {
+        HashMap<String, Object> requestChanged = new HashMap<>();
+        requestChanged.put("RequestStatus", request.getStatus());
+        requestChanged.put("Driver", request.getDriver().getUsername());
         collectionReference_request.document(request.getRequestID())
                 .update(requestChanged)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
