@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Button get_start;
     Handler handler;
     int DELAY = 3*1000;
-    public static Database db ;
+    public static Database db;
     SharedPreferences preferences_user;
     SharedPreferences preferences_request;
     @Override
