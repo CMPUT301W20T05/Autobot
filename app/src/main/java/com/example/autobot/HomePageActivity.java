@@ -248,7 +248,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                                 totalFare += tips;
                             }
                             request.resetCost(totalFare, db);
-
                             //finish current activity
                             uCurRequestDialog.dismiss();
                             //wait driver to accept
@@ -474,12 +473,12 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             public void onSuccess(Uri uri) {
                 Uri downloadUrl = uri;
                 newUser.setUri(downloadUrl.toString());
-                Toast.makeText(HomePageActivity.this, "Upload success! URL - " + downloadUrl.toString() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(HomePageActivity.this, "Upload fail! please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
             }
         });
 
