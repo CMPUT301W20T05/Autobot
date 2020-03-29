@@ -231,7 +231,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
                     double estimateAddModelFee = request.EstimateAddModelFee(addPrice);
                     if (EstimatedFare != null) {
-                        EstimatedFare.setText(String.valueOf(df.format(estimateAddModelFee)));
+                        EstimatedFare.setText(df.format(estimateAddModelFee));
                     }
 
                     CurRequestConfirm.setOnClickListener(new View.OnClickListener() {

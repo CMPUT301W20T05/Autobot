@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void jump_to_homepage(){
         final Intent intenthomepage = new Intent(this, HomePageActivity.class);
+        finish();
         startActivity(intenthomepage);
     }
 }
