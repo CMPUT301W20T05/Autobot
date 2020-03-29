@@ -443,8 +443,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-                                Offline.clear(sharedPreferences,sharedPreferences);
+                                //clear save instance
+                                Offline.clear(LoginActivity.sharedPreferences);
                                 Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(logout);
                             }
