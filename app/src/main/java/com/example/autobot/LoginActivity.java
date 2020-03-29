@@ -139,10 +139,12 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setGoodRate((String) document.get("GoodRate"));
                                                             user.setBadRate((String) document.get("BadRate"));
                                                             Log.d("Testing",user.getUserType()+"hihih");
+
                                                             if (checkBoxRememberMe.isChecked()) {
                                                                 //save user in shareprefence, don't need to login when you reopen the app
                                                                 save_user_login();
                                                             }
+
                                                             if (TruePassword.equals(Password)){
                                                                 // determine to go rider mode or driver mode
                                                                 if (Type.equals("Rider")) {

@@ -246,7 +246,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         badrate = header.findViewById(R.id.poor_rate);
 
         DocumentReference docRef = userBase.getRef(username);
-
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
