@@ -121,7 +121,7 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener {
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener {
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
@@ -246,7 +246,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         badrate = header.findViewById(R.id.poor_rate);
 
         DocumentReference docRef = userBase.getRef(username);
-
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {  // display username on navigation view
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -985,5 +984,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return df.format(distance);
     }
 
-
+    @Override
+    public void onOkPressedC(String money) {
+        Database userBaseC = LoginActivity.db;
+        User userC = LoginActivity.user;
+        String Oldmoney = userC.getBalance();
+        Float O = Float.parseFloat(Oldmoney);
+        Float N = Float.parseFloat(money);
+        Float Final = O + N;
+        String newbalance = String.valueOf(Final);
+        userC.setBalance(newbalance);
+        userBaseC.add_new_user(userC);
+        TextView balance = findViewById(R.id.balance);
+        balance.setText(newbalance);
+        Toast.makeText(BaseActivity.this, "Add Credit Success!" , Toast.LENGTH_SHORT).show();
+    }
 }

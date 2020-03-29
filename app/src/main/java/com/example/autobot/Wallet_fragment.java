@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,9 +30,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class Wallet_fragment extends Fragment {
+public class Wallet_fragment extends Fragment{
     Database userBase = LoginActivity.db;
     User user = LoginActivity.user;
+    TextView addcredit;
 
     ListView informationList;
     WalletAdapter informationAdapter;
@@ -73,15 +75,18 @@ public class Wallet_fragment extends Fragment {
                         }
                     }
                 });
-
-
-
-
-
         TextView user_name = view.findViewById(R.id.username_wallet);
         TextView balance = view.findViewById(R.id.balance);
         user_name.setText(user.getUsername());
         balance.setText(user.getBalance());
+
+        addcredit = view.findViewById(R.id.addCredit);
+        addcredit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AddCreditFragment().show(getParentFragmentManager(), "AddCredit");
+            }
+        });
 
         return view;
     }
@@ -97,5 +102,6 @@ public class Wallet_fragment extends Fragment {
             return "";
         }
     }
+
 }
 
