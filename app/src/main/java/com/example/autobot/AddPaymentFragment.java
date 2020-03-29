@@ -203,6 +203,7 @@ public class AddPaymentFragment extends DialogFragment {
                         }
                     }
                 }).create();
+
     }
     public static boolean isNumeric(String str) { //function to check if it is integer
         for (int i = str.length(); --i >= 0; ) {
