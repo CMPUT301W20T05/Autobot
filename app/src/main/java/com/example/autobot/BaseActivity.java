@@ -403,7 +403,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
-    
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {

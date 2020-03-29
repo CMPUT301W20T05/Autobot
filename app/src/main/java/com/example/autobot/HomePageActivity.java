@@ -490,6 +490,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         return username;
     }
 
+    /**
+     * recreate homepage activity
+     */
     public void recreateActivity() {
         Intent intent = getIntent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
