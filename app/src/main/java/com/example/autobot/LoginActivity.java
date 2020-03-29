@@ -3,6 +3,7 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
     public static Database db;
     public static User user;
+    public static Request loaded_request;
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +185,37 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+    public void load_user(){
+        try{
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+        //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
+            user = Offline.ExtractUser(sharedPreferences);
+        Log.d("loaduser",user.toString());
+        }
+        catch (Exception e){
+            Log.d("loaduser","no saved user"+e.toString());
+        }
+    }
+
+    public void load_request(){
+        try{
+            //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+            loaded_request = Offline.ExtractRequest(sharedPreferences);
+            Log.d("loadrequest",loaded_request.get_active_requset_tostring());
+        }
+        catch (Exception e){
+            Log.d("loadrequest","no saved request"+e.toString());
+        }
+    }
+
+    public void save_user_login(){
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        Offline.UploadUser(sharedPreferences,user);
+        Log.d("userusertype",user.getUserType());
+    }
+
 
 
 }

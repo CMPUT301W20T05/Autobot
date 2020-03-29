@@ -49,7 +49,7 @@ public class Database{
     public CollectionReference collectionReference_payment;
     public StorageReference storageReference;
     public FirebaseStorage storage;
-    User user = new User("");
+    User user;
     Request r = new Request();
     Uri downloadUri;
     String a = "0";
@@ -349,7 +349,6 @@ public class Database{
         FirebaseFirestore db3 = FirebaseFirestore.getInstance();
         collectionReference_request = db3.collection("Request");
         r.setRider(user);
-
         db3.collection("Request")
                 .whereEqualTo("ID",RequestID)
                 .get()

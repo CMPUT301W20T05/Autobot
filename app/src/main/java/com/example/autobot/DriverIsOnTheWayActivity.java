@@ -47,7 +47,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
     private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
     private User rider;
-    private User driver;
+    private User driver = new User("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     request.reset_Request_Status((String) document.getString("RequestStatus"));
-                    request.setDriver(db.rebuildUser((String) document.getString("Driver")));
+                    String driverName = (String) document.getString("Driver");
+                    driver.setUsername(driverName);
+                    request.setDriver(RebuildTool.rebuild_user(db.db1.collection("users").document(), driver));
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
                     try {
                         request.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
