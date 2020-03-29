@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
@@ -68,12 +69,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
         //load_user();
         setTitle("driver mode");
-
+        user = LoginActivity.user;
         db = LoginActivity.db; // get database
-        user = LoginActivity.user; // get User
         username = user.getUsername(); // get username
         requests_list = new ArrayList<Request>();
-
         setProfile(username,db); // set profile
 
         //attach listener
@@ -223,9 +222,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     public void confirm_request(Request request){
         //update request in the database
         request.UpdateStatus(1);
-
+        //user = LoginActivity.user;
         //set up the drive
         request.setDriver(user);
+        Log.d("username",username);
         db.ChangeRequestStatus(request);
         //notify need to modify database
         //db.ChangeRequestStatus(request);
@@ -317,7 +317,11 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Log.d("time",Accepttime);
         Log.d("stime",send_time);
 
-        User rider = db.rebuildUser(rider_id);
+        User rider = new User(rider_id) ;
+        RebuildTool.rebuild_user(db.collectionReference_user.document(rider_id),rider);
+        Log.d("Testing",rider.getUsername()+rider.getUserType());
+        Log.d("driver",user.getUsername());
+        //User rider = db.rebuildUser(rider_id);
         Request request = new Request(rider,BeginningLocation,Destination);
         request.setRequestID(request_id);
         request.setTips(tips);
