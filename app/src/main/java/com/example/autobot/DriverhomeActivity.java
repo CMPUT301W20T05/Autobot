@@ -291,7 +291,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
-
+        LoginActivity.save_user_login();
         db.add_new_user(newUser);
 
     }

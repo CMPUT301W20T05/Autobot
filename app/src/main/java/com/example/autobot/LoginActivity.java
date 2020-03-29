@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText editAccount = findViewById(R.id.editAccount);
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
         CheckBox checkBoxRememberMe = findViewById(R.id.rememberMe);
+        sharedPreferences = getPreferences(MODE_PRIVATE);
         load_user();
         if (user != null) {
             if (user.getUserType().equals("Driver")) {
@@ -236,7 +237,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     public void load_user(){
         try{
             sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -261,9 +261,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void save_user_login(){
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        Offline.UploadUser(sharedPreferences,user);
+    public static void save_user_login(){
+        Offline.UploadUser(LoginActivity.sharedPreferences,user);
     }
     @Override
     public void onBackPressed() {
