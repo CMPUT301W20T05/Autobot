@@ -96,10 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                 String Account = editAccount.getText().toString();
                 String Password = editTextInputPassword.getText().toString();
 
-                if (checkBoxRememberMe.isChecked()){
-
-                }
-
                 if (Status.equals("Phone Number")){
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
