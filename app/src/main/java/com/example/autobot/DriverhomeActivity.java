@@ -271,8 +271,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requests_list.get(pos).getBeginningLocation(), DEFAULT_ZOOM));
 
         //inflate the fragment
-        fragment1 = showSelectedActiveRequestFragment;
-        active_request_fm.beginTransaction().replace(R.id.myMap,fragment1).addToBackStack(null).commit();
+        active_request_fm.beginTransaction().replace(R.id.myMap,showSelectedActiveRequestFragment).addToBackStack(null).commit();
 
     }
 
