@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,8 +29,10 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -53,6 +57,10 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
 
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import io.paperdb.Paper;
 
 /**
@@ -63,23 +71,22 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private LatLng destination;
     private LatLng origin;
     private Button HPConfirmButton, HPDirectionButton;
-    public  Database db;
+    public Database db;
     private String username;
     public static User user;
     public static Request request;
+    private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
     public StorageReference storageReference;
     public FirebaseStorage storage;
     Uri downloadUri;
     private static final String TAG = "HomePageActivity";
 
-
     private String model;
     private double addPrice;
     private boolean clicked = false;
 
     DecimalFormat df = new DecimalFormat("0.00");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -95,29 +102,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         username = user.getUsername(); // get username
 
         setProfile(username,db); // set profile
-
-//        Paper.init(this);
-//        String RequestID = Paper.book().read(Prevalent.RequestIDKey);
-//        if (RequestID != "")
-//        {
-//            if (!TextUtils.isEmpty(RequestID))
-//            {
-//                try {
-//                    request = db.rebuildRequest(RequestID, user);
-//                    String requestStatus = request.getStatus();
-//                    if (requestStatus == "Driver Accepted") {
-//                        Intent intentDriverAccepted = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-//                        startActivity(intentDriverAccepted);
-//                    }
-//                    else if (requestStatus == "Trip Completed"){
-//                        Intent intentComplete = new Intent(HomePageActivity.this, OrderComplete.class);
-//                        startActivity(intentComplete);
-//                    }
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
 
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
@@ -208,8 +192,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                     request.setEstimateCost(origin, destination);
                     db.add_new_request(request);
-                    String reID = request.getRequestID();
-                    Paper.book().write(Prevalent.RequestIDKey, request);
+                    reID = request.getRequestID();
                     //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
                     //calculate estimated fare
@@ -405,7 +388,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
             }
         });
-
     }
 
     /**
@@ -529,5 +511,81 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     public Bitmap getBitmap(){
         return mybitmap;
     }
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (fragment == null) {
+            if (System.currentTimeMillis() - firstPressedTime < 2000) {
+                backToast.cancel();
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+            } else {
+                backToast = Toast.makeText(HomePageActivity.this, "Press another time to Quit", Toast.LENGTH_SHORT);
+                backToast.show();
+                firstPressedTime = System.currentTimeMillis();
+            }
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+            if (fragment != null) {
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(mhItem)) { // if the my request history page is opened, back to main page
+            if (fragment != null) {
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(piItem)) { // if the payment information page is opened, back to main page
+            if (fragment != null) {
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStackImmediate();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                }
+            }
+
+        } else if (onNavigationItemSelected(sItem)) { // if the settings page is opened, back to main page
+            if (fragment != null) {
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)) { // if the notifications page is opened, back to main page
+            if (fragment != null) {
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        }
+    }
+
 
 }

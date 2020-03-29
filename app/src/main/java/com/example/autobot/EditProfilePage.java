@@ -242,10 +242,11 @@ public class EditProfilePage extends Fragment {
     }
 
     private void dispatchTakePictureIntent() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
-        } else {
-            Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+        }
+        else {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             // Ensure that there's a camera activity to handle the intent
             if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
                 // Create the File where the photo should go

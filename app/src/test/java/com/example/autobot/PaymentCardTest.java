@@ -12,7 +12,7 @@ public class PaymentCardTest {
     private PaymentCard mockPaymentCard() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse("2020-03-22");
-        return new PaymentCard((long) 123456,"David", date, 10, "edmonton", "T6G 3M3");
+        return new PaymentCard((long) 123456,"David", "David", date, 10, "edmonton", "T6G 3M3");
     }
 
     @Test
@@ -24,6 +24,7 @@ public class PaymentCardTest {
         Long l = new Long(123456);
         assertEquals(l, paymentCard.getCardNumber());
         assertEquals("David",paymentCard.getHoldName());
+        assertEquals("David", paymentCard.getUserName());
         assertEquals(10,paymentCard.getCardLogo());
         assertEquals("edmonton", paymentCard.getBillingAddress());
         assertEquals("T6G 3M3", paymentCard.getPostalCode());
@@ -46,6 +47,9 @@ public class PaymentCardTest {
         Long l = new Long(654321);
         paymentCard.setCardNumber(l);
         assertEquals(l,paymentCard.getCardNumber());
+
+        paymentCard.setUserName("Brian");
+        assertEquals("Brian",paymentCard.getUserName());
 
         paymentCard.setHoldName("Brian");
         assertEquals("Brian",paymentCard.getHoldName());
