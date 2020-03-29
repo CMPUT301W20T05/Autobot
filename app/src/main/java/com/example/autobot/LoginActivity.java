@@ -64,9 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         if(user != null){
             if(user.getUserType().equals("Driver")){
                 Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                finish();
                 startActivity(intentHomePage);
             }else{
                 Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                finish();
                 startActivity(intentHomePage);
             }
         }
@@ -137,8 +139,11 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setGoodRate((String) document.get("GoodRate"));
                                                             user.setBadRate((String) document.get("BadRate"));
                                                             Log.d("Testing",user.getUserType()+"hihih");
-                                                            //save user in shareprefence, don't need to login when you reopen the app
-                                                            save_user_login();
+
+                                                            if (checkBoxRememberMe.isChecked()) {
+                                                                //save user in shareprefence, don't need to login when you reopen the app
+                                                                save_user_login();
+                                                            }
 
                                                             if (TruePassword.equals(Password)){
                                                                 // determine to go rider mode or driver mode
