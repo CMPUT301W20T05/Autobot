@@ -40,6 +40,7 @@ public class AddCreditFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.addcredit, null);
 
+        MoneyAmount = view.findViewById(R.id.MoneySpinner);
         android.app.AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -48,16 +49,7 @@ public class AddCreditFragment extends DialogFragment {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        MoneyAmount.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                Money = String.valueOf((CardTypeItem) adapterView.getItemAtPosition(i));
-                            }
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
+                        Money = MoneyAmount.getSelectedItem().toString();
                         listener.onOkPressedC(Money);
                     }}).create();
     }
