@@ -60,6 +60,17 @@ public class LoginActivity extends AppCompatActivity {
         EditText editAccount = findViewById(R.id.editAccount);
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
         CheckBox checkBoxRememberMe = findViewById(R.id.rememberMe);
+        load_user();
+        if(user != null){
+            if(user.getUserType().equals("Driver")){
+                Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                startActivity(intentHomePage);
+            }else{
+                Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                startActivity(intentHomePage);
+            }
+        }
+   
 
         TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
         textViewNoAccount.setOnClickListener(new View.OnClickListener() {
@@ -194,16 +205,18 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                     }
                 }
-            }
-        });
-    }
+
+
+            });
+        }
+
 
     public void load_user(){
         try{
             sharedPreferences = getPreferences(MODE_PRIVATE);
         //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
             user = Offline.ExtractUser(sharedPreferences);
-        Log.d("loaduser",user.toString());
+             Log.d("loaduser",user.toString());
         }
         catch (Exception e){
             Log.d("loaduser","no saved user"+e.toString());
