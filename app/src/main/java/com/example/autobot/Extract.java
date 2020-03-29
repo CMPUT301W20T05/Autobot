@@ -1,4 +1,4 @@
-package com.example.autobot.Common;
+package com.example.autobot;
 
 import com.example.autobot.Request;
 import com.example.autobot.User;
@@ -54,38 +54,39 @@ public class Extract {
         reference.document(requestID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
+                    @Override
 
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    LatLng BeginningLocation = new LatLng(Double.valueOf((String) documentSnapshot.getString("BeginningLocationLat")), Double.parseDouble((String) documentSnapshot.getString("BeginningLocationLnt")));
-                    r.setBeginningLocation(BeginningLocation);
-                    LatLng Destination = new LatLng(Double.valueOf((String) documentSnapshot.getString("DestinationLat")), Double.valueOf((String) documentSnapshot.getString("DestinationLnt")));
-                    r.setDestination(Destination);
-                    r.setDriver(RebuildUser((String) documentSnapshot.getString("Driver")));
-                    r.setRequestID((String) documentSnapshot.getString("RequestID"));
-                    r.setRider(RebuildUser((String) documentSnapshot.getString("Rider")));
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            LatLng BeginningLocation = new LatLng(Double.valueOf((String) documentSnapshot.getString("BeginningLocationLat")), Double.parseDouble((String) documentSnapshot.getString("BeginningLocationLnt")));
+                            r.setBeginningLocation(BeginningLocation);
+                            LatLng Destination = new LatLng(Double.valueOf((String) documentSnapshot.getString("DestinationLat")), Double.valueOf((String) documentSnapshot.getString("DestinationLnt")));
+                            r.setDestination(Destination);
+                            r.setDriver(RebuildUser((String) documentSnapshot.getString("Driver")));
+                            r.setRequestID((String) documentSnapshot.getString("RequestID"));
+                            r.setRider(RebuildUser((String) documentSnapshot.getString("Rider")));
 
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
-                    try {
-                        r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
-                        r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
-                        r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                            try {
+                                r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
+                                r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
+                                r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
+                            r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
+                            r.setRequestID((String) documentSnapshot.getString("ID"));
+                            r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
+                            r.setTips(Double.valueOf(documentSnapshot.getString("Tips")));
+                        }
+
                     }
-                    r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
-                    r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
-                    r.setRequestID((String) documentSnapshot.getString("ID"));
-                    r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
-                    r.setTips(Double.valueOf(documentSnapshot.getString("Tips")));
-                }
-
-            }
-        });
+                });
         return r;
 
 
     }
 
 }
+
