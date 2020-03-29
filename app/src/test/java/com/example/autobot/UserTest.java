@@ -15,7 +15,7 @@ public class UserTest {
     public void testGetter(){
         User user = mockUser();
         assertEquals("", user.getEmergencyContact());
-        assertEquals(null, user.getUri());
+        assertEquals(String.valueOf(R.id.icon), user.getUri());
         assertEquals("0",user.getGoodRate());
         assertEquals("0", user.getBadRate());
         assertEquals("", user.getHomeAddress());
