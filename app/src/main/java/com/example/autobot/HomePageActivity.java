@@ -247,6 +247,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                                 request.resetTips(tips, db);
                                 totalFare += tips;
                             }
+                            //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
                                 request.resetCost(totalFare, db);
 
@@ -481,12 +482,12 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             public void onSuccess(Uri uri) {
                 Uri downloadUrl = uri;
                 newUser.setUri(downloadUrl.toString());
-                Toast.makeText(HomePageActivity.this, "Upload success! URL - " + downloadUrl.toString() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(HomePageActivity.this, "Upload fail! please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
             }
         });
 
