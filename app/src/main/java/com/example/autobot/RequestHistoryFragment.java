@@ -119,11 +119,13 @@ public class RequestHistoryFragment extends Fragment {
                                 requestArrayList.add(new HistoryRequest(str, dateTemp, userName1, requestId, cost, 1));
 
                             }
-                            requestArrayList = Common.sortListByDate(requestArrayList); // sort
-                            requestArrayList = Common.sortListByStatus(requestArrayList); // same
-                            requestArrayList = Common.addHeader(requestArrayList); // add header
-                            adapter = new HistoryRequestAdapter(getContext(), requestArrayList);
-                            recyclerView_request.setAdapter(adapter);
+                            if (requestArrayList.size() != 0){
+                                requestArrayList = Common.sortListByDate(requestArrayList); // sort
+                                requestArrayList = Common.sortListByStatus(requestArrayList); // same
+                                requestArrayList = Common.addHeader(requestArrayList); // add header
+                                adapter = new HistoryRequestAdapter(getContext(), requestArrayList);
+                                recyclerView_request.setAdapter(adapter);}
+
                         } else {
                             //Log.d(TAG, "Error getting documents: ", task.getException());
 
