@@ -120,7 +120,7 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener {
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener {
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
@@ -996,5 +996,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(distance);
+    }
+
+    @Override
+    public void onOkPressedC(String money) {
+        String Oldmoney = user.getBalance();
+        Oldmoney = Oldmoney + money;
+        user.setBalance(Oldmoney);
+        userbase.add_new_user(user);
     }
 }
