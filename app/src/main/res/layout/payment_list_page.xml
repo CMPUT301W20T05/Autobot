@@ -1,30 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/background_light">
-    <ListView
+    <LinearLayout
         android:layout_marginTop="64dp"
-        android:id="@+id/payment_listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_payment_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:clickable="true"
         android:focusable="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/red"
-        android:tint="@color/white"/>
+        android:id="@+id/wallet">
+        <ImageView
+            android:src="@drawable/wallet"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp">
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Wallet"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="250dp"
+            android:gravity="center_vertical">
 
-</FrameLayout>
+        </TextView>
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/right_512"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp">
 
+        </ImageView>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/background_light"
+        android:layout_marginTop="10dp">
+        <ListView
+
+            android:id="@+id/payment_listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_payment_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            app:srcCompat="@android:drawable/ic_input_add"
+            app:backgroundTint="@color/red"
+            android:tint="@color/white">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    </FrameLayout>
+
+
+</LinearLayout>

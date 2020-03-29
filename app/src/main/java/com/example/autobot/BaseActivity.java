@@ -87,6 +87,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -96,6 +99,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,6 +109,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.android.volley.VolleyLog.TAG;
 import static com.example.autobot.App.CHANNEL_1_ID;
 
 /**
@@ -550,8 +556,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onOkPressed(PaymentCard newPayment) {
-        ((PaymentInformationFragment) fragment).updateList(newPayment);
+    public void onOkPressed(PaymentCard newPayment,int i) {
+        if (i == 1) Toast.makeText(this, "You have added this card.", Toast.LENGTH_SHORT).show();
+        else ((PaymentInformationFragment) fragment).updateList(newPayment);
     }
 
     @Override
@@ -985,5 +992,87 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(distance);
+    }
+
+    public User getUser(Database db, String userName) {
+        User user = new User("");
+        Query query = db.collectionReference_user.whereEqualTo("Username", userName);
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().size() != 0) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    user.setEmailAddress((String) document.get("EmailAddress"));
+                                    user.setFirstName((String) document.get("FirstName"));
+                                    user.setLastName((String) document.get("LastName"));
+                                    System.out.println(document.get("CurrentLocation"));
+                                    double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                    double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                    LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                    user.updateCurrentLocation(CurrentLocation);
+                                    user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                    user.setHomeAddress((String) document.get("HomeAddress"));
+                                    user.setPassword((String) document.get("Password"));
+                                    user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                    user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                    user.setUserType((String) document.get("Type"));
+                                    user.setUsername((String) document.get("Username"));
+                                    String uri = ((String) document.get("ImageUri"));
+//                                    if (uri != null) {
+//                                        user.setUri(Uri.parse(uri));
+//                                    }
+                                    user.setUri(uri);
+                                    user.setGoodRate((String) document.get("GoodRate"));
+                                    user.setBadRate((String) document.get("BadRate"));
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    }
+                });
+        return user;
+    }
+
+    public Request getRequest(Database db, String requestID) throws ParseException {
+        Request r = new Request();
+        db.collectionReference_request
+                .document(requestID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + documentSnapshot.getData());
+                            LatLng BeginningLocation = new LatLng(Double.valueOf((String) documentSnapshot.getString("BeginningLocationLat")), Double.parseDouble((String) documentSnapshot.getString("BeginningLocationLnt")));
+                            r.setBeginningLocation(BeginningLocation);
+                            LatLng Destination = new LatLng(Double.valueOf((String) documentSnapshot.getString("DestinationLat")), Double.valueOf((String) documentSnapshot.getString("DestinationLnt")));
+                            r.setDestination(Destination);
+                            r.setDriver(getUser(db, (String) documentSnapshot.getString("Driver")));
+                            r.setRequestID((String) documentSnapshot.getString("RequestID"));
+                            r.setRider(getUser(db, (String) documentSnapshot.getString("Rider")));
+
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                            try {
+                                r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
+                                r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
+                                r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
+                            r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
+                            r.setRequestID((String) documentSnapshot.getString("ID"));
+                            r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
+                            r.setTips(Double.valueOf(documentSnapshot.getString("Tips")));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    }
+                });
+        return r;
     }
 }

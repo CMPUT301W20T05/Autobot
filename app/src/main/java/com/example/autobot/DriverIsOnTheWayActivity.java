@@ -68,6 +68,27 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         //request = db.rebuildRequest(reID, user);
         request = HomePageActivity.request;
         reID = request.getRequestID();
+//        try {
+//            request = getRequest(db, reID);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+        db.collectionReference_request.document(reID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    request.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
+                    request.setDriver(getUser(db, (String) documentSnapshot.getString("Driver")));
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                    try {
+                        request.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         //use request to get infor
 //        driver = db.rebuildUser("jc");
