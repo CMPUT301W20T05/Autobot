@@ -123,6 +123,7 @@ public class PaymentInformationFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container,wallet_fragment,"WALLET_FRAGMENT");
                 fragmentTransaction.commit();
+                getActivity().setTitle("Wallet");
             }
         });
 
