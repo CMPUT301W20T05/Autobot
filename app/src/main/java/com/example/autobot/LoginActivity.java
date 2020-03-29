@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     public static User user;
     public static Request loaded_request;
     SharedPreferences sharedPreferences;
+    public long firstPressedTime;
+    public Toast backToast;
 
 
     @Override
@@ -248,6 +250,21 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         Offline.UploadUser(sharedPreferences,user);
     }
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - firstPressedTime < 2000) {
+            backToast.cancel();
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        } else {
+            backToast = Toast.makeText(LoginActivity.this, "Press another time to Quit", Toast.LENGTH_SHORT);
+            backToast.show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }
+
 
 
 
