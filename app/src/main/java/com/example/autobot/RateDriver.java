@@ -31,7 +31,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     private User user;
     private Request request;
     private String reID;
-    private Boolean Good;
+    private Boolean Good = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
                 int good = Integer.parseInt(goodrate);
                 good += 1;
                 driver.resetGoodrate(String.valueOf(good),db);
-                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                Intent finishRequest = new Intent(RateDriver.this, HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);
                 startActivity(finishRequest);

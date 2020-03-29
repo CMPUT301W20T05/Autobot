@@ -231,7 +231,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
                     double estimateAddModelFee = request.EstimateAddModelFee(addPrice);
                     if (EstimatedFare != null) {
-                        EstimatedFare.setText(String.valueOf(df.format(estimateAddModelFee)));
+                        EstimatedFare.setText(df.format(estimateAddModelFee));
                     }
 
                     CurRequestConfirm.setOnClickListener(new View.OnClickListener() {
@@ -496,6 +496,9 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         return username;
     }
 
+    /**
+     * recreate homepage activity
+     */
     public void recreateActivity() {
         Intent intent = getIntent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

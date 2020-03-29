@@ -61,8 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         EditText editTextInputPassword = findViewById(R.id.editTextInputPassword);
         CheckBox checkBoxRememberMe = findViewById(R.id.rememberMe);
 
-
-
         TextView textViewNoAccount = findViewById(R.id.textViewGoToSignUp);
         textViewNoAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,9 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setUserType((String) document.get("Type"));
                                                             user.setUsername((String) document.get("Username"));
                                                             String uri = ((String) document.get("ImageUri"));
-//                                    if (uri != null) {
-//                                        user.setUri(Uri.parse(uri));
-//                                    }
                                                             user.setUri(uri);
                                                             user.setGoodRate((String) document.get("GoodRate"));
                                                             user.setBadRate((String) document.get("BadRate"));
@@ -180,13 +175,13 @@ public class LoginActivity extends AppCompatActivity {
                                                 if (Type.equals("Rider")) {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
                                                     intentHomePage.putExtra("User",Account);
-
+                                                    //finish();
                                                     startActivity(intentHomePage);
                                                 }
                                                 else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
                                                     intentHomePage.putExtra("User",Account);
-
+                                                    //finish();
                                                     startActivity(intentHomePage);
                                                 }
                                             }
