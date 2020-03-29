@@ -50,11 +50,11 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/DriverAvatar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:srcCompat="@drawable/icon" />
+                android:src="@drawable/icon" />
 
             <TextView
                 android:id="@+id/Driver_name"
