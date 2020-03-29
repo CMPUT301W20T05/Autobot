@@ -83,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                 String Password = editTextInputPassword.getText().toString();
 
                 if (checkBoxRememberMe.isChecked()){
-//                        Paper.book().write(Prevalent.UserPhoneKey, Account);
-//                        Paper.book().write(Prevalent.UserPasswordKey, Password);
+
                 }
 
                 if (Status.equals("Phone Number")){
@@ -194,8 +193,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             }
-
-
         });
     }
 
