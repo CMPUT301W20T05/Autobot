@@ -6,16 +6,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.textclassifier.TextClassifierEvent;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
-import com.example.autobot.BaseActivity;
-import com.example.autobot.HomePageActivity;
-import com.example.autobot.R;
-import com.example.autobot.Request;
-import com.example.autobot.UCurRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;

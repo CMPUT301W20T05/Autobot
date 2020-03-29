@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,11 +14,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * This is a class for RateDriver activity
@@ -31,7 +40,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     private User user;
     private Request request;
     private String reID;
-    private Boolean Good;
+    private Boolean Good = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +76,9 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         Button Confirm = findViewById(R.id.confirmFee);
         LikeButton thumb = findViewById(R.id.thumb);
 
-        User driver = request.getDriver();
-        User rider = request.getRider();
+        User driver = DriverIsOnTheWayActivity.driver;
         //set driver infor
-        //imageViewAvatar.setBackgroundResource();
+        setAvatar(driver, avatar);
         DriverName.setText(String.format("%s%s", driver.getLastName(), driver.getFirstName()));
 
         String goodrate = driver.getGoodRate();
@@ -118,7 +126,7 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
                 int good = Integer.parseInt(goodrate);
                 good += 1;
                 driver.resetGoodrate(String.valueOf(good),db);
-                Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
+                Intent finishRequest = new Intent(RateDriver.this, HomePageActivity.class);
                 finish();
                 overridePendingTransition(0, 0);
                 startActivity(finishRequest);

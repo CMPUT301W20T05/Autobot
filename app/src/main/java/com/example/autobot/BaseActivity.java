@@ -403,7 +403,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
-    
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
@@ -443,11 +443,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-                                Offline.clear(sharedPreferences,sharedPreferences);
+                                //clear save instance
+                                Offline.clear(LoginActivity.sharedPreferences);
                                 Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(logout);
-                                //need to actual logout
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
