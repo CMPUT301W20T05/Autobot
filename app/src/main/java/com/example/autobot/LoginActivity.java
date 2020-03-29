@@ -64,9 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             if (user.getUserType().equals("Driver")) {
                 Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                finish();
                 startActivity(intentHomePage);
             } else {
                 Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                finish();
                 startActivity(intentHomePage);
             }
         }
@@ -136,9 +138,12 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setUri(uri);
                                                             user.setGoodRate((String) document.get("GoodRate"));
                                                             user.setBadRate((String) document.get("BadRate"));
-                                                            Log.d("Testing", user.getUserType() + "hihih");
-                                                            //save user in shareprefence, don't need to login when you reopen the app
-                                                            save_user_login();
+                                                            Log.d("Testing",user.getUserType()+"hihih");
+
+                                                            if (checkBoxRememberMe.isChecked()) {
+                                                                //save user in shareprefence, don't need to login when you reopen the app
+                                                                save_user_login();
+                                                            }
 
                                                             if (TruePassword.equals(Password)){
                                                                 // determine to go rider mode or driver mode
@@ -175,21 +180,52 @@ public class LoginActivity extends AppCompatActivity {
                                             String userName = Account; // set username to username
                                             String RightPassword = documentSnapshot.getString("Password");
                                             String Type = documentSnapshot.getString("Type");
-                                            if (RightPassword.equals(Password)) {
-                                                if (Type.equals("Rider")) {
-                                                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                    intentHomePage.putExtra("User",Account);
-                                                    finish();
-                                                    startActivity(intentHomePage);
-                                                } else {
-                                                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                    intentHomePage.putExtra("User",Account);
-                                                    finish();
-                                                    startActivity(intentHomePage);
+                                            user = new User(userName);
+                                            DocumentReference documentReference = db.collectionReference_user.document(userName);
+                                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    user.setEmailAddress((String) document.get("EmailAddress"));
+                                                    user.setFirstName((String) document.get("FirstName"));
+                                                    user.setLastName((String) document.get("LastName"));
+                                                    double Lat = Double.valueOf((String) document.get("CurrentLocationLat"));
+                                                    Log.d("Testing", (String) document.get("CurrentLocationLat"));
+                                                    double Lnt = Double.valueOf((String) document.get("CurrentLocationLnt"));
+                                                    LatLng CurrentLocation = new LatLng(Lat, Lnt);
+                                                    user.updateCurrentLocation(CurrentLocation);
+                                                    user.setEmergencyContact((String) document.get("EmergencyContact"));
+                                                    user.setHomeAddress((String) document.get("HomeAddress"));
+                                                    user.setPassword((String) document.get("Password"));
+                                                    user.setPhoneNumber((String) document.get("PhoneNumber"));
+                                                    user.setStars(Double.valueOf((String) document.get("StarsRate")));
+                                                    user.setUserType((String) document.get("Type"));
+                                                    user.setUsername((String) document.get("Username"));
+                                                    String uri = ((String) document.get("ImageUri"));
+                                                    user.setUri(uri);
+                                                    user.setGoodRate((String) document.get("GoodRate"));
+                                                    user.setBadRate((String) document.get("BadRate"));
+                                                    Log.d("Testing", user.getUserType() + "hihih");
+                                                    if (checkBoxRememberMe.isChecked()) {
+                                                        //save user in shareprefence, don't need to login when you reopen the app
+                                                        save_user_login();
+                                                    }
+                                                    if (RightPassword.equals(Password)) {
+                                                        if (Type.equals("Rider")) {
+                                                            Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                            intentHomePage.putExtra("User", Account);
+                                                            startActivity(intentHomePage);
+                                                        } else {
+                                                            Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                            intentHomePage.putExtra("User", Account);
+                                                            startActivity(intentHomePage);
+                                                        }
+                                                    } else
+                                                        editTextInputPassword.setError("The Wrong password!");
                                                 }
-                                            } else
-                                                editTextInputPassword.setError("The Wrong password!");
-                                        } else {
+                                            });
+                                        }
+                                        else {
                                             editAccount.setError("User name is not exist!");
                                         }
                                     }

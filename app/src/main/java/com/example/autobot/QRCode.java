@@ -61,9 +61,8 @@ public class QRCode extends BaseActivity {
         //request = db.rebuildRequest(reID, user);
         request = HomePageActivity.request;
         reID = request.getRequestID();
-        User Driver = request.getDriver();
+        User Driver = DriverIsOnTheWayActivity.driver;
         setProfile(username,db); // set profile
-
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
         generate = (Button) findViewById(R.id.generate);
         confirm = (Button) findViewById(R.id.confirmButton);

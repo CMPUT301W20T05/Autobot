@@ -69,5 +69,6 @@
     <string name="where_are_you">Where are you?</string>
     <string name="api_key">AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA</string>
     <string name="textview">TextView</string>
+    <string name="license">Copyright (c) 2019 CMPUT301W20T05</string>
 </resources>
 

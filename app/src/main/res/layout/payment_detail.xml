@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:text="Holder name: "
         android:layout_marginLeft="20dp">
-
     </TextView>
     <TextView
         android:id="@+id/card_date"
