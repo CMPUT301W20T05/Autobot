@@ -190,6 +190,7 @@ public class Database{
         user_data.put("ImageUri",user.getUri());
         user_data.put("GoodRate",user.getGoodRate());
         user_data.put("BadRate",user.getBadRate());
+        user_data.put("Balance",user.getBalance());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -308,6 +309,7 @@ public class Database{
                                     user.setUri(uri);
                                     user.setGoodRate((String) document.get("GoodRate"));
                                     user.setBadRate((String) document.get("BadRate"));
+                                    user.setBalance((String) document.get("Balance"));
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
