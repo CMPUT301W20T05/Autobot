@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     public static Database db;
     public static User user;
     public static Request loaded_request;
-    SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
     public long firstPressedTime;
     public Toast backToast;
 

@@ -1,0 +1,14 @@
+As a team: We modify our project such as debug rebuild finction and add some funtion such as
+wallet, offline and shared preferences.
+
+As a member:
+zonglun1: De bud the download data function especially rebuilduser and rebuild request, in 
+addition add offline class to support shared preferences usage.
+yiping1: Finished all items functionality inside the menu, and finished onBackPressed.
+
+
+Comment:
+zonglun1: We do not unserstand how the firebase work well, may be we need to pay more attention
+to basic idea of firebase.
+yiping1: Firebase problem influent us for a long time since project started, we spent a lot of time
+on that.
