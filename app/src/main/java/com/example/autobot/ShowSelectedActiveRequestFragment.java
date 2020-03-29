@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +98,7 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
                 lname.setText(rider.getLastName());
                 pnumber.setText(rider.getPhoneNumber());
                 email.setText(rider.getEmailAddress());
-
+                Log.d("checkuser",rider.getUserType()+"hi");
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setView(view)
                         .setTitle("Details")

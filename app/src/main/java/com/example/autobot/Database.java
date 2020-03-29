@@ -55,19 +55,8 @@ public class Database{
     String a = "0";
 
     public Database() throws ParseException {
-        FirebaseFirestore.getInstance().clearPersistence();
      //   mAuth = FirebaseAuth.getInstance();
         db1 = FirebaseFirestore.getInstance();
-//        storage = FirebaseStorage.getInstance();
-//        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
-        // to disable clean-up.
-
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-                .build();
-
-        db1.setFirestoreSettings(settings);
         collectionReference_user = db1.collection("users");
         collectionReference_request = db1.collection("Request");
         collectionReference_payment = db1.collection("PaymentInf");
@@ -189,6 +178,7 @@ public class Database{
         user_data.put("ImageUri",user.getUri());
         user_data.put("GoodRate",user.getGoodRate());
         user_data.put("BadRate",user.getBadRate());
+        user_data.put("Balance",user.getBalance());
         collectionReference_user
                 .document(user_data.get("Username"))
                 .set(user_data)
@@ -261,8 +251,10 @@ public class Database{
      */
 
     public User rebuildUser(String username){
+        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+        collectionReference_user = db2.collection("users");
         user.setUsername(username);
-        Query query = collectionReference_user.whereEqualTo("Username", username);
+        Query query = db2.collection("users").whereEqualTo("Username", username);
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -293,6 +285,7 @@ public class Database{
                                     user.setUri(uri);
                                     user.setGoodRate((String) document.get("GoodRate"));
                                     user.setBadRate((String) document.get("BadRate"));
+                                    user.setBalance((String) document.get("Balance"));
                                 }
                             } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -355,43 +348,54 @@ public class Database{
      */
 
     public Request rebuildRequest(String RequestID, User user) throws ParseException {
+        FirebaseFirestore db3 = FirebaseFirestore.getInstance();
+        collectionReference_request = db3.collection("Request");
         r.setRider(user);
-        collectionReference_request
-                .document(RequestID)
+        db3.collection("Request")
+                .whereEqualTo("ID",RequestID)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    LatLng BeginningLocation = new LatLng(Double.valueOf((String) document.getString("BeginningLocationLat")), Double.parseDouble((String) document.getString("BeginningLocationLnt")));
+                                    r.setBeginningLocation(BeginningLocation);
+                                    LatLng Destination = new LatLng(Double.valueOf((String) document.getString("DestinationLat")), Double.valueOf((String) document.getString("DestinationLnt")));
+                                    r.setDestination(Destination);
+                                    r.setDriver(rebuildUser((String) document.getString("Driver")));
+                                    r.setRequestID((String) document.getString("RequestID"));
+                                    r.setRider(rebuildUser((String) document.getString("Rider")));
 
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            LatLng BeginningLocation = new LatLng(Double.valueOf((String) documentSnapshot.getString("BeginningLocationLat")), Double.parseDouble((String) documentSnapshot.getString("BeginningLocationLnt")));
-                            r.setBeginningLocation(BeginningLocation);
-                            LatLng Destination = new LatLng(Double.valueOf((String) documentSnapshot.getString("DestinationLat")), Double.valueOf((String) documentSnapshot.getString("DestinationLnt")));
-                            r.setDestination(Destination);
-                            r.setDriver(rebuildUser((String) documentSnapshot.getString("Driver")));
-                            r.setRequestID((String) documentSnapshot.getString("RequestID"));
-                            r.setRider(rebuildUser((String) documentSnapshot.getString("Rider")));
-
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
-                            try {
-                                r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
-                                r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
-                                r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                                    try {
+                                        r.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
+                                        r.resetArriveTime(formatter.parse((String) document.getString("ArriveTime")));
+                                        r.resetSendTime(formatter.parse((String) document.getString("SendTime")));
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    r.reset_Request_Status((String) document.getString("RequestStatus"));
+                                    r.resetEstimateCost(Double.valueOf((String) document.getString("EstimateCost")));
+                                    r.setRequestID((String) document.getString("ID"));
+                                    r.setCost(Double.valueOf(document.getString("Cost")));
+                                    r.setTips(Double.valueOf(document.getString("Tips")));
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
                             }
-                            r.reset_Request_Status((String) documentSnapshot.getString("RequestStatus"));
-                            r.resetEstimateCost(Double.valueOf((String) documentSnapshot.getString("EstimateCost")));
-                            r.setRequestID((String) documentSnapshot.getString("ID"));
-                            r.setCost(Double.valueOf(documentSnapshot.getString("Cost")));
-                            r.setTips(Double.valueOf(documentSnapshot.getString("Tips")));
-                        }
 
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
                     }
                 });
 
         return r;
     }
+
     public void CancelRequest(String requestID){
         collectionReference_request.document(requestID)
                 .delete()

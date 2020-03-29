@@ -63,13 +63,13 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Rider Mode");
+        setTitle("Driver Mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
         db = DriverhomeActivity.db;
-        user = DriverhomeActivity.user; // get User
-        username = user.getUsername(); // get username
-
+        user = LoginActivity.user; // get User
+        //username = user.getUsername(); // get username
+        username = request.getDriver().getUsername();
         detect_cancel_order();//detect whether user cancel order
         setProfile(username,db); // set profile
         set_profile_picture(rootView);//set profile picture
@@ -135,11 +135,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        update_map();
-    }
+
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         name = findViewById(R.id.driver_name);
@@ -241,6 +237,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         //if order cancel return to the home page
                         Intent intent = new Intent(DriveIsGoing.this, DriverhomeActivity.class);
                         int pause_time = 3000;
+
                         FragmentManager fm = getSupportFragmentManager();
                         Fragment notification = new CancelNotifiFragment();
                         fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();

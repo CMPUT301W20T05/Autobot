@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.content.Intent;
 import android.os.Handler;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.paperdb.Paper;
+
 /**
  * this is class for main activity(first page of our app)
  */
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Button get_start;
     Handler handler;
     int DELAY = 3*1000;
-    public static Database db ;
+    public static Database db;
     SharedPreferences preferences_user;
     SharedPreferences preferences_request;
     @Override
@@ -47,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //if(Offline.preference_is_empty(preferences_request)&&Offline.preference_is_empty(preferences_user)){
-         //   log_in_page();
+        //   log_in_page();
         //}else{
-          //  jump_to_homepage();
+        //  jump_to_homepage();
         //}
         log_in_page();
-
 
     }
     /*change activity*/
