@@ -6,6 +6,7 @@ zonglun1: De bud the download data function especially rebuilduser and rebuild r
 addition add offline class to support shared preferences usage.
 yiping1: Finished all items functionality inside the menu, and finished onBackPressed.
 weida:add wallet function and some uri and payment function changed.
+xqiu1: make our ui look better, organize the app, adjust some functions
 
 Comment:
 zonglun1: We do not unserstand how the firebase work well, may be we need to pay more attention
@@ -13,3 +14,4 @@ to basic idea of firebase.
 yiping1: Firebase problem influent us for a long time since project started, we spent a lot of time
 on that.
 weida: We integrated the App， there are many bug. But we try to overcame a lot of problems.
+xqiu1: we should pay more attention on database(especially firebase) and also have a better structure.
