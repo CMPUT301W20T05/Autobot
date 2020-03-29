@@ -13,9 +13,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firestore.v1.StructuredQuery;
 
 import java.io.FileNotFoundException;
@@ -23,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class OrderComplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
@@ -85,6 +90,22 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
                 startActivity(intentQRCode);
             }
         });
+
+        db.db1.collection("Request").document(reID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    request.reset_Request_Status((String) document.getString("RequestStatus"));
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                    try {
+                        request.resetAcceptTime(formatter.parse((String) document.getString("ArriveTime")));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -104,7 +125,6 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         newUser.setEmergencyContact(emergencyContact);
 
         db.add_new_user(newUser);
-
     }
     @Override
     public String getUsername() {

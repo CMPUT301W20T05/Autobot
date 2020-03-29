@@ -27,8 +27,10 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -63,23 +65,22 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
     private LatLng destination;
     private LatLng origin;
     private Button HPConfirmButton, HPDirectionButton;
-    public  Database db;
+    public Database db;
     private String username;
     public static User user;
     public static Request request;
+    private String reID;
     private static final int REQUEST_PHONE_CALL = 101;
     public StorageReference storageReference;
     public FirebaseStorage storage;
     Uri downloadUri;
     private static final String TAG = "HomePageActivity";
 
-
     private String model;
     private double addPrice;
     private boolean clicked = false;
 
     DecimalFormat df = new DecimalFormat("0.00");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -208,7 +209,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                     }
                     request.setEstimateCost(origin, destination);
                     db.add_new_request(request);
-                    String reID = request.getRequestID();
+                    reID = request.getRequestID();
                     Paper.book().write(Prevalent.RequestIDKey, request);
                     //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
@@ -405,7 +406,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
             }
         });
-
     }
 
     /**

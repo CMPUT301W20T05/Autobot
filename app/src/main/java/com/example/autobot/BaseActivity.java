@@ -635,9 +635,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPause() {
         super.onPause();
-//        if (googleApiClient != null) {
-//            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,  this);
-//        }
     }
 
     @Override

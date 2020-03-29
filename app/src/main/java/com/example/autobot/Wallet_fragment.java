@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -54,7 +55,8 @@ public class Wallet_fragment extends Fragment {
                                 String status = document.getData().get("RequestStatus").toString();
                                 if (status.equals("Trip Completed")) {
                                     String time = document.getData().get("SendTime").toString();
-                                    String cost = document.getData().get("Cost").toString();
+                                    DecimalFormat df1 = new DecimalFormat("0.00");
+                                    String cost = df1.format(document.getData().get("Cost"));
                                     LatLng latLng = new LatLng(Double.valueOf((String) document.getString("DestinationLat")), Double.valueOf((String) document.getString("DestinationLnt")));
                                     String destination = null;
                                     try {
