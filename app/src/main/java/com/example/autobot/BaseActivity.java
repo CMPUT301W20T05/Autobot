@@ -555,7 +555,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 fragment = null;
                 setTitle("Home Page");
             }
-        }
+        } else if
 
     }
 
