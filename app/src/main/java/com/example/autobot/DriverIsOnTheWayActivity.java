@@ -40,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import static com.android.volley.VolleyLog.TAG;
 
-
 public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
 
     private Request request;

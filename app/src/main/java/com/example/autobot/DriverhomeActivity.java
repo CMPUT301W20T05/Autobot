@@ -10,13 +10,17 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,15 +63,13 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     public static Database db;
     private static final String TAG = "DriverhomeActivity";
     Marker beginning_location;
+    Fragment fragment1;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        db = LoginActivity.db;
-
-        //load_user();
         setTitle("driver mode");
         user = LoginActivity.user;
         db = LoginActivity.db; // get database
@@ -122,18 +124,18 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                             Request active_request = new Request(user3);
                             requests_list.add(active_request);} catch (ParseException e){}*/
                         adapter = new ActiveRequestsAdapter(DriverhomeActivity.this,0,requests_list);
-                        Fragment fragment = new ActiverequestsFragment(requests_list,adapter);
+                        fragment1 = new ActiverequestsFragment(requests_list,adapter);
                         load_requests(searchedLatLng);
                         active_request_fm = getSupportFragmentManager();
-                        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                        active_request_fm.beginTransaction().replace(R.id.myMap,fragment1).addToBackStack(null).commit();
                         //----------------------------------------------------------------------------------------------
                     }
                 }
 
                 @Override
                 public void onError(@NonNull Status status) {
-                               // TODO: Handle the error.
-                        Log.i(TAG, "An error occurred: " + status);
+                    // TODO: Handle the error.
+                    Log.i(TAG, "An error occurred: " + status);
                 }
             });
         }
@@ -157,59 +159,57 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
            Request active_request = new Request(user3);
            active_request.setBeginningLocation(searchedLatLng);
            requests_list.add(active_request);} catch (ParseException e){}*/
-           db.collectionReference_request.get()
-                   .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                       @Override
-                       public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                           if (task.isSuccessful()){
-                               for (DocumentSnapshot document: task.getResult()){
-                                   //get the location of start
-                                   Log.d("abc",(String)document.get("BeginningLocationLat")+(String)document.get("BeginningLocationLnt"));
-                                   LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
-                                   //if the distance between beginning location and search place is within the range and the request is inactive, select that request
-                                   long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
-                                   String b = (String) document.get("RequestStatus");
-                                   if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
-                                       //clone all the info of satisfied request
-                                       String request_id = (String) document.get("RequestID");
-                                       String rider_id = (String) document.get("Rider");
-                                       double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                       double tips =  (double) document.get("Tips");
-                                       String Accepttime = (String) document.get("AcceptTime");
-                                       String send_time = (String) document.get("SendTime");
-                                       LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
-                                       //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
-                                       try {
-                                           Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
-                                           //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
-                                           //testing
-                                           //User user3 = new User("jc");
-                                           //Request active_request = new Request(user3);
-                                           Toast.makeText(DriverhomeActivity.this,"success", Toast.LENGTH_SHORT).show();
-                                           requests_list.add(active_request);
-                                           adapter.notifyDataSetChanged();
-                                       } catch (ParseException e) {
-                                           e.printStackTrace();
-                                       }
-                                       //requests_list.add(active_request);
-                                   }
-                               }
-                           } else {
-                               Log.d("suck", "error getting documents: ", task.getException());
-                           }
-                       }
-                   });
+        db.collectionReference_request.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (DocumentSnapshot document: task.getResult()){
+                                //get the location of start
+                                Log.d("abc",(String)document.get("BeginningLocationLat")+(String)document.get("BeginningLocationLnt"));
+                                LatLng BeginningLocation = new LatLng(Double.valueOf((String)document.get("BeginningLocationLat")),Double.valueOf((String)document.get("BeginningLocationLnt")));
+                                //if the distance between beginning location and search place is within the range and the request is inactive, select that request
+                                long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
+                                String b = (String) document.get("RequestStatus");
+                                if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                    //clone all the info of satisfied request
+                                    String request_id = (String) document.get("RequestID");
+                                    String rider_id = (String) document.get("Rider");
+                                    double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
+                                    double tips =  (double) document.get("Tips");
+                                    String Accepttime = (String) document.get("AcceptTime");
+                                    String send_time = (String) document.get("SendTime");
+                                    LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
+                                    //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
+                                    try {
+                                        Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
+                                        //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
+                                        //testing
+                                        //User user3 = new User("jc");
+                                        //Request active_request = new Request(user3);
+                                        Toast.makeText(DriverhomeActivity.this,"success", Toast.LENGTH_SHORT).show();
+                                        requests_list.add(active_request);
+                                        adapter.notifyDataSetChanged();
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //requests_list.add(active_request);
+                                }
+                            }
+                        } else {
+                            Log.d("suck", "error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     /*public void update_navigation_view(User user){
         NavigationView navigationView = getWindow().getDecorView().getRootView().findViewById(R.id.nav_view);
         //find the layout of header layout
         header = navigationView.getHeaderView(0);
-
         //find the text view of user name
         TextView user_name = header.findViewById(R.id.driver_name);
         ImageView profile = header.findViewById(R.id.profile_photo);
-
         //edit
         user_name.setText(user.getFirstName()+user.getLastName());
         Bitmap pic = Bitmap.createBitmap(200,200,Bitmap.Config.RGB_565);
@@ -250,14 +250,14 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //-----------------------------------------
     @Override
     public void hide() {
-              //hide the request list view
-              requests_list.clear();
-              adapter.notifyDataSetChanged();
-              active_request_fm.popBackStack();
-              rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
-              //hide the beginning marker
-              remove_beginning_location();
-              //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+        //hide the request list view
+        requests_list.clear();
+        adapter.notifyDataSetChanged();
+        active_request_fm.popBackStack();
+        rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
+        //hide the beginning marker
+        remove_beginning_location();
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
 
     @Override
@@ -271,7 +271,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requests_list.get(pos).getBeginningLocation(), DEFAULT_ZOOM));
 
         //inflate the fragment
-        active_request_fm.beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+        active_request_fm.beginTransaction().replace(R.id.myMap,showSelectedActiveRequestFragment).addToBackStack(null).commit();
+
     }
 
     //for edit profile info
@@ -348,5 +349,89 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             beginning_location.remove();
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+    }
+    @Override
+    public void onBackPressed(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if (fragment == null){
+            int i = fragmentManager.getFragments().size()-1;
+            if (fragmentManager.getFragments().get(i) == fragment1){
+                ft.remove(fragment1);
+                super.onBackPressed(); // back to the last activity
+            } else {
+                if(System.currentTimeMillis() - firstPressedTime<2000){
+                    backToast.cancel();
+                    Intent a = new Intent(Intent.ACTION_MAIN);
+                    a.addCategory(Intent.CATEGORY_HOME);
+                    a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(a);
+                }else{
+                    backToast = Toast.makeText(DriverhomeActivity.this,"Press another time to Quit",Toast.LENGTH_SHORT);
+                    backToast.show();
+                    firstPressedTime = System.currentTimeMillis();
+                }
+            }
+        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
+            if (fragment != null){
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStackImmediate();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                }
+            }
+
+        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        }
+
     }
 }

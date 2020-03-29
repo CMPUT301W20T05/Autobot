@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Button get_start;
     Handler handler;
     int DELAY = 3*1000;
-    public static Database db;
+    public static com.example.autobot.Database db;
     SharedPreferences preferences_user;
     SharedPreferences preferences_request;
     @Override
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void jump_to_homepage(){
         final Intent intenthomepage = new Intent(this, HomePageActivity.class);
+        finish();
         startActivity(intenthomepage);
     }
 }

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 
@@ -44,6 +45,8 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         setProfile(username,db); // set profile
 
         TextView Price = findViewById(R.id.setFare);
+        DecimalFormat df1 = new DecimalFormat("0.00");
+        Price.setText(df1.format(request.getCost()));
         //driver scan qrcode
         Button buttonScan = findViewById(R.id.scan);
         buttonScan.setVisibility(View.VISIBLE);

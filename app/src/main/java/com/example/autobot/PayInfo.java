@@ -11,6 +11,11 @@ class PayInfo implements Serializable {
     public PayInfo(){
 
     }
+    public String getCardNumber(){return this.CardNumber;}
+    public String getHolderNmae(){return this.HolderNmae;}
+    public String getBillingAddress(){return this.BillingAddress;}
+    public String getCountry(){return this.Country;}
+    public String getPostalCode(){return this.PostalCode;}
 
     public void setCardNumber(String CardNumber){
         this.CardNumber = CardNumber;
