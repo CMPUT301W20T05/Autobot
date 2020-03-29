@@ -14,6 +14,7 @@ import com.google.firebase.storage.UploadTask;
 
 public class RebuildTool {
     static User user_new;
+    //documentReference is db.collectionReference_user.document(rider_id)
     public static void rebuild_user(DocumentReference documentReference,User rider){
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
