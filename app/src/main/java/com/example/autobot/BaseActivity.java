@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.DialogInterface;
@@ -87,6 +88,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -96,6 +100,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,6 +109,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.android.volley.VolleyLog.TAG;
 import static com.example.autobot.App.CHANNEL_1_ID;
 
 /**
@@ -416,7 +422,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("Payment").commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
@@ -506,7 +512,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 backToast.show();
                 firstPressedTime = System.currentTimeMillis();
             }
-
         } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
@@ -525,10 +530,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
             if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("Home Page");
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStack();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                }
             }
 
         } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
@@ -550,8 +560,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onOkPressed(PaymentCard newPayment) {
-        ((PaymentInformationFragment) fragment).updateList(newPayment);
+    public void onOkPressed(PaymentCard newPayment,int i) {
+        if (i == 1) Toast.makeText(this, "You have added this card.", Toast.LENGTH_SHORT).show();
+        else ((PaymentInformationFragment) fragment).updateList(newPayment);
     }
 
     @Override
