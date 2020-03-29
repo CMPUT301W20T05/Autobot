@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     public static Database db;
     public static User user;
     public static Request loaded_request;
-    SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
     public long firstPressedTime;
     public Toast backToast;
 
@@ -99,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (Status.equals("Phone Number")) {
                     if (Account.length() == 0) editAccount.setError("Please input PhoneNumber");
                     else {
-
                         Query query = db.collectionReference_user.whereEqualTo("PhoneNumber", Account);
                         query.get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -140,22 +139,24 @@ public class LoginActivity extends AppCompatActivity {
                                                             Log.d("Testing", user.getUserType() + "hihih");
                                                             //save user in shareprefence, don't need to login when you reopen the app
                                                             save_user_login();
+
+                                                            if (TruePassword.equals(Password)){
+                                                                // determine to go rider mode or driver mode
+                                                                if (Type.equals("Rider")) {
+                                                                    Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                                                                    startActivity(intentHomePage);
+
+                                                                }
+                                                                else {
+                                                                    Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                                                                    startActivity(intentHomePage);
+                                                                }
+                                                            }
+                                                            else {
+                                                                editTextInputPassword.setError("The Wrong password!");
+                                                            }
                                                         }
                                                     });
-
-                                                    if (TruePassword.equals(Password)) {
-                                                        // determine to go rider mode or driver mode
-                                                        if (Type.equals("Rider")) {
-                                                            Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                            startActivity(intentHomePage);
-
-                                                        } else {
-                                                            Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                            startActivity(intentHomePage);
-                                                        }
-                                                    } else {
-                                                        editTextInputPassword.setError("The Wrong password!");
-                                                    }
                                                 }
 
                                             } else editAccount.setError("PhoneNumber is not exist");
@@ -177,13 +178,13 @@ public class LoginActivity extends AppCompatActivity {
                                             if (RightPassword.equals(Password)) {
                                                 if (Type.equals("Rider")) {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
-                                                    intentHomePage.putExtra("User", Account);
-                                                    //finish();
+                                                    intentHomePage.putExtra("User",Account);
+                                                    finish();
                                                     startActivity(intentHomePage);
                                                 } else {
                                                     Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
-                                                    intentHomePage.putExtra("User", Account);
-                                                    //finish();
+                                                    intentHomePage.putExtra("User",Account);
+                                                    finish();
                                                     startActivity(intentHomePage);
                                                 }
                                             } else
@@ -195,11 +196,9 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                     }
                 }
-
             }
         });
     }
-
 
 
     public void load_user(){
