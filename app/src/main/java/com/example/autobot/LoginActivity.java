@@ -64,9 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         if(user != null){
             if(user.getUserType().equals("Driver")){
                 Intent intentHomePage = new Intent(LoginActivity.this, DriverhomeActivity.class);
+                finish();
                 startActivity(intentHomePage);
             }else{
                 Intent intentHomePage = new Intent(LoginActivity.this, HomePageActivity.class);
+                finish();
                 startActivity(intentHomePage);
             }
         }
