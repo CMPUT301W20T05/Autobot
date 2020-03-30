@@ -43,7 +43,7 @@ public class ConfirmOriginAndDestination extends BaseActivity {
         // Specify the types of place data to return.
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-            setAutocompleteSupportFragment(autocompleteFragmentOrigin);
+            setAutocompleteSupportFragment(autocompleteFragmentOrigin,"");
             Location temp = getCurrentLocation();
             origin = new LatLng(temp.getLatitude(), temp.getLongitude());
 
@@ -68,7 +68,7 @@ public class ConfirmOriginAndDestination extends BaseActivity {
 
         if (autocompleteFragmentDestination != null) {
             autocompleteFragmentDestination.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-            setAutocompleteSupportFragment(autocompleteFragmentDestination);
+            setAutocompleteSupportFragment(autocompleteFragmentDestination,"");
 
             destination = getSearchedLatLng();
         }
