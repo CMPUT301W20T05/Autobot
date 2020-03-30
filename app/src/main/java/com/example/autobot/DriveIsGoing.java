@@ -48,6 +48,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.gson.reflect.TypeToken;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -56,6 +58,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -77,7 +80,7 @@ public class DriveIsGoing extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Driver Mode");
+        setTitle("driver mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
         db = DriverhomeActivity.db;
@@ -136,12 +139,12 @@ public class DriveIsGoing extends BaseActivity {
             @Override
             public void onClick(View view) {
                 view = LayoutInflater.from(DriveIsGoing.this).inflate(R.layout.profile_viewer, null);
-
+                ImageView avatar = view.findViewById(R.id.profileAvatar);
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
-
+                setAvatar(rider, avatar);
                 fname.setText(rider.getFirstName());
                 lname.setText(rider.getLastName());
                 pnumber.setText(rider.getPhoneNumber());
@@ -245,6 +248,8 @@ public class DriveIsGoing extends BaseActivity {
 
                     else if ((documentSnapshot.get("RequestStatus").toString()).equals("Rider Accepted")){
                         //notification
+                        request.reset_Request_Status("Rider Accepted");
+                        LoginActivity.save_request(request);
                         boolean value1 = true; // default value if no value was found
                         final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
                         value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key
@@ -336,7 +341,6 @@ public class DriveIsGoing extends BaseActivity {
     }
     @Override
     public void onBackPressed(){
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
 
@@ -353,21 +357,26 @@ public class DriveIsGoing extends BaseActivity {
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
-        }
+        } else if (fragment == null){}
         else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
+
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -375,11 +384,15 @@ public class DriveIsGoing extends BaseActivity {
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
                     fragmentManager.popBackStackImmediate();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
                     fragment = null;
-                    setTitle("Home Page");
+                    setTitle("driver mode");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -388,14 +401,18 @@ public class DriveIsGoing extends BaseActivity {
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
 

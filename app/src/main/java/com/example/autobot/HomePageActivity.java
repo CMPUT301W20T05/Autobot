@@ -242,10 +242,12 @@ public class HomePageActivity extends BaseActivity {
                             Double tips = 0.0;
                             double totalFare = addPrice + estimateFare;
                             Editable temp = editTextTip.getText();
-                            if (temp!=null) {
-                                tips = Double.valueOf(String.valueOf(temp));
-                                request.resetTips(tips, db);
-                                totalFare += tips;
+                            if (temp != null) {
+                                if (String.valueOf(temp) != "") {
+                                    tips = Double.valueOf(String.valueOf(temp));
+                                    request.resetTips(tips, db);
+                                    totalFare += tips;
+                                }
                             }
                             //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
@@ -493,6 +495,8 @@ public class HomePageActivity extends BaseActivity {
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(mhItem)) { // if the my request history page is opened, back to main page
@@ -501,6 +505,8 @@ public class HomePageActivity extends BaseActivity {
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)) { // if the payment information page is opened, back to main page
@@ -508,11 +514,15 @@ public class HomePageActivity extends BaseActivity {
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
                     fragmentManager.popBackStackImmediate();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
                     fragment = null;
                     setTitle("Home Page");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -522,6 +532,8 @@ public class HomePageActivity extends BaseActivity {
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)) { // if the notifications page is opened, back to main page
             if (fragment != null) {
@@ -529,13 +541,10 @@ public class HomePageActivity extends BaseActivity {
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
 }

@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
     public static Database db;
     public static User user;
-    public static Request loaded_request;
+    public static Request request;
     public static SharedPreferences sharedPreferences;
     public long firstPressedTime;
     public Toast backToast;
@@ -250,16 +250,22 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void load_request(){
-        try{
+    public static void load_request(Context context){
+        //try{
             //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
-            sharedPreferences = getPreferences(MODE_PRIVATE);
-            loaded_request = Offline.ExtractRequest(sharedPreferences);
-            Log.d("loadrequest",loaded_request.get_active_requset_tostring());
-        }
-        catch (Exception e){
+            request = Offline.ExtractRequest(LoginActivity.sharedPreferences);
+            if(request != null){
+            Toast.makeText(context,request.get_active_requset_tostring(),Toast.LENGTH_LONG).show();}else {
+                Toast.makeText(context,"empty",Toast.LENGTH_LONG).show();
+            }
+        //}
+        /*catch (Exception e){
             Log.d("loadrequest","no saved request"+e.toString());
-        }
+        }*/
+    }
+
+    public static void save_request(Request request1){
+        Offline.UploadRequest(LoginActivity.sharedPreferences,request1);
     }
 
     public static void save_user_login(){

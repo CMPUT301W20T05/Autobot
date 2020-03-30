@@ -86,7 +86,7 @@ public class EditProfilePage extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_contact_infor_activity, container,false);
 
-        pPhoto = view.findViewById(R.id.imageView2);
+        pPhoto = view.findViewById(R.id.profileAvatar);
         bitmap = listener.getBitmap();
         if (bitmap != null) pPhoto.setImageBitmap(bitmap);
         pPhoto.setOnClickListener(new View.OnClickListener() {
