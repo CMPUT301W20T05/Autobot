@@ -178,7 +178,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-
+        LoginActivity.load_request(getApplicationContext());
         //set up google map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
         if (mapFragment != null) {
@@ -455,7 +455,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //clear save instance
-                                Offline.clear(LoginActivity.sharedPreferences);
+                                Offline.clear_user(LoginActivity.sharedPreferences);
                                 Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(logout);
                             }
