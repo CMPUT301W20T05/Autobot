@@ -216,7 +216,7 @@ public class Request implements Serializable {
     public void resetCost(double cost,Database db){
         this.Cost = cost;
         HashMap<String, Object> update = new HashMap<>();
-        update.put("Cost", this.Cost);
+        update.put("Cost", String.valueOf(this.Cost));
         db.collectionReference_request.document(RequestID)
                 .update(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.DialogFragment;
 
 
@@ -24,6 +27,9 @@ import com.google.zxing.Result;
 
 import java.text.DecimalFormat;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -37,8 +43,6 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     public Result result;
     final int MY_PERMISSION_REQUEST_CAMERA = 1;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +106,10 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
             }
         });
         scanCompleteDialog.show();
+    }
+    @Override
+    public void onBackPressed(){
+
     }
 
 }

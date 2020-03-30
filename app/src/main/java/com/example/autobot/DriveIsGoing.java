@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -28,8 +30,10 @@ import androidx.core.app.ActivityCompat;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -60,6 +64,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     private User user;
     private Button buttonCancelOrder;
     private static final int REQUEST_PHONE_CALL = 101;
+    Fragment fragment1;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -270,6 +275,24 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
                         delay(pause_time,fm);
                     }
+                    //if rider click rider pick
+                    else if((documentSnapshot.get("RequestStatus").toString()).equals("Rider picked")){
+                        request.reset_Request_Status("Rider picked");
+                        pick_up_rider();
+                    }
+                    else if((documentSnapshot.get("RequestStatus").toString()).equals("Trip Completed")){
+                        request.UpdateStatus(4);
+                        //need to add
+                        //update db
+                        db.ChangeRequestStatus(request);
+
+                        Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
+                        //intentOrderComplete.putExtra("Username",username);
+                        finish();
+                        intentOrderComplete.putExtra("Username",username);
+                        finish();
+                        startActivity(intentOrderComplete);
+                    }
                 }
             }
         });
@@ -325,6 +348,72 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             e.printStackTrace();
         } catch (NumberFormatException e){
         }
+    }
+    @Override
+    public void onBackPressed(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+
+        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
+            if (fragment != null){
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStackImmediate();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                }
+            }
+
+        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+            }
+        }
+
     }
 
 
