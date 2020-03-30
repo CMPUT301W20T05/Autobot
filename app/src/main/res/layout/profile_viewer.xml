@@ -9,8 +9,8 @@
     android:background="@android:color/background_light"
     android:clickable="true">
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileAvatar"
         android:layout_width="99dp"
         android:layout_height="99dp"
         android:layout_marginTop="52dp"
@@ -27,7 +27,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        app:layout_constraintTop_toBottomOf="@+id/profileAvatar">
 
         <TextView
             android:layout_width="100dp"

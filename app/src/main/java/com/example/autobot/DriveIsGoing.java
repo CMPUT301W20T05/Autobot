@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -40,6 +41,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -47,6 +50,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.gson.reflect.TypeToken;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +66,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class DriveIsGoing extends BaseActivity {
 
     protected static Request request;
     private Database db;
@@ -72,7 +80,7 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Driver Mode");
+        setTitle("driver mode");
         View rootView = getLayoutInflater().inflate(R.layout.cancel_ride, frameLayout);
 
         db = DriverhomeActivity.db;
@@ -131,12 +139,12 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
             @Override
             public void onClick(View view) {
                 view = LayoutInflater.from(DriveIsGoing.this).inflate(R.layout.profile_viewer, null);
-
+                ImageView avatar = view.findViewById(R.id.profileAvatar);
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
-
+                setAvatar(rider, avatar);
                 fname.setText(rider.getFirstName());
                 lname.setText(rider.getLastName());
                 pnumber.setText(rider.getPhoneNumber());
@@ -154,35 +162,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
         buttonCancelOrder.setText("Pick up passenager");
         pick_up_rider();
     }
-
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
-        User newUser = user;
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-
-        db.add_new_user(newUser);
-
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
-
 
     //reset the button onclick function--------------------------------------
     /*public void accept_order(){
@@ -255,12 +234,18 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         Toast.makeText(DriveIsGoing.this,"Cancel",Toast.LENGTH_LONG).show();
                         //if order cancel return to the home page
                         Intent intent = new Intent(DriveIsGoing.this, DriverhomeActivity.class);
-                        int pause_time = 3000;
+                        //notification
+                        boolean value1 = true; // default value if no value was found
+                        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
+                        value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key
+                        if (value1){
+                            int pause_time = 3000;
+                            FragmentManager fm = getSupportFragmentManager();
+                            Fragment notification = new CancelNotifiFragment();
+                            fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
+                            delay(pause_time,intent);}
+                        }
 
-                        FragmentManager fm = getSupportFragmentManager();
-                        Fragment notification = new CancelNotifiFragment();
-                        fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
-                        delay(pause_time,intent);}
                     else if ((documentSnapshot.get("RequestStatus").toString()).equals("Rider Accepted")){
                         //notification
                         request.reset_Request_Status("Rider Accepted");
@@ -271,13 +256,14 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         if (value1){
                             notificationManager = NotificationManagerCompat.from(getApplicationContext());
                             sendOnChannel("Rider has accepted. Please pick up your rider.");
+                            int pause_time = 3000;
+                            FragmentManager fm = getSupportFragmentManager();
+                            Fragment notification = new SuccessfulNotification();
+                            update_map();
+                            fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
+                            delay(pause_time,fm);
                         }
-                        int pause_time = 3000;
-                        FragmentManager fm = getSupportFragmentManager();
-                        Fragment notification = new SuccessfulNotification();
-                        update_map();
-                        fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
-                        delay(pause_time,fm);
+
                     }
                     //if rider click rider pick
                     else if((documentSnapshot.get("RequestStatus").toString()).equals("Rider picked")){
@@ -355,7 +341,6 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
     }
     @Override
     public void onBackPressed(){
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
 
@@ -372,21 +357,26 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
-        }
+        } else if (fragment == null){}
         else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
+
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -394,11 +384,15 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
                     fragmentManager.popBackStackImmediate();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
                     fragment = null;
-                    setTitle("Home Page");
+                    setTitle("driver mode");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -407,14 +401,18 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
 

@@ -6,21 +6,30 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -29,8 +38,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -40,7 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import static com.android.volley.VolleyLog.TAG;
 
-public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class DriverIsOnTheWayActivity extends BaseActivity {
 
     private Request request;
     private Database db;
@@ -214,12 +227,13 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                                     @Override
                                     public void onClick(View view) {
                                         view = LayoutInflater.from(DriverIsOnTheWayActivity.this).inflate(R.layout.profile_viewer, null);
-
+                                        ImageView avatar = view.findViewById(R.id.profileAvatar);
                                         TextView fname = view.findViewById(R.id.FirstName);
                                         TextView lname = view.findViewById(R.id.LastName);
                                         TextView pnumber = view.findViewById(R.id.PhoneNumber);
                                         TextView email = view.findViewById(R.id.EmailAddress);
                                         //should be set as driver's infor
+                                        setAvatar(driver, avatar);
                                         fname.setText(driver.getFirstName());
                                         lname.setText(driver.getLastName());
                                         pnumber.setText(driver.getPhoneNumber());
@@ -297,35 +311,6 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
         });
     }
 
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
-        User newUser = user;
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-
-        db.add_new_user(newUser);
-
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
-
     //request attributes
     public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException {
         Log.d("request_id",request_id);
@@ -372,6 +357,82 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                 });
     }
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (fragment == null){}
+        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
+            }
+
+        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
+            }
+
+        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
+            if (fragment != null){
+                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
+                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
+                    fragmentManager.popBackStackImmediate();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
+                } else {
+                    ft.remove(fragment).commit();
+                    onResume();
+                    fragment = null;
+                    setTitle("Home Page");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
+                }
+            }
+
+        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
+            }
+        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
+            if (fragment != null){
+                ft.remove(fragment).commit();
+                onResume();
+                fragment = null;
+                setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
+            }
+        }
+
+    }
 
 }

@@ -3,24 +3,34 @@ package com.example.autobot;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-public class Driver_ordercomplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+
+public class Driver_ordercomplete extends BaseActivity {
 
     private Database db;
     private String username;
@@ -75,33 +85,6 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
-        User newUser = user;
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-
-        db.add_new_user(newUser);
-
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
-    @Override
     public void onBackPressed(){
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -121,12 +104,15 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
         }
+        else if (fragment == null){}
         else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
@@ -134,7 +120,9 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -142,11 +130,15 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
                     fragmentManager.popBackStackImmediate();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
                     fragment = null;
-                    setTitle("Home Page");
+                    setTitle("driver mode");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -155,14 +147,18 @@ public class Driver_ordercomplete extends BaseActivity implements EditProfilePag
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
 

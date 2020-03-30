@@ -21,6 +21,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.textclassifier.TextClassifierEvent;
 import android.widget.ArrayAdapter;
@@ -62,10 +63,12 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -92,10 +95,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -121,13 +128,13 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener {
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener, EditProfilePage.EditProfilePageListener, PaymentInformationFragment.OnFragmentInteractionListenerPayment{
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
     public ArrayList<PaymentCard> mDataList;
-    public User user;
+    public User user = LoginActivity.user;
     public FrameLayout frameLayout;
     public String un;
     //pls dont private these part
@@ -154,6 +161,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public CircleImageView profilePhoto;
     public TextView goodrate;
     public TextView badrate;
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -167,9 +176,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public Uri myuri;
     private String temp1, temp2;
 
-
+    public static Database db = LoginActivity.db; // get database
     public long firstPressedTime;
     public Toast backToast;
+    public String username = user.getUsername();
 
     private static final int REQUEST_PHONE_CALL = 101;
 
@@ -181,6 +191,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         LoginActivity.load_request(getApplicationContext());
         //set up google map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
 //            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -420,28 +431,32 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()) {
             case R.id.my_request_history:
                 fragment = new RequestHistoryFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(1).setChecked(true);
                 setTitle("My Request History");
                 break;
             case R.id.settings:
                 fragment = new SettingsFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(4).setChecked(true);
                 setTitle("About Us");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
             case R.id.my_notification:
                 fragment = new Notifications();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
                 navigationView.getMenu().getItem(2).setChecked(true);
+                frameLayout.setVisibility(View.GONE);
                 setTitle("My Notifications");
                 break;
             case R.id.log_out:
@@ -474,7 +489,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 //                Bundle bundle = new Bundle();
 //                bundle.putString("username",username);
 //                fragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(0).setChecked(true);
                 setTitle("Edit Profile");
                 break;
@@ -519,6 +535,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
@@ -527,6 +545,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -539,6 +559,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     onResume();
                     fragment = null;
                     setTitle("Home Page");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -548,13 +570,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
-                fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
 
@@ -958,14 +983,18 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void makePhoneCall(String phoneNumber) {
+        boolean success = false;
         if (!phoneNumber.equals("")) {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
             callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "No permission for calling", Toast.LENGTH_LONG).show();
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-            } else {
-                startActivity(callIntent);
+            while (!success) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "No permission for calling", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+                } else {
+                    success = true;
+                    startActivity(callIntent);
+                }
             }
         }
         else {
@@ -1011,4 +1040,63 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         balance.setText(newbalance);
         Toast.makeText(BaseActivity.this, "Add Credit Success!" , Toast.LENGTH_SHORT).show();
     }
+    @Override
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
+        User newUser = user;
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
+
+        String username = newUser.getUsername();
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        if (mybitmap != null) {
+            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        }
+
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Uri downloadUrl = uri;
+                newUser.setUri(downloadUrl.toString());
+                Toast.makeText(BaseActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(BaseActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        newUser.setFirstName(FirstName); // save the changes that made by user
+        newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
+        LoginActivity.save_user_login();
+        db.add_new_user(newUser);
+
+    }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
+    }
+
+    @Override
+    public void onOkPressed(Fragment thisFragment) {
+        fragment = thisFragment;
+    }
+
 }

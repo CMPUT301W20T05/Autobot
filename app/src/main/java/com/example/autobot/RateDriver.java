@@ -33,7 +33,7 @@ import static com.android.volley.VolleyLog.TAG;
  * User can rate driver at this step
  */
 
-public class RateDriver extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class RateDriver extends BaseActivity {
 
     private Database db;
     private String username;
@@ -100,12 +100,13 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
             public void onClick(View view) {
                 //see profile
                 view = LayoutInflater.from(RateDriver.this).inflate(R.layout.profile_viewer, null);
-
+                ImageView avatar = view.findViewById(R.id.profileAvatar);
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
                 //should be set as driver's infor
+                setAvatar(driver, avatar);
                 fname.setText(driver.getFirstName());
                 lname.setText(driver.getLastName());
                 pnumber.setText(driver.getPhoneNumber());
@@ -157,33 +158,6 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
         });
     }
 
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
-        User newUser = user;
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-
-        db.add_new_user(newUser);
-
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
     @Override
     public void onBackPressed() {}
 }
