@@ -76,10 +76,6 @@ public class HomePageActivity extends BaseActivity {
     public static User user;
     public static Request request;
     private String reID;
-    private static final int REQUEST_PHONE_CALL = 101;
-    public StorageReference storageReference;
-    public FirebaseStorage storage;
-    Uri downloadUri;
     private static final String TAG = "HomePageActivity";
 
     private String model;
@@ -102,6 +98,12 @@ public class HomePageActivity extends BaseActivity {
         username = user.getUsername(); // get username
 
         setProfile(username,db); // set profile
+
+        //check if there is a unfinished request
+        Request localRequest = LoginActivity.load_request(HomePageActivity.this);
+        if (localRequest != null) {
+
+        }
 
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
@@ -140,8 +142,6 @@ public class HomePageActivity extends BaseActivity {
                     Toast.makeText(HomePageActivity.this, "Please select destination", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //distance between two locations
-                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                     //draw route between two locations
                     drawRoute(origin, destination);
                     HPConfirmButton.setVisibility(View.VISIBLE);
@@ -192,6 +192,9 @@ public class HomePageActivity extends BaseActivity {
                     }
                     request.setEstimateCost(origin, destination);
                     db.add_new_request(request);
+                    //save current request to local
+                    LoginActivity.save_request(request);
+
                     reID = request.getRequestID();
                     //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
@@ -322,22 +325,6 @@ public class HomePageActivity extends BaseActivity {
                             alert.show();
                         }
                     });
-
-//                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
-//                phoneButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-//                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
-//                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-//                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-//                        } else {
-//                            startActivity(callIntent);
-//                        }
-//                    }
-//                });
-
                 }
                 else {
                     //2: bottom sheet for waiting driver to accept
@@ -393,7 +380,7 @@ public class HomePageActivity extends BaseActivity {
 
                     dialog.show();
                 }
-
+                LoginActivity.save_request(request);
             }
         });
     }
