@@ -136,12 +136,12 @@ public class DriveIsGoing extends BaseActivity {
             @Override
             public void onClick(View view) {
                 view = LayoutInflater.from(DriveIsGoing.this).inflate(R.layout.profile_viewer, null);
-
+                ImageView avatar = view.findViewById(R.id.profileAvatar);
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
-
+                setAvatar(rider, avatar);
                 fname.setText(rider.getFirstName());
                 lname.setText(rider.getLastName());
                 pnumber.setText(rider.getPhoneNumber());

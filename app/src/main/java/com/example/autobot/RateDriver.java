@@ -100,12 +100,13 @@ public class RateDriver extends BaseActivity {
             public void onClick(View view) {
                 //see profile
                 view = LayoutInflater.from(RateDriver.this).inflate(R.layout.profile_viewer, null);
-
+                ImageView avatar = view.findViewById(R.id.profileAvatar);
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
                 //should be set as driver's infor
+                setAvatar(driver, avatar);
                 fname.setText(driver.getFirstName());
                 lname.setText(driver.getLastName());
                 pnumber.setText(driver.getPhoneNumber());
