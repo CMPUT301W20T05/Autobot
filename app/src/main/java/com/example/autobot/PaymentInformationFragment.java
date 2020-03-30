@@ -2,6 +2,7 @@ package com.example.autobot;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -49,6 +50,23 @@ public class PaymentInformationFragment extends Fragment {
     String postalCode;
     int cardLogo;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  //format for the date
+    private OnFragmentInteractionListenerPayment listener;
+
+    public interface OnFragmentInteractionListenerPayment {
+        void onOkPressed(Fragment fragment);
+
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListenerPayment) {
+            listener = (OnFragmentInteractionListenerPayment) context;
+
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
 
     public void updateList(PaymentCard paymentCard){
         mDataList.add(paymentCard);
@@ -120,6 +138,7 @@ public class PaymentInformationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Wallet_fragment wallet_fragment = new Wallet_fragment();
+                listener.onOkPressed(wallet_fragment);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container,wallet_fragment,"WALLET_FRAGMENT").addToBackStack(null);
                 fragmentTransaction.commit();

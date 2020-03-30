@@ -21,6 +21,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.textclassifier.TextClassifierEvent;
 import android.widget.ArrayAdapter;
@@ -62,10 +63,12 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -125,7 +128,7 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener, EditProfilePage.EditProfilePageListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener, EditProfilePage.EditProfilePageListener, PaymentInformationFragment.OnFragmentInteractionListenerPayment{
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
@@ -188,6 +191,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         //set up google map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
 //            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -427,28 +431,32 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()) {
             case R.id.my_request_history:
                 fragment = new RequestHistoryFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(1).setChecked(true);
                 setTitle("My Request History");
                 break;
             case R.id.settings:
                 fragment = new SettingsFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(4).setChecked(true);
                 setTitle("About Us");
                 break;
             case R.id.payment_information:
                 fragment = new PaymentInformationFragment();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(3).setChecked(true);
                 setTitle("Payment Information");
                 break;
             case R.id.my_notification:
                 fragment = new Notifications();
                 anInt = 1;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap, fragment).addToBackStack(null).commit();
                 navigationView.getMenu().getItem(2).setChecked(true);
+                frameLayout.setVisibility(View.GONE);
                 setTitle("My Notifications");
                 break;
             case R.id.log_out:
@@ -481,7 +489,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 //                Bundle bundle = new Bundle();
 //                bundle.putString("username",username);
 //                fragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.myMap,fragment).addToBackStack(null).commit();
+                frameLayout.setVisibility(View.GONE);
                 navigationView.getMenu().getItem(0).setChecked(true);
                 setTitle("Edit Profile");
                 break;
@@ -525,8 +534,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                ft.add(R.id.fragment_container,fragment).commit();
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
@@ -535,6 +545,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -547,6 +559,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     onResume();
                     fragment = null;
                     setTitle("Home Page");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -556,13 +570,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 onResume();
                 fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
-                fragment = null;
                 setTitle("Home Page");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
 
@@ -1076,4 +1093,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public Bitmap getBitmap(){
         return mybitmap;
     }
+
+    @Override
+    public void onOkPressed(Fragment thisFragment) {
+        fragment = thisFragment;
+    }
+
 }
