@@ -176,7 +176,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                     //clone all the info of satisfied request
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
-                                    double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
+                                    double Estcost = Double.parseDouble(document.get("EstimateCost").toString());
                                     double tips =  Double.parseDouble(document.get("Tips").toString());
 
                                     String Accepttime = (String) document.get("AcceptTime");
