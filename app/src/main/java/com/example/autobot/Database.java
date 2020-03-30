@@ -81,6 +81,7 @@ public class Database{
                 if(documentSnapshot != null&&documentSnapshot.exists()){
                     if (documentSnapshot.getString("RequestStatus").equals(requeststatus)){
                         Log.d(TAG,"Current status: "+ requeststatus);
+                        start.finish();
                         start.startActivity(intent);
                     }
                 }

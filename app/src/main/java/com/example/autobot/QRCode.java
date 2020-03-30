@@ -62,6 +62,7 @@ public class QRCode extends BaseActivity {
         request = HomePageActivity.request;
         reID = request.getRequestID();
         User Driver = DriverIsOnTheWayActivity.driver;
+        User rider = request.getRider();
         setProfile(username,db); // set profile
         qrimg = (ImageView) findViewById(R.id.qrcodeScanner);
         generate = (Button) findViewById(R.id.generate);
@@ -102,15 +103,16 @@ public class QRCode extends BaseActivity {
             public void onClick(View v) {
                 Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                 Driver.setBalance(String.valueOf(Double.parseDouble(Driver.getBalance()) + totalFare));
-                user.setBalance(String.valueOf(Double.parseDouble(Driver.getBalance()) - totalFare));
+                rider.setBalance(String.valueOf(Double.parseDouble(rider.getBalance()) - totalFare));
                 db.add_new_user(Driver);
-                db.add_new_user(user);
+                db.add_new_user(rider);
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
                 finish();
                 startActivity(intentRateDriver);
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {}
 
 }

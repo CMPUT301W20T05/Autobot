@@ -184,4 +184,6 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     public Bitmap getBitmap(){
         return mybitmap;
     }
+    @Override
+    public void onBackPressed() {}
 }

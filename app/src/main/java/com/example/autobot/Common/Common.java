@@ -19,10 +19,10 @@ public class Common {
         int i = 0;
         ArrayList<HistoryRequest> customList = new ArrayList<>();
 
-        HistoryRequest firstPosition = new HistoryRequest("Cancel", new Date(), "gg", "gg", 1, VIEWTYPE_GROUP);
+        HistoryRequest firstPosition = new HistoryRequest(list.get(i).getStatus(), new Date(), "gg", "gg", 1, VIEWTYPE_GROUP);
         customList.add(firstPosition);
         for (i = 0;i < list.size()-1;i++){
-            HistoryRequest historyRequest = new HistoryRequest("Cancel", new Date(), "gg", "gg", 1, VIEWTYPE_GROUP);
+            HistoryRequest historyRequest = new HistoryRequest(list.get(i).getStatus(), new Date(), "gg", "gg", 1, VIEWTYPE_GROUP);
             String string1 = list.get(i).getStatus();
             String string2 = list.get(i+1).getStatus();
             if (string1.equals(string2)){

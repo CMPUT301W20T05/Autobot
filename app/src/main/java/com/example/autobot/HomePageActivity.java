@@ -118,13 +118,13 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentOrigin.setHint("Current Location");
-            setAutocompleteSupportFragment(autocompleteFragmentOrigin);
+            setAutocompleteSupportFragment(autocompleteFragmentOrigin, "curr");
         }
 
         if (autocompleteFragmentDestination != null) {
             autocompleteFragmentDestination.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
             autocompleteFragmentDestination.setHint("Destination");
-            setAutocompleteSupportFragment(autocompleteFragmentDestination);
+            setAutocompleteSupportFragment(autocompleteFragmentDestination, "dest");
         }
 
 
@@ -247,16 +247,25 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                                 request.resetTips(tips, db);
                                 totalFare += tips;
                             }
-                            request.resetCost(totalFare, db);
-                            //finish current activity
-                            uCurRequestDialog.dismiss();
-                            //wait driver to accept
-                            Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-                            db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
+                            //check if affordable
+                            if (Double.parseDouble(user.getBalance()) >= totalFare){
+                                request.resetCost(Math.round(totalFare)/1.00, db);
 
-                            //set price have to go here to display
-                            approPrice.setText(df.format(request.getCost()));
-                            dialog.show();
+                                //finish current activity
+                                uCurRequestDialog.dismiss();
+                                //wait driver to accept
+                                Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
+                                db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
+
+                                //set price have to go here to display
+                                approPrice.setText(df.format(request.getCost()));
+                                dialog.show();
+                            }
+                            else{
+                                Toast.makeText(HomePageActivity.this,"Sorry the balance in wallet bot enough.Please add credit!",Toast.LENGTH_SHORT).show();
+                                db.CancelRequest(reID);
+                                recreateActivity();
+                            }
                         }
                     });
                     uCurRequestDialog.show();
@@ -416,23 +425,11 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
      * @return origin location (Latlng)
      */
     public LatLng getOrigin(AutocompleteSupportFragment autocompleteFragmentOrigin){
-        Location temp = getCurrentLocation();
+        Location loc = getCurrentLocation();
+        origin = new LatLng(loc.getLatitude(), loc.getLongitude()); //convert to latlng
+        LatLng temp = getPickupLoc();
         if (temp != null) {
-            origin = new LatLng(temp.getLatitude(), temp.getLongitude()); //convert to latlng
-
-            autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(@NonNull Place place) {
-                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                    origin = place.getLatLng();
-                }
-
-                @Override
-                public void onError(@NonNull Status status) {
-                    // TODO: Handle the error.
-                    Log.i(TAG, "An error occurred: " + status);
-                }
-            });
+            origin = temp;
         }
         return origin;
     }
@@ -589,6 +586,4 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             }
         }
     }
-
-
 }

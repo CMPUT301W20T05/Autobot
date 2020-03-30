@@ -3,181 +3,196 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_style"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_height="300dp"
+        android:verticalScrollbarPosition="right"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="Request Detail"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageViewAvatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/icon" />
+            android:background="@drawable/layout_style"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <TextView
-                android:id="@+id/Driver_name"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Rider Name"
-                android:textSize="20sp" />
-
-            <ImageButton
-                android:id="@+id/phoneButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:srcCompat="@android:drawable/stat_sys_phone_call" />
-
-            <ImageButton
-                android:id="@+id/emailButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:srcCompat="@android:drawable/ic_dialog_email" />
-
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:text="Start"
-                android:textColor="@color/blue2"
-                android:textSize="18sp"
+                android:padding="15dp"
+                android:text="Request Detail"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/origin_loc"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:padding="16dp"
-                android:text="Origin location"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageViewAvatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/icon" />
 
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:text="End"
-                android:textColor="@color/blue2"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/Driver_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    android:text="Rider Name"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/Destination"
+                <ImageButton
+                    android:id="@+id/phoneButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:srcCompat="@android:drawable/stat_sys_phone_call" />
+
+                <ImageButton
+                    android:id="@+id/emailButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:srcCompat="@android:drawable/ic_dialog_email" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:padding="16dp"
-                android:text="@string/Destination"
-                android:textSize="18sp" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Start"
+                    android:textColor="@color/blue2"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Distance"
-                android:textColor="@color/blue2"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/origin_loc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:padding="16dp"
+                    android:text="Origin location"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/Appro_distance"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:padding="16dp"
-                android:text="Approximated distance"
-                android:textSize="18sp" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="End"
+                    android:textColor="@color/blue2"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Fare"
-                android:textColor="@color/blue2"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/Destination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:padding="16dp"
+                    android:text="@string/Destination"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/Appro_price"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Approximated price"
-                android:textSize="18sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Distance"
+                    android:textColor="@color/blue2"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Appro_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:padding="16dp"
+                    android:text="Approximated distance"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Fare"
+                    android:textColor="@color/blue2"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Appro_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Approximated price"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/cancel_order"
-            android:layout_width="180dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/button_blue_style"
-            android:text="Cancel Order"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    </ScrollView>
 
-    </LinearLayout>
-
+    <Button
+        android:id="@+id/cancel_order"
+        android:layout_width="180dp"
+        android:layout_height="48dp"
+        android:background="@drawable/button_blue_style"
+        android:text="Cancel Order"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 <!--    <ImageButton-->
 <!--        android:id="@+id/button_back"-->
 <!--        android:layout_width="60dp"-->
