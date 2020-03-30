@@ -33,7 +33,7 @@ import static com.android.volley.VolleyLog.TAG;
  * User can rate driver at this step
  */
 
-public class RateDriver extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class RateDriver extends BaseActivity {
 
     private Database db;
     private String username;
@@ -158,30 +158,5 @@ public class RateDriver extends BaseActivity implements EditProfilePage.EditProf
     }
 
     @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
-        User newUser = user;
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-
-        db.add_new_user(newUser);
-
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
+    public void onBackPressed() {}
 }

@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/background_light"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:clickable="true">
     <LinearLayout
         android:layout_marginTop="64dp"
         android:layout_width="match_parent"
