@@ -162,7 +162,7 @@
         android:layout_marginTop="72dp"
         android:background="@drawable/button_red_style"
         android:text="@string/Continue"
-
+        android:textColor="@color/quantum_grey100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
