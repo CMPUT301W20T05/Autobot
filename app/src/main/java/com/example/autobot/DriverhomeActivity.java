@@ -172,7 +172,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                 //if the distance between beginning location and search place is within the range and the request is inactive, select that request
                                 long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
                                 String b = (String) document.get("RequestStatus");
-                                if( 3000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                if( 30000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
                                     //clone all the info of satisfied request
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
@@ -217,9 +217,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         profile.setImageBitmap(pic);
     }*/
 
-
-    @Override
     //--------------listener of show detail of active request fragment
+    @Override
     public void confirm_request(Request request){
         //update request in the database
         request.UpdateStatus(1);
@@ -270,7 +269,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //mark down the mark action, need to be removed if i click on the another request
         beginning_location = mMap.addMarker(marker);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requests_list.get(pos).getBeginningLocation(), DEFAULT_ZOOM));
-
         //inflate the fragment
         active_request_fm.beginTransaction().replace(R.id.myMap,showSelectedActiveRequestFragment).addToBackStack(null).commit();
 
