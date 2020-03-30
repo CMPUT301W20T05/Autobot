@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,6 +117,7 @@ public class OrderComplete extends BaseActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    LoginActivity.save_request(request);
                 }
             }
         });

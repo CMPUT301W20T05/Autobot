@@ -135,6 +135,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
 
                                 request.setDriver(driver);
                                 rider = request.getRider();
+                                //save request to local
+                                LoginActivity.save_request(request);
 
                                 setProfile(username,db); // set profile
 
