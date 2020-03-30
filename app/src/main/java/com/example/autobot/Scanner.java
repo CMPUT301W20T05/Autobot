@@ -109,7 +109,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     }
     @Override
     public void onBackPressed(){
-
+        finish();
     }
 
 }

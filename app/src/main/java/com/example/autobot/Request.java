@@ -124,7 +124,7 @@ public class Request implements Serializable {
     public void resetTips(double tips,Database db){
         this.tips = tips;
         HashMap<String, Object> update = new HashMap<>();
-        update.put("Tips", this.tips);
+        update.put("Tips", String.valueOf(this.tips));
         db.collectionReference_request.document(RequestID)
                 .update(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
