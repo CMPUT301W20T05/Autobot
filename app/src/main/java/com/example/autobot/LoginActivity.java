@@ -250,18 +250,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public static void load_request(Context context){
-        //try{
+    public static Request load_request(Context context){
+        Request new_request = null;
+        try{
             //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
-            request = Offline.ExtractRequest(LoginActivity.sharedPreferences);
-            if(request != null){
-            Toast.makeText(context,request.get_active_requset_tostring(),Toast.LENGTH_LONG).show();}else {
+            new_request = Offline.ExtractRequest(LoginActivity.sharedPreferences);
+            if(new_request  != null){
+            Toast.makeText(context,"exist",Toast.LENGTH_LONG).show();}else {
                 Toast.makeText(context,"empty",Toast.LENGTH_LONG).show();
             }
-        //}
-        /*catch (Exception e){
+        }
+        catch (Exception e){
             Log.d("loadrequest","no saved request"+e.toString());
-        }*/
+        }
+        return new_request;
     }
 
     public static void save_request(Request request1){

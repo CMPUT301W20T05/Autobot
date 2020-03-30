@@ -108,10 +108,6 @@ public class QRCode extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
-                Driver.setBalance(String.valueOf(Double.parseDouble(Driver.getBalance()) + totalFare));
-                rider.setBalance(String.valueOf(Double.parseDouble(rider.getBalance()) - totalFare));
-                db.add_new_user(Driver);
-                db.add_new_user(rider);
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
                 finish();
                 startActivity(intentRateDriver);
@@ -138,59 +134,13 @@ public class QRCode extends BaseActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
         }else if (fragment == null){}
-        else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("Home Page");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
-
-        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("Home Page");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
-
-        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
-            if (fragment != null){
-                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
-                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
-                    fragmentManager.popBackStackImmediate();
-                } else {
-                    ft.remove(fragment).commit();
-                    onResume();
-                    fragment = null;
-                    setTitle("Home Page");
-                    frameLayout.setVisibility(View.VISIBLE);
-                    frameLayout.invalidate();
-                }
-            }
-
-        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("Home Page");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
-        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("Home Page");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
+        else {
+            ft.remove(fragment).commit();
+            fragment = null;
+            setTitle("Rider Mode");
+            onResume();
+            frameLayout.setVisibility(View.VISIBLE);
+            frameLayout.invalidate();
         }
 
     }

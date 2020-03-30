@@ -46,6 +46,7 @@
             android:id="@+id/add_cardNumber_editText"
             android:ems="15"
             android:hint=" Input 16 digits card number"
+            android:textStyle="italic"
             android:inputType="text|number">
 
         </EditText>
@@ -68,6 +69,7 @@
             android:id="@+id/add_holdName"
             android:ems="15"
             android:hint=" Input the Name on your card"
+            android:textStyle="italic"
             android:inputType="textPersonName">
 
         </EditText>
@@ -90,7 +92,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/add_expireDate"
             android:ems="15"
-            android:hint=" Input Expire Date"
+            android:hint=" (yyyy-mm-dd)"
+            android:textStyle="italic"
             android:inputType="text|date">
 
         </EditText>
@@ -114,6 +117,7 @@
             android:id="@+id/add_billingAddress"
             android:ems="15"
             android:hint=" Input Billing Address"
+            android:textStyle="italic"
             android:inputType="text">
 
         </EditText>
@@ -136,6 +140,7 @@
             android:id="@+id/add_postalCode"
             android:ems="15"
             android:hint="Input Postal Code"
+            android:textStyle="italic"
             android:inputType="text|textPostalAddress">
 
         </EditText>

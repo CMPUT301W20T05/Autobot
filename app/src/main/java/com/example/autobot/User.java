@@ -59,6 +59,26 @@ public class User implements Driver, Rider, Serializable {
         this.EmergencyContact = emergencyContact;
     }
 
+    public void resetbalance(String balance, Database db){
+        this.Balance = balance;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("Balance", balance);
+        db.collectionReference_user.document(Username)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+
     public void resetGoodrate(String goodrate,Database db) {
         this.GoodRate = goodrate;
         HashMap<String, Object> update = new HashMap<>();
