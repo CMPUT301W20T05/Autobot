@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -84,7 +85,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         requests_list = new ArrayList<Request>();
         Log.d("username3",username+"hi");
         setProfile(username,db); // set profile
-
+        if(LoginActivity.load_request(getApplicationContext()) != null){
+            notificationManager = NotificationManagerCompat.from(this);
+            sendOnChannel("You have a current incomplete request. Please check your request history.");
+        }
         //attach listener
         //testing
         /*user = new User();
@@ -195,7 +199,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                         //testing
                                         //User user3 = new User("jc");
                                         //Request active_request = new Request(user3);
-                                        Toast.makeText(DriverhomeActivity.this,"success", Toast.LENGTH_SHORT).show();
                                         requests_list.add(active_request);
                                         adapter.notifyDataSetChanged();
                                     } catch (ParseException e) {
@@ -267,6 +270,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
 
+
     @Override
     public void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment, int pos) {
         //mark up the beginning location of the sletected reuqest
@@ -318,7 +322,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         }
 
         request.direct_setEstimateCost(EstCost);
-        Log.d("testing",request.testing_rebuild_request());
         return request;
     }
 

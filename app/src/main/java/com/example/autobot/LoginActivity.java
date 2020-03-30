@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -255,10 +256,6 @@ public class LoginActivity extends AppCompatActivity {
         try{
             //if the user had login in before, retrieve that user from sharedpreferences, dont need to do the login again
             new_request = Offline.ExtractRequest(LoginActivity.sharedPreferences);
-            if(new_request  != null){
-            Toast.makeText(context,"exist",Toast.LENGTH_LONG).show();}else {
-                Toast.makeText(context,"empty",Toast.LENGTH_LONG).show();
-            }
         }
         catch (Exception e){
             Log.d("loadrequest","no saved request"+e.toString());
