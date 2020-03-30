@@ -1011,4 +1011,5 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         balance.setText(newbalance);
         Toast.makeText(BaseActivity.this, "Add Credit Success!" , Toast.LENGTH_SHORT).show();
     }
+
 }
