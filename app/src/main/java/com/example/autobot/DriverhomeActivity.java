@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -35,8 +37,12 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -64,6 +70,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     private static final String TAG = "DriverhomeActivity";
     Marker beginning_location;
     Fragment fragment1;
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
 
 
 
@@ -176,7 +184,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
                                     double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                    double tips =  (double) document.get("Tips");
+                                    double tips = Double.parseDouble(document.get("Tips").toString());
                                     String Accepttime = (String) document.get("AcceptTime");
                                     String send_time = (String) document.get("SendTime");
                                     LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
@@ -278,14 +286,39 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //for edit profile info
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
+        User newUser = user;
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         mybitmap = bitmap;
         if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
 
-        User newUser = user;
+        String username = newUser.getUsername();
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        if (mybitmap != null) {
+            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        }
+
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Uri downloadUrl = uri;
+                newUser.setUri(downloadUrl.toString());
+                Toast.makeText(DriverhomeActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(DriverhomeActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
