@@ -107,6 +107,7 @@ public class QRCode extends BaseActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Offline.clear_request(LoginActivity.sharedPreferences);
                 Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
                 finish();

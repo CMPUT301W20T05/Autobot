@@ -264,6 +264,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                                                         //db.CancelRequest(reID);
                                                         request.resetRequestStatus("Cancel",db);
                                                         db.ChangeRequestStatus(request);
+                                                        Offline.clear_request(LoginActivity.sharedPreferences);
                                                         //return to homepage
                                                         Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                                                         finish();
