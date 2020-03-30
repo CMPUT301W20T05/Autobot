@@ -98,6 +98,10 @@ public class DriveIsGoing extends BaseActivity {
         TextView reminder = findViewById(R.id.driver_condition);
         reminder.setText("drive safe");
         TextView rider_name = findViewById(R.id.Driver_name);
+        TextView estimatedTime = findViewById(R.id.EstimatedTime);
+        estimatedTime.setText(request.calculate_time());
+        TextView estimateDist = findViewById(R.id.EstimatedDist);
+        estimateDist.setText(request.calculate_distance());
         rider_name.setText(rider.getUsername());
         ImageButton imageButtonPhone = findViewById(R.id.phoneButton);
         ImageButton imageButtonEmail = findViewById(R.id.emailButton);
@@ -233,6 +237,7 @@ public class DriveIsGoing extends BaseActivity {
                     if((documentSnapshot.get("RequestStatus").toString()).equals("Cancel")){
                         Toast.makeText(DriveIsGoing.this,"Cancel",Toast.LENGTH_LONG).show();
                         //if order cancel return to the home page
+                        Offline.clear_request(LoginActivity.sharedPreferences);
                         Intent intent = new Intent(DriveIsGoing.this, DriverhomeActivity.class);
                         //notification
                         boolean value1 = true; // default value if no value was found
@@ -268,12 +273,15 @@ public class DriveIsGoing extends BaseActivity {
                     //if rider click rider pick
                     else if((documentSnapshot.get("RequestStatus").toString()).equals("Rider picked")){
                         request.reset_Request_Status("Rider picked");
+                        LoginActivity.save_request(request);
                         pick_up_rider();
                     }
                     else if((documentSnapshot.get("RequestStatus").toString()).equals("Trip Completed")){
                         request.UpdateStatus(4);
                         //need to add
                         //update db
+                        //once order complete, delete it
+                        Offline.clear_request(LoginActivity.sharedPreferences);
                         db.ChangeRequestStatus(request);
 
                         Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
