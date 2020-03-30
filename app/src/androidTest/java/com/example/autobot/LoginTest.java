@@ -27,15 +27,14 @@ public class  LoginTest {
     }
 
     @Test
-    public void checkActivityChange() {
-        // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
-        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-    }
-
-
-    @Test
     public void checkLoginButton(){
         solo.clickOnButton("Log in");
+        solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
+    }
+
+    @Test
+    public void checkActivityChange() {
+        // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
         solo.assertCurrentActivity("Wrong Activity", HomePageActivity.class);
     }
 
