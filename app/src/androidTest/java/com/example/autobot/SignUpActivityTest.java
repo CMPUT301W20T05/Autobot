@@ -29,27 +29,28 @@ public class SignUpActivityTest {
         //LoginActivity Step
         solo.clickOnText("No account?");
         //SignUpActivity Steps
-        solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "12345");
+        solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "123456");
         solo.enterText((EditText) solo.getView(R.id.accountUserName), "TestSignUp");
         solo.clickOnRadioButton(1);
         solo.clickOnCheckBox(0);
-    }
-
-    @Test
-    public void checkActivityChange() {
-        // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
-        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
 
     /**
      * Check to see if the back button works or not
      */
     @Test
-    public void checkContinueButton() throws InterruptedException {
+    public void checkButton() {
+        solo.clickOnButton("Continue");
         solo.clickOnButton("Continue");
         //solo.clickOnView(solo.getView(R.id.ContinueButton));
         //solo.clickOnView(solo.getView(R.id.ContinueButton));
         solo.assertCurrentActivity("Wrong Activity", SetPasswordActivity.class);
+    }
+
+    @Test
+    public void checkActivityChange() {
+        // Asserts that the current activity is the signupactivity. Otherwise, show wrong message
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
 
     /**
