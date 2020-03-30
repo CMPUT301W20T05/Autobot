@@ -112,6 +112,7 @@ public class QRCode extends BaseActivity {
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {}
 
 }

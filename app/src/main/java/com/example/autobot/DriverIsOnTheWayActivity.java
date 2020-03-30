@@ -371,5 +371,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                     }
                 });
     }
+    @Override
+    public void onBackPressed() {}
 
 }

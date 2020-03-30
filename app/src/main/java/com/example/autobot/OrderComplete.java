@@ -141,4 +141,6 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
     public Bitmap getBitmap(){
         return mybitmap;
     }
+    @Override
+    public void onBackPressed() {}
 }
