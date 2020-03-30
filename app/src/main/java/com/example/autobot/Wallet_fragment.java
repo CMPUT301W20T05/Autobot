@@ -57,7 +57,7 @@ public class Wallet_fragment extends Fragment{
                                 if (status.equals("Trip Completed")) {
                                     String time = document.getData().get("SendTime").toString();
                                     DecimalFormat df1 = new DecimalFormat("0.00");
-                                    String cost = df1.format(document.getData().get("Cost"));
+                                    String cost = (String)document.getData().get("Cost");
                                     LatLng latLng = new LatLng(Double.valueOf((String) document.getString("DestinationLat")), Double.valueOf((String) document.getString("DestinationLnt")));
                                     String destination = null;
                                     try {

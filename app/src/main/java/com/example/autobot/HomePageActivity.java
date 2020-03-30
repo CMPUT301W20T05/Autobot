@@ -249,7 +249,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                             }
                             //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
-                                request.resetCost(totalFare, db);
+                                request.resetCost(Math.round(totalFare)/1.00, db);
 
                                 //finish current activity
                                 uCurRequestDialog.dismiss();
@@ -586,6 +586,4 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             }
         }
     }
-
-
 }

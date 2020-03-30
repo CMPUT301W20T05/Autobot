@@ -275,6 +275,24 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
                         delay(pause_time,fm);
                     }
+                    //if rider click rider pick
+                    else if((documentSnapshot.get("RequestStatus").toString()).equals("Rider picked")){
+                        request.reset_Request_Status("Rider picked");
+                        pick_up_rider();
+                    }
+                    else if((documentSnapshot.get("RequestStatus").toString()).equals("Trip Completed")){
+                        request.UpdateStatus(4);
+                        //need to add
+                        //update db
+                        db.ChangeRequestStatus(request);
+
+                        Intent intentOrderComplete = new Intent(DriveIsGoing.this, Driver_ordercomplete.class);
+                        //intentOrderComplete.putExtra("Username",username);
+                        finish();
+                        intentOrderComplete.putExtra("Username",username);
+                        finish();
+                        startActivity(intentOrderComplete);
+                    }
                 }
             }
         });
