@@ -285,6 +285,10 @@ public class DriverIsOnTheWayActivity extends BaseActivity implements EditProfil
                                 //rider confirm completion
                                 db.NotifyStatusChangeButton(reID, "Rider picked", buttonCancelOrder, false);
                                 db.NotifyStatusChangeButton(reID, "Rider picked", buttonComplete, true);
+
+                                //if driver click finish
+                                Intent intentComplete = new Intent(DriverIsOnTheWayActivity.this, OrderComplete.class);
+                                db.NotifyStatusChange(reID, "Trip Completed", DriverIsOnTheWayActivity.this, intentComplete);
                             }
                         }
                     });

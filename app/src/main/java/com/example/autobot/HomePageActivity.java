@@ -99,9 +99,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
 
         db = MainActivity.db; // get database
         user = LoginActivity.user; // get User
-        if (user == null) {
-
-        }
         username = user.getUsername(); // get username
 
         setProfile(username,db); // set profile
@@ -250,17 +247,25 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
                                 request.resetTips(tips, db);
                                 totalFare += tips;
                             }
-                            request.resetCost(totalFare, db);
+                            //check if affordable
+                            if (Double.parseDouble(user.getBalance()) >= totalFare){
+                                request.resetCost(totalFare, db);
 
-                            //finish current activity
-                            uCurRequestDialog.dismiss();
-                            //wait driver to accept
-                            Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
-                            db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
+                                //finish current activity
+                                uCurRequestDialog.dismiss();
+                                //wait driver to accept
+                                Intent intent = new Intent(HomePageActivity.this, DriverIsOnTheWayActivity.class);
+                                db.NotifyStatusChange(reID, "Driver Accepted", HomePageActivity.this, intent);
 
-                            //set price have to go here to display
-                            approPrice.setText(df.format(request.getCost()));
-                            dialog.show();
+                                //set price have to go here to display
+                                approPrice.setText(df.format(request.getCost()));
+                                dialog.show();
+                            }
+                            else{
+                                Toast.makeText(HomePageActivity.this,"Sorry the balance in wallet bot enough.Please add credit!",Toast.LENGTH_SHORT).show();
+                                db.CancelRequest(reID);
+                                recreateActivity();
+                            }
                         }
                     });
                     uCurRequestDialog.show();
@@ -477,12 +482,12 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             public void onSuccess(Uri uri) {
                 Uri downloadUrl = uri;
                 newUser.setUri(downloadUrl.toString());
-                Toast.makeText(HomePageActivity.this, "Upload success! URL - " + downloadUrl.toString() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(HomePageActivity.this, "Upload fail! please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -491,6 +496,7 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         newUser.setEmailAddress(EmailAddress);
         newUser.setHomeAddress(HomeAddress);
         newUser.setEmergencyContact(emergencyContact);
+        LoginActivity.save_user_login();
         db.add_new_user(newUser);
 
     }
