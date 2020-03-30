@@ -31,7 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class OrderComplete extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class OrderComplete extends BaseActivity {
 
     private Database db;
     private String username;
@@ -115,32 +115,6 @@ public class OrderComplete extends BaseActivity implements EditProfilePage.EditP
         });
     }
 
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-
-        User newUser = user;
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-
-        db.add_new_user(newUser);
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
     @Override
     public void onBackPressed() {}
 }

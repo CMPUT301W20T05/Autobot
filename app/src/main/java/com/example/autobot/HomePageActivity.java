@@ -66,7 +66,7 @@ import io.paperdb.Paper;
 /**
  * this class is the homepage activity
  */
-public class HomePageActivity extends BaseActivity implements EditProfilePage.EditProfilePageListener {
+public class HomePageActivity extends BaseActivity {
 
     private LatLng destination;
     private LatLng origin;
@@ -444,55 +444,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         return destination;
     }
 
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        User newUser = user;
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
-
-        String username = newUser.getUsername();
-        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        if (mybitmap != null) {
-            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        }
-
-        byte[] thumb = byteArrayOutputStream.toByteArray();
-        UploadTask uploadTask = LOAD.putBytes(thumb);
-        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Uri downloadUrl = uri;
-                newUser.setUri(downloadUrl.toString());
-                Toast.makeText(HomePageActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(HomePageActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-        LoginActivity.save_user_login();
-        db.add_new_user(newUser);
-
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
     /**
      * recreate homepage activity
      */
@@ -506,11 +457,6 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
         overridePendingTransition(0, 0);
     }
 
-
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
     @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -586,4 +532,10 @@ public class HomePageActivity extends BaseActivity implements EditProfilePage.Ed
             }
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
 }
