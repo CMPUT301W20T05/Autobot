@@ -70,7 +70,6 @@ public class Driver_ordercomplete extends BaseActivity {
         Button ConfirmButton = findViewById(R.id.confirmFee);
         ConfirmButton.setVisibility(View.GONE);
 
-        Price.setText(String.valueOf(request.getCost()));
 
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,12 +104,15 @@ public class Driver_ordercomplete extends BaseActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
             drawer.closeDrawer(GravityCompat.START);
         }
+        else if (fragment == null){}
         else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
@@ -118,7 +120,9 @@ public class Driver_ordercomplete extends BaseActivity {
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
 
         } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
@@ -126,11 +130,15 @@ public class Driver_ordercomplete extends BaseActivity {
                 Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
                 if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
                     fragmentManager.popBackStackImmediate();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 } else {
                     ft.remove(fragment).commit();
                     onResume();
                     fragment = null;
-                    setTitle("Home Page");
+                    setTitle("driver mode");
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.invalidate();
                 }
             }
 
@@ -139,14 +147,18 @@ public class Driver_ordercomplete extends BaseActivity {
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
             if (fragment != null){
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
-                setTitle("Home Page");
+                setTitle("driver mode");
+                frameLayout.setVisibility(View.VISIBLE);
+                frameLayout.invalidate();
             }
         }
 
