@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -100,12 +105,13 @@ public class RateDriver extends BaseActivity {
             public void onClick(View view) {
                 //see profile
                 view = LayoutInflater.from(RateDriver.this).inflate(R.layout.profile_viewer, null);
-
+                ImageView avatar = view.findViewById(R.id.profileAvatar);
                 TextView fname = view.findViewById(R.id.FirstName);
                 TextView lname = view.findViewById(R.id.LastName);
                 TextView pnumber = view.findViewById(R.id.PhoneNumber);
                 TextView email = view.findViewById(R.id.EmailAddress);
                 //should be set as driver's infor
+                setAvatar(driver, avatar);
                 fname.setText(driver.getFirstName());
                 lname.setText(driver.getLastName());
                 pnumber.setText(driver.getPhoneNumber());
@@ -158,5 +164,33 @@ public class RateDriver extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();  // setup fragmentTransaction
+
+        navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu(); // get the menu
+        MenuItem emItem = menu.findItem(R.id.edit_profile); // item edit profile
+        MenuItem mhItem = menu.findItem(R.id.my_request_history); // item my request history
+        MenuItem mnItem = menu.findItem(R.id.my_notification); // item my notification
+        MenuItem piItem = menu.findItem(R.id.payment_information); // item payment information
+        MenuItem sItem = menu.findItem(R.id.settings); // item settings
+        MenuItem lItem = menu.findItem(R.id.log_out); // item log out
+
+        //  store the menu to var when creating options menu
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {  // if the drawer is opened, when a item is clicked, close the drawer
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (fragment == null){}
+        else {
+            ft.remove(fragment).commit();
+            fragment = null;
+            setTitle("Rider Mode");
+            onResume();
+            frameLayout.setVisibility(View.VISIBLE);
+            frameLayout.invalidate();
+        }
+
+    }
 }
