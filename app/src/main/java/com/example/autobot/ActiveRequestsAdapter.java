@@ -43,8 +43,8 @@ public class ActiveRequestsAdapter extends ArrayAdapter<Request> {
         rider_name.setText("Passenger: "+request.getRider().getUsername());
         destination.setText("Destination: "+convert_lat_to_addaress(request,request.getDestination()));
         start.setText("Start: "+convert_lat_to_addaress(request,request.getBeginningLocation()));
-        fee.setText(String.valueOf(request.getEstimateCost()));
-        tips.setText(String.format("%3.2f%%",request.getTips()));
+        fee.setText(String.format("%5.3f",request.getEstimateCost()));
+        tips.setText(String.format("%3.2f",request.getTips()));
         return view;
     }
 

@@ -82,6 +82,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         db = LoginActivity.db; // get database
         username = user.getUsername(); // get username
         requests_list = new ArrayList<Request>();
+        Log.d("username3",username+"hi");
         setProfile(username,db); // set profile
 
         //attach listener
@@ -178,13 +179,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                 //if the distance between beginning location and search place is within the range and the request is inactive, select that request
                                 long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
                                 String b = (String) document.get("RequestStatus");
-                                if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                if( 30000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
                                     //clone all the info of satisfied request
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
                                     double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                    double tips =  Double.parseDouble((String) document.get("Tips"));
-
+                                    double tips =   Double.parseDouble((String) document.get("Tips"));
                                     String Accepttime = (String) document.get("AcceptTime");
                                     String send_time = (String) document.get("SendTime");
                                     LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
@@ -358,6 +358,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Request request = new Request(rider,BeginningLocation,Destination);
         request.setRequestID(request_id);
         request.setTips(tips);
+        request.setCost(tips+EstCost);
         //set up date format
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
         //set up all time related attributes
