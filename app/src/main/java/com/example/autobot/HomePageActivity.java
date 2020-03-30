@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -99,12 +103,6 @@ public class HomePageActivity extends BaseActivity {
 
         setProfile(username,db); // set profile
 
-        //check if there is a unfinished request
-        Request localRequest = LoginActivity.load_request(HomePageActivity.this);
-        if (localRequest != null) {
-
-        }
-
         // Initialize the AutocompleteSupportFragment.
         // Specify the types of place data to return.
         //origin
@@ -128,7 +126,6 @@ public class HomePageActivity extends BaseActivity {
             autocompleteFragmentDestination.setHint("Destination");
             setAutocompleteSupportFragment(autocompleteFragmentDestination, "dest");
         }
-
 
         HPDirectionButton = (Button) findViewById(R.id.buttonShowDirection);
         HPDirectionButton.setOnClickListener(new View.OnClickListener() {
@@ -245,11 +242,11 @@ public class HomePageActivity extends BaseActivity {
                             Double tips = 0.0;
                             double totalFare = addPrice + estimateFare;
                             String temp = editTextTip.getText().toString();
-                            if (temp != "") {
+                            if (!temp.equals("")){
                                 tips = Double.valueOf(temp);
-                                request.resetTips(tips, db);
-                                totalFare += tips;
                             }
+                            request.resetTips(tips, db);
+                            totalFare += tips;
                             //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
                                 request.resetCost(Math.round(totalFare)/1.00, db);
@@ -442,6 +439,62 @@ public class HomePageActivity extends BaseActivity {
 
         startActivity(intent);
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //check if there is a unfinished request
+        Request localRequest = LoginActivity.load_request(HomePageActivity.this);
+        if (localRequest != null) {
+            notificationManager = NotificationManagerCompat.from(this);
+            sendOnChannel("You have a current incomplete request. Please check your request history.");
+
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.current_request, null);
+            TextView startLoc = view.findViewById(R.id.startLoc);
+            TextView endLoc = view.findViewById(R.id.endLoc);
+            ImageView avatar = view.findViewById(R.id.avatar);
+            TextView name = view.findViewById(R.id.Name);
+            ImageButton phone = view.findViewById(R.id.phoneButton);
+            ImageButton email = view.findViewById(R.id.emailButton);
+            TextView status = view.findViewById(R.id.status);
+            TextView distance = view.findViewById(R.id.Appro_distance);
+            TextView price = view.findViewById(R.id.Appro_price);
+
+            //should be set as driver's infor
+            User driver = localRequest.getDriver();
+            if (driver != null) {
+                setAvatar(driver, avatar);
+                name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
+                phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        makePhoneCall(driver.getPhoneNumber());
+                    }
+                });
+                email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sendEmail(driver.getEmailAddress());
+                    }
+                });
+            }
+            else {
+                name.setText("No driver accepted yet.");
+            }
+            //set request infor
+            setReadableAddress(localRequest, localRequest.getBeginningLocation(), startLoc);
+            setReadableAddress(localRequest, localRequest.getDestination(), endLoc);
+            status.setText(localRequest.getStatus());
+            distance.setText(calculateDistance(localRequest.getBeginningLocation(), localRequest.getDestination()));
+            price.setText(String.valueOf(localRequest.getCost()));
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+            alert.setView(view)
+                    .setTitle("Request Details")
+                    .setNegativeButton("Close",null);
+            alert.show();
+        }
     }
 
     @Override
