@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -35,8 +37,12 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -65,8 +71,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     Marker beginning_location;
     Fragment fragment1;
     Fragment fragment2;
-
-
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -76,6 +82,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         db = LoginActivity.db; // get database
         username = user.getUsername(); // get username
         requests_list = new ArrayList<Request>();
+        Log.d("username3",username+"hi");
         setProfile(username,db); // set profile
 
         //attach listener
@@ -96,7 +103,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         // Specify the types of place data to return.
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-            setAutocompleteSupportFragment(autocompleteFragmentOrigin);
+            setAutocompleteSupportFragment(autocompleteFragmentOrigin,"");
             autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
@@ -172,13 +179,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                 //if the distance between beginning location and search place is within the range and the request is inactive, select that request
                                 long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
                                 String b = (String) document.get("RequestStatus");
-                                if( 30000000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                if( 30000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
                                     //clone all the info of satisfied request
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
                                     double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                    double tips =  Double.parseDouble((String) document.get("Tips"));
-
+                                    double tips =   Double.parseDouble((String) document.get("Tips"));
                                     String Accepttime = (String) document.get("AcceptTime");
                                     String send_time = (String) document.get("SendTime");
                                     LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
@@ -279,14 +285,39 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     //for edit profile info
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
+        User newUser = user;
         name = findViewById(R.id.driver_name);
         String fullName = FirstName + " " + LastName;
         name.setText(fullName);
         profilePhoto = findViewById(R.id.profile_photo);
         mybitmap = bitmap;
         if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
 
-        User newUser = user;
+        String username = newUser.getUsername();
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        if (mybitmap != null) {
+            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        }
+
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Uri downloadUrl = uri;
+                newUser.setUri(downloadUrl.toString());
+                Toast.makeText(DriverhomeActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(DriverhomeActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         newUser.setFirstName(FirstName); // save the changes that made by user
         newUser.setLastName(LastName);
         newUser.setEmailAddress(EmailAddress);
@@ -327,6 +358,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Request request = new Request(rider,BeginningLocation,Destination);
         request.setRequestID(request_id);
         request.setTips(tips);
+        request.setCost(tips+EstCost);
         //set up date format
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
         //set up all time related attributes
