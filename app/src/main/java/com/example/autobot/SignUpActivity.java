@@ -22,8 +22,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.ParseException;
-
 public class SignUpActivity extends AppCompatActivity implements AddLicenseFragment.OnFragmentInteractionListener{
 
     int Type_Rider = 0 ;
@@ -39,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity implements AddLicenseFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
         TextView textViewBackToLogin = findViewById(R.id.textViewGoToSignUp);
-        Button ContinueButton = findViewById(R.id.ContinueButton);
+        final Button ContinueButton = findViewById(R.id.ContinueButton);
         final CheckBox checkBoxPolicy = findViewById(R.id.checkBoxPolicy);
         final RadioButton radioButtonDriver = findViewById(R.id.radioButtonDriver);
         final RadioButton radioButtonRider = findViewById(R.id.radioButtonRider);

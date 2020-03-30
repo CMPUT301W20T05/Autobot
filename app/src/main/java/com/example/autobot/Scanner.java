@@ -87,7 +87,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         scanCompleteDialog.setCancelable(false);
 
         TextView price = scanCompleteDialog.findViewById(R.id.price);
-        price.setText(String.valueOf(result));
+        price.setText(String.valueOf(result.getText()));
 
         Button buttonReturn = scanCompleteDialog.findViewById(R.id.returnHomepage);
         buttonReturn.setOnClickListener(new View.OnClickListener() {
