@@ -7,6 +7,8 @@ addition add offline class to support shared preferences usage.
 yiping1: Finished all items functionality inside the menu, and finished onBackPressed.
 weida:add wallet function and add credit , in addition some uri and payment function changed.
 xqiu1: make our ui look better, organize the app, adjust some functions
+wenzhuo2: add more tests including ui tests and unit tests, fix some bugs and test the app
+jlyu3:write listener to minitor database and realize the function that "remember me".
 
 Comment:
 zonglun1: We do not unserstand how the firebase work well, may be we need to pay more attention
@@ -15,3 +17,5 @@ yiping1: Firebase problem influent us for a long time since project started, we 
 on that.
 weida: We integrated the App， there are many bug. But we try to overcame a lot of problems.
 xqiu1: we should pay more attention on database(especially firebase) and also have a better structure.
+wenzhuo2: there are so many small bugs, and we need to test more times as more as possible
+jlyu3:integration causes many problems.
