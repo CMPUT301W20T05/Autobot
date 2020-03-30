@@ -108,10 +108,6 @@ public class QRCode extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(QRCode.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
-                Driver.setBalance(String.valueOf(Double.parseDouble(Driver.getBalance()) + totalFare));
-                rider.setBalance(String.valueOf(Double.parseDouble(rider.getBalance()) - totalFare));
-                db.add_new_user(Driver);
-                db.add_new_user(rider);
                 Intent intentRateDriver = new Intent(QRCode.this, RateDriver.class);
                 finish();
                 startActivity(intentRateDriver);
