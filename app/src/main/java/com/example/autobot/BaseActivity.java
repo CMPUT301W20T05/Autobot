@@ -525,6 +525,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 ft.remove(fragment).commit();
                 onResume();
                 fragment = null;
+                ft.add(R.id.fragment_container,fragment).commit();
                 setTitle("Home Page");
             }
 
