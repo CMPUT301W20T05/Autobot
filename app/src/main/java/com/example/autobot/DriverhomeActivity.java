@@ -177,7 +177,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
                                     double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                    double tips =  (double) Double.parseDouble(document.get("Tips").toString());
+                                    double tips =  Double.parseDouble((String) document.get("Tips"));
+
                                     String Accepttime = (String) document.get("AcceptTime");
                                     String send_time = (String) document.get("SendTime");
                                     LatLng Destination = new LatLng(Double.valueOf((String)document.get("DestinationLat")),Double.valueOf((String)document.get("DestinationLnt")));
@@ -217,9 +218,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         profile.setImageBitmap(pic);
     }*/
 
-
-    @Override
     //--------------listener of show detail of active request fragment
+    @Override
     public void confirm_request(Request request){
         //update request in the database
         request.UpdateStatus(1);
@@ -270,7 +270,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //mark down the mark action, need to be removed if i click on the another request
         beginning_location = mMap.addMarker(marker);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requests_list.get(pos).getBeginningLocation(), DEFAULT_ZOOM));
-
         //inflate the fragment
         fragment2 = showSelectedActiveRequestFragment;
         active_request_fm.beginTransaction().replace(R.id.myMap,showSelectedActiveRequestFragment).addToBackStack(null).commit();

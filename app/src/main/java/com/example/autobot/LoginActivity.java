@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                                                             user.setUri(uri);
                                                             user.setGoodRate((String) document.get("GoodRate"));
                                                             user.setBadRate((String) document.get("BadRate"));
+                                                            user.setBalance((String) document.get("Balance"));
                                                             Log.d("Testing",user.getUserType()+"hihih");
 
                                                             if (checkBoxRememberMe.isChecked()) {

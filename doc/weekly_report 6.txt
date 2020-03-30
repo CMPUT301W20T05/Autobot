@@ -5,7 +5,7 @@ As a member:
 zonglun1: De bud the download data function especially rebuilduser and rebuild request, in 
 addition add offline class to support shared preferences usage.
 yiping1: Finished all items functionality inside the menu, and finished onBackPressed.
-weida:add wallet function and some uri and payment function changed.
+weida:add wallet function and add credit , in addition some uri and payment function changed.
 xqiu1: make our ui look better, organize the app, adjust some functions
 
 Comment:
