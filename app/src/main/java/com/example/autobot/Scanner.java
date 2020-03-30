@@ -67,11 +67,17 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     @Override
     protected void onResume(){
         super.onResume();
-        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
+        boolean success = false;
+        while (!success) {
+            if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
+            }
+            else {
+                success = true;
+                scannerView.setResultHandler(this);
+                scannerView.startCamera();
+            }
         }
-        scannerView.setResultHandler(this);
-        scannerView.startCamera();
     }
 
     protected void openDialog(){
