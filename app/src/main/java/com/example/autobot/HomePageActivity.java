@@ -306,6 +306,7 @@ public class HomePageActivity extends BaseActivity {
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //delete current request
                                             db.CancelRequest(reID);
+                                            Offline.clear_request(LoginActivity.sharedPreferences);
                                             //close dialog
                                             dialog.dismiss();
                                             //set homepage to initial state
@@ -358,6 +359,7 @@ public class HomePageActivity extends BaseActivity {
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //delete current request
                                             db.CancelRequest(reID);
+                                            Offline.clear_request(LoginActivity.sharedPreferences);
                                             //close dialog
                                             dialog.dismiss();
                                             //set homepage to initial state
@@ -464,7 +466,7 @@ public class HomePageActivity extends BaseActivity {
             //should be set as driver's infor
             User driver = localRequest.getDriver();
             if (driver != null) {
-                setAvatar(driver, avatar);
+                //setAvatar(driver, avatar);
                 name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
                 phone.setOnClickListener(new View.OnClickListener() {
                     @Override

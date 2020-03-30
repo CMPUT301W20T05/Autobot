@@ -99,6 +99,7 @@ public class OrderComplete extends BaseActivity {
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Offline.clear_request(LoginActivity.sharedPreferences);
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
                 finish();
                 startActivity(intentQRCode);
