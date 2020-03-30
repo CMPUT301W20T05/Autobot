@@ -54,7 +54,7 @@ import java.util.Date;
 import java.util.zip.Inflater;
 
 
-public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed ,EditProfilePage.EditProfilePageListener, ShowSelectedActiveRequestFragment.ButtonPress{
+public class DriverhomeActivity extends BaseActivity implements ActiverequestsFragment.OnBackPressed, ShowSelectedActiveRequestFragment.ButtonPress{
     public static User user;
     private String user_id;
     String phone_num;
@@ -282,65 +282,10 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
 
     }
 
-    //for edit profile info
-    @Override
-    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
-        User newUser = user;
-        name = findViewById(R.id.driver_name);
-        String fullName = FirstName + " " + LastName;
-        name.setText(fullName);
-        profilePhoto = findViewById(R.id.profile_photo);
-        mybitmap = bitmap;
-        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
-
-        String username = newUser.getUsername();
-        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        if (mybitmap != null) {
-            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        }
-
-        byte[] thumb = byteArrayOutputStream.toByteArray();
-        UploadTask uploadTask = LOAD.putBytes(thumb);
-        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Uri downloadUrl = uri;
-                newUser.setUri(downloadUrl.toString());
-                Toast.makeText(DriverhomeActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(DriverhomeActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        newUser.setFirstName(FirstName); // save the changes that made by user
-        newUser.setLastName(LastName);
-        newUser.setEmailAddress(EmailAddress);
-        newUser.setHomeAddress(HomeAddress);
-        newUser.setEmergencyContact(emergencyContact);
-        LoginActivity.save_user_login();
-        db.add_new_user(newUser);
-
-    }
     @Override
     public void update_adapter(ActiveRequestsAdapter adapter){
         adapter.notifyDataSetChanged();
     }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public Bitmap getBitmap(){
-        return mybitmap;
-    }
-
 
     //request attributes
     public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException{
