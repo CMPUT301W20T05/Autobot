@@ -241,13 +241,11 @@ public class HomePageActivity extends BaseActivity {
                             EditText editTextTip = uCurRequestDialog.findViewById(R.id.addTip);
                             Double tips = 0.0;
                             double totalFare = addPrice + estimateFare;
-                            Editable temp = editTextTip.getText();
-                            if (temp != null) {
-                                if (String.valueOf(temp) != "") {
-                                    tips = Double.valueOf(String.valueOf(temp));
-                                    request.resetTips(tips, db);
-                                    totalFare += tips;
-                                }
+                            String temp = editTextTip.getText().toString();
+                            if (temp != "") {
+                                tips = Double.valueOf(temp);
+                                request.resetTips(tips, db);
+                                totalFare += tips;
                             }
                             //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
