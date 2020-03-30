@@ -21,7 +21,9 @@ public class Offline {
 
     }
     public static void UploadRequest(SharedPreferences r_references,Request request){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .addDeserializationExclusionStrategy(new GsonDeserializeExclusion())
+                .create();
         String json = gson.toJson(request);
         Log.d("saverequest",json+"hi");
         SharedPreferences.Editor editor = r_references.edit();
