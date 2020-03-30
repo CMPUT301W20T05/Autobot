@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +20,10 @@ import com.example.autobot.Adapter.WalletAdapter;
 import com.example.autobot.Common.Common;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -75,6 +79,8 @@ public class Wallet_fragment extends Fragment{
                         }
                     }
                 });
+
+
         TextView user_name = view.findViewById(R.id.username_wallet);
         TextView balance = view.findViewById(R.id.balance);
         user_name.setText(user.getUsername());
@@ -102,6 +108,7 @@ public class Wallet_fragment extends Fragment{
             return "";
         }
     }
+
 
 }
 
