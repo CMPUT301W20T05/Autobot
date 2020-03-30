@@ -92,10 +92,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -121,13 +125,13 @@ import static com.example.autobot.App.CHANNEL_1_ID;
  */
 
 //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener {
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddPaymentFragment.OnFragmentInteractionListener, OnMapReadyCallback, TaskLoadedCallback, LocationListener,AddCreditFragment.OnFragmentInteractionListener, EditProfilePage.EditProfilePageListener{
     public Database userbase;
     public DrawerLayout drawer;
     public ListView paymentList;
     public ArrayAdapter<PaymentCard> mAdapter;
     public ArrayList<PaymentCard> mDataList;
-    public User user;
+    public User user = LoginActivity.user;
     public FrameLayout frameLayout;
     public String un;
     //pls dont private these part
@@ -154,6 +158,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public CircleImageView profilePhoto;
     public TextView goodrate;
     public TextView badrate;
+    public StorageReference storageReference;
+    public FirebaseStorage storage;
 
     private static final int REQUEST_CODE = 101;
     //private Object LatLng;
@@ -167,9 +173,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public Uri myuri;
     private String temp1, temp2;
 
-
+    public static Database db = LoginActivity.db; // get database
     public long firstPressedTime;
     public Toast backToast;
+    public String username = user.getUsername();
 
     private static final int REQUEST_PHONE_CALL = 101;
 
@@ -1014,5 +1021,58 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         TextView balance = findViewById(R.id.balance);
         balance.setText(newbalance);
         Toast.makeText(BaseActivity.this, "Add Credit Success!" , Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
+        User newUser = user;
+        name = findViewById(R.id.driver_name);
+        String fullName = FirstName + " " + LastName;
+        name.setText(fullName);
+        profilePhoto = findViewById(R.id.profile_photo);
+        mybitmap = bitmap;
+        if (mybitmap != null) profilePhoto.setImageBitmap(mybitmap);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://cmput301w20t05.appspot.com/");
+
+        String username = newUser.getUsername();
+        StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        if (mybitmap != null) {
+            mybitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        }
+
+        byte[] thumb = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = LOAD.putBytes(thumb);
+        LOAD.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Uri downloadUrl = uri;
+                newUser.setUri(downloadUrl.toString());
+                Toast.makeText(BaseActivity.this, "Upload photo success!" , Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(BaseActivity.this, "Upload photo fail! please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        newUser.setFirstName(FirstName); // save the changes that made by user
+        newUser.setLastName(LastName);
+        newUser.setEmailAddress(EmailAddress);
+        newUser.setHomeAddress(HomeAddress);
+        newUser.setEmergencyContact(emergencyContact);
+        LoginActivity.save_user_login();
+        db.add_new_user(newUser);
+
+    }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public Bitmap getBitmap(){
+        return mybitmap;
     }
 }
