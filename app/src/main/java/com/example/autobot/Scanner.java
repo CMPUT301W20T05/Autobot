@@ -53,14 +53,8 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     }
 
     @Override
-    public void handleResult(Result result) {
-        //textUsername.setText(rawResult.getText());
-        //result = rawResult;
-
-        //Toast.makeText(ScanActivity.this,"The rider done.",Toast.LENGTH_SHORT ).show();
-        //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-        //onBackPressed();
+    public void handleResult(Result rawResult) {
+        result = rawResult;
         openDialog();
     }
 
@@ -72,15 +66,18 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     @Override
     protected void onResume(){
-        /*super.onPostResume();
-        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
-        }
-        scannerView.setResultHandler(this);
-        scannerView.startCamera();*/
         super.onResume();
-        scannerView.setResultHandler(this);
-        scannerView.startCamera();
+        boolean success = false;
+        while (!success) {
+            if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
+            }
+            else {
+                success = true;
+                scannerView.setResultHandler(this);
+                scannerView.startCamera();
+            }
+        }
     }
 
     protected void openDialog(){
@@ -90,7 +87,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         scanCompleteDialog.setCancelable(false);
 
         TextView price = scanCompleteDialog.findViewById(R.id.price);
-        price.setText(String.valueOf(result));
+        price.setText(String.valueOf(result.getText()));
 
         Button buttonReturn = scanCompleteDialog.findViewById(R.id.returnHomepage);
         buttonReturn.setOnClickListener(new View.OnClickListener() {
