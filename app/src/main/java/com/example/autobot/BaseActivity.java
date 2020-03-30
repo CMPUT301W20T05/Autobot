@@ -1097,6 +1097,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onOkPressed(Fragment thisFragment) {
         fragment = thisFragment;
+        frameLayout.setVisibility(View.GONE);
+        navigationView.getMenu().getItem(3).setChecked(true);
     }
 
 }

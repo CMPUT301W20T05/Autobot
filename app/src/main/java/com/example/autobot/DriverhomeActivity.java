@@ -373,65 +373,18 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                     firstPressedTime = System.currentTimeMillis();
                 }
             }
-
-        } else if (onNavigationItemSelected(emItem)) { // if the edit profile page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                fragment = null;
-                setTitle("driver mode");
-                onResume();
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
+        } else {
+            ft.remove(fragment).commit();
+            fragment = null;
+            setTitle("driver mode");
+            onResume();
+            try {
+                requests_list.clear();
+                adapter.notifyDataSetChanged();
+            } catch (Exception e) {
             }
-
-        } else if (onNavigationItemSelected(mhItem)){ // if the my request history page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("driver mode");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
-
-        } else if (onNavigationItemSelected(piItem)){ // if the payment information page is opened, back to main page
-            if (fragment != null) {
-                Fragment wallet_fragment = fragmentManager.findFragmentByTag("WALLET_FRAGMENT");
-                if (wallet_fragment instanceof Wallet_fragment && wallet_fragment.isVisible()) {
-                    ft.remove(fragment);
-                    super.onBackPressed();
-                    frameLayout.setVisibility(View.VISIBLE);
-                    frameLayout.invalidate();
-                } else {
-                    ft.remove(fragment).commit();
-                    onResume();
-                    fragment = null;
-                    setTitle("driver mode");
-                    frameLayout.setVisibility(View.VISIBLE);
-                    frameLayout.invalidate();
-                }
-            }
-
-        } else if (onNavigationItemSelected(sItem)){ // if the settings page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("driver mode");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
-
-        } else if (onNavigationItemSelected(mnItem)){ // if the notifications page is opened, back to main page
-            if (fragment != null){
-                ft.remove(fragment).commit();
-                onResume();
-                fragment = null;
-                setTitle("driver mode");
-                frameLayout.setVisibility(View.VISIBLE);
-                frameLayout.invalidate();
-            }
-
+            frameLayout.setVisibility(View.VISIBLE);
+            frameLayout.invalidate();
         }
 
     }
