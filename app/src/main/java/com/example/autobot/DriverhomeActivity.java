@@ -2,6 +2,7 @@ package com.example.autobot;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 
 import android.content.Intent;
@@ -10,10 +11,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -389,5 +394,60 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             frameLayout.invalidate();
         }
 
+    }
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //check if there is a unfinished request
+        Request localRequest = LoginActivity.load_request(DriverhomeActivity.this);
+        if (localRequest != null) {
+            notificationManager = NotificationManagerCompat.from(this);
+            sendOnChannel("You have a current incomplete request. Please check your request history.");
+
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(DriverhomeActivity.this).inflate(R.layout.current_request, null);
+            TextView startLoc = view.findViewById(R.id.startLoc);
+            TextView endLoc = view.findViewById(R.id.endLoc);
+            ImageView avatar = view.findViewById(R.id.avatar);
+            TextView name = view.findViewById(R.id.Name);
+            ImageButton phone = view.findViewById(R.id.phoneButton);
+            ImageButton email = view.findViewById(R.id.emailButton);
+            TextView status = view.findViewById(R.id.status);
+            TextView distance = view.findViewById(R.id.Appro_distance);
+            TextView price = view.findViewById(R.id.Appro_price);
+
+            //should be set as driver's infor
+            User driver = localRequest.getRider();
+            if (driver != null) {
+                //setAvatar(driver, avatar);
+                name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
+                phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        makePhoneCall(driver.getPhoneNumber());
+                    }
+                });
+                email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sendEmail(driver.getEmailAddress());
+                    }
+                });
+            }
+            else {
+                name.setText("No driver accepted yet.");
+            }
+            //set request infor
+            setReadableAddress(localRequest, localRequest.getBeginningLocation(), startLoc);
+            setReadableAddress(localRequest, localRequest.getDestination(), endLoc);
+            status.setText(localRequest.getStatus());
+            distance.setText(calculateDistance(localRequest.getBeginningLocation(), localRequest.getDestination()));
+            price.setText(String.valueOf(localRequest.getCost()));
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(DriverhomeActivity.this);
+            alert.setView(view)
+                    .setTitle("Request Details")
+                    .setNegativeButton("Close",null);
+            alert.show();
+        }
     }
 }
