@@ -177,7 +177,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
                                     double Estcost = Double.parseDouble((String) document.get("EstimateCost"));
-                                    double tips =  Double.parseDouble((String) document.get("Tips"));
+                                    double tips =  Double.parseDouble(document.get("Tips").toString());
 
                                     String Accepttime = (String) document.get("AcceptTime");
                                     String send_time = (String) document.get("SendTime");
