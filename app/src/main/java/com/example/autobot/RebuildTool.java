@@ -38,6 +38,7 @@ public class RebuildTool {
                 user.setUserType((String) document.get("Type"));
                 user.setUsername((String) document.get("Username"));
                 String uri = ((String) document.get("ImageUri"));
+
                 user.setUri(uri);
                 user.setGoodRate((String) document.get("GoodRate"));
                 user.setBadRate((String) document.get("BadRate"));

@@ -205,8 +205,6 @@ public class Database{
         return this.collectionReference_user.document(username);
     }
 
-
-
     public Uri upload(Bitmap mybitmap,String username){
         StorageReference LOAD = storageReference.child("Image").child(username+".jpg");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

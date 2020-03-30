@@ -9,8 +9,14 @@
     <string-array name="AccountType">
         <item>Phone Number</item>
         <item>User Name</item>
-        <item>Email</item>
     </string-array>
+    <string-array name="Money_amount">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+
     <string-array name="Models">
         <item>Normal</item>
         <item>Pleasure</item>
@@ -63,5 +69,6 @@
     <string name="where_are_you">Where are you?</string>
     <string name="api_key">AIzaSyAk4LrG7apqGcX52ROWvhSMWqvFMBC9WAA</string>
     <string name="textview">TextView</string>
+    <string name="license">Copyright (c) 2019 CMPUT301W20T05</string>
 </resources>
 
