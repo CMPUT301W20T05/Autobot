@@ -48,6 +48,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.gson.reflect.TypeToken;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -56,6 +58,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -245,6 +248,8 @@ public class DriveIsGoing extends BaseActivity {
 
                     else if ((documentSnapshot.get("RequestStatus").toString()).equals("Rider Accepted")){
                         //notification
+                        request.reset_Request_Status("Rider Accepted");
+                        LoginActivity.save_request(request);
                         boolean value1 = true; // default value if no value was found
                         final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
                         value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key

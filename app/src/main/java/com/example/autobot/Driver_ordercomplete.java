@@ -70,7 +70,6 @@ public class Driver_ordercomplete extends BaseActivity {
         Button ConfirmButton = findViewById(R.id.confirmFee);
         ConfirmButton.setVisibility(View.GONE);
 
-        Price.setText(String.valueOf(request.getCost()));
 
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override

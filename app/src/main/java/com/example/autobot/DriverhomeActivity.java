@@ -240,7 +240,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         Log.d("debug",request.getStatus());
 
         DriveIsGoing.request = request;
-
+        LoginActivity.save_request(request);
         //start new activity
         Intent intent = new Intent(DriverhomeActivity.this,DriveIsGoing.class);
         intent.putExtra("Username",username);
