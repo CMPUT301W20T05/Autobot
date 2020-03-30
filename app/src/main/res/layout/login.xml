@@ -78,6 +78,7 @@
         android:layout_marginTop="16dp"
         android:text="Remember me"
         android:textColor="@android:color/holo_blue_dark"
+        android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextInputPassword" />
 

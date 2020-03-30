@@ -1,12 +1,15 @@
 package com.example.autobot;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +19,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -33,6 +38,7 @@ import java.util.Locale;
 public class ShowSelectedActiveRequestFragment extends Fragment {
     private Request request;
     ButtonPress listener;
+    private static final int REQUEST_PHONE_CALL = 101;
 
     public ShowSelectedActiveRequestFragment(Request request) {
         this.request = request;
@@ -76,12 +82,52 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
                 listener.confirm_request(request);
             }
         });
-        /*ImageButton back_button = rootView.findViewById(R.id.button_back);
-        back_button.setOnClickListener(new View.OnClickListener() {
-             @Override
-           public void onClick(View v) {
-              listener.back_press(); }
-        });*/
+
+        ImageButton phone = rootView.findViewById(R.id.phoneButton);
+        ImageButton email = rootView.findViewById(R.id.emailButton);
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean success = false;
+                String phoneNumber = request.getRider().getPhoneNumber();
+                if (!phoneNumber.equals("")) {
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
+                    while (!success) {
+                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(getContext(), "No permission for calling", Toast.LENGTH_LONG).show();
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+                        } else {
+                            success = true;
+                            startActivity(callIntent);
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "No phone number provided", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = request.getRider().getEmailAddress();
+                if (!email.equals("")) {
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("message/rfc822");
+                    i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        startActivity(Intent.createChooser(i, "Send mail..."));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "No email address provided", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
         //view profilo
