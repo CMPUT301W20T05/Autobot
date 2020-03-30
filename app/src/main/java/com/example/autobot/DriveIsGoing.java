@@ -253,12 +253,18 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         Toast.makeText(DriveIsGoing.this,"Cancel",Toast.LENGTH_LONG).show();
                         //if order cancel return to the home page
                         Intent intent = new Intent(DriveIsGoing.this, DriverhomeActivity.class);
-                        int pause_time = 3000;
+                        //notification
+                        boolean value1 = true; // default value if no value was found
+                        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("isChecked", 0);
+                        value1 = sharedPreferences.getBoolean("isChecked1", value1); // retrieve the value of your key
+                        if (value1){
+                            int pause_time = 3000;
+                            FragmentManager fm = getSupportFragmentManager();
+                            Fragment notification = new CancelNotifiFragment();
+                            fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
+                            delay(pause_time,intent);}
+                        }
 
-                        FragmentManager fm = getSupportFragmentManager();
-                        Fragment notification = new CancelNotifiFragment();
-                        fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
-                        delay(pause_time,intent);}
                     else if ((documentSnapshot.get("RequestStatus").toString()).equals("Rider Accepted")){
                         //notification
                         boolean value1 = true; // default value if no value was found
@@ -267,13 +273,14 @@ public class DriveIsGoing extends BaseActivity implements EditProfilePage.EditPr
                         if (value1){
                             notificationManager = NotificationManagerCompat.from(getApplicationContext());
                             sendOnChannel("Rider has accepted. Please pick up your rider.");
+                            int pause_time = 3000;
+                            FragmentManager fm = getSupportFragmentManager();
+                            Fragment notification = new SuccessfulNotification();
+                            update_map();
+                            fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
+                            delay(pause_time,fm);
                         }
-                        int pause_time = 3000;
-                        FragmentManager fm = getSupportFragmentManager();
-                        Fragment notification = new SuccessfulNotification();
-                        update_map();
-                        fm.beginTransaction().add(R.id.cancel_notification_fragment,notification).addToBackStack(null).commit();
-                        delay(pause_time,fm);
+
                     }
                     //if rider click rider pick
                     else if((documentSnapshot.get("RequestStatus").toString()).equals("Rider picked")){
