@@ -135,6 +135,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public static GoogleMap mMap;
     private static Location currentLocation;
     LatLng searchedLatLng;
+    private LatLng pickupLoc;
     //----------------------------------
     LocationCallback locationCallback; //for updating users request if last known location is null
     FusedLocationProviderClient fusedLocationProviderClient; //fetching the current location
@@ -327,11 +328,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
+     * get the picked up location if user searched
+     * @return picked up location
+     */
+    public LatLng getPickupLoc() {
+        return pickupLoc;
+    }
+
+    /**
      * set google autocomplete fragment
      * it contains setOnPlaceSelectedListener (add marker to the selected location and move camera)
      * @param autocompleteFragment autocomplete fragment (AutocompleteSupportFragment)
      */
-    public void setAutocompleteSupportFragment(AutocompleteSupportFragment autocompleteFragment) {
+    public void setAutocompleteSupportFragment(AutocompleteSupportFragment autocompleteFragment, String wheretogo) {
 
         if (autocompleteFragment != null) {
             // Specify the types of place data to return.
@@ -341,35 +350,39 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     Place.Field.NAME,
                     Place.Field.ADDRESS,
                     Place.Field.PHONE_NUMBER));
-
-            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(@NonNull Place place) {
-                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                    searchedLatLng = place.getLatLng();
-
-                    //remove old marker and add new marker
-                    if (currentLocationMarker != null) {
-                        currentLocationMarker.remove();
-                    }
-
-                    mMap.clear();
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    if (searchedLatLng != null) {
-                        markerOptions.position(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude));
-                        markerOptions.title("Current Location");
-                        currentLocationMarker = mMap.addMarker(markerOptions);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
-                    }
-                }
-
-                @Override
-                public void onError(@NonNull Status status) {
-                    // TODO: Handle the error.
-                    Log.i(TAG, "An error occurred: " + status);
-                }
-            });
         }
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                searchedLatLng = place.getLatLng();
+
+                if (wheretogo == "curr") {
+                    pickupLoc = searchedLatLng;
+                }
+
+                //remove old marker and add new marker
+                if (currentLocationMarker != null) {
+                    currentLocationMarker.remove();
+                }
+
+                mMap.clear();
+                MarkerOptions markerOptions = new MarkerOptions();
+                if (searchedLatLng != null) {
+                    markerOptions.position(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude));
+                    markerOptions.title("Current Location");
+                    currentLocationMarker = mMap.addMarker(markerOptions);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
 
         // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
         // and once again when the user makes a selection (for example when calling fetchPlace()).
@@ -392,7 +405,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Log.e(TAG, "Place not found: " + apiException.getStatusCode());
             }
         });
-
     }
 
     @Override

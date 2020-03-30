@@ -96,7 +96,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         // Specify the types of place data to return.
         if (autocompleteFragmentOrigin != null) {
             autocompleteFragmentOrigin.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-            setAutocompleteSupportFragment(autocompleteFragmentOrigin);
+            setAutocompleteSupportFragment(autocompleteFragmentOrigin,"");
             autocompleteFragmentOrigin.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
