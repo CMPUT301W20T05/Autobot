@@ -2,15 +2,21 @@ package com.example.autobot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Geocoder;
+import android.media.Image;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -53,7 +59,8 @@ public class OrderInfo extends BaseActivity {
 
         setProfile(username,db); // set profile
 
-        //Button viewDetail = findViewById(R.id.View_Detail);
+        ImageView avatar = findViewById(R.id.imageViewAvatar);
+        TextView riderName = findViewById(R.id.Driver_name);
         ImageButton emailButton = findViewById(R.id.emailButton);
         ImageButton phoneButton = findViewById(R.id.phoneButton);
         //ImageButton backButton = findViewById(R.id.button_back);
