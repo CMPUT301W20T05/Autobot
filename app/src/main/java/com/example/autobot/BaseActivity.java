@@ -965,14 +965,18 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void makePhoneCall(String phoneNumber) {
+        boolean success = false;
         if (!phoneNumber.equals("")) {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
             callIntent.setData(Uri.parse("tel:" + phoneNumber));//change the number.
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "No permission for calling", Toast.LENGTH_LONG).show();
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-            } else {
-                startActivity(callIntent);
+            while (!success) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "No permission for calling", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+                } else {
+                    success = true;
+                    startActivity(callIntent);
+                }
             }
         }
         else {
