@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,9 +49,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -414,11 +419,17 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             TextView status = view.findViewById(R.id.status);
             TextView distance = view.findViewById(R.id.Appro_distance);
             TextView price = view.findViewById(R.id.Appro_price);
-
             //should be set as driver's infor
             User driver = localRequest.getRider();
             if (driver != null) {
+                try{
+                    AsnycProcess mytask = new AsnycProcess(driver.getUri(),avatar);
+                    mytask.execute();
                 //setAvatar(driver, avatar);
+                }
+                catch (Exception e){
+                    Log.d("error",e.toString());
+                }
                 name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
                 phone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -448,6 +459,33 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                     .setTitle("Request Details")
                     .setNegativeButton("Close",null);
             alert.show();
+        }
+
+    }
+    //creating this class for Asnyc loading the profile imgae
+    class AsnycProcess extends AsyncTask<Void, Void, Void> {
+        String url_web;
+        Bitmap avatar;
+        ImageView imageViewAvatar;
+        public AsnycProcess(String url_web,ImageView imageViewAvatar){
+            this.url_web = url_web;
+            this.imageViewAvatar = imageViewAvatar;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            URL url;
+            try{
+            url = new URL(url_web);
+            avatar = BitmapFactory.decodeStream((InputStream) url.getContent());}
+            catch (Exception e){
+                Log.d("IOerror",e.toString());
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            imageViewAvatar.setImageBitmap(avatar);
         }
     }
 }
