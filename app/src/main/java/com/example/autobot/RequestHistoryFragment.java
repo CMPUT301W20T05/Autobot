@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ public class RequestHistoryFragment extends Fragment {
     private Bitmap bitmap = null;
     private String temp;
     private String userName;
+    private String userNamer;
 
     private ArrayList<HistoryRequest> requestArrayList;
     private HistoryRequestAdapter adapter;
@@ -76,6 +78,24 @@ public class RequestHistoryFragment extends Fragment {
 
         requestArrayList = new ArrayList<>();
 
+        Request temp = LoginActivity.load_request(getContext());
+
+        if (temp != null){
+            try {
+                dateTemp = formatter.parse(temp.getSendDate().toString());
+            } catch (ParseException e) {
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+            String tempo = temp.getRider().toString();
+            if (user.getUserType().equals("Rider")){
+                tempo = temp.getDriver().toString();
+            }
+            HistoryRequest newTempHeader = new HistoryRequest("Current",new Date(),"","",0,0);
+            HistoryRequest newTemp = new HistoryRequest("Current", dateTemp, tempo, temp.getRequestID(), Float.parseFloat(String.valueOf(temp.getCost())), 1);
+            requestArrayList.add(newTempHeader);
+            requestArrayList.add(newTemp);
+        }
+
         userBase.collectionReference_request
                 .whereEqualTo(user.getUserType(), user.getUsername())
                 .get()
@@ -87,8 +107,13 @@ public class RequestHistoryFragment extends Fragment {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 String time1 = document.getData().get("ArriveTime").toString();
                                 userName = document.getData().get("Driver").toString();
+                                userNamer = document.getData().get("Rider").toString();
                                 requestId = document.getData().get("ID").toString();
                                 String userName1 = "Driver: " + userName;
+
+                                if (user.getUserType().equals("Driver")){
+                                    userName1 = "Rider: " + userNamer;
+                                }
                                 if (!time1.equals("30-11-002 12:00:00")) {
                                     try {
                                         dateTemp = formatter.parse(time1);
