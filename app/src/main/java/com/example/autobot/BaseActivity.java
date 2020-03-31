@@ -1005,10 +1005,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setAvatar(User user, ImageView imageViewAvatar) {
-        try {
+        try  {
             Bitmap avatar = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
             imageViewAvatar.setImageBitmap(avatar);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
