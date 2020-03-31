@@ -58,45 +58,45 @@ public class Common {
                 return historyRequest.getStatus().compareTo(t1.getStatus());
             }
         });
-        ArrayList<HistoryRequest> newHistoryRequest = new ArrayList<>();
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Current")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Request Sending")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Driver Accepted")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Rider Accepted")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Rider picked")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Trip Completed")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
-        for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().equals("Cancel")){
-                newHistoryRequest.add(historyRequests.get(i));
-            }
-        }
+//        ArrayList<HistoryRequest> newHistoryRequest = new ArrayList<>();
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Current")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Request Sending")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Driver Accepted")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Rider Accepted")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Rider picked")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Trip Completed")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
+//        for (int i = 0;i < historyRequests.size()-1;i++){
+//            if (historyRequests.get(i).getStatus().equals("Cancel")){
+//                newHistoryRequest.add(historyRequests.get(i));
+//            }
+//        }
 
-        return newHistoryRequest;
-//        return historyRequests;
+//        return newHistoryRequest;
+        return historyRequests;
     }
 
 
