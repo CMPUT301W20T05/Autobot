@@ -135,6 +135,8 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
 
                                 request.setDriver(driver);
                                 rider = request.getRider();
+                                //save request to local
+                                LoginActivity.save_request(request);
 
                                 setProfile(username,db); // set profile
 
@@ -262,6 +264,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                                                         //db.CancelRequest(reID);
                                                         request.resetRequestStatus("Cancel",db);
                                                         db.ChangeRequestStatus(request);
+                                                        Offline.clear_request(LoginActivity.sharedPreferences);
                                                         //return to homepage
                                                         Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
                                                         finish();

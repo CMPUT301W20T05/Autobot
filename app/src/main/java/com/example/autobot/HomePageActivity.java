@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -76,10 +80,6 @@ public class HomePageActivity extends BaseActivity {
     public static User user;
     public static Request request;
     private String reID;
-    private static final int REQUEST_PHONE_CALL = 101;
-    public StorageReference storageReference;
-    public FirebaseStorage storage;
-    Uri downloadUri;
     private static final String TAG = "HomePageActivity";
 
     private String model;
@@ -127,7 +127,6 @@ public class HomePageActivity extends BaseActivity {
             setAutocompleteSupportFragment(autocompleteFragmentDestination, "dest");
         }
 
-
         HPDirectionButton = (Button) findViewById(R.id.buttonShowDirection);
         HPDirectionButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ShowToast")
@@ -140,8 +139,6 @@ public class HomePageActivity extends BaseActivity {
                     Toast.makeText(HomePageActivity.this, "Please select destination", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //distance between two locations
-                    double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
                     //draw route between two locations
                     drawRoute(origin, destination);
                     HPConfirmButton.setVisibility(View.VISIBLE);
@@ -192,6 +189,9 @@ public class HomePageActivity extends BaseActivity {
                     }
                     request.setEstimateCost(origin, destination);
                     db.add_new_request(request);
+                    //save current request to local
+                    LoginActivity.save_request(request);
+
                     reID = request.getRequestID();
                     //db.NotifyStatusChange(reID,"Request Accepted",HomePageActivity.this);
 
@@ -241,14 +241,12 @@ public class HomePageActivity extends BaseActivity {
                             EditText editTextTip = uCurRequestDialog.findViewById(R.id.addTip);
                             Double tips = 0.0;
                             double totalFare = addPrice + estimateFare;
-                            Editable temp = editTextTip.getText();
-                            if (temp != null) {
-                                if (String.valueOf(temp) != "") {
-                                    tips = Double.valueOf(String.valueOf(temp));
-                                    request.resetTips(tips, db);
-                                    totalFare += tips;
-                                }
+                            String temp = editTextTip.getText().toString();
+                            if (!temp.equals("")){
+                                tips = Double.valueOf(temp);
                             }
+                            request.resetTips(tips, db);
+                            totalFare += tips;
                             //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
                                 request.resetCost(Math.round(totalFare)/1.00, db);
@@ -308,6 +306,7 @@ public class HomePageActivity extends BaseActivity {
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //delete current request
                                             db.CancelRequest(reID);
+                                            Offline.clear_request(LoginActivity.sharedPreferences);
                                             //close dialog
                                             dialog.dismiss();
                                             //set homepage to initial state
@@ -324,22 +323,6 @@ public class HomePageActivity extends BaseActivity {
                             alert.show();
                         }
                     });
-
-//                ImageButton phoneButton = (ImageButton) dialog.findViewById(R.id.phoneButton);
-//                phoneButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-//                        callIntent.setData(Uri.parse("tel:" + "123"));//change the number.
-//                        if (ActivityCompat.checkSelfPermission(HomePageActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            ActivityCompat.requestPermissions(HomePageActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-//                            Toast.makeText(HomePageActivity.this, "No permission for calling", Toast.LENGTH_LONG).show();
-//                        } else {
-//                            startActivity(callIntent);
-//                        }
-//                    }
-//                });
-
                 }
                 else {
                     //2: bottom sheet for waiting driver to accept
@@ -376,6 +359,7 @@ public class HomePageActivity extends BaseActivity {
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //delete current request
                                             db.CancelRequest(reID);
+                                            Offline.clear_request(LoginActivity.sharedPreferences);
                                             //close dialog
                                             dialog.dismiss();
                                             //set homepage to initial state
@@ -395,7 +379,7 @@ public class HomePageActivity extends BaseActivity {
 
                     dialog.show();
                 }
-
+                LoginActivity.save_request(request);
             }
         });
     }
@@ -457,6 +441,62 @@ public class HomePageActivity extends BaseActivity {
 
         startActivity(intent);
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //check if there is a unfinished request
+        Request localRequest = LoginActivity.load_request(HomePageActivity.this);
+        if (localRequest != null) {
+            notificationManager = NotificationManagerCompat.from(this);
+            sendOnChannel("You have a current incomplete request. Please check your request history.");
+
+            @SuppressLint("InflateParams") View view = LayoutInflater.from(HomePageActivity.this).inflate(R.layout.current_request, null);
+            TextView startLoc = view.findViewById(R.id.startLoc);
+            TextView endLoc = view.findViewById(R.id.endLoc);
+            ImageView avatar = view.findViewById(R.id.avatar);
+            TextView name = view.findViewById(R.id.Name);
+            ImageButton phone = view.findViewById(R.id.phoneButton);
+            ImageButton email = view.findViewById(R.id.emailButton);
+            TextView status = view.findViewById(R.id.status);
+            TextView distance = view.findViewById(R.id.Appro_distance);
+            TextView price = view.findViewById(R.id.Appro_price);
+
+            //should be set as driver's infor
+            User driver = localRequest.getDriver();
+            if (driver != null) {
+                //setAvatar(driver, avatar);
+                name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
+                phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        makePhoneCall(driver.getPhoneNumber());
+                    }
+                });
+                email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sendEmail(driver.getEmailAddress());
+                    }
+                });
+            }
+            else {
+                name.setText("No driver accepted yet.");
+            }
+            //set request infor
+            setReadableAddress(localRequest, localRequest.getBeginningLocation(), startLoc);
+            setReadableAddress(localRequest, localRequest.getDestination(), endLoc);
+            status.setText(localRequest.getStatus());
+            distance.setText(calculateDistance(localRequest.getBeginningLocation(), localRequest.getDestination()));
+            price.setText(String.valueOf(localRequest.getCost()));
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(HomePageActivity.this);
+            alert.setView(view)
+                    .setTitle("Request Details")
+                    .setNegativeButton("Close",null);
+            alert.show();
+        }
     }
 
     @Override

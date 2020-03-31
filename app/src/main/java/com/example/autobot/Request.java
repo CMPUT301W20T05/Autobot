@@ -14,6 +14,7 @@ import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -295,8 +296,22 @@ public class Request implements Serializable {
     //public LatLng getCurrentLocation(){
         //return this.Rider.getCurrentLocation();
     //}
+    //calculate the distance between start and destination
+    public String calculate_distance(){
+        double distance = Math.round(SphericalUtil.computeDistanceBetween(getBeginningLocation(), getDestination()));
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(distance);
+    }
+
+    //calculate how many minutes drive to destination
+    public String calculate_time(){
+        double distance = Math.round(SphericalUtil.computeDistanceBetween(getBeginningLocation(), getDestination()));
+        double time = distance / 1008.00 + 5.00;
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(time);
+    }
 
     public String testing_rebuild_request(){
-        return String.format("ID: %s\nRider name: %s\n Begining: %s \nDestination: %s\nEstimate cost: %5.2f\nAccepttime %s\n send time %s",this.getRequestID(),Rider.getUsername(),String.valueOf(this.BeginningLocation),String.valueOf(this.Destination),this.EstimateCost,formatter.format(this.AcceptTime),formatter.format(this.SendTime));
+        return String.format("ID: %s\nRider name: %s\nDriver name: %s\nRequest Status: %s",this.getRequestID(),Rider.getUsername(),Driver.getUsername(),this.getStatus());
     }
 }
