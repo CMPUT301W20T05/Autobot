@@ -62,6 +62,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -278,6 +279,8 @@ public class DriveIsGoing extends BaseActivity {
                     }
                     else if((documentSnapshot.get("RequestStatus").toString()).equals("Trip Completed")){
                         request.UpdateStatus(4);
+                        Date date = new Date(System.currentTimeMillis());
+                        request.resetArriveTime(date, db);
                         //need to add
                         //update db
                         //once order complete, delete it

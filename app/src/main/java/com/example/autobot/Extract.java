@@ -1,5 +1,7 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
+
 import com.example.autobot.Request;
 import com.example.autobot.User;
 import com.google.android.gms.maps.model.LatLng;
@@ -66,10 +68,10 @@ public class Extract {
                             r.setRequestID((String) documentSnapshot.getString("RequestID"));
                             r.setRider(RebuildUser((String) documentSnapshot.getString("Rider")));
 
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             try {
-                                r.resetAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
-                                r.resetArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
+                                r.setAcceptTime(formatter.parse((String) documentSnapshot.getString("AcceptTime")));
+                                r.setArriveTime(formatter.parse((String) documentSnapshot.getString("ArriveTime")));
                                 r.resetSendTime(formatter.parse((String) documentSnapshot.getString("SendTime")));
                             } catch (ParseException e) {
                                 e.printStackTrace();

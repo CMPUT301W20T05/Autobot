@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -98,9 +99,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     request.reset_Request_Status((String) document.getString("RequestStatus"));
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
-                        request.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
+                        request.setAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -171,6 +172,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                                     public void onClick(View v) {
                                         request.resetRequestStatus("Cancel",db);
                                         db.ChangeRequestStatus(request);
+                                        Offline.clear_request(LoginActivity.sharedPreferences);
                                         riderAcceptedDialog.dismiss();
                                         //return to homepage
                                         Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
@@ -327,13 +329,13 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
         request.setRequestID(request_id);
         request.setTips(tips);
         //set up date format
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //set up all time related attributes
         try{
             Date acceptedtime = formatter.parse(Accepttime);
             Date Sendtime = formatter.parse(send_time);
-            request.resetAcceptTime(acceptedtime);
-            request.resetArriveTime(acceptedtime);
+            request.setAcceptTime(acceptedtime);
+            request.setArriveTime(acceptedtime);
             request.resetSendTime(Sendtime);
         } catch (ParseException e){
             e.printStackTrace();
