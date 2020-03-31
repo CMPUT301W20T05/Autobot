@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -54,6 +56,8 @@ import com.google.maps.android.SphericalUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -466,7 +470,13 @@ public class HomePageActivity extends BaseActivity {
             //should be set as driver's infor
             User driver = localRequest.getDriver();
             if (driver != null) {
-                //setAvatar(driver, avatar);
+                try{
+                    AsnycProcess mytask = new AsnycProcess(driver.getUri(), avatar);
+                    mytask.execute();
+                }
+                catch (Exception e){
+                    Log.d("error",e.toString());
+                }
                 name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
                 phone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -497,6 +507,9 @@ public class HomePageActivity extends BaseActivity {
                     .setNegativeButton("Close",null);
             alert.show();
         }
+
+        request = localRequest;
+        Offline.clear_request(LoginActivity.sharedPreferences);
     }
 
     @Override
@@ -536,6 +549,32 @@ public class HomePageActivity extends BaseActivity {
             onResume();
             frameLayout.setVisibility(View.VISIBLE);
             frameLayout.invalidate();
+        }
+    }
+
+    class AsnycProcess extends AsyncTask<Void, Void, Void> {
+        String url_web;
+        Bitmap avatar;
+        ImageView imageViewAvatar;
+        public AsnycProcess(String url_web,ImageView imageViewAvatar){
+            this.url_web = url_web;
+            this.imageViewAvatar = imageViewAvatar;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            URL url;
+            try{
+                url = new URL(url_web);
+                avatar = BitmapFactory.decodeStream((InputStream) url.getContent());}
+            catch (Exception e){
+                Log.d("IOerror",e.toString());
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            imageViewAvatar.setImageBitmap(avatar);
         }
     }
 
