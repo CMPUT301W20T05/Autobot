@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,6 +33,7 @@ import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -60,10 +63,12 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.order_info, container, false);
+        set_profile_picture(rootView);
         TextView drive_name = rootView.findViewById(R.id.Driver_name);
         drive_name.setText(request.getRider().getUsername());
         TextView cost = rootView.findViewById(R.id.Appro_price);
@@ -160,8 +165,6 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
                 alert.show();
             }
         });
-
-
         return rootView;
     }
 
@@ -178,5 +181,22 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
 
     public double get_distance(LatLng start,LatLng end){
         return Math.round(SphericalUtil.computeDistanceBetween(start,end))/1000;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void set_profile_picture(View view){
+        ImageView profile = view.findViewById(R.id.imageViewAvatar);
+        //if user dose have profile,get the url of pic resource
+        String url = request.getRider().getUri();
+        try {
+            Bitmap profile_pic= BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+            //profile.setAdjustViewBounds(true);
+            profile.setImageBitmap(profile_pic);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e){
+        }
     }
 }

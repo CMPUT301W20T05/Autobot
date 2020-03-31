@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -310,7 +311,7 @@ public class Database{
         request_data.put("BeginningLocationLat",String.valueOf(request.getBeginningLocation().latitude));
         request_data.put("BeginningLocationLnt",String.valueOf(request.getBeginningLocation().longitude));
         request_data.put("RequestID",request.getRequestID());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         request_data.put("SendTime",formatter.format(request.getSendDate()));
         request_data.put("AcceptTime",formatter.format(request.getAcceptTime()));
         request_data.put("ArriveTime",formatter.format(request.getArriveTime()));
@@ -368,10 +369,10 @@ public class Database{
                                     r.setRequestID((String) document.getString("RequestID"));
                                     r.setRider(rebuildUser((String) document.getString("Rider")));
 
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     try {
-                                        r.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
-                                        r.resetArriveTime(formatter.parse((String) document.getString("ArriveTime")));
+                                        r.setAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
+                                        r.setArriveTime(formatter.parse((String) document.getString("ArriveTime")));
                                         r.resetSendTime(formatter.parse((String) document.getString("SendTime")));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
@@ -423,7 +424,7 @@ public class Database{
      * @param PayInfCard
      */
     public void add_new_Payment(PaymentCard PayInfCard) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         HashMap<String,String> payment_data = new HashMap<>();
         payment_data.put("CardNumber",PayInfCard.getCardNumber().toString() );
         payment_data.put("HoldName", PayInfCard.getHoldName());

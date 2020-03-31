@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -66,7 +67,8 @@ public class RequestHistoryFragment extends Fragment {
     private HistoryRequestAdapter adapter;
     LinearLayoutManager layoutManager;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");  //format for the date
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  //format for the date
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_request_history_page, container, false);
@@ -114,7 +116,8 @@ public class RequestHistoryFragment extends Fragment {
                                 if (user.getUserType().equals("Driver")){
                                     userName1 = "Rider: " + userNamer;
                                 }
-                                if (!time1.equals("30-11-002 12:00:00")) {
+
+                                if (!time1.equals("0002-11-30 00:00:00")) {
                                     try {
                                         dateTemp = formatter.parse(time1);
                                     } catch (ParseException e) {
@@ -122,7 +125,7 @@ public class RequestHistoryFragment extends Fragment {
                                     }
                                 } else {
                                     String time2 = document.getData().get("AcceptTime").toString();
-                                    if (!time2.equals("30-11-002 12:00:00")) {
+                                    if (!time2.equals("0002-11-30 00:00:00")) {
                                         try {
                                             dateTemp = formatter.parse(time2);
                                         } catch (ParseException e) {
@@ -145,7 +148,7 @@ public class RequestHistoryFragment extends Fragment {
 
                             }
                             if (requestArrayList.size() != 0){
-                                requestArrayList = Common.sortListByDate(requestArrayList); // sort
+                                //requestArrayList = Common.sortListByDate(requestArrayList); // sort
                                 requestArrayList = Common.sortListByStatus(requestArrayList); // same
                                 requestArrayList = Common.addHeader(requestArrayList); // add header
                                 adapter = new HistoryRequestAdapter(getContext(), requestArrayList);
