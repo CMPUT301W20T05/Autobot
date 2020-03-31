@@ -245,6 +245,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //user = LoginActivity.user;
         //set up the drive
         request.setDriver(user);
+        Date date = new Date(System.currentTimeMillis());
+        request.resetAcceptTime(date, db);
         Log.d("username",username);
         db.ChangeRequestStatus(request);
         //notify need to modify database
@@ -279,7 +281,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         remove_beginning_location();
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
-
 
     @Override
     public void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment, int pos) {
@@ -319,13 +320,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.setTips(tips);
         request.setCost(tips+EstCost);
         //set up date format
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //set up all time related attributes
         try{
             Date acceptedtime = formatter.parse(Accepttime);
             Date Sendtime = formatter.parse(send_time);
-            request.resetAcceptTime(acceptedtime);
-            request.resetArriveTime(acceptedtime);
+            request.setAcceptTime(acceptedtime);
             request.resetSendTime(Sendtime);
         } catch (ParseException e){
             e.printStackTrace();
@@ -461,6 +461,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             alert.show();
         }
 
+        Offline.clear_request(LoginActivity.sharedPreferences);
     }
     //creating this class for Asnyc loading the profile imgae
     class AsnycProcess extends AsyncTask<Void, Void, Void> {
