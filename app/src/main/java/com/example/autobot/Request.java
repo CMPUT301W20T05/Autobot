@@ -46,7 +46,7 @@ public class Request implements Serializable {
     private ArrayList<String> requestStatusList;
     private double tips;
     @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Request(User user) throws ParseException {
         this.Rider = user;
@@ -62,7 +62,7 @@ public class Request implements Serializable {
         this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        String defaultTimeString = "00-0-0000 00:00:00";
+        String defaultTimeString = "0000-00-00 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
