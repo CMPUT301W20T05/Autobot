@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Geocoder;
 import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
@@ -113,6 +114,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -188,7 +190,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        LoginActivity.load_request(getApplicationContext());
         //set up google map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
 
@@ -471,6 +472,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //clear save instance
                                 Offline.clear_user(LoginActivity.sharedPreferences);
+                                Offline.clear_request(LoginActivity.sharedPreferences);
                                 Intent logout = new Intent(getApplicationContext(),LoginActivity.class);
                                 startActivity(logout);
                             }
@@ -1023,6 +1025,18 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(distance);
+    }
+
+    public void setReadableAddress(Request request, LatLng location, TextView textView) {
+        if (location != null) {
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                String address = request.ReadableAddress(location, geocoder);
+                textView.setText(address);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

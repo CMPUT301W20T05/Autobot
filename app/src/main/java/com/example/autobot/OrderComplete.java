@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,6 +99,7 @@ public class OrderComplete extends BaseActivity {
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Offline.clear_request(LoginActivity.sharedPreferences);
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
                 finish();
                 startActivity(intentQRCode);
@@ -116,6 +118,7 @@ public class OrderComplete extends BaseActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    LoginActivity.save_request(request);
                 }
             }
         });
