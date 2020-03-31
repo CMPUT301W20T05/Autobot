@@ -52,49 +52,51 @@ public class Common {
         return historyRequests;
     }
     public static ArrayList<HistoryRequest> sortListByStatus(ArrayList<HistoryRequest> historyRequests){
-//        Collections.sort(historyRequests, new Comparator<HistoryRequest>() {
-//            @Override
-//            public int compare(HistoryRequest historyRequest, HistoryRequest t1) {
-//                return historyRequest.getStatus().compareTo(t1.getStatus());
-//            }
-//        });
+        Collections.sort(historyRequests, new Comparator<HistoryRequest>() {
+            @Override
+            public int compare(HistoryRequest historyRequest, HistoryRequest t1) {
+                return historyRequest.getStatus().compareTo(t1.getStatus());
+            }
+        });
         ArrayList<HistoryRequest> newHistoryRequest = new ArrayList<>();
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Current")){
+            if (historyRequests.get(i).getStatus().equals("Current")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Request Sending")){
+            if (historyRequests.get(i).getStatus().equals("Request Sending")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Driver Accepted")){
+            if (historyRequests.get(i).getStatus().equals("Driver Accepted")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Rider Accepted")){
+            if (historyRequests.get(i).getStatus().equals("Rider Accepted")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Rider picked")){
+            if (historyRequests.get(i).getStatus().equals("Rider picked")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Trip Completed")){
+            if (historyRequests.get(i).getStatus().equals("Trip Completed")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
         for (int i = 0;i < historyRequests.size()-1;i++){
-            if (historyRequests.get(i).getStatus().toString().equals("Cancel")){
+            if (historyRequests.get(i).getStatus().equals("Cancel")){
                 newHistoryRequest.add(historyRequests.get(i));
             }
         }
+
         return newHistoryRequest;
+//        return historyRequests;
     }
 
 

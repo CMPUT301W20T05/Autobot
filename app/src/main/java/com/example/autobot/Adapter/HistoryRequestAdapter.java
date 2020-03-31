@@ -81,7 +81,7 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             RequestViewHolder requestViewHolder = (RequestViewHolder) holder;
             requestViewHolder.usersname.setText(requestList.get(position).getUser());
             requestViewHolder.status.setText("Status: " + requestList.get(position).getStatus());
-            requestViewHolder.cost.setText("Cost " + requestList.get(position).getCost());
+            requestViewHolder.cost.setText("Cost: " + requestList.get(position).getCost());
             requestViewHolder.date_time.setText("Date: " + formatter.format(requestList.get(position).getDate()));
 
             requestViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +165,9 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     String Status = "Status:  " + document.getData().get("RequestStatus").toString();
 
                                     String test = document.getData().get("Driver").toString();
+                                    if (user.getUserType().equals("Driver")){
+                                        test = document.getData().get("Rider").toString();
+                                    }
 //                                    Toast.makeText(context, test, Toast.LENGTH_SHORT).show(); // print driver's name
                                     if (test.equals("")) {
                                         temp = null;

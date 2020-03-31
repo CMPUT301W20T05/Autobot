@@ -80,21 +80,21 @@ public class RequestHistoryFragment extends Fragment {
 
         Request temp = LoginActivity.load_request(getContext());
 
-        if (temp != null){
-            try {
-                dateTemp = formatter.parse(temp.getSendDate().toString());
-            } catch (ParseException e) {
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-            }
-            String tempo = temp.getRider().toString();
-            if (user.getUserType().equals("Rider")){
-                tempo = temp.getDriver().toString();
-            }
-            HistoryRequest newTempHeader = new HistoryRequest("Current",new Date(),"","",0,0);
-            HistoryRequest newTemp = new HistoryRequest("Current", dateTemp, tempo, temp.getRequestID(), Float.parseFloat(String.valueOf(temp.getCost())), 1);
-            requestArrayList.add(newTempHeader);
-            requestArrayList.add(newTemp);
-        }
+//        if (temp != null){
+//            try {
+//                dateTemp = formatter.parse(temp.getSendDate().toString());
+//            } catch (ParseException e) {
+//                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+//            }
+//            String tempo = temp.getRider().toString();
+//            if (user.getUserType().equals("Rider")){
+//                tempo = temp.getDriver().toString();
+//            }
+//            HistoryRequest newTempHeader = new HistoryRequest("Current",new Date(),"","",0,0);
+//            HistoryRequest newTemp = new HistoryRequest("Current", dateTemp, tempo, temp.getRequestID(), Float.parseFloat(String.valueOf(temp.getCost())), 1);
+//            requestArrayList.add(newTempHeader);
+//            requestArrayList.add(newTemp);
+//        }
 
         userBase.collectionReference_request
                 .whereEqualTo(user.getUserType(), user.getUsername())
