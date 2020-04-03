@@ -17,6 +17,10 @@ import static com.android.volley.VolleyLog.TAG;
 public class RebuildTool {
     static User user_new;
     //documentReference is db.collectionReference_user.document(rider_id)
+    /*
+     *@param user the user attribute of that activity
+     * this function is for rebuilding user by extracting info from db
+     */
     public static void rebuild_user(DocumentReference documentReference, User user){
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

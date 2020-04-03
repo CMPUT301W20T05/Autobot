@@ -184,7 +184,7 @@ public class DriveIsGoing extends BaseActivity {
             }
         });
     }*/
-
+    //manage the pressing pick up rider button
     public void pick_up_rider(){
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +203,7 @@ public class DriveIsGoing extends BaseActivity {
         });
     }
 
-
+    //manage the pressing finished button
     public void finish_order(){
         buttonCancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,7 +298,11 @@ public class DriveIsGoing extends BaseActivity {
             }
         });
     }
-
+    /*
+     *@param pause time how many minutes we want to delay
+     *@param intent manage the replacement of 2 activities
+     * this function is for planning the tasks
+     */
     //this function is for managing the process of swapping 2 activities
     public void delay(int pause_time,Intent intent){
         Timer timer = new Timer();
@@ -313,7 +317,11 @@ public class DriveIsGoing extends BaseActivity {
 
     }
 
-
+    /*
+     *@param pause time how many minutes we want to delay
+     *@param fm the FragmentManager that we use to control fragment processing
+     * this function is for planning the tasks
+     */
     //successful notification
     public void delay(int pause_time,FragmentManager fm){
         Timer timer = new Timer();
@@ -327,7 +335,7 @@ public class DriveIsGoing extends BaseActivity {
         timer.schedule(task,pause_time);
 
     }
-
+    //update the map and draw the routine
     public void update_map(){
         LatLng start = request.getBeginningLocation();
         LatLng destination = request.getDestination();
