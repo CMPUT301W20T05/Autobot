@@ -13,7 +13,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-
+/**
+This is the UI test for testing DriverHomePage
+ */
 public class DriverHomepageTest {
     private Solo solo;
 
