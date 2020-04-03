@@ -64,11 +64,11 @@ public class Database{
     }
 
     /**
-     *
-     * @param requestID
-     * @param requeststatus
-     * @param start
-     * @param intent
+     *The function will implement when status changed in database.
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param start which textView u want to change
+     * @param intent the changed content of textView
      */
     public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
@@ -118,6 +118,14 @@ public class Database{
         });
     }
 
+    /**
+     *
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param button
+     * @param visible
+     */
+
     public void NotifyStatusChangeButton(String requestID, String requeststatus, Button button, boolean visible){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -142,6 +150,12 @@ public class Database{
             }
         });
     }
+
+    /**
+     * this function can return current location for user.
+     * @param user
+     * @return
+     */
     public LatLng getCurrentLocation(User user){
         final LatLng[] currentLocation = new LatLng[1];
         this.collectionReference_user.document(user.getUsername())
@@ -396,6 +410,11 @@ public class Database{
         return r;
     }
 
+    /**
+     * Cancel the request from database.
+     * @param requestID
+     */
+
     public void CancelRequest(String requestID){
         collectionReference_request.document(requestID)
                 .delete()
@@ -449,6 +468,11 @@ public class Database{
                     }
                 });
     }
+
+    /**
+     * change request status in database.
+     * @param request
+     */
 
     public void ChangeRequestStatus(Request request) {
         HashMap<String, Object> requestChanged = new HashMap<>();

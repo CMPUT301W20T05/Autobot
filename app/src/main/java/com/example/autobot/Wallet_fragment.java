@@ -43,6 +43,13 @@ public class Wallet_fragment extends Fragment{
     WalletAdapter informationAdapter;
     ArrayList<WalletInformation> informationDataList;
 
+    /**
+     * This is fragment of wallet includes username balance and payment history
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return a fragment
+     */
 
     public View onCreateView(LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.wallet, container, false);
@@ -94,7 +101,8 @@ public class Wallet_fragment extends Fragment{
                                     TextView user_name = view.findViewById(R.id.username_wallet);
                                     TextView balance = view.findViewById(R.id.balance);
                                     user_name.setText(user.getUsername());
-                                    balance.setText(user.getBalance());
+                                    DecimalFormat df = new DecimalFormat("0.00");
+                                    balance.setText(df.format(Double.valueOf(user.getBalance())));
 
                                     addcredit = view.findViewById(R.id.addCredit);
                                     addcredit.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +120,12 @@ public class Wallet_fragment extends Fragment{
         return view;
     }
 
+    /**
+     * To transfer latlng to the real location
+     * @param latLng
+     * @return
+     * @throws ParseException
+     */
     public String convert_lat_to_addaress(LatLng latLng) throws ParseException {
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         Request request = new Request();
