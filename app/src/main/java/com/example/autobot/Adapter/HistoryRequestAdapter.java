@@ -1,10 +1,12 @@
 package com.example.autobot.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater layoutInflater;
     private ArrayList<HistoryRequest> requestList;
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // format for the date
     public User user = LoginActivity.user;
     private Bitmap bitmap = null;

@@ -5,6 +5,12 @@ public class WalletInformation {
     String Cost;
     String date;
 
+    /**
+     * it is to set a custom list
+     * @param destination
+     * @param cost
+     * @param date
+     */
     public WalletInformation(String destination, String cost, String date) {
         Destination = destination;
         Cost = cost;
