@@ -19,13 +19,24 @@ public class WalletAdapter extends ArrayAdapter<WalletInformation> {
     private ArrayList<WalletInformation> informations;
     private Context context;
 
+    /**
+     * This is custom adapter of payment history
+     * @param context
+     * @param informations
+     */
     public WalletAdapter(Context context, ArrayList<WalletInformation> informations){
         super(context, 0,informations);
         this.informations = informations;
         this.context = context;
     }
 
-
+    /**
+     * to set wallet history view
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
 
     @NonNull
     @Override

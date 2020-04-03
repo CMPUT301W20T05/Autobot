@@ -1039,6 +1039,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * This the wallet add credit fragment's ok button
+     * It can upload new data to database
+     * @param money
+     */
+
     @Override
     public void onOkPressedC(String money) {
         Database userBaseC = LoginActivity.db;
@@ -1054,6 +1060,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         balance.setText(newbalance);
         Toast.makeText(BaseActivity.this, "Add Credit Success!" , Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * This is to update information of edit profile and upload information
+     * @param FirstName
+     * @param LastName
+     * @param EmailAddress
+     * @param HomeAddress
+     * @param emergencyContact
+     * @param bitmap
+     */
     @Override
     public void updateInformation(String FirstName, String LastName, String EmailAddress, String HomeAddress, String emergencyContact, Bitmap bitmap) { // change the name on the profile page to the new input name
         User newUser = user;
