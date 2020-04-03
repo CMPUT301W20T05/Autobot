@@ -10,7 +10,9 @@ import com.robotium.solo.Solo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-
+/**
+ This is the UI test for testing DriverOrderComplete
+ */
 public class DriverOrderCompleteTest {
     private Solo solo;
 

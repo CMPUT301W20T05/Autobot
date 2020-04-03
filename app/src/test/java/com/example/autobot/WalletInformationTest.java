@@ -3,7 +3,9 @@ package com.example.autobot;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
+/**
+ This is the Unit test for testing WalletInfo Class
+ */
 public class WalletInformationTest {
     private WalletInformation mockWalletInformation(){
         return new WalletInformation("Southgate", "50", "2020-03-28");

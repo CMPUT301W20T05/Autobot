@@ -5,7 +5,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
+/**
+ This is the Unit test for testing User Class
+ */
 public class UserTest {
     private User mockUser(){
         return new User("David");

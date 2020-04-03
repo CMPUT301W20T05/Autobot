@@ -11,7 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+/**
+ This is the UI test for testing SignUp Page
+ */
 public class SignUpActivityTest {
     private Solo solo;
 

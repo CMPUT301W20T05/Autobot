@@ -1,7 +1,5 @@
 package com.example.autobot;
 
-import android.widget.EditText;
-
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -10,8 +8,9 @@ import com.robotium.solo.Solo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-
+/**
+ This is the UI test for testing OrderInfo page
+ */
 public class OrderInfoTest {
     private Solo solo;
 

@@ -1,6 +1,5 @@
 package com.example.autobot;
 
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -13,12 +12,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.TestCase.assertTrue;
-
+/**
+ This is the UI test for testing HomePageActivity
+ */
 public class HomePageActivityTest {
     private Solo solo;
 
