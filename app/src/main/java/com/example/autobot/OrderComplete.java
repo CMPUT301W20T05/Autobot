@@ -102,7 +102,7 @@ public class OrderComplete extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Date date = new Date(System.currentTimeMillis());
-                request.resetArriveTime(date, db);
+               // request.resetArriveTime(date, db);
                 Offline.clear_request(LoginActivity.sharedPreferences);
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
                 finish();

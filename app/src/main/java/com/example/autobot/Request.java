@@ -282,7 +282,7 @@ public class Request implements Serializable {
     public void setArriveTime(Date d){
         this.ArriveTime = d;
     }
-    public void resetArriveTime(Date d,Database db){
+    public void resetArriveTime(Date d ,Database db){
         this.ArriveTime = d;
         HashMap<String, Object> update = new HashMap<>();
         update.put("ArriveTime", String.valueOf(this.ArriveTime));
