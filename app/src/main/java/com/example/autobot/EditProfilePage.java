@@ -37,7 +37,9 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-
+/**
+ * this is a fragment that allows people to change their personally information here
+ */
 public class EditProfilePage extends Fragment {
     private EditText firstName;
     private EditText lastName;
@@ -218,7 +220,9 @@ public class EditProfilePage extends Fragment {
 
         return view;
     }
-
+    /**
+     * this function shows the result of user decision.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -240,7 +244,9 @@ public class EditProfilePage extends Fragment {
             }
         }
     }
-
+    /**
+     * this function dispatch the intent of the photo that has just been taken.
+     */
     private void dispatchTakePictureIntent() {
         boolean success = false;
         while (!success){
@@ -274,7 +280,9 @@ public class EditProfilePage extends Fragment {
 
 
     }
-
+    /**
+     * this function creates a image file for the later use.
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -290,6 +298,9 @@ public class EditProfilePage extends Fragment {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+    /**
+     * this function could add the new picture to the local photo library.
+     */
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(currentPhotoPath);
@@ -297,7 +308,9 @@ public class EditProfilePage extends Fragment {
         mediaScanIntent.setData(contentUri);
         getContext().sendBroadcast(mediaScanIntent);
     }
-
+    /**
+     * this function opens the local photo library on the phone.
+     */
     private void openLibrary() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");

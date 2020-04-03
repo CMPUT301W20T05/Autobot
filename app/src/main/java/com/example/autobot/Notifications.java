@@ -15,7 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
-
+/**
+ * this is a fragment show the option of notifications, people can choose their option here
+ */
 public class Notifications extends Fragment {
     NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getContext());
     @Nullable
@@ -78,19 +80,30 @@ public class Notifications extends Fragment {
 
         return view;
     }
+    /**
+     * this function can mute the app when using.
+     */
     private void mute() {
         //mute audio
         AudioManager amanager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
     }
+    /**
+     * this function can unMute the app when using.
+     */
     public void unMute() {
         //unMute audio
         AudioManager amanager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
     }
+    /**
+     * this function can enable vibration the app when using.
+     */
     public void enableVibration(long[] customPattern){
         notificationBuilder.setVibrate(customPattern);
-    }
+    }/**
+     * this function can disable vibration the app when using.
+     */
     public void disableVibration(){
         notificationBuilder.setVibrate(new long[]{0L});
     }

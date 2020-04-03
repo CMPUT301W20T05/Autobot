@@ -298,7 +298,7 @@ public class Request implements Serializable {
                 });
 
     }
-
+    
     /**
      * reset arrive time in database
      * @param d new time
@@ -330,6 +330,7 @@ public class Request implements Serializable {
                     }
                 });
     }
+    
     /**
      * reset status in database
      * @param status new status
@@ -386,7 +387,7 @@ public class Request implements Serializable {
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(time);
     }
-
+    //just for testing
     public String testing_rebuild_request(){
         return String.format("ID: %s\nRider name: %s\nDriver name: %s\nRequest Status: %s",this.getRequestID(),Rider.getUsername(),Driver.getUsername(),this.getStatus());
     }

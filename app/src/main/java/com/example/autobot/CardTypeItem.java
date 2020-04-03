@@ -1,5 +1,8 @@
 package com.example.autobot;
 
+/**
+ * this is a class of Card type item, we can get card type and card logo here.
+ */
 public class CardTypeItem {
     private String cardType;
     private int cardTypelogo;
@@ -11,6 +14,5 @@ public class CardTypeItem {
 
     public String getCardType() { return this.cardType;}
     public int getCardTypelogo() {return this.cardTypelogo;}
-
 
 }

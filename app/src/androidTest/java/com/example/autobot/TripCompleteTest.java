@@ -10,8 +10,9 @@ import com.robotium.solo.Solo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-
+/**
+ This is the UI test for testing TripComplete Activity
+ */
 public class TripCompleteTest {
     private Solo solo;
 
