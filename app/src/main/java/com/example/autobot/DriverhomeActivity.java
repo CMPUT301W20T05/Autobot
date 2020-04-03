@@ -193,7 +193,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                 //if the distance between beginning location and search place is within the range and the request is inactive, select that request
                                 long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
                                 String b = (String) document.get("RequestStatus");
-                                if( 30000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                if( 3000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
                                     //clone all the info of satisfied request
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
@@ -205,6 +205,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                     //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
                                     try {
                                         Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        markerOptions.position(BeginningLocation);
+                                        markerOptions.title(request_id);
+                                        //mark down order Location
+                                        mMap.addMarker(markerOptions);
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BeginningLocation, DEFAULT_ZOOM));
                                         //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
                                         //testing
                                         //User user3 = new User("jc");
@@ -245,6 +251,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //user = LoginActivity.user;
         //set up the drive
         request.setDriver(user);
+        request.resetAcceptTime(new Date());
         Log.d("username",username);
         db.ChangeRequestStatus(request);
         //notify need to modify database
@@ -276,7 +283,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         active_request_fm.popBackStack();
         rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
         //hide the beginning marker
-        remove_beginning_location();
+        //remove_beginning_location();
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
 
