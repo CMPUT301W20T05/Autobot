@@ -10,11 +10,15 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+/**
+ * This class is the static class to help other upload and extract data from shared preferences
+ */
+
 public class Offline {
-    /*
-    *@param u_references the where we save item
-    *@param user the user of the app
-    * this function is for saving the login user
+    /**
+     * This function helps use upload user to shared preferences
+     * @param u_references the preferences
+     * @param user upload user
      */
     public static void UploadUser(SharedPreferences u_references,User user){
         Gson gson = new Gson();
@@ -25,10 +29,11 @@ public class Offline {
         editor.commit();
 
     }
-    /*
-     *@param u_references the where we save item
-     *@param request the unfinished
-     * this function is for saving the unfinished request
+
+    /**
+     * This function helps use upload request to shared preferences
+     * @param r_references the preferences
+     * @param request upload request
      */
     public static void UploadRequest(SharedPreferences r_references,Request request){
         Gson gson = new GsonBuilder()
@@ -40,10 +45,11 @@ public class Offline {
         editor.putString("Request",json);
         editor.commit();
     }
-    /*
-     *@param u_references the where we save item
-     * @return user the user who login last time.
-     * this function is for rebuild saved user
+
+    /**
+     * This function helps us extract user from shared preferences
+     * @param u_references shared preferences
+     * @return new user
      */
     public static User ExtractUser(SharedPreferences u_references) {
         Gson gson = new Gson();
@@ -57,10 +63,11 @@ public class Offline {
         }.getType();
         return gson.fromJson(user_string, type);
     }
-    /*
-     *@param u_references the where we save item
-     * @return request the unfinished request
-     * this function is for srebuild the saved user
+
+    /**
+     * This function helps us extract request from shared preferences
+     * @param u_references shared preferences
+     * @return new request
      */
     public static Request ExtractRequest(SharedPreferences u_references){
         Gson gson = new GsonBuilder()
@@ -72,18 +79,20 @@ public class Offline {
         Log.d("getrequest",request_string+"hhhhhhhh");
         return gson.fromJson(request_string, type);
     }
-    /*
-     *@param u_references the where we save item
-     * this function is for cleaning the saved user
+
+    /**
+     * clear user shared preferences
+     * @param u_references
      */
     public static void clear_user(SharedPreferences u_references){
         SharedPreferences.Editor editor = u_references.edit();
         editor.remove("User");
         editor.commit();
     }
-    /*
-     *@param u_references the where we save item
-     * this function is for cleaning the saved request
+
+    /**
+     * clear request shared preferences
+     * @param sharedPreferences
      */
     public static void clear_request(SharedPreferences sharedPreferences){
         SharedPreferences.Editor editor = sharedPreferences.edit();

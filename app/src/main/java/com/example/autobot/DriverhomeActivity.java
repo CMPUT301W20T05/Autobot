@@ -291,6 +291,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //remove_beginning_location();
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
+
     /*this function for showing the selected request
      *@param showSelectedActiveRequestFragment the view detail fragment we want to rise
      *@param pos the postion of that request in requests list

@@ -3,7 +3,9 @@ package com.example.autobot;
 import android.graphics.Bitmap;
 
 import java.util.Date;
-
+/**
+ * this is a class of History Request item, we can get information and set information here
+ */
 public class HistoryRequest {
     // set variables
     private String status;

@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.Assert.*;
-
+/**
+ This is the Unit test for testing PaymentCard Class
+ */
 public class PaymentCardTest {
     private PaymentCard mockPaymentCard() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

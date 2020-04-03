@@ -14,19 +14,27 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+/**
+ * this is a class of Card Type Adapter, it extends ArrayAdapter.
+ */
 public class CardTypeItemAdapter extends ArrayAdapter<CardTypeItem> {
 
     public CardTypeItemAdapter(Context context, ArrayList<CardTypeItem> CardTypeItemList) {
         super(context,0, CardTypeItemList);
     }
 
+    /**
+     * returns the View.
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         return initView(position, convertView, parent);
     }
 
+    /**
+     * returns the drop down view.
+     */
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         return initView(position, convertView, parent);

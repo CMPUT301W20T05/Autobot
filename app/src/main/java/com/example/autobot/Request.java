@@ -271,23 +271,6 @@ public class Request implements Serializable {
 
     public void setAcceptTime(Date d){
         this.AcceptTime = d;
-        HashMap<String, Object> update = new HashMap<>();
-        update.put("AcceptTime", String.valueOf(this.AcceptTime));
-        MainActivity.db.collectionReference_request.document(RequestID)
-                .update(update)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data addition successful");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data addition failed" + e.toString());
-                    }
-                });
-
     }
 
     /**
@@ -295,7 +278,6 @@ public class Request implements Serializable {
      * @param d new time
      * @param db Database
      */
-
     public void resetAcceptTime(Date d, Database db){
         this.AcceptTime = d;
         HashMap<String, Object> update = new HashMap<>();
@@ -316,28 +298,13 @@ public class Request implements Serializable {
                 });
 
     }
+    
     /**
      * reset arrive time in database
      * @param d new time
      */
     public void setArriveTime(Date d){
         this.ArriveTime = d;
-        HashMap<String, Object> update = new HashMap<>();
-        update.put("ArriveTime", String.valueOf(this.ArriveTime));
-        MainActivity.db.collectionReference_request.document(RequestID)
-                .update(update)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data addition successful");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data addition failed" + e.toString());
-                    }
-                });
     }
     /**
      * reset arrive time in database
@@ -363,6 +330,7 @@ public class Request implements Serializable {
                     }
                 });
     }
+    
     /**
      * reset status in database
      * @param status new status

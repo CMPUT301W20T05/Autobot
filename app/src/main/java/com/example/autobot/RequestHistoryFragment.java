@@ -50,7 +50,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.android.volley.VolleyLog.TAG;
-
+/**
+ * This is a fragment which shows a list of History Requests that user has.
+ */
 public class RequestHistoryFragment extends Fragment {
 
     private Date dateTemp;

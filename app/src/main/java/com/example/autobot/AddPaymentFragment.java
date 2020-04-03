@@ -31,7 +31,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
+/**
+ * This is a class of DialogFragment, it shows a dialog that allow people to add their payment.
+ */
 public class AddPaymentFragment extends DialogFragment {
     private ArrayList<CardTypeItem> mCardList;
     private ArrayList<String > tempList;
@@ -49,11 +51,16 @@ public class AddPaymentFragment extends DialogFragment {
     String defaultTimeString = "0000-00-00";
     Date edate = new Date();
     public Fragment fragment;
-
+    /**
+     * This is a Listener which interacts with the Base Activity.
+     */
     public interface OnFragmentInteractionListener {
         void onOkPressed(PaymentCard newPayment, int i);
 
     }
+    /**
+     * Assign listener to (OnFragmentInteractionListener) context.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -205,6 +212,9 @@ public class AddPaymentFragment extends DialogFragment {
                 }).create();
 
     }
+    /**
+     * this function is to check whether the given string is a number.
+     */
     public static boolean isNumeric(String str) { //function to check if it is integer
         for (int i = str.length(); --i >= 0; ) {
             if (!Character.isDigit(str.charAt(i))) {

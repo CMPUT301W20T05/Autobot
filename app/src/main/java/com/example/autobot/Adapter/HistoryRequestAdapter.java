@@ -33,6 +33,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * this is a class of History Request Adapter, it extends RecyclerView.Adapter.
+ */
 public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater layoutInflater;
     private ArrayList<HistoryRequest> requestList;
@@ -45,12 +48,21 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public Database userBase = LoginActivity.db;
     private Context context;
 
+    /**
+     * @param context
+     * @param requestList a ArrayList that contains History Request
+     */
     public HistoryRequestAdapter(Context context, ArrayList<HistoryRequest> requestList) {
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.requestList = requestList;
     }
 
+    /**
+     * This is a View holder that distinguish the group header and group content (requests)
+     * @param parent
+     * @param viewType
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -69,12 +81,19 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return groupViewHolder;
         }
     }
-
+    /**
+     * This function returns the ViewType of a item in the ArrayList
+     * @param position the position the item at in the ArrayList
+     */
     @Override
     public int getItemViewType(int position) {
         return requestList.get(position).getViewType();
     }
-
+    /**
+     * This function set the right information on the view
+     * @param holder
+     * @param position the position the item at in the ArrayList
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GroupViewHolder){
@@ -98,24 +117,35 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             });
         }
     }
-
+    /**
+     * This function returns how many items in the ArrayList
+     */
     @Override
     public int getItemCount() {
         return requestList.size();
     }
 
+    /**
+     * This is a Class extends RecyclerView.ViewHolder
+     */
     private static class GroupViewHolder extends RecyclerView.ViewHolder{
         TextView txt_group_title;
-
+        /**
+         * @param itemView
+         */
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             txt_group_title = itemView.findViewById(R.id.txt_group_title);
         }
     }
-
+    /**
+     * This is a Class extends RecyclerView.ViewHolder
+     */
     private static class RequestViewHolder extends RecyclerView.ViewHolder{
         TextView usersname, status, date_time, cost;
-
+        /**
+         * @param itemView
+         */
         public RequestViewHolder(@NonNull View itemView) {
             super(itemView);
             usersname = itemView.findViewById(R.id.usersname);
@@ -125,6 +155,10 @@ public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         }
     }
+    /**
+     * This is a function which shows details of a HistoryRequest when click on it
+     * @param historyRequest A ArrayList contains HistoryRequest
+     */
     public void showDetail(@NonNull HistoryRequest historyRequest) {
         LayoutInflater inflater = layoutInflater;
         String rid = historyRequest.getRequestId();
