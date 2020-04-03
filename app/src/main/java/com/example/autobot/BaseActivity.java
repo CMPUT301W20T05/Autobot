@@ -665,6 +665,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
     }
 
+    /**
+     * this method will be automatically called when user moves more than 10 meters, or update the current location per 10 seconds
+     * and also, the current location will be updated to database
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
@@ -712,6 +717,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * get current location
+     */
     @SuppressLint("MissingPermission")
     protected void getDeviceLocation() {
         fusedLocationProviderClient.getLastLocation()
@@ -773,6 +781,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * send notification to the channel
+     * @param message the message you want to show
      */
     public void sendOnChannel(String message) {
 
@@ -782,12 +791,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setAutoCancel(true) //用户点按通知后自动移除通知
+                .setAutoCancel(true)
                 .build();
 
         notificationManager.notify(1, notification);
     }
 
+    /**
+     * use user's avatar as marker and add it to the map
+     * @param location
+     * @param user
+     * @param title
+     * @param snippet
+     */
     public void addMapMarkers(LatLng location, User user, String title, String snippet){
 
         if(mMap != null){
@@ -966,6 +982,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 
+    /**
+     * This method is called to send email
+     * @param email
+     */
     public void sendEmail(String email) {
         if (!email.equals("")) {
             Intent i = new Intent(Intent.ACTION_SEND);
@@ -984,6 +1004,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    /**
+     * this method is called to make a phone call
+     * @param phoneNumber
+     */
     public void makePhoneCall(String phoneNumber) {
         boolean success = false;
         if (!phoneNumber.equals("")) {
@@ -1004,6 +1028,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * this method is called to set avatar for the given user
+     * @param user
+     * @param imageViewAvatar
+     */
     public void setAvatar(User user, ImageView imageViewAvatar) {
         try  {
             Bitmap avatar = BitmapFactory.decodeStream((InputStream)new URL(user.getUri()).getContent());
@@ -1013,6 +1042,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * this method is called to calculate the driver's rate
+     * @param user
+     * @return
+     */
     public String calculateRate(User user) {
         DecimalFormat df = new DecimalFormat("0.0");
         float goodRate = Float.parseFloat(user.getGoodRate());
@@ -1021,12 +1055,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return String.format("%s%%", df.format(rate));
     }
 
+    /**
+     *  this method is called to calculate the distance between two locations
+     * @param origin
+     * @param destination
+     * @return
+     */
     public String calculateDistance(LatLng origin, LatLng destination) {
         double distance = Math.round(SphericalUtil.computeDistanceBetween(origin, destination));
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(distance);
     }
 
+    /**
+     * this method is called to set the readable address for given textview
+     * @param request
+     * @param location
+     * @param textView
+     */
     public void setReadableAddress(Request request, LatLng location, TextView textView) {
         if (location != null) {
             Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -1044,7 +1090,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
      * It can upload new data to database
      * @param money
      */
-
     @Override
     public void onOkPressedC(String money) {
         Database userBaseC = LoginActivity.db;
