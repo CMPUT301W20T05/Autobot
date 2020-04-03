@@ -238,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
+    //retrieve the user
     public void load_user(){
         try{
             sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -250,7 +250,10 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("loaduser","no saved user"+e.toString());
         }
     }
-
+    /*
+     *@param context the activity we want to place in
+     *@return request the request we retrieve from the save instance
+     */
     public static Request load_request(Context context){
         Request new_request = null;
         try{
@@ -262,11 +265,14 @@ public class LoginActivity extends AppCompatActivity {
         }
         return new_request;
     }
-
+    /*
+     *@param request a empty request
+     *retrieve the unfinish request
+     */
     public static void save_request(Request request1){
         Offline.UploadRequest(LoginActivity.sharedPreferences,request1);
     }
-
+    //this function is for retrieving the user, dont need to relogin
     public static void save_user_login(){
         Offline.UploadUser(LoginActivity.sharedPreferences,user);
     }

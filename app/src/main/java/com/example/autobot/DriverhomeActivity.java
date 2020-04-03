@@ -173,7 +173,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         String user_id = intent.getStringExtra("User");
         //user = db.rebuildUser(username);
     }
-
+    /*
+     * @param searchedLatLng where of searching location
+     */
     //loading all the satisfied requests
     public void load_requests(LatLng searchedLatLng) {
            /*try{
@@ -244,6 +246,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     }*/
 
     //--------------listener of show detail of active request fragment
+     //* @param request the request we want to select
+    //handle confirm order event
     @Override
     public void confirm_request(Request request){
         //update request in the database
@@ -251,7 +255,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //user = LoginActivity.user;
         //set up the drive
         request.setDriver(user);
-        request.resetAcceptTime(new Date());
+        Date date = new Date(System.currentTimeMillis());
+        request.resetAcceptTime(date, db);
         Log.d("username",username);
         db.ChangeRequestStatus(request);
         //notify need to modify database
@@ -266,7 +271,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         finish();
         startActivity(intent);
     }
-
+    //handle back press event
     @Override
     public void back_press(){
         active_request_fm.popBackStack();
@@ -275,6 +280,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
     //-----------------------------------------
+    //handle hiding listview
     @Override
     public void hide() {
         //hide the request list view
@@ -282,12 +288,13 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         adapter.notifyDataSetChanged();
         active_request_fm.popBackStack();
         rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
-        //hide the beginning marker
         //remove_beginning_location();
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
-
-
+    /*this function for showing the selected request
+     *@param showSelectedActiveRequestFragment the view detail fragment we want to rise
+     *@param pos the postion of that request in requests list
+     */
     @Override
     public void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment, int pos) {
         //mark up the beginning location of the sletected reuqest
@@ -302,13 +309,24 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         active_request_fm.beginTransaction().replace(R.id.myMap,showSelectedActiveRequestFragment).addToBackStack(null).commit();
 
     }
-
+    /*
+    *param adapter the adapter of list view
+    * this function for notify adapter that data changed
+     */
     @Override
     public void update_adapter(ActiveRequestsAdapter adapter){
         adapter.notifyDataSetChanged();
     }
-
-    //request attributes
+    /*
+    *@param request_id id of that request
+    * @param rider_id rider id
+    * @param EstCost the estimated cost
+    * @param Accepttime when driver accept the oeder
+    * @param BeginningLocation where is the passenger
+    * @param tips the tips of the order
+    * @param send time the send time of the order
+     */
+    //for rebuilding a request
     public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException{
         Log.d("request_id",request_id);
         Log.d("rider_id",rider_id);
@@ -326,13 +344,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.setTips(tips);
         request.setCost(tips+EstCost);
         //set up date format
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //set up all time related attributes
         try{
             Date acceptedtime = formatter.parse(Accepttime);
             Date Sendtime = formatter.parse(send_time);
-            request.resetAcceptTime(acceptedtime);
-            request.resetArriveTime(acceptedtime);
+            request.setAcceptTime(acceptedtime);
             request.resetSendTime(Sendtime);
         } catch (ParseException e){
             e.printStackTrace();
@@ -341,7 +358,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.direct_setEstimateCost(EstCost);
         return request;
     }
-
+    //for moving the map focus
     public void remove_beginning_location(){
         if(beginning_location != null){
             beginning_location.remove();
@@ -468,6 +485,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             alert.show();
         }
 
+        Offline.clear_request(LoginActivity.sharedPreferences);
     }
     //creating this class for Asnyc loading the profile imgae
     class AsnycProcess extends AsyncTask<Void, Void, Void> {

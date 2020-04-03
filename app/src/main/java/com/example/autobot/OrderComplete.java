@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -36,6 +37,7 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class OrderComplete extends BaseActivity {
@@ -99,6 +101,8 @@ public class OrderComplete extends BaseActivity {
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date date = new Date(System.currentTimeMillis());
+               // request.resetArriveTime(date, db);
                 Offline.clear_request(LoginActivity.sharedPreferences);
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
                 finish();
@@ -112,9 +116,9 @@ public class OrderComplete extends BaseActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     request.reset_Request_Status((String) document.getString("RequestStatus"));
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
-                        request.resetAcceptTime(formatter.parse((String) document.getString("ArriveTime")));
+                        request.setAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

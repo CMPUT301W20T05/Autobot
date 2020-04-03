@@ -68,6 +68,7 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.order_info, container, false);
+        set_profile_picture(rootView);
         TextView drive_name = rootView.findViewById(R.id.Driver_name);
         drive_name.setText(request.getRider().getUsername());
         TextView cost = rootView.findViewById(R.id.Appro_price);
@@ -79,7 +80,6 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
         destination.setText(convert_latng_to_address(request.getDestination()));
         cost.setText(String.format("%4.3f",request.getEstimateCost()));
         Button confirm = rootView.findViewById(R.id.cancel_order);
-        set_profile_picture(rootView);
         confirm.setText("CONFIRM");
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,11 +165,12 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
                 alert.show();
             }
         });
-
-
         return rootView;
     }
-
+    /*
+     *@param location the location which i want to get its name
+     *@return string it's name
+     */
     public String convert_latng_to_address(LatLng location){
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
@@ -184,6 +185,11 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
     public double get_distance(LatLng start,LatLng end){
         return Math.round(SphericalUtil.computeDistanceBetween(start,end))/1000;
     }
+
+    /*
+     *@param view the view where is the viewitem located in
+     * this function is for setting up the profilo pic
+     */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void set_profile_picture(View view){
         ImageView profile = view.findViewById(R.id.imageViewAvatar);

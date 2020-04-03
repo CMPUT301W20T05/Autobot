@@ -42,7 +42,7 @@ public class Driver_ordercomplete extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setTitle("Rider Mode");
+        setTitle("Driver Mode");
         View rootView = getLayoutInflater().inflate(R.layout.accurate_fair, frameLayout);
 
         db = LoginActivity.db;

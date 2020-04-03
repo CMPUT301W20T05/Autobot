@@ -57,8 +57,10 @@ import com.google.maps.android.SphericalUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -253,7 +255,8 @@ public class HomePageActivity extends BaseActivity {
                             totalFare += tips;
                             //check if affordable
                             if (Double.parseDouble(user.getBalance()) >= totalFare){
-                                request.resetCost(Math.round(totalFare)/1.00, db);
+                                BigDecimal bg = new BigDecimal(totalFare);
+                                request.resetCost(bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue(), db);
 
                                 //finish current activity
                                 uCurRequestDialog.dismiss();

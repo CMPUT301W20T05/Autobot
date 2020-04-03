@@ -3,6 +3,7 @@ package com.example.autobot;
 import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +46,7 @@ public class Request implements Serializable {
     private ArrayList<String> requestStatusList;
     private double tips;
     @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Request(User user) throws ParseException {
         this.Rider = user;
@@ -60,7 +62,7 @@ public class Request implements Serializable {
         this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        String defaultTimeString = "00-0-0000 00:00:00";
+        String defaultTimeString = "0000-00-00 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
@@ -83,7 +85,7 @@ public class Request implements Serializable {
         this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        String defaultTimeString = "00-0-0000 00:00:00";
+        String defaultTimeString = "0000-00-00 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
@@ -107,7 +109,7 @@ public class Request implements Serializable {
         this.requestStatusList.add("Cancel");
         this.RequestStatus = requestStatusList.get(0);
         this.SendTime = new Date(System.currentTimeMillis());
-        String defaultTimeString = "00-0-0000 00:00:00";
+        String defaultTimeString = "0000-00-00 00:00:00";
         this.AcceptTime = formatter.parse(defaultTimeString);
         this.ArriveTime = formatter.parse(defaultTimeString);
         this.EstimateCost = 0.0;
@@ -122,6 +124,12 @@ public class Request implements Serializable {
     public void setTips(double tips){
         this.tips = tips;
     }
+
+    /**
+     * reset tips in database
+     * @param tips new tips
+     * @param db Database
+     */
     public void resetTips(double tips,Database db){
         this.tips = tips;
         HashMap<String, Object> update = new HashMap<>();
@@ -190,7 +198,8 @@ public class Request implements Serializable {
             double distance = Math.round(SphericalUtil.computeDistanceBetween(beginningLocation, destination));
             estimateCost = 5.0 + distance * 0.01;
         }
-        this.EstimateCost = estimateCost;
+        BigDecimal bg = new BigDecimal(estimateCost);
+        this.EstimateCost = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     //add a function to directly set estcost
@@ -213,6 +222,12 @@ public class Request implements Serializable {
     public double getCost() {
         return this.Cost;
     }
+
+    /**
+     * reset cost in database
+     * @param cost new cost
+     * @param db database
+     */
 
     public void resetCost(double cost,Database db){
         this.Cost = cost;
@@ -253,12 +268,106 @@ public class Request implements Serializable {
     public void resetSendTime(Date d){
         this.SendTime = d;
     }
-    public void resetAcceptTime(Date d){
+
+    public void setAcceptTime(Date d){
         this.AcceptTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("AcceptTime", String.valueOf(this.AcceptTime));
+        MainActivity.db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+
     }
-    public void resetArriveTime(Date d){
+
+    /**
+     * reset accept time in database
+     * @param d new time
+     * @param db Database
+     */
+
+    public void resetAcceptTime(Date d, Database db){
+        this.AcceptTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("AcceptTime", String.valueOf(this.AcceptTime));
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+
+    }
+    /**
+     * reset arrive time in database
+     * @param d new time
+     */
+    public void setArriveTime(Date d){
         this.ArriveTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("ArriveTime", String.valueOf(this.ArriveTime));
+        MainActivity.db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
     }
+    /**
+     * reset arrive time in database
+     * @param d new time
+     * @param db Database
+     */
+    public void resetArriveTime(Date d ,Database db){
+        this.ArriveTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("ArriveTime", String.valueOf(this.ArriveTime));
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+    }
+    /**
+     * reset status in database
+     * @param status new status
+     * @param db Database
+     */
     public void resetRequestStatus(String status,Database db){
         this.RequestStatus = status;
         HashMap<String, Object> update = new HashMap<>();
@@ -310,7 +419,7 @@ public class Request implements Serializable {
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(time);
     }
-
+    //just for testing
     public String testing_rebuild_request(){
         return String.format("ID: %s\nRider name: %s\nDriver name: %s\nRequest Status: %s",this.getRequestID(),Rider.getUsername(),Driver.getUsername(),this.getStatus());
     }

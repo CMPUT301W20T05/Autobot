@@ -1,5 +1,6 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -63,11 +64,11 @@ public class Database{
     }
 
     /**
-     *
-     * @param requestID
-     * @param requeststatus
-     * @param start
-     * @param intent
+     *The function will implement when status changed in database.
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param start which textView u want to change
+     * @param intent the changed content of textView
      */
     public void NotifyStatusChange(String requestID, String requeststatus, Activity start, Intent intent){
         DocumentReference ref = collectionReference_request.document(requestID);
@@ -117,6 +118,14 @@ public class Database{
         });
     }
 
+    /**
+     *
+     * @param requestID the unique id of request
+     * @param requeststatus what status u are looking for
+     * @param button
+     * @param visible
+     */
+
     public void NotifyStatusChangeButton(String requestID, String requeststatus, Button button, boolean visible){
         DocumentReference ref = collectionReference_request.document(requestID);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -141,6 +150,12 @@ public class Database{
             }
         });
     }
+
+    /**
+     * this function can return current location for user.
+     * @param user
+     * @return
+     */
     public LatLng getCurrentLocation(User user){
         final LatLng[] currentLocation = new LatLng[1];
         this.collectionReference_user.document(user.getUsername())
@@ -310,7 +325,7 @@ public class Database{
         request_data.put("BeginningLocationLat",String.valueOf(request.getBeginningLocation().latitude));
         request_data.put("BeginningLocationLnt",String.valueOf(request.getBeginningLocation().longitude));
         request_data.put("RequestID",request.getRequestID());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         request_data.put("SendTime",formatter.format(request.getSendDate()));
         request_data.put("AcceptTime",formatter.format(request.getAcceptTime()));
         request_data.put("ArriveTime",formatter.format(request.getArriveTime()));
@@ -368,10 +383,10 @@ public class Database{
                                     r.setRequestID((String) document.getString("RequestID"));
                                     r.setRider(rebuildUser((String) document.getString("Rider")));
 
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     try {
-                                        r.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
-                                        r.resetArriveTime(formatter.parse((String) document.getString("ArriveTime")));
+                                        r.setAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
+                                        r.setArriveTime(formatter.parse((String) document.getString("ArriveTime")));
                                         r.resetSendTime(formatter.parse((String) document.getString("SendTime")));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
@@ -394,6 +409,11 @@ public class Database{
 
         return r;
     }
+
+    /**
+     * Cancel the request from database.
+     * @param requestID
+     */
 
     public void CancelRequest(String requestID){
         collectionReference_request.document(requestID)
@@ -423,7 +443,7 @@ public class Database{
      * @param PayInfCard
      */
     public void add_new_Payment(PaymentCard PayInfCard) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         HashMap<String,String> payment_data = new HashMap<>();
         payment_data.put("CardNumber",PayInfCard.getCardNumber().toString() );
         payment_data.put("HoldName", PayInfCard.getHoldName());
@@ -448,6 +468,11 @@ public class Database{
                     }
                 });
     }
+
+    /**
+     * change request status in database.
+     * @param request
+     */
 
     public void ChangeRequestStatus(Request request) {
         HashMap<String, Object> requestChanged = new HashMap<>();
