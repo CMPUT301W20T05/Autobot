@@ -27,6 +27,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firestore.v1.StructuredQuery;
@@ -38,7 +40,10 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+
+import static com.android.volley.VolleyLog.TAG;
 
 public class OrderComplete extends BaseActivity {
 
@@ -101,12 +106,28 @@ public class OrderComplete extends BaseActivity {
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date = new Date(System.currentTimeMillis());
-                request.resetArriveTime(date, db);
                 Offline.clear_request(LoginActivity.sharedPreferences);
+
+                Date date = new Date(System.currentTimeMillis());
+                request.setArriveTime(date);
+
                 Intent intentQRCode = new Intent(OrderComplete.this, QRCode.class);
-                finish();
-                startActivity(intentQRCode);
+                HashMap<String, Object> update = new HashMap<>();
+                update.put("ArriveTime", String.valueOf(date));
+                db.collectionReference_request.document(reID)
+                        .update(update)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                                startActivity(intentQRCode);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        });
             }
         });
 
