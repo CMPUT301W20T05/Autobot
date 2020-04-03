@@ -1,5 +1,8 @@
 package com.example.autobot;
 
+/**
+ * This class is the user information bus.
+ */
 
 import android.util.Log;
 
