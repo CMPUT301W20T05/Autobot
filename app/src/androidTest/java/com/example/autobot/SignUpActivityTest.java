@@ -11,7 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+/**
+ This is the UI test for testing SignUp Page
+ */
 public class SignUpActivityTest {
     private Solo solo;
 
@@ -28,7 +30,7 @@ public class SignUpActivityTest {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         //LoginActivity Step
         solo.clickOnText("No account?");
-        
+
         //SignUpActivity Steps
         solo.enterText((EditText) solo.getView(R.id.accountPhoneNumber), "123456");
         solo.enterText((EditText) solo.getView(R.id.accountUserName), "TestSignUp");

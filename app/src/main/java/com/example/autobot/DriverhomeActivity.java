@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,9 +49,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -188,7 +193,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                 //if the distance between beginning location and search place is within the range and the request is inactive, select that request
                                 long a = Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation));
                                 String b = (String) document.get("RequestStatus");
-                                if( 30000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
+                                if( 3000 >= Math.round(SphericalUtil.computeDistanceBetween(searchedLatLng,BeginningLocation)) && (b.equals("Request Sending"))){
                                     //clone all the info of satisfied request
                                     String request_id = (String) document.get("RequestID");
                                     String rider_id = (String) document.get("Rider");
@@ -200,6 +205,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                                     //retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time);
                                     try {
                                         Request active_request = retrieve_request(request_id,rider_id,BeginningLocation,Destination,Estcost,Accepttime,send_time,tips);
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        markerOptions.position(BeginningLocation);
+                                        markerOptions.title(request_id);
+                                        //mark down order Location
+                                        mMap.addMarker(markerOptions);
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BeginningLocation, DEFAULT_ZOOM));
                                         //Request active_request = db.rebuildRequest((String)request_id, db.rebuildUser(user_id));
                                         //testing
                                         //User user3 = new User("jc");
@@ -240,6 +251,8 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //user = LoginActivity.user;
         //set up the drive
         request.setDriver(user);
+        Date date = new Date(System.currentTimeMillis());
+        request.resetAcceptTime(date, db);
         Log.d("username",username);
         db.ChangeRequestStatus(request);
         //notify need to modify database
@@ -270,11 +283,9 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         adapter.notifyDataSetChanged();
         active_request_fm.popBackStack();
         rootView.findViewById(R.id.autocomplete_origin).setVisibility(View.VISIBLE);
-        //hide the beginning marker
-        remove_beginning_location();
+        //remove_beginning_location();
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
-
 
     @Override
     public void show_detail(ShowSelectedActiveRequestFragment showSelectedActiveRequestFragment, int pos) {
@@ -314,13 +325,12 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         request.setTips(tips);
         request.setCost(tips+EstCost);
         //set up date format
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //set up all time related attributes
         try{
             Date acceptedtime = formatter.parse(Accepttime);
             Date Sendtime = formatter.parse(send_time);
-            request.resetAcceptTime(acceptedtime);
-            request.resetArriveTime(acceptedtime);
+            request.setAcceptTime(acceptedtime);
             request.resetSendTime(Sendtime);
         } catch (ParseException e){
             e.printStackTrace();
@@ -414,11 +424,17 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
             TextView status = view.findViewById(R.id.status);
             TextView distance = view.findViewById(R.id.Appro_distance);
             TextView price = view.findViewById(R.id.Appro_price);
-
             //should be set as driver's infor
             User driver = localRequest.getRider();
             if (driver != null) {
+                try{
+                    AsnycProcess mytask = new AsnycProcess(driver.getUri(),avatar);
+                    mytask.execute();
                 //setAvatar(driver, avatar);
+                }
+                catch (Exception e){
+                    Log.d("error",e.toString());
+                }
                 name.setText(String.format("%s %s", driver.getFirstName(), driver.getLastName()));
                 phone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -448,6 +464,34 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
                     .setTitle("Request Details")
                     .setNegativeButton("Close",null);
             alert.show();
+        }
+
+        Offline.clear_request(LoginActivity.sharedPreferences);
+    }
+    //creating this class for Asnyc loading the profile imgae
+    class AsnycProcess extends AsyncTask<Void, Void, Void> {
+        String url_web;
+        Bitmap avatar;
+        ImageView imageViewAvatar;
+        public AsnycProcess(String url_web,ImageView imageViewAvatar){
+            this.url_web = url_web;
+            this.imageViewAvatar = imageViewAvatar;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            URL url;
+            try{
+            url = new URL(url_web);
+            avatar = BitmapFactory.decodeStream((InputStream) url.getContent());}
+            catch (Exception e){
+                Log.d("IOerror",e.toString());
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            imageViewAvatar.setImageBitmap(avatar);
         }
     }
 }

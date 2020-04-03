@@ -11,7 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+/**
+ This is the UI test for testing Login Page
+ */
 public class  LoginTest {
     private Solo solo;
 

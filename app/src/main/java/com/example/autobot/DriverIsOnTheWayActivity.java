@@ -1,12 +1,10 @@
 package com.example.autobot;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,40 +15,28 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.google.maps.android.SphericalUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import static com.android.volley.VolleyLog.TAG;
 
 public class DriverIsOnTheWayActivity extends BaseActivity {
@@ -98,9 +84,9 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     request.reset_Request_Status((String) document.getString("RequestStatus"));
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
-                        request.resetAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
+                        request.setAcceptTime(formatter.parse((String) document.getString("AcceptTime")));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -171,6 +157,7 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
                                     public void onClick(View v) {
                                         request.resetRequestStatus("Cancel",db);
                                         db.ChangeRequestStatus(request);
+                                        Offline.clear_request(LoginActivity.sharedPreferences);
                                         riderAcceptedDialog.dismiss();
                                         //return to homepage
                                         Intent finishRequest = new Intent(getApplicationContext(), HomePageActivity.class);
@@ -327,13 +314,13 @@ public class DriverIsOnTheWayActivity extends BaseActivity {
         request.setRequestID(request_id);
         request.setTips(tips);
         //set up date format
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyy hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //set up all time related attributes
         try{
             Date acceptedtime = formatter.parse(Accepttime);
             Date Sendtime = formatter.parse(send_time);
-            request.resetAcceptTime(acceptedtime);
-            request.resetArriveTime(acceptedtime);
+            request.setAcceptTime(acceptedtime);
+            request.setArriveTime(acceptedtime);
             request.resetSendTime(Sendtime);
         } catch (ParseException e){
             e.printStackTrace();
