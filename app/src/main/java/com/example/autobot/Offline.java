@@ -29,6 +29,7 @@ public class Offline {
         editor.commit();
 
     }
+
     /**
      * This function helps use upload request to shared preferences
      * @param r_references the preferences
@@ -62,6 +63,7 @@ public class Offline {
         }.getType();
         return gson.fromJson(user_string, type);
     }
+
     /**
      * This function helps us extract request from shared preferences
      * @param u_references shared preferences
@@ -92,7 +94,6 @@ public class Offline {
      * clear request shared preferences
      * @param sharedPreferences
      */
-
     public static void clear_request(SharedPreferences sharedPreferences){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("Request");

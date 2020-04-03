@@ -167,7 +167,10 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
         });
         return rootView;
     }
-
+    /*
+     *@param location the location which i want to get its name
+     *@return string it's name
+     */
     public String convert_latng_to_address(LatLng location){
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
@@ -183,6 +186,10 @@ public class ShowSelectedActiveRequestFragment extends Fragment {
         return Math.round(SphericalUtil.computeDistanceBetween(start,end))/1000;
     }
 
+    /*
+     *@param view the view where is the viewitem located in
+     * this function is for setting up the profilo pic
+     */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void set_profile_picture(View view){
         ImageView profile = view.findViewById(R.id.imageViewAvatar);

@@ -106,7 +106,6 @@ public class OrderComplete extends BaseActivity {
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Offline.clear_request(LoginActivity.sharedPreferences);
 
                 Date date = new Date(System.currentTimeMillis());
