@@ -7,7 +7,9 @@ import android.widget.LinearLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-
+/**
+ * this is a class whichc extends LinearLayoutManager, it is to used for Recycler View
+ */
 public class LinearLayoutManagerWithSmoothScroller extends LinearLayoutManager {
     public LinearLayoutManagerWithSmoothScroller(Context context) {
         super(context);
