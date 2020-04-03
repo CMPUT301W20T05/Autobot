@@ -326,6 +326,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     * @param BeginningLocation where is the passenger
     * @param tips the tips of the order
     * @param send time the send time of the order
+    * @return the request corresponding to the input request id
      */
     //for rebuilding a request
     public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException{
