@@ -253,11 +253,44 @@ public class Request implements Serializable {
     public void resetSendTime(Date d){
         this.SendTime = d;
     }
-    public void resetAcceptTime(Date d){
+    public void resetAcceptTime(Date d, Database db){
         this.AcceptTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("AcceptTime", String.valueOf(this.AcceptTime));
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+
     }
-    public void resetArriveTime(Date d){
+    public void resetArriveTime(Date d,Database db){
         this.ArriveTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("ArriveTime", String.valueOf(this.ArriveTime));
+        db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
     }
     public void resetRequestStatus(String status,Database db){
         this.RequestStatus = status;
