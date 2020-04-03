@@ -1,7 +1,9 @@
 package com.example.autobot;
 
 import java.util.Date;
-
+/**
+ * this is a class of Payment Card item, we can get information and set information here
+ */
 public class PaymentCard {
     // set variables
     private Long cardNumber;

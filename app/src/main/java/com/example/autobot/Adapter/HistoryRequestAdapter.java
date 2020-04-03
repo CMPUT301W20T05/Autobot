@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * this is a class of History Request Adapter, it extends RecyclerView.Adapter
+ * this is a class of History Request Adapter, it extends RecyclerView.Adapter.
  */
 public class HistoryRequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater layoutInflater;

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 /**
- * this is a class whichc extends LinearLayoutManager, it is to used for Recycler View
+ * this is a class whichc extends LinearLayoutManager, it is to used for Recycler View.
  */
 public class LinearLayoutManagerWithSmoothScroller extends LinearLayoutManager {
     public LinearLayoutManagerWithSmoothScroller(Context context) {
@@ -19,6 +19,11 @@ public class LinearLayoutManagerWithSmoothScroller extends LinearLayoutManager {
         super(context, orientation, reverseLayout);
     }
 
+    /**
+     * @param recyclerView the RecyclerView
+     * @param state the RecyclerView.State
+     * @param position the position the item at
+     */
     @Override
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
         RecyclerView.SmoothScroller smoothScroller = new TopSnappedSmoothScroller(recyclerView.getContext());
@@ -39,6 +44,9 @@ public class LinearLayoutManagerWithSmoothScroller extends LinearLayoutManager {
     }
 
 
+    /**
+     * @param targetPosition the position the item at
+     */
     @Override
     public PointF computeScrollVectorForPosition(int targetPosition) {
         return LinearLayoutManagerWithSmoothScroller.this.computeScrollVectorForPosition(targetPosition);

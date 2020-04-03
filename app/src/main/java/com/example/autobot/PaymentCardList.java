@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * this is a class of Payment Card Adapter, it extends ArrayAdapter.
+ */
 public class PaymentCardList extends ArrayAdapter<PaymentCard> { // this is a adapter
     private ArrayList<PaymentCard> paymentCards;
     private Context context;
