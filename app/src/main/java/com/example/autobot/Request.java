@@ -124,6 +124,12 @@ public class Request implements Serializable {
     public void setTips(double tips){
         this.tips = tips;
     }
+
+    /**
+     * reset tips in database
+     * @param tips new tips
+     * @param db Database
+     */
     public void resetTips(double tips,Database db){
         this.tips = tips;
         HashMap<String, Object> update = new HashMap<>();
@@ -217,6 +223,12 @@ public class Request implements Serializable {
         return this.Cost;
     }
 
+    /**
+     * reset cost in database
+     * @param cost new cost
+     * @param db database
+     */
+
     public void resetCost(double cost,Database db){
         this.Cost = cost;
         HashMap<String, Object> update = new HashMap<>();
@@ -256,9 +268,34 @@ public class Request implements Serializable {
     public void resetSendTime(Date d){
         this.SendTime = d;
     }
+
     public void setAcceptTime(Date d){
         this.AcceptTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("AcceptTime", String.valueOf(this.AcceptTime));
+        MainActivity.db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
+
     }
+
+    /**
+     * reset accept time in database
+     * @param d new time
+     * @param db Database
+     */
+
     public void resetAcceptTime(Date d, Database db){
         this.AcceptTime = d;
         HashMap<String, Object> update = new HashMap<>();
@@ -279,10 +316,35 @@ public class Request implements Serializable {
                 });
 
     }
+    /**
+     * reset arrive time in database
+     * @param d new time
+     */
     public void setArriveTime(Date d){
         this.ArriveTime = d;
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("ArriveTime", String.valueOf(this.ArriveTime));
+        MainActivity.db.collectionReference_request.document(RequestID)
+                .update(update)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data addition successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
     }
-    public void resetArriveTime(Date d,Database db){
+    /**
+     * reset arrive time in database
+     * @param d new time
+     * @param db Database
+     */
+    public void resetArriveTime(Date d ,Database db){
         this.ArriveTime = d;
         HashMap<String, Object> update = new HashMap<>();
         update.put("ArriveTime", String.valueOf(this.ArriveTime));
@@ -301,6 +363,11 @@ public class Request implements Serializable {
                     }
                 });
     }
+    /**
+     * reset status in database
+     * @param status new status
+     * @param db Database
+     */
     public void resetRequestStatus(String status,Database db){
         this.RequestStatus = status;
         HashMap<String, Object> update = new HashMap<>();

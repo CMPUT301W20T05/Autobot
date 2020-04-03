@@ -1,5 +1,8 @@
 package com.example.autobot;
 
+/**
+ * This class is the user information bus.
+ */
 
 import android.util.Log;
 
@@ -59,6 +62,12 @@ public class User implements Driver, Rider, Serializable {
         this.EmergencyContact = emergencyContact;
     }
 
+    /**
+     * This is to update new balance to database
+     * @param balance
+     * @param db
+     */
+
     public void resetbalance(String balance, Database db){
         this.Balance = balance;
         HashMap<String, Object> update = new HashMap<>();
@@ -79,6 +88,12 @@ public class User implements Driver, Rider, Serializable {
                 });
     }
 
+    /**
+     * This is to update new Goodrate to database
+     * @param goodrate
+     * @param db
+     */
+
     public void resetGoodrate(String goodrate,Database db) {
         this.GoodRate = goodrate;
         HashMap<String, Object> update = new HashMap<>();
@@ -98,6 +113,12 @@ public class User implements Driver, Rider, Serializable {
                     }
                 });
     }
+
+    /**
+     * This is to updata new Badtate to database
+     * @param badrate
+     * @param db
+     */
     public void resetBadrate(String badrate,Database db) {
         this.BadRate = badrate;
         HashMap<String, Object> update = new HashMap<>();

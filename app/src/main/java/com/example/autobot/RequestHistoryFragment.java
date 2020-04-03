@@ -91,6 +91,11 @@ public class RequestHistoryFragment extends Fragment {
                                 userName = document.getData().get("Driver").toString();
                                 requestId = document.getData().get("ID").toString();
                                 String userName1 = "Driver: " + userName;
+                                try {
+                                    dateTemp = formatter.parse("0000-00-00 00:00:00");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 if (!time1.equals("0002-11-30 00:00:00")) {
                                     try {
                                         dateTemp = formatter.parse(time1);
