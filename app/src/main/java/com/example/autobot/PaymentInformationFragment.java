@@ -36,6 +36,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+/**
+ * This is a fragment which shows a list of payment information that user has.
+ */
 public class PaymentInformationFragment extends Fragment {
     ListView paymentList;
     ArrayAdapter<PaymentCard> mAdapter;
@@ -68,6 +71,10 @@ public class PaymentInformationFragment extends Fragment {
         }
     }
 
+    /**
+     * This function updates the current ArrayList (adds the input payment card to the ArrayList)
+     * @param paymentCard A PaymentCard
+     */
     public void updateList(PaymentCard paymentCard){
         mDataList.add(paymentCard);
         mAdapter.notifyDataSetChanged();
@@ -148,7 +155,11 @@ public class PaymentInformationFragment extends Fragment {
 
         return view;
     }
-
+    /**
+     * This function shows the detail of a selected payment card
+     * @param paymentCard the PaymentCard
+     * @param position the selected item's position
+     */
     private void showDetail(@NonNull PaymentCard paymentCard,int position) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.payment_detail,null);
 

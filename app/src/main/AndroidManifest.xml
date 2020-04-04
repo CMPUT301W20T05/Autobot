@@ -63,7 +63,6 @@
         <activity
             android:name=".HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GoogleMapActivity" />
         <activity
             android:name=".UCurRequest"
             android:parentActivityName=".HomePageActivity" />

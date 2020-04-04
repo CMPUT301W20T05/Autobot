@@ -3,7 +3,9 @@ package com.example.autobot;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
+/**
+ This is the Unit test for testing CardTypeItem Class
+ */
 public class CardTypeItemTest {
     private CardTypeItem mockCardType(){
         return new CardTypeItem("Visa",10);

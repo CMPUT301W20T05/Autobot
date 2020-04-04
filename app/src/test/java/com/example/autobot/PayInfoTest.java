@@ -3,7 +3,9 @@ package com.example.autobot;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
+/**
+ This is the Unit test for testing PayInfo Class
+ */
 public class PayInfoTest {
     private PayInfo mockPayInfo(){
         return new PayInfo();

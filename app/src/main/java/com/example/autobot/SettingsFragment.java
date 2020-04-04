@@ -10,10 +10,11 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+/**
+ * This is a fragment which shows the detail information of our group.
+ */
 public class SettingsFragment extends Fragment {
     ListView listView;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settings_page, container, false);
