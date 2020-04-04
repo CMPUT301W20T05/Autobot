@@ -1,0 +1,23 @@
+weekly report 7
+As a team:
+This week we focusing on debugging and preparing for final demo.
+
+As a team member: 
+xqiu1: debugging and test our app, responsible for the introduction of our demo
+weida:debug and test, make the PPT for our demo.
+Wenzhuo2: debug and test, improve our app
+yiping1: Debugged and optimized the app, also prepared for the presentation.
+Jlyu3: write a asynchronous function to loading data in the background
+zonglun1:add wiki for project 4. modify the database class.
+
+
+
+
+Comment:
+xqiu1: it’s pity that we have some technical issue during the Tuesday demo, but we prepared well for it, that’s a good thing.
+weida: We done our project in this two moths. We do a good app, and everyone is good job.
+Wenzhuo2: Thanks for everyone’s hardworking. You all did a great job!
+yiping1: We actually did really good on this project, but there was a pity that something went wrong within our presentation time. 
+Jlyu3: All my teammates did a really awesome job!
+zonglun1:Everyone try their best to do the demo and project.
+
