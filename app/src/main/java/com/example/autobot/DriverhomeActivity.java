@@ -291,10 +291,7 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
         //remove_beginning_location();
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(searchedLatLng.latitude, searchedLatLng.longitude), DEFAULT_ZOOM));
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 4b5f5f61380a7acf68df9e9f83ff7799e532709e
     /*this function for showing the selected request
      *@param showSelectedActiveRequestFragment the view detail fragment we want to rise
      *@param pos the postion of that request in requests list
@@ -329,10 +326,6 @@ public class DriverhomeActivity extends BaseActivity implements ActiverequestsFr
     * @param BeginningLocation where is the passenger
     * @param tips the tips of the order
     * @param send time the send time of the order
-<<<<<<< HEAD
-=======
-    * @return the request corresponding to the input request id
->>>>>>> 4b5f5f61380a7acf68df9e9f83ff7799e532709e
      */
     //for rebuilding a request
     public Request retrieve_request(String request_id, String rider_id,LatLng BeginningLocation, LatLng Destination,double EstCost,String Accepttime,String send_time,double tips)throws ParseException{
