@@ -27,7 +27,9 @@ public class CancelNotifiFragment extends Fragment {
             @Override
             //while still on counting time, update the remaining time data of the view 
             public void onTick(long millisUntilFinished) {
+                //update the remaining time
                 TimeLeftInMillis = millisUntilFinished;
+                //update view
                 updateCountDownText();
             }
             @Override
